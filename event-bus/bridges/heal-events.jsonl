@@ -1,0 +1,3 @@
+{"id": "evt-45ab4ea288", "timestamp": "2026-06-11T03:42:37.299018+00:00", "source": "phoenix", "type": "heal.warn", "severity": "warn", "payload": {"rule": "connection_refused", "count": 2}, "correlation_id": ""}
+{"id": "evt-a45b3e19e8", "timestamp": "2026-06-11T04:03:56.531868+00:00", "source": "phoenix", "type": "heal.observe", "severity": "info", "payload": {"rule": "tool_timeout", "count": 16}, "correlation_id": ""}
+{"id": "evt-31101f3076", "timestamp": "2026-06-11T04:03:56.553630+00:00", "source": "phoenix", "type": "heal.escalate", "severity": "warn", "payload": {"rule": "tool_timeout", "from_level": 1, "to_level": 2}, "correlation_id": ""}

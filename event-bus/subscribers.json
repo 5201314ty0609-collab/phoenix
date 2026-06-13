@@ -1,0 +1,42 @@
+[
+  {
+    "id": "sub-heal-observe",
+    "pattern": "type:tool.* source:hermes",
+    "target": "~/.claude/phoenix/event-bus/bridges/hermes-tool-events.jsonl",
+    "command": "",
+    "description": "Route Hermes tool events to heal engine input",
+    "enabled": true
+  },
+  {
+    "id": "sub-sense-alert",
+    "pattern": "type:sense.* severity:warn",
+    "target": "~/.claude/phoenix/event-bus/bridges/sense-alerts.jsonl",
+    "command": "",
+    "description": "Collect sense alerts for dashboard",
+    "enabled": true
+  },
+  {
+    "id": "sub-knowledge-log",
+    "pattern": "type:knowledge.*",
+    "target": "~/.claude/phoenix/event-bus/bridges/knowledge-events.jsonl",
+    "command": "",
+    "description": "Log knowledge graph changes",
+    "enabled": true
+  },
+  {
+    "id": "sub-heal-log",
+    "pattern": "type:heal.*",
+    "target": "~/.claude/phoenix/event-bus/bridges/heal-events.jsonl",
+    "command": "",
+    "description": "Log self-healing actions",
+    "enabled": true
+  },
+  {
+    "id": "sub-critical-alert",
+    "pattern": "severity:critical",
+    "target": "~/.claude/phoenix/event-bus/bridges/critical-alerts.jsonl",
+    "command": "",
+    "description": "Critical events for immediate review",
+    "enabled": true
+  }
+]
