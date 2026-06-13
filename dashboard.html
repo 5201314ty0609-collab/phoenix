@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHOENIX Dashboard · 控制台</title>
+<style>
+  :root {
+    --bg: #1a1b26; --surface: #24283b; --surface-alt: #1f2335;
+    --border: rgba(255,255,255,0.06);
+    --text: #c0caf5; --text-dim: #565f89; --text-bright: #e0e2f0;
+    --accent: #e0af68; --accent-alt: #7aa2f7;
+    --red: #f7768e; --green: #9ece6a; --yellow: #e0af68; --purple: #bb9af7;
+    --radius: 10px; --gap: 16px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+    --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--font); background:var(--bg); color:var(--text); padding:20px; line-height:1.6; }
+
+  /* ── Hero ── */
+  .hero { text-align:center; padding:32px 20px 24px; border-bottom:1px solid var(--border); margin-bottom:24px; }
+  .hero h1 { font-size:2rem; font-weight:800; letter-spacing:-0.03em; }
+  .hero .sub { font-size:0.85rem; color:var(--text-dim); margin-top:6px; }
+  .hero .guide {
+    display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:16px;
+    font-size:0.75rem; color:var(--text-dim);
+  }
+  .hero .guide span { background:var(--surface-alt); padding:4px 12px; border-radius:14px; white-space:nowrap; }
+
+  header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--border);
+  }
+  header h2 { font-size:1.1rem; font-weight:700; }
+  .dot { width:7px; height:7px; border-radius:50%; display:inline-block; }
+  .dot.online { background:var(--green); box-shadow:0 0 6px var(--green); }
+
+  .section-title {
+    font-size:1rem; font-weight:700; margin:28px 0 14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .section-title .en { font-size:0.65rem; color:var(--text-dim); font-weight:400; text-transform:uppercase; letter-spacing:0.1em; }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:var(--gap); }
+  .card {
+    background:var(--surface); border-radius:var(--radius); padding:18px;
+    border:1px solid var(--border); cursor:pointer; transition:border-color .2s, transform .1s;
+    position:relative;
+  }
+  .card:hover { border-color:var(--accent); transform:translateY(-2px); }
+  .card.full { grid-column:1/-1; }
+  .card .card-header {
+    display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;
+  }
+  .card .card-title { font-size:0.9rem; font-weight:700; }
+  .card .card-title .en { font-size:0.6rem; color:var(--text-dim); font-weight:400; display:block; text-transform:uppercase; letter-spacing:0.08em; }
+  .card .card-desc { font-size:0.7rem; color:var(--text-dim); margin-bottom:10px; line-height:1.4; }
+  .card .action-btn {
+    font-size:0.62rem; background:var(--surface-alt); color:var(--accent-alt);
+    border:1px solid var(--border); padding:4px 12px; border-radius:14px;
+    cursor:pointer; transition:all .2s; font-family:var(--font); white-space:nowrap;
+  }
+  .card .action-btn:hover { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+
+  .metric { display:flex; justify-content:space-between; padding:3px 0; }
+  .metric .label { color:var(--text-dim); font-size:0.8rem; }
+  .metric .label .en { font-size:0.58rem; display:block; color:var(--text-dim); opacity:0.6; }
+  .metric .value { font-weight:600; font-variant-numeric:tabular-nums; font-size:0.85rem; }
+  .value.good { color:var(--green); } .value.warn { color:var(--yellow); } .value.bad { color:var(--red); }
+
+  .sense-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; }
+  .sense-item { text-align:center; padding:8px 2px; border-radius:6px; background:var(--surface-alt); transition:background .2s; }
+  .sense-item:hover { background:rgba(224,175,104,0.1); }
+  .sense-item .name { font-size:0.7rem; font-weight:600; }
+  .sense-item .state { font-size:0.72rem; margin-top:1px; }
+  .sense-item .trend { font-size:0.58rem; color:var(--accent-alt); margin-top:1px; }
+
+  .bar { height:5px; border-radius:3px; background:var(--surface-alt); margin-top:3px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:3px; transition:width 0.6s ease; }
+  .bar-fill.good{background:var(--green)} .bar-fill.warn{background:var(--yellow)} .bar-fill.bad{background:var(--red)}
+
+  .tag { display:inline-block; padding:2px 8px; border-radius:11px; font-size:0.68rem; font-weight:600; margin:1px; }
+  .tag.green{background:rgba(158,206,106,.15);color:var(--green)}
+  .tag.yellow{background:rgba(224,175,104,.15);color:var(--yellow)}
+  .tag.red{background:rgba(247,118,142,.15);color:var(--red)}
+  .tag.purple{background:rgba(187,154,247,.15);color:var(--purple)}
+
+  /* ── Usage Guide Cards ── */
+  .use-card { background:var(--surface-alt); border-radius:var(--radius); padding:16px; border:1px solid var(--border); }
+  .use-card h4 { font-size:0.82rem; margin-bottom:6px; }
+  .use-card p { font-size:0.72rem; color:var(--text-dim); line-height:1.5; }
+
+  /* ── Modal ── */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:100; justify-content:center; align-items:flex-start; padding:30px 20px; overflow-y:auto; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--surface); border-radius:var(--radius); width:100%; max-width:760px; border:1px solid var(--border); box-shadow:0 24px 80px rgba(0,0,0,0.6); animation:modalIn .2s ease; }
+  @keyframes modalIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .modal-header { display:flex; justify-content:space-between; align-items:flex-start; padding:20px 22px; border-bottom:1px solid var(--border); }
+  .modal-header h2 { font-size:1.1rem; font-weight:700; }
+  .modal-header h2 .en { font-size:0.62rem; color:var(--text-dim); font-weight:400; display:block; text-transform:uppercase; letter-spacing:0.08em; }
+  .modal-header .mod-desc { font-size:0.72rem; color:var(--text-dim); margin-top:4px; line-height:1.4; }
+  .modal-close { background:none; border:none; color:var(--text-dim); font-size:1.4rem; cursor:pointer; padding:4px 8px; border-radius:4px; }
+  .modal-close:hover { color:var(--red); }
+  .modal-body { padding:20px 22px; max-height:55vh; overflow-y:auto; }
+  .modal-actions { padding:14px 22px; border-top:1px solid var(--border); display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; }
+  .btn { padding:7px 16px; border-radius:6px; border:1px solid var(--border); cursor:pointer; font-size:0.78rem; font-family:var(--font); transition:all .2s; background:var(--surface-alt); color:var(--text); }
+  .btn:hover { border-color:var(--accent); color:var(--text-bright); }
+  .btn.primary { background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:600; }
+  .btn.primary:hover { opacity:0.9; }
+  .btn.danger { border-color:var(--red); color:var(--red); }
+  .btn.danger:hover { background:var(--red); color:var(--bg); }
+
+  /* ── Search ── */
+  .search-bar { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .search-bar input, .search-bar select { background:var(--surface-alt); border:1px solid var(--border); color:var(--text); padding:7px 12px; border-radius:6px; font-size:0.78rem; font-family:var(--font); }
+  .search-bar input:focus, .search-bar select:focus { outline:none; border-color:var(--accent); }
+  .search-bar input { flex:1; min-width:140px; }
+
+  .tl-entry { padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.02); font-size:0.76rem; display:flex; gap:10px; }
+  .tl-entry .ts { color:var(--text-dim); font-family:var(--mono); font-size:0.68rem; white-space:nowrap; min-width:125px; }
+  .tl-entry .type { color:var(--accent-alt); font-weight:600; min-width:95px; font-size:0.68rem; }
+  .tl-entry .body { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  .alert-item { padding:7px 10px; margin:4px 0; border-radius:4px; font-size:0.76rem; }
+  .alert-item.crit { background:rgba(247,118,142,.08); border-left:2px solid var(--red); }
+  .alert-item.warn { background:rgba(224,175,104,.08); border-left:2px solid var(--yellow); }
+
+  .module-list { display:grid; grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); gap:8px; }
+  .module-item { background:var(--surface-alt); border-radius:6px; padding:12px; border:1px solid transparent; transition:border-color .2s; }
+  .module-item:hover { border-color:var(--accent); }
+  .module-item .mod-name { font-weight:600; font-size:0.82rem; }
+  .module-item .mod-en { font-size:0.6rem; color:var(--text-dim); }
+  .module-item .mod-meta { font-size:0.66rem; color:var(--text-dim); margin-top:3px; }
+  .module-item .mod-desc { font-size:0.64rem; color:var(--text-dim); margin-top:4px; line-height:1.3; }
+
+  .empty-state { text-align:center; padding:24px; color:var(--text-dim); font-size:0.8rem; }
+  .toast { position:fixed; bottom:24px; right:24px; padding:12px 20px; border-radius:8px; font-size:0.8rem; z-index:200; animation:slideUp .3s ease; font-weight:600; }
+  @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .toast.ok { background:var(--green); color:var(--bg); }
+  .toast.err { background:var(--red); color:var(--bg); }
+
+  footer { margin-top:32px; text-align:center; color:var(--text-dim); font-size:0.7rem; padding:20px; border-top:1px solid var(--border); }
+  footer a { color:var(--accent); text-decoration:none; }
+
+  @media (max-width:768px) { .grid{grid-template-columns:1fr} .sense-grid{grid-template-columns:repeat(3,1fr)} .hero h1{font-size:1.3rem} .modal{max-width:100%} }
+</style>
+</head>
+<body>
+
+<!-- ═══ Hero ═══ -->
+<div class="hero">
+  <h1>🐦‍🔥 PHOENIX 控制台 <span style="font-size:0.7rem;color:var(--text-dim);font-weight:400">Dashboard</span></h1>
+  <div class="sub">自进化 AI Agent 编排系统 · Self-Evolving Agent Harness v1.3.0</div>
+  <div class="guide">
+    <span>🔍 实时监控 7 个感知器状态</span>
+    <span>📈 追踪决策偏移趋势</span>
+    <span>🛡️ 管理工具调用安全防护</span>
+    <span>🧬 查看自动学习的用户画像</span>
+    <span>📜 搜索回放执行历史</span>
+    <span>🗂️ 验证 62 个技能依赖关系</span>
+  </div>
+</div>
+
+<!-- ═══ 使用指南 ═══ -->
+<div class="section-title">🧭 能做什么 <span class="en">What You Can Do</span></div>
+<div class="grid" style="margin-bottom:20px">
+  <div class="use-card">
+    <h4>🔍 系统健康诊断 System Health</h4>
+    <p>一眼看清 PHOENIX 是否正常运行——7 个感知器（上下文压力、错误级联、话题漂移等）的状态和趋势预测。发现异常立即定位。</p>
+  </div>
+  <div class="use-card">
+    <h4>📈 行为趋势分析 Behavior Trends</h4>
+    <p>追踪用户的决策倾向变化——是倾向保守（frugal）还是愿意投入（spend）？趋势是否稳定？帮助理解自己的认知模式。</p>
+  </div>
+  <div class="use-card">
+    <h4>🛡️ 安全防护管理 Safety Guard</h4>
+    <p>查看工具调用是否陷入了死循环、重复失败或原地踏步。一键重置计数器。保护 Agent 不浪费 token。</p>
+  </div>
+  <div class="use-card">
+    <h4>🧬 自动画像学习 Auto Persona</h4>
+    <p>PHOENIX 从对话中自动学习沟通偏好、决策模式、核心价值观——不需要手动填写。强制重建按钮可以触发全量重新分析。</p>
+  </div>
+  <div class="use-card">
+    <h4>📜 执行历史审计 Timeline Audit</h4>
+    <p>搜索和过滤所有历史事件——会话、工具调用、自愈、进化。按类型筛选，按关键词搜索。完整的可追溯性。</p>
+  </div>
+  <div class="use-card">
+    <h4>🗂️ 技能生态管理 Skill Management</h4>
+    <p>62 个技能的依赖和冲突关系一览。哪些技能有依赖链？哪些互相冲突？确保技能系统不会自相矛盾。</p>
+  </div>
+</div>
+
+<!-- ═══ 实时监控 ═══ -->
+<div class="section-title">📊 实时监控 <span class="en">Live Monitor</span></div>
+<header>
+  <h2>模块面板 <span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">Module Panels · 点击展开详情 Click to expand</span></h2>
+  <div style="display:flex;gap:14px;align-items:center;font-size:0.72rem;color:var(--text-dim)">
+    <span id="grain-display"></span>
+    <span class="dot online"></span>
+    <span>运行中 Live</span>
+    <span id="clock" style="font-family:var(--mono)"></span>
+  </div>
+</header>
+
+<div class="grid">
+
+  <!-- System Overview -->
+  <div class="card" onclick="openModal('overview')">
+    <div class="card-header">
+      <div class="card-title">📊 系统概览<span class="en">System Overview</span></div>
+    </div>
+    <div class="card-desc">PHOENIX 核心运行状态——版本号、活跃框架数量、当前决策偏移方向和稳定性。系统的脉搏。</div>
+    <div id="overview-content"></div>
+  </div>
+
+  <!-- 7-Sense -->
+  <!-- Users -->
+  <div class="card" onclick="openModal('users')">
+    <div class="card-header">
+      <div class="card-title">👥 用户层级<span class="en">User Tiers</span></div>
+    </div>
+    <div class="card-desc">三层体系——👑创始人(全权限)、⭐合伙人(已构建画像)、🌱使用者(学习期)。使用者积累 ≥10 沙粒后自动升级为合伙人。</div>
+    <div id="users-content"></div>
+  </div>
+
+  <div class="card" onclick="openModal('senses')">
+    <div class="card-header">
+      <div class="card-title">👁️ 七感监测<span class="en">7-Sense Monitor</span></div>
+    </div>
+    <div class="card-desc">7 个元认知感知器的实时状态——O2(上下文压力)、Nociception(错误痛觉)、Drift(话题漂移)、Echo(重复)、Chronos(时间节奏)、Spatial(工作空间)、Vestibular(工具平衡)。每个感知器有独立趋势预测。</div>
+    <div class="sense-grid" id="senses-grid"></div>
+  </div>
+
+  <!-- Drift Velocity -->
+  <div class="card" onclick="openModal('drift')">
+    <div class="card-header">
+      <div class="card-title">📈 偏移速率<span class="en">Drift Velocity</span></div>
+    </div>
+    <div class="card-desc">量化决策倾向随时间的变化——frugal(保守/本地优先)、spend(投入/探索)、drift(随性)。追踪"你怎么变"而非"你是什么样"。稳定性指示决策一致性。</div>
+    <div id="drift-content"></div>
+  </div>
+
+  <!-- Modules -->
+  <div class="card" onclick="openModal('modules')">
+    <div class="card-header">
+      <div class="card-title">🧩 模块清单<span class="en">Module Inventory</span></div>
+    </div>
+    <div class="card-desc">所有 PHOENIX 引擎模块——事件总线、策略引擎、时间线、工具防护、技能注册表、NexSandglass 记忆引擎等。每模块显示行数、大小和功能摘要。</div>
+    <div id="modules-content"></div>
+  </div>
+
+  <!-- Tool Guard -->
+  <div class="card" onclick="openModal('toolguard')">
+    <div class="card-header">
+      <div class="card-title">🛡️ 工具防护<span class="en">Tool Guard</span>
+        <button class="action-btn" onclick="event.stopPropagation(); doAction('tool-guard/reset',{tool:'all'})" title="重置所有计数器">↻ 重置</button>
+      </div>
+    </div>
+    <div class="card-desc">防止 Agent 陷入工具调用死循环——三种检测器：精确失败(同参数)、同工具失败(不同参数)、无进展(幂等工具结果不变)。四级决策链：允许→警告→阻断→强制中止。</div>
+    <div id="toolguard-content"></div>
+  </div>
+
+  <!-- Skills -->
+  <div class="card" onclick="openModal('skills')">
+    <div class="card-header">
+      <div class="card-title">🗂️ 技能生态<span class="en">Skill Ecosystem</span></div>
+    </div>
+    <div class="card-desc">62 个技能的依赖关系管理——21 个有依赖链，1 对冲突声明，28 个独立技能。确保 PHOENIX 的能力网络不会自相矛盾。</div>
+    <div id="skills-content"></div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card full" onclick="openModal('timeline')">
+    <div class="card-header">
+      <div class="card-title">📜 执行时间线<span class="en">Execution Timeline</span></div>
+    </div>
+    <div class="card-desc">所有系统事件的完整记录——会话启停、工具调用、自愈动作、进化周期、感知器告警。SQLite 持久化 + FTS5 全文搜索。可回放任何历史会话。</div>
+    <div id="timeline-content"></div>
+  </div>
+
+  <!-- Persona -->
+  <div class="card full" onclick="openModal('persona')">
+    <div class="card-header">
+      <div class="card-title">🧬 用户画像<span class="en">Persona (NexSandglass)</span>
+        <button class="action-btn" onclick="event.stopPropagation(); doAction('persona/rebuild',{})" title="强制全量重建画像">🔄 重建</button>
+      </div>
+    </div>
+    <div class="card-desc">四层自动蒸馏画像——L1基础锚点(技术栈/领域)、L2兴趣图谱(注意力投向)、L3交互协议(沟通偏好/雷区)、L4认知内核(决策模式/核心价值观)。从对话沙粒中自动学习，非手动填写。</div>
+    <div id="persona-content"></div>
+  </div>
+
+</div>
+
+<footer>
+  PHOENIX · Self-Evolving Agent Harness · <span id="refresh-time"></span>
+  · <a href="https://github.com/holyty/phoenix" target="_blank">GitHub</a>
+  · 纯 Python stdlib 构建 · 零外部依赖
+</footer>
+
+<!-- ═══ Modal ═══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <h2 id="modal-title"></h2>
+        <div class="mod-desc" id="modal-desc"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+<div id="toast-container"></div>
+
+<script>
+const API = '';
+let currentData = {};
+
+async function get(p) { try { const r=await fetch(API+p); return r.ok?await r.json():{error:r.status}; } catch(e) { return {error:e.message}; } }
+async function post(p,b) { try { const r=await fetch(API+p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}); return r.ok?await r.json():{error:r.status}; } catch(e) { return {error:e.message}; } }
+
+function toast(m,ok=true) {
+  const t=document.createElement('div'); t.className='toast '+(ok?'ok':'err'); t.textContent=m;
+  document.getElementById('toast-container').appendChild(t); setTimeout(()=>t.remove(),2500);
+}
+async function doAction(path,body) {
+  const r=await post('/api/'+path,body);
+  if(r.status==='ok'){ toast('✅ '+(r.action||'操作完成')); refresh(); }
+  else{ toast('❌ '+(r.message||'操作失败'),false); }
+}
+
+// ── Modal config ──
+const MODAL_CONFIG = {
+  users: {
+    title:'👥 用户层级', en:'User Tiers',
+    desc:'三层体系——👑创始人(全权限，不可降级)、⭐合伙人(画像已激活，≥10沙粒)、🌱使用者(学习期，沙粒不足10)。使用者积累足够沙粒后自动升级为合伙人。',
+    render:()=>{
+      const users=currentData.users?.users||[];
+      const stats=currentData.users?.stats||{};
+      return `<div style="margin-bottom:8px">${Object.entries(stats.by_tier||{}).map(([t,c])=>{
+        const info=(stats.tiers||{})[t]||{};
+        return c>0?`<span class="tag ${t==='founder'?'yellow':t==='partner'?'purple':'green'}">${info.icon||''} ${info.zh||t}: ${c}</span> `:'';
+      }).join('')}</div>
+      ${users.map(u=>`
+        <div style="padding:8px;margin:4px 0;background:var(--surface-alt);border-radius:6px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <strong>${u.tier_icon} ${u.name}</strong>
+            <span class="tag ${u.tier==='founder'?'yellow':u.tier==='partner'?'purple':'green'}" style="margin-left:6px">${u.tier_label}</span>
+            ${u.persona_status==='active'?'<span class="tag purple" style="margin-left:3px">画像已激活</span>':'<span style="font-size:0.65rem;color:var(--text-dim);margin-left:4px">学习中</span>'}
+          </div>
+          <div style="font-size:0.7rem;color:var(--text-dim)">${u.total_grains||0} 沙粒</div>
+        </div>
+      `).join('')}
+      <div class="empty-state" style="margin-top:8px;font-size:0.68rem">
+        注册新用户: <code style="background:var(--surface-alt);padding:2px 6px;border-radius:3px">user_manager.py register &lt;名字&gt; user</code>
+      </div>`;
+    }, actions:''
+  },
+  overview: {
+    title:'📊 系统概览', en:'System Overview',
+    desc:'PHOENIX 核心运行状态。版本号、活跃框架数、决策偏移方向和稳定性——系统的脉搏数据。',
+    render:()=>{
+      const d=currentData.status||{},drift=d.drift||{},evo=d.evolution||{},m=d.phoenix||{};
+      return `<div class="metric"><div class="label">版本 Version</div><div class="value">${m.version||'?'}</div></div>
+        <div class="metric"><div class="label">活跃框架 Active Frameworks</div><div class="value good">${evo.active_frameworks||0}</div></div>
+        <div class="metric"><div class="label">偏移方向 Drift Direction</div><div class="value">${drift.direction||'unknown'}</div></div>
+        <div class="metric"><div class="label">偏移稳定性 Drift Stability</div><div class="value">${drift.stability||'unknown'}</div></div>
+        <div class="metric"><div class="label">趋势斜率 Trend Slope</div><div class="value">${drift.trend_slope||0}</div></div>
+        <div class="metric"><div class="label">时间戳 Timestamp</div><div class="value" style="font-family:var(--mono);font-size:0.7rem">${(m.timestamp||'').slice(0,19)}</div></div>`;
+    }, actions:''
+  },
+  senses: {
+    title:'👁️ 七感监测', en:'7-Sense Monitor',
+    desc:'7 个元认知感知器。O2 监测上下文压力(>70%警告,>85%阻断)；Nociception 检测错误级联(>2次/5调用阻断)；Drift 追踪话题漂移(>30%偏离警告)；Echo 检测重复模式；Chronos 追踪时间节奏；Spatial 管理工作空间文件变更；Vestibular 平衡工具使用多样性。',
+    render:()=>{
+      const senses=currentData.status?.senses||{};
+      const names={o2:'O2 上下文压力',nociception:'痛觉 错误级联',drift:'漂移 话题偏离',echo:'回声 重复检测',chronos:'时间 节奏感知',spatial:'空间 文件感知',vestibular:'平衡 工具多样'};
+      return Object.entries(senses).map(([n,s])=>{
+        let cls='good'; if(s.trend==='alert')cls='bad'; else if(s.trend==='warn')cls='warn';
+        return `<div style="margin-bottom:6px;padding:8px;background:var(--surface-alt);border-radius:6px">
+          <strong>${names[n]||n}</strong>
+          <span class="tag ${cls}">${s.state||'正常'}</span>
+          ${s.trend?`<span class="tag purple">趋势:${s.trend}</span>`:''}
+        </div>`;
+      }).join('');
+    }, actions:''
+  },
+  drift: {
+    title:'📈 偏移速率', en:'Drift Velocity',
+    desc:'决策倾向的量化追踪。三个方向：frugal(保守/本地优先/省钱)、spend(投入/探索/付费方案)、drift(随性/无明确倾向)。稳定性分为四级：高度稳定→稳定→波动→剧烈波动。趋势斜率指示变化方向和速度。',
+    render:()=>{
+      const d=currentData.persona?.drift||currentData.status?.drift||{};
+      const h=d.history||[];
+      return `<div class="metric"><div class="label">方向 Direction</div><div class="value">${d.direction||'?'}</div></div>
+        <div class="metric"><div class="label">稳定性 Stability</div><div class="value">${d.stability||'?'}</div></div>
+        <h4 style="margin-top:14px;color:var(--text-dim)">每日记录 Daily History</h4>
+        ${h.filter(x=>x.total_signals>0).map(x=>`<div class="metric"><div class="label">${x.date}</div><div class="value">${x.drift_score>0?'+':''}${x.drift_score} <span style="color:var(--text-dim);font-weight:400">(${x.total_signals} 信号)</span></div></div>`).join('')||'<div class="empty-state">暂无每日数据。沙粒积累后会显示每日偏移率变化。</div>'}`;
+    }, actions:'<button class="btn primary" onclick="doAction(\'drift/recalc\',{})">重新计算 30 天偏移 Recalculate 30-Day Drift</button>'
+  },
+  modules: {
+    title:'🧩 模块清单', en:'Module Inventory',
+    desc:'PHOENIX 的所有引擎模块。纯 Python stdlib 构建，零外部依赖。每个模块独立可测试，层与层之间通过文件系统通信。点击卡片回到主页可看到模块摘要。',
+    render:()=>{
+      const mods=currentData.modules?.modules||{};
+      const descs={
+        'tool-guard':'工具循环防护——三种失败检测器+四级决策链','skill-registry':'技能依赖与冲突管理——62技能的拓扑验证',
+        'nexsandglass':'四层记忆引擎——沙粒写入+偏移率+决策检测+灵魂蒸馏',
+        'policy-engine':'策略引擎——15规则/7链/优先级仲裁','timeline':'执行时间线——SQLite+FTS5持久化',
+        'server':'HTTP API服务器——纯stdlib的仪表盘后端','inspector':'系统巡检——7端点HTTP监控',
+        'event-bus':'事件总线——25事件类型/发布订阅','phoenix-mcp-server':'MCP协议服务器——6工具被发现'
+      };
+      return `<div class="module-list">${Object.entries(mods).map(([n,m])=>`
+        <div class="module-item">
+          <div class="mod-name">${n}</div>
+          <div class="mod-meta">${m.lines} 行 · ${m.size_kb}kb</div>
+          <div class="mod-desc">${descs[n]||m.summary||''}</div>
+        </div>`).join('')}</div>`;
+    }, actions:''
+  },
+  toolguard: {
+    title:'🛡️ 工具防护', en:'Tool Guard',
+    desc:'防止 Agent 陷入死循环。三种检测器各有独立阈值——精确失败(同参数连续失败2→警告/4→阻断/6→中止)、同工具失败(3→警告/6→阻断/10→中止)、无进展(幂等工具2→警告/4→阻断/6→中止)。成功自动重置计数器。',
+    render:()=>{
+      const d=currentData.toolguard||{},s=d.summary||{},a=d.alerts||{};
+      let ah='';
+      for(const[k,v]of Object.entries(a.exact_failures||{}))
+        ah+=`<div class="alert-item crit">🔁 <strong>${k.split(':')[0]}</strong> 同参数连续失败 ${v} 次 (死循环风险)</div>`;
+      for(const[k,v]of Object.entries(a.tool_failures||{}))
+        ah+=`<div class="alert-item warn">⚠️ <strong>${k}</strong> 连续失败 ${v} 次 (工具可能不可用)</div>`;
+      for(const[k,v]of Object.entries(a.no_progress||{}))
+        ah+=`<div class="alert-item warn">🔄 <strong>${k}</strong> 无进展 ${v} 次 (原地踏步)</div>`;
+      return `<div class="metric"><div class="label">总观测 Total Observed</div><div class="value">${s.total_observed||0}</div></div>
+        <div class="metric"><div class="label">警告 Warned</div><div class="value warn">${s.total_warned||0}</div></div>
+        <div class="metric"><div class="label">阻断 Blocked</div><div class="value bad">${s.total_blocked||0}</div></div>
+        <div class="metric"><div class="label">强制中止 Halted</div><div class="value bad">${s.total_halted||0}</div></div>
+        <h4 style="margin-top:14px;color:var(--text-dim)">活跃警报 Active Alerts</h4>
+        ${ah||'<div class="empty-state">✅ 无活跃警报 All Clear</div>'}`;
+    }, actions:'<button class="btn danger" onclick="if(confirm(\'确认重置所有工具防护计数器？\'))doAction(\'tool-guard/reset\',{tool:\'all\'})">重置全部计数器 Reset All</button>'
+  },
+  skills: {
+    title:'🗂️ 技能生态', en:'Skill Ecosystem',
+    desc:'62 个 PHOENIX 技能的依赖关系全景。21 个技能有依赖声明（如 django-verification → django-tdd → django-patterns），仅 1 对冲突（continuous-learning ⚔️ continuous-learning-v2），28 个独立技能。拓扑排序确保加载顺序正确。',
+    render:()=>{
+      const d=currentData.skills||{};
+      return `<div class="metric"><div class="label">总技能 Total Skills</div><div class="value good">${d.total||0}</div></div>
+        <div class="metric"><div class="label">有依赖关系 With Dependencies</div><div class="value">${d.with_dependencies||0}</div></div>
+        <div class="metric"><div class="label">有冲突声明 With Conflicts</div><div class="value warn">${d.with_conflicts||0}</div></div>
+        <div class="metric"><div class="label">独立技能 Independent</div><div class="value">${d.orphans||0}</div></div>
+        <div class="empty-state" style="margin-top:16px">运行 <code style="background:var(--surface-alt);padding:2px 6px;border-radius:3px">skill-registry.py validate</code> 查看完整依赖验证报告</div>`;
+    }, actions:''
+  },
+  timeline: {
+    title:'📜 执行时间线', en:'Execution Timeline',
+    desc:'所有系统事件的完整审计轨迹。SQLite 持久化 + FTS5 全文搜索。支持按类型过滤（会话/工具/自愈/感知器/进化/知识/Agent），支持关键词搜索。每条记录精确到秒。',
+    render:()=>{
+      const entries=currentData.timeline?.entries||[];
+      const types=['session','tool','heal','sense','evolution','knowledge','agent'];
+      const typeNames={session:'会话',tool:'工具',heal:'自愈',sense:'感知器',evolution:'进化',knowledge:'知识',agent:'Agent'};
+      return `<div class="search-bar">
+        <input type="text" id="tl-search" placeholder="搜索事件... Search events..." oninput="filterTimeline()">
+        <select id="tl-type" onchange="filterTimeline()">
+          <option value="">全部类型 All Types</option>
+          ${types.map(t=>`<option value="${t}%">${typeNames[t]||t}</option>`).join('')}
+        </select>
+      </div>
+      <div id="tl-entries">${entries.slice(0,25).map(e=>`
+        <div class="tl-entry"><span class="ts">${(e.timestamp||'').slice(0,19).replace('T',' ')}</span><span class="type">${e.event_type||e.event||'?'}</span><span class="body">${(e.summary||JSON.stringify(e.payload||{})).slice(0,130)}</span></div>
+      `).join('')||'<div class="empty-state">暂无事件记录</div>'}</div>`;
+    }, actions:''
+  },
+  persona: {
+    title:'🧬 用户画像', en:'Persona (NexSandglass)',
+    desc:'四层自动蒸馏——L1基础锚点(技术栈关键词+领域)、L2兴趣图谱(工具偏好+关注领域)、L3交互协议(沟通风格+反模式——最重要的层)、L4认知内核(决策模式+核心价值观)。每条声明附溯源码 [src:hash] 防 LLM 幻觉。≥10 条沙粒后自动激活。',
+    render:()=>{
+      const d=currentData.persona||{};
+      if(!d.available) return '<div class="empty-state">数据不足——需要 ≥10 条对话沙粒才能蒸馏画像。<br>Insufficient data — need ≥10 sand grains.</div>';
+      return `<div style="margin-bottom:8px">
+        <span class="tag purple">${d.drift?.direction||'?'}</span>
+        <span class="tag yellow">${d.drift?.stability||'?'}</span>
+        <span style="font-size:0.72rem;color:var(--text-dim);margin-left:8px">${d.total_grains||0} 沙粒 grains</span>
+      </div>
+      <pre style="font-size:0.7rem;max-height:420px;overflow-y:auto;background:var(--surface-alt);padding:14px;border-radius:6px;white-space:pre-wrap;font-family:var(--font)">${d.persona||'无画像数据'}</pre>`;
+    }, actions:'<button class="btn primary" onclick="doAction(\'persona/rebuild\',{})">强制全量重建 Force Full Rebuild</button>'
+  }
+};
+
+function openModal(name) {
+  const c=MODAL_CONFIG[name]||{title:name,en:'',desc:'',render:()=>'',actions:''};
+  document.getElementById('modal-title').innerHTML=c.title+` <span class="en">${c.en}</span>`;
+  document.getElementById('modal-desc').textContent=c.desc;
+  document.getElementById('modal-body').innerHTML=c.render();
+  document.getElementById('modal-actions').innerHTML=c.actions||'';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e) {
+  if(e&&e.target!==document.getElementById('modal-overlay'))return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function filterTimeline() {
+  const search=(document.getElementById('tl-search')?.value||'').toLowerCase();
+  const type=(document.getElementById('tl-type')?.value||'').replace('%','');
+  const entries=currentData.timeline?.entries||[];
+  const f=entries.filter(e=>{
+    const et=e.event_type||e.event||'';
+    if(type&&!et.startsWith(type))return false;
+    if(search){const t=(e.summary+JSON.stringify(e.payload||{})+et).toLowerCase();if(!t.includes(search))return false;}
+    return true;
+  });
+  document.getElementById('tl-entries').innerHTML=f.slice(0,50).map(e=>`
+    <div class="tl-entry"><span class="ts">${(e.timestamp||'').slice(0,19).replace('T',' ')}</span><span class="type">${e.event_type||e.event||'?'}</span><span class="body">${(e.summary||JSON.stringify(e.payload||{})).slice(0,130)}</span></div>
+  `).join('')||'<div class="empty-state">无匹配事件 No matching events</div>';
+}
+
+// ── Mini renders ──
+function m(name,label,val,cls=''){return `<div class="metric"><div class="label">${label}</div><div class="value ${cls}">${val}</div></div>`;}
+function miniOverview(d){const dr=(d||{}).drift||{};return m('ver','版本 Version',(d||{}).phoenix?.version||'?')+m('fw','活跃框架 Frameworks',((d||{}).evolution||{}).active_frameworks||0,'good')+m('dr','偏移 Drift',(dr.direction||'?')+' · '+(dr.stability||'?'));}
+function miniDrift(d){const dr=(d||{}).drift||{};const p=dr.stability==='highly_stable'?90:dr.stability==='stable'?65:dr.stability==='volatile'?35:15;const cls=p>55?'good':p>25?'warn':'bad';return m('dir','方向 Direction',dr.direction||'?')+m('stab','稳定性 Stability',dr.stability||'?')+`<div class="bar"><div class="bar-fill ${cls}" style="width:${p}%"></div></div>`;}
+function miniModules(d){const mods=(d||{}).modules||{};return m('mod','模块 Modules',mods.total_modules||0,'good')+m('lines','总行数 Lines',mods.total_lines||0);}
+function miniToolGuard(d){const s=(d||{}).summary||{};return m('obs','观测 Observed',s.total_observed||0)+m('blk','阻断 Blocked',s.total_blocked||0,'bad')+m('halt','中止 Halted',s.total_halted||0,'bad');}
+function miniSkills(d){return m('sk','技能 Skills',(d||{}).total||0,'good')+m('dep','有依赖 With Deps',(d||{}).with_dependencies||0);}
+function miniUsers(d){const users=(d||{}).users||[],stats=(d||{}).stats||{};const parts=[];for(const[t,c]of Object.entries(stats.by_tier||{})){if(c>0){const info=(stats.tiers||{})[t]||{};parts.push(`${info.icon||''}${c}`);}}return m('total','总用户 Users',parts.join(' · '),'good')+users.slice(0,3).map(u=>`<div class="metric"><span class="label">${u.tier_icon} ${u.name}</span><span class="value" style="font-size:0.68rem">${u.tier_label}${u.persona_status==='active'?' · 画像已激活':''}</span></div>`).join('');}
+function miniTimeline(d){const e=((d||{}).entries||[]).slice(0,6);return e.map(x=>`<div class="tl-entry"><span class="ts">${(x.timestamp||'').slice(11,19)}</span><span class="type">${(x.event_type||x.event||'?').slice(0,18)}</span><span class="body">${(x.summary||'').slice(0,60)}</span></div>`).join('')||'<div class="empty-state">暂无事件</div>';}
+function miniPersona(d){if(!(d||{}).available)return '<div class="empty-state">等待沙粒积累...<br>Awaiting sand grains...</div>';return `<div style="font-size:0.7rem;max-height:90px;overflow:hidden;color:var(--text-dim)">${((d||{}).persona||'').slice(0,250)}...</div>`;}
+
+// ── SSE 实时连接 ──
+let sseConnected = false;
+let lastSseEvent = null;
+
+function connectSSE() {
+  try {
+    const sse = new EventSource('/api/stream');
+    sse.addEventListener('connected', (e) => {
+      sseConnected = true;
+      const d = JSON.parse(e.data);
+      document.getElementById('status-dot').className = 'dot online';
+      console.log('SSE connected,', d.clients, 'clients');
+    });
+    sse.addEventListener('sand_ingested', (e) => {
+      const d = JSON.parse(e.data);
+      lastSseEvent = d;
+      // 有新沙粒 → 立即刷新画像相关面板
+      refresh();
+      toast('🆕 新沙粒摄入 · '+ (d.total_grains||'?') +' grains', true);
+    });
+    sse.addEventListener('heartbeat', () => {
+      document.getElementById('status-dot').className = 'dot online';
+    });
+    sse.onerror = () => {
+      sseConnected = false;
+      document.getElementById('status-dot').className = 'dot';
+      // SSE 断开 → 降级到轮询
+      setTimeout(() => { if (!sseConnected) refresh(); }, 10000);
+    };
+  } catch(e) {
+    sseConnected = false;
+  }
+}
+
+async function refresh() {
+  const [status,modules,timeline,persona,toolguard,skills,users]=await Promise.all([
+    get('/api/status'),get('/api/modules'),get('/api/timeline?limit=20'),
+    get('/api/persona'),get('/api/tool-guard'),get('/api/skills'),get('/api/users')
+  ]);
+  currentData={status,modules,timeline,persona,toolguard,skills,users};
+  document.getElementById('overview-content').innerHTML=miniOverview(status);
+  document.getElementById('users-content').innerHTML=miniUsers(users);
+  document.getElementById('drift-content').innerHTML=miniDrift(persona);
+  document.getElementById('modules-content').innerHTML=miniModules(modules);
+  document.getElementById('toolguard-content').innerHTML=miniToolGuard(toolguard);
+  document.getElementById('skills-content').innerHTML=miniSkills(skills);
+  document.getElementById('timeline-content').innerHTML=miniTimeline(timeline);
+  document.getElementById('persona-content').innerHTML=miniPersona(persona);
+  const senses=status.senses||{};
+  const names={o2:'O2<br>压力',nociception:'痛觉<br>错误',drift:'漂移<br>话题',echo:'回声<br>重复',chronos:'时间<br>节奏',spatial:'空间<br>文件',vestibular:'平衡<br>工具'};
+  document.getElementById('senses-grid').innerHTML=Object.entries(senses).map(([n,s])=>{let cls='good';if(s.trend==='alert')cls='bad';else if(s.trend==='warn')cls='warn';return `<div class="sense-item"><div class="name">${names[n]||n}</div><div class="state ${cls}">${s.state||'ok'}</div>${s.trend?`<div class="trend">${s.trend}</div>`:''}</div>`;}).join('');
+  if(persona.total_grains)document.getElementById('grain-display').textContent=persona.total_grains+' 沙粒';
+  document.getElementById('refresh-time').textContent=new Date().toLocaleTimeString('zh-CN');
+  document.getElementById('clock').textContent=new Date().toLocaleTimeString('zh-CN');
+}
+connectSSE();
+refresh();
+setInterval(refresh, 30000);  // 兜底轮询
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>
