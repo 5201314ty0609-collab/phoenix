@@ -22,6 +22,12 @@ import os
 import sys
 from datetime import datetime, timezone
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
+
+
+class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
+    """多线程 HTTP 服务器——支持 SSE 长连接不阻塞其他请求"""
+    daemon_threads = True
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse, parse_qs
@@ -613,7 +619,7 @@ def main():
         if arg == "--host" and i + 1 < len(sys.argv):
             HOST = sys.argv[i + 1]
 
-    server = HTTPServer((HOST, PORT), PhoenixHandler)
+    server = ThreadingHTTPServer((HOST, PORT), PhoenixHandler)
     print(f"🐦‍🔥 PHOENIX Server")
     print(f"   http://{HOST}:{PORT}")
     print(f"   API: http://{HOST}:{PORT}/api/status")

@@ -161,7 +161,7 @@
 <script>
 const API='';let D={};let sseOk=false;
 
-async function G(p){try{const r=await fetch(API+p);return r.ok?await r.json():null}catch(e){return null}}
+async function G(p){try{const c=new AbortController();const t=setTimeout(()=>c.abort(),8000);const r=await fetch(API+p,{signal:c.signal});clearTimeout(t);return r.ok?await r.json():null}catch(e){console.log('Fetch fail:',p,e.message);return null}}
 async function P(p,b){try{const r=await fetch(API+p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});return r.ok?await r.json():null}catch(e){return null}}
 
 function T(m,ok=true){const t=document.createElement('div');t.className='toast '+(ok?'ok':'err');t.textContent=m;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),2500)}
@@ -253,15 +253,15 @@ async function load(){
     G('/api/persona'),G('/api/tool-guard'),G('/api/skills'),G('/api/users')
   ]);
   D={status,modules,timeline,persona,toolguard,skills,users};
-  // Render all
-  buildWelcome(persona);
-  document.getElementById('persona-mini').innerHTML=miniPersona(persona);
-  document.getElementById('senses-mini').innerHTML=miniSenses(status);
-  document.getElementById('drift-mini').innerHTML=miniDrift(persona);
-  document.getElementById('toolguard-mini').innerHTML=miniToolGuard(toolguard);
-  document.getElementById('users-mini').innerHTML=miniUsers(users);
-  document.getElementById('modules-mini').innerHTML=miniModules(modules);
-  document.getElementById('timeline-mini').innerHTML=miniTimeline(timeline);
+  // Render all — each wrapped in try-catch so one failure doesn't block others
+  try{buildWelcome(persona||{})}catch(e){console.log(e)}
+  try{document.getElementById('persona-mini').innerHTML=miniPersona(persona||{})}catch(e){}
+  try{document.getElementById('senses-mini').innerHTML=miniSenses(status||{})}catch(e){}
+  try{document.getElementById('drift-mini').innerHTML=miniDrift(persona||{})}catch(e){}
+  try{document.getElementById('toolguard-mini').innerHTML=miniToolGuard(toolguard||{})}catch(e){}
+  try{document.getElementById('users-mini').innerHTML=miniUsers(users||{})}catch(e){}
+  try{document.getElementById('modules-mini').innerHTML=miniModules(modules||{})}catch(e){}
+  try{document.getElementById('timeline-mini').innerHTML=miniTimeline(timeline||{})}catch(e){}
   document.getElementById('refresh-label').textContent='更新于 '+new Date().toLocaleTimeString('zh-CN');
   setConn(true,'PHOENIX 引擎已连接');
 }
