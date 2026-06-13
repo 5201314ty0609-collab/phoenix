@@ -1,0 +1,22 @@
+{
+  "id": "shadow-c496db56",
+  "type": "shadow",
+  "title": "Anti-pattern: 连续 3 次同样错误仍不改变策略",
+  "description": "连续 3 次同样错误仍不改变策略",
+  "content": "{\"id\": \"shadow-005\", \"pattern\": \"连续 3 次同样错误仍不改变策略\", \"consequence\": \"无限循环，浪费 tokens，任务无法完成\", \"severity\": \"high\", \"detection\": \"同一工具/操作连续 3 次相同错误\", \"prevention\": \"MUNDO _stuck_threshold: 连续3次同错误 → 强制跳出\", \"source\": \"MUNDO core.py MundoEngine\"}",
+  "confidence": 0.7,
+  "stage": "active",
+  "domains": [
+    "anti-pattern"
+  ],
+  "created_at": "2026-06-08T10:01:18.593688+00:00",
+  "updated_at": "2026-06-08T10:01:18.593694+00:00",
+  "source": {
+    "origin": "phoenix-shadow"
+  },
+  "metadata": {
+    "severity": "high"
+  },
+  "edges_out": [],
+  "edges_in_count": 7
+}

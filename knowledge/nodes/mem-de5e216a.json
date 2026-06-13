@@ -1,0 +1,26 @@
+{
+  "id": "mem-de5e216a",
+  "type": "memory",
+  "title": "memory-curation",
+  "description": "PHOENIX 记忆筛选原则 — 什么值得记住，什么该隔离",
+  "content": "# 记忆筛选原则\n\n复合型创作者需要精炼的上下文。记忆不是越多越好。\n\n## 保留标准（满足任一即保留）\n\n- 定义「你是谁」或「时宇是谁」\n- 指引长期方向（愿景、原则、策略）\n- 包含被验证过的重要教训\n- 直接影响日常对话质量\n\n## 隔离标准（满足任一即归档）\n\n- 一次性的配置操作细节\n- 已吸收到系统中的外部评估\n- 纯技术参考，低频使用\n- 超过 30 天未被回顾\n\n## 新增记忆前自问\n\n> 这条信息对创作和进化有帮助吗？\n> 下次对话时，读到这条会让我更好地帮助时宇吗？\n\n答不上来 → 不记。已有记忆中的冗余 → 清掉。\n\n## 归档位置\n\n`memory/_archive/` — 保留但不主动加载。需要时可查询。\n\n**Why:** 记忆臃肿消耗上下文，稀释核心信号的密度。精炼记忆 = 保护进化质量。\n**How to apply:** 每次会话结束前审视新增记忆，每次开始时确认没有冗余。",
+  "confidence": 0.9,
+  "stage": "active",
+  "domains": [
+    "reference"
+  ],
+  "created_at": "2026-06-08T10:01:18.590423+00:00",
+  "updated_at": "2026-06-08T10:01:18.590432+00:00",
+  "source": {
+    "origin": "phoenix-memory",
+    "original_file": "memory-curation.md"
+  },
+  "metadata": {
+    "file": "memory-curation.md",
+    "archived": false
+  },
+  "edges_out": [
+    "mem-4db95721"
+  ],
+  "edges_in_count": 3
+}

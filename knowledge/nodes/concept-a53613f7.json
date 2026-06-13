@@ -1,0 +1,33 @@
+{
+  "id": "concept-a53613f7",
+  "type": "concept",
+  "title": "Heal Rule: tool_timeout",
+  "description": "工具调用超时 → 增加 timeout 参数",
+  "content": "{\"pattern\": \"timeout|timed out|TimeoutError\", \"action\": \"increase_timeout\", \"description\": \"工具调用超时 → 增加 timeout 参数\", \"auto_apply\": false, \"success_count\": 0, \"fail_count\": 24}",
+  "confidence": 0.4,
+  "stage": "active",
+  "domains": [
+    "self-healing",
+    "automation"
+  ],
+  "created_at": "2026-06-08T10:01:18.600729+00:00",
+  "updated_at": "2026-06-08T10:01:18.600736+00:00",
+  "source": {
+    "origin": "phoenix-heal-rules"
+  },
+  "metadata": {
+    "auto_apply": false,
+    "success_count": 0,
+    "fail_count": 24
+  },
+  "edges_out": [
+    "shadow-09d2d059",
+    "shadow-4789e12f",
+    "shadow-78b98e5b",
+    "shadow-7fd4e0d7",
+    "shadow-b1399b32",
+    "shadow-c496db56",
+    "shadow-d2a694f1"
+  ],
+  "edges_in_count": 0
+}

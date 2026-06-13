@@ -1,0 +1,33 @@
+{
+  "id": "concept-4e66cb33",
+  "type": "concept",
+  "title": "Heal Rule: file_not_found",
+  "description": "文件未找到 → 搜索替代路径",
+  "content": "{\"pattern\": \"No such file|FileNotFoundError|ENOENT\", \"action\": \"search_and_suggest\", \"description\": \"文件未找到 → 搜索替代路径\", \"auto_apply\": false, \"success_count\": 0, \"fail_count\": 0}",
+  "confidence": 0.4,
+  "stage": "active",
+  "domains": [
+    "self-healing",
+    "automation"
+  ],
+  "created_at": "2026-06-08T10:01:18.600996+00:00",
+  "updated_at": "2026-06-08T10:01:18.601001+00:00",
+  "source": {
+    "origin": "phoenix-heal-rules"
+  },
+  "metadata": {
+    "auto_apply": false,
+    "success_count": 0,
+    "fail_count": 0
+  },
+  "edges_out": [
+    "shadow-09d2d059",
+    "shadow-4789e12f",
+    "shadow-78b98e5b",
+    "shadow-7fd4e0d7",
+    "shadow-b1399b32",
+    "shadow-c496db56",
+    "shadow-d2a694f1"
+  ],
+  "edges_in_count": 0
+}

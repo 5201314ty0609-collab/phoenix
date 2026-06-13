@@ -1,0 +1,33 @@
+{
+  "id": "concept-38d143c1",
+  "type": "concept",
+  "title": "Heal Rule: permission_denied",
+  "description": "权限拒绝 → 建议 chmod 或检查权限",
+  "content": "{\"pattern\": \"Permission denied|EACCES|not permitted\", \"action\": \"suggest_sudo_or_chmod\", \"description\": \"权限拒绝 → 建议 chmod 或检查权限\", \"auto_apply\": false, \"success_count\": 0, \"fail_count\": 0}",
+  "confidence": 0.4,
+  "stage": "active",
+  "domains": [
+    "self-healing",
+    "automation"
+  ],
+  "created_at": "2026-06-08T10:01:18.601143+00:00",
+  "updated_at": "2026-06-08T10:01:18.601149+00:00",
+  "source": {
+    "origin": "phoenix-heal-rules"
+  },
+  "metadata": {
+    "auto_apply": false,
+    "success_count": 0,
+    "fail_count": 0
+  },
+  "edges_out": [
+    "shadow-09d2d059",
+    "shadow-4789e12f",
+    "shadow-78b98e5b",
+    "shadow-7fd4e0d7",
+    "shadow-b1399b32",
+    "shadow-c496db56",
+    "shadow-d2a694f1"
+  ],
+  "edges_in_count": 0
+}

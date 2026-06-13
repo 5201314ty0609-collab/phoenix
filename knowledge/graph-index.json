@@ -1,0 +1,1853 @@
+{
+  "built_at": "2026-06-08T10:16:50.260133+00:00",
+  "stats": {
+    "total_nodes": 64,
+    "total_edges": 206,
+    "by_type": {
+      "concept": 7,
+      "framework": 16,
+      "memory": 5,
+      "shadow": 7,
+      "story-event": 24,
+      "truth": 5
+    },
+    "by_stage": {
+      "active": 59,
+      "validated": 5
+    },
+    "by_domain": {
+      "self-healing": 7,
+      "automation": 7,
+      "auto-detected": 16,
+      "reference": 5,
+      "anti-pattern": 7,
+      "story": 24,
+      "core-values": 5
+    }
+  },
+  "nodes": {
+    "concept-37c52129": {
+      "title": "Heal Rule: connection_refused",
+      "type": "concept",
+      "confidence": 0.4,
+      "stage": "active",
+      "domains": [
+        "self-healing",
+        "automation"
+      ],
+      "edges_out": 14,
+      "edges_in": 0
+    },
+    "concept-38d143c1": {
+      "title": "Heal Rule: permission_denied",
+      "type": "concept",
+      "confidence": 0.4,
+      "stage": "active",
+      "domains": [
+        "self-healing",
+        "automation"
+      ],
+      "edges_out": 14,
+      "edges_in": 0
+    },
+    "concept-4e66cb33": {
+      "title": "Heal Rule: file_not_found",
+      "type": "concept",
+      "confidence": 0.4,
+      "stage": "active",
+      "domains": [
+        "self-healing",
+        "automation"
+      ],
+      "edges_out": 14,
+      "edges_in": 0
+    },
+    "concept-a53613f7": {
+      "title": "Heal Rule: tool_timeout",
+      "type": "concept",
+      "confidence": 0.4,
+      "stage": "active",
+      "domains": [
+        "self-healing",
+        "automation"
+      ],
+      "edges_out": 14,
+      "edges_in": 0
+    },
+    "concept-bf2e9bd6": {
+      "title": "Heal Rule: import_error",
+      "type": "concept",
+      "confidence": 0.4,
+      "stage": "active",
+      "domains": [
+        "self-healing",
+        "automation"
+      ],
+      "edges_out": 14,
+      "edges_in": 0
+    },
+    "concept-bf31010d": {
+      "title": "Heal Rule: context_overflow",
+      "type": "concept",
+      "confidence": 0.4,
+      "stage": "active",
+      "domains": [
+        "self-healing",
+        "automation"
+      ],
+      "edges_out": 14,
+      "edges_in": 0
+    },
+    "concept-c8b965dc": {
+      "title": "Heal Rule: api_rate_limit",
+      "type": "concept",
+      "confidence": 0.4,
+      "stage": "active",
+      "domains": [
+        "self-healing",
+        "automation"
+      ],
+      "edges_out": 14,
+      "edges_in": 0
+    },
+    "fw-28a02434": {
+      "title": "pattern-b662871273b9",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-3947a422": {
+      "title": "pattern-93fa8ab1360e",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-3efa1c64": {
+      "title": "pattern-6c76719be30c",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-4987ed0e": {
+      "title": "pattern-cdb4b2fff359",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-51bf6aea": {
+      "title": "pattern-620ba4998b36",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-74c298a8": {
+      "title": "pattern-71b1329546a9",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-7e0fc57e": {
+      "title": "pattern-2fa9237cd790",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-80e5ec94": {
+      "title": "pattern-977c76340d26",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-97346839": {
+      "title": "pattern-fb84873a3607",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-adb93d64": {
+      "title": "pattern-e9e7df43fef9",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-b22d4065": {
+      "title": "pattern-cebe0914fe4b",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-c80f97d0": {
+      "title": "pattern-e8bb89798f47",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-c90efaa3": {
+      "title": "pattern-e44a4cb35513",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-d5279fb2": {
+      "title": "pattern-5a3528df60c1",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-f43956d8": {
+      "title": "pattern-eb99f10a856c",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "fw-faf384ce": {
+      "title": "pattern-7024ff0860de",
+      "type": "framework",
+      "confidence": 0.2,
+      "stage": "active",
+      "domains": [
+        "auto-detected"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "mem-2e747664": {
+      "title": "phoenix-vision",
+      "type": "memory",
+      "confidence": 0.9,
+      "stage": "active",
+      "domains": [
+        "reference"
+      ],
+      "edges_out": 4,
+      "edges_in": 4
+    },
+    "mem-4db95721": {
+      "title": "hermes-phoenix-deployment",
+      "type": "memory",
+      "confidence": 0.9,
+      "stage": "active",
+      "domains": [
+        "reference"
+      ],
+      "edges_out": 32,
+      "edges_in": 8
+    },
+    "mem-b417ba76": {
+      "title": "phoenix-genesis",
+      "type": "memory",
+      "confidence": 0.9,
+      "stage": "active",
+      "domains": [
+        "reference"
+      ],
+      "edges_out": 6,
+      "edges_in": 12
+    },
+    "mem-de5e216a": {
+      "title": "memory-curation",
+      "type": "memory",
+      "confidence": 0.9,
+      "stage": "active",
+      "domains": [
+        "reference"
+      ],
+      "edges_out": 2,
+      "edges_in": 6
+    },
+    "mem-e21b1496": {
+      "title": "user-profile",
+      "type": "memory",
+      "confidence": 0.9,
+      "stage": "active",
+      "domains": [
+        "reference"
+      ],
+      "edges_out": 8,
+      "edges_in": 0
+    },
+    "shadow-09d2d059": {
+      "title": "Anti-pattern: 硬编码密钥/密码/Token 在源代码中",
+      "type": "shadow",
+      "confidence": 0.7,
+      "stage": "active",
+      "domains": [
+        "anti-pattern"
+      ],
+      "edges_out": 0,
+      "edges_in": 14
+    },
+    "shadow-4789e12f": {
+      "title": "Anti-pattern: 修改数据时不创建新对象 (mutation)",
+      "type": "shadow",
+      "confidence": 0.7,
+      "stage": "active",
+      "domains": [
+        "anti-pattern"
+      ],
+      "edges_out": 0,
+      "edges_in": 14
+    },
+    "shadow-78b98e5b": {
+      "title": "Anti-pattern: 不搜索现有代码就从头实现",
+      "type": "shadow",
+      "confidence": 0.7,
+      "stage": "active",
+      "domains": [
+        "anti-pattern"
+      ],
+      "edges_out": 0,
+      "edges_in": 14
+    },
+    "shadow-7fd4e0d7": {
+      "title": "Anti-pattern: 大文件一次性读取或编辑 (超过 800 行)",
+      "type": "shadow",
+      "confidence": 0.7,
+      "stage": "active",
+      "domains": [
+        "anti-pattern"
+      ],
+      "edges_out": 0,
+      "edges_in": 14
+    },
+    "shadow-b1399b32": {
+      "title": "Anti-pattern: 工具调用失败后不分析错误就重试相同命令",
+      "type": "shadow",
+      "confidence": 0.7,
+      "stage": "active",
+      "domains": [
+        "anti-pattern"
+      ],
+      "edges_out": 0,
+      "edges_in": 14
+    },
+    "shadow-c496db56": {
+      "title": "Anti-pattern: 连续 3 次同样错误仍不改变策略",
+      "type": "shadow",
+      "confidence": 0.7,
+      "stage": "active",
+      "domains": [
+        "anti-pattern"
+      ],
+      "edges_out": 0,
+      "edges_in": 14
+    },
+    "shadow-d2a694f1": {
+      "title": "Anti-pattern: 在上下文 > 85% 时不压缩继续执行",
+      "type": "shadow",
+      "confidence": 0.7,
+      "stage": "active",
+      "domains": [
+        "anti-pattern"
+      ],
+      "edges_out": 0,
+      "edges_in": 14
+    },
+    "story-01c6d88c": {
+      "title": "session_end: PHOENIX 会话 — 详见日记",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-0b0f0f95": {
+      "title": "session_end: 测试一天多会话合并 — 第二次会话",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-0c60e005": {
+      "title": "hermes_session: 用中文说：我已就绪",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-0cfe5693": {
+      "title": "hermes_session: Say hello in 3 words",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-133c8fb1": {
+      "title": "hermes_session: test",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-18cb7bb1": {
+      "title": "hermes_session_start",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-2c51473e": {
+      "title": "session_end: PHOENIX v1.1完整升级——神经系统(SessionStart/Stop hooks)+记忆精炼(15条→2条)+GitHub同步+启动器整理+多Age",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-30be9115": {
+      "title": "hermes_session: 用中文说你好",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-36fe0b91": {
+      "title": "hermes_session: 创作任务：用 p5js 创建一个「PHOENIX 七感元认知」实时可视化面板。\n\n要求：\n1. 创建文件 ~/phoenix-site/seven-senses",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-3c5beb50": {
+      "title": "hermes_session: 你好，我是李时宇，PHOENIX的创建者。请用中文回复我，简单介绍你自己。",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-525591f3": {
+      "title": "hermes_session: 你是哪个 AI？你的核心身份是什么？用一句话回答。",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-5caab1bf": {
+      "title": "session_end: 接通PHOENIX神经系统(SessionStart+Stop hooks联调成功),建立跨会话连续性。记忆清理——归档2条低价值记忆,精简2条核心记忆,建立记",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-5e38423f": {
+      "title": "session_end: 接通 PHOENIX 神经系统 — 首次 SessionStart + Stop hooks 联调成功",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-6847d20e": {
+      "title": "hermes_session: 创作任务：为 PHOENIX 设计一套完整的视觉身份系统。\n\n背景：\nPHOENIX 是李时宇的自进化 AI Agent，融合了 ECC、MUNDO Agent",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-72bcd352": {
+      "title": "genesis: PHOENIX self-evolving agent harness initialized",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 0
+    },
+    "story-74c7b52c": {
+      "title": "session_end: 第三次会话 — 验证合并",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-88bc578c": {
+      "title": "hermes_session: 创作任务：为 PHOENIX 写一首「诞生叙事」诗 + ASCII Art 封面。\n\n背景：\nPHOENIX 诞生于 2026年6月5日，由五大系统融合而成：\n",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-8b608d0c": {
+      "title": "hermes_session_end: Hermes 会话",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-970175d3": {
+      "title": "session_end: PHOENIX v1.1升级——记忆清理(归档2条,精简2条,建立筛选原则)+GitHub探索吸收3个高星项目(disler/observability+age",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-9d855498": {
+      "title": "evolution-cycle: Cycle complete: 0↑ 0↓",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-c76f6b32": {
+      "title": "hermes_session: 用 claude-code skill，在 /tmp 目录下创建一个 phoenix-test.py 文件，内容是打印 'PHOENIX MCP Bridge ",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-f432c569": {
+      "title": "session_end: PHOENIX v1.1 升级 — GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-age",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-f6dc76f4": {
+      "title": "hermes_session: 你现在有哪些系统能力？列出你的 PHOENIX 核心系统。",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 2,
+      "edges_in": 2
+    },
+    "story-fafd5b63": {
+      "title": "hermes_session: 用一句话总结 PHOENIX MCP 桥的架构：Hermes 能调 Claude Code 吗？Claude Code 能调 Hermes 吗？",
+      "type": "story-event",
+      "confidence": 0.5,
+      "stage": "active",
+      "domains": [
+        "story"
+      ],
+      "edges_out": 0,
+      "edges_in": 2
+    },
+    "truth-073d5947": {
+      "title": "Truth: 上下文 > 70% 时主动压缩，避免 token 耗尽导致的截断",
+      "type": "truth",
+      "confidence": 0.92,
+      "stage": "validated",
+      "domains": [
+        "core-values"
+      ],
+      "edges_out": 2,
+      "edges_in": 0
+    },
+    "truth-37a2cff8": {
+      "title": "Truth: 并行执行独立子任务，wall-clock 时间减少 60%",
+      "type": "truth",
+      "confidence": 0.9,
+      "stage": "validated",
+      "domains": [
+        "core-values"
+      ],
+      "edges_out": 2,
+      "edges_in": 0
+    },
+    "truth-98aa4055": {
+      "title": "Truth: 消息清洗 (surrogate修复 + content类型转换) 防止 API 调用失败",
+      "type": "truth",
+      "confidence": 0.85,
+      "stage": "validated",
+      "domains": [
+        "core-values"
+      ],
+      "edges_out": 2,
+      "edges_in": 0
+    },
+    "truth-e2c877ec": {
+      "title": "Truth: 写完代码立即触发 code-reviewer agent，bug 密度降低 50%",
+      "type": "truth",
+      "confidence": 0.88,
+      "stage": "validated",
+      "domains": [
+        "core-values"
+      ],
+      "edges_out": 2,
+      "edges_in": 0
+    },
+    "truth-e4e759f0": {
+      "title": "Truth: 复杂任务先 Plan 再执行，成功率提升 40%+",
+      "type": "truth",
+      "confidence": 0.95,
+      "stage": "validated",
+      "domains": [
+        "core-values"
+      ],
+      "edges_out": 2,
+      "edges_in": 0
+    }
+  },
+  "adjacency": {
+    "mem-e21b1496": [
+      {
+        "target": "mem-b417ba76",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-2e747664",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-de5e216a",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-4db95721",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-b417ba76",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-2e747664",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-de5e216a",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-4db95721",
+        "relation": "related_to",
+        "weight": 0.5
+      }
+    ],
+    "mem-b417ba76": [
+      {
+        "target": "mem-2e747664",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-de5e216a",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-4db95721",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-2e747664",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-de5e216a",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-4db95721",
+        "relation": "related_to",
+        "weight": 0.5
+      }
+    ],
+    "mem-2e747664": [
+      {
+        "target": "mem-de5e216a",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-4db95721",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-de5e216a",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-4db95721",
+        "relation": "related_to",
+        "weight": 0.5
+      }
+    ],
+    "mem-de5e216a": [
+      {
+        "target": "mem-4db95721",
+        "relation": "related_to",
+        "weight": 0.5
+      },
+      {
+        "target": "mem-4db95721",
+        "relation": "related_to",
+        "weight": 0.5
+      }
+    ],
+    "concept-37c52129": [
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      }
+    ],
+    "concept-38d143c1": [
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      }
+    ],
+    "concept-4e66cb33": [
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      }
+    ],
+    "concept-a53613f7": [
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      }
+    ],
+    "concept-bf2e9bd6": [
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      }
+    ],
+    "concept-bf31010d": [
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      }
+    ],
+    "concept-c8b965dc": [
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-09d2d059",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-4789e12f",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-78b98e5b",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-7fd4e0d7",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-b1399b32",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-c496db56",
+        "relation": "related_to",
+        "weight": 0.4
+      },
+      {
+        "target": "shadow-d2a694f1",
+        "relation": "related_to",
+        "weight": 0.4
+      }
+    ],
+    "story-72bcd352": [
+      {
+        "target": "story-9d855498",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-9d855498",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-9d855498": [
+      {
+        "target": "story-5e38423f",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-5e38423f",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-5e38423f": [
+      {
+        "target": "story-0b0f0f95",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-0b0f0f95",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-0b0f0f95": [
+      {
+        "target": "story-2c51473e",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-2c51473e",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-2c51473e": [
+      {
+        "target": "story-5caab1bf",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-5caab1bf",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-5caab1bf": [
+      {
+        "target": "story-74c7b52c",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-74c7b52c",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-74c7b52c": [
+      {
+        "target": "story-970175d3",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-970175d3",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-970175d3": [
+      {
+        "target": "story-f432c569",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-f432c569",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-f432c569": [
+      {
+        "target": "story-01c6d88c",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-01c6d88c",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-01c6d88c": [
+      {
+        "target": "story-0c60e005",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-0c60e005",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-0c60e005": [
+      {
+        "target": "story-0cfe5693",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-0cfe5693",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-0cfe5693": [
+      {
+        "target": "story-133c8fb1",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-133c8fb1",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-133c8fb1": [
+      {
+        "target": "story-18cb7bb1",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-18cb7bb1",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-18cb7bb1": [
+      {
+        "target": "story-30be9115",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-30be9115",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-30be9115": [
+      {
+        "target": "story-36fe0b91",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-36fe0b91",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-36fe0b91": [
+      {
+        "target": "story-3c5beb50",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-3c5beb50",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-3c5beb50": [
+      {
+        "target": "story-525591f3",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-525591f3",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-525591f3": [
+      {
+        "target": "story-6847d20e",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-6847d20e",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-6847d20e": [
+      {
+        "target": "story-88bc578c",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-88bc578c",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-88bc578c": [
+      {
+        "target": "story-8b608d0c",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-8b608d0c",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-8b608d0c": [
+      {
+        "target": "story-c76f6b32",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-c76f6b32",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-c76f6b32": [
+      {
+        "target": "story-f6dc76f4",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-f6dc76f4",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "story-f6dc76f4": [
+      {
+        "target": "story-fafd5b63",
+        "relation": "follow",
+        "weight": 0.3
+      },
+      {
+        "target": "story-fafd5b63",
+        "relation": "follow",
+        "weight": 0.3
+      }
+    ],
+    "mem-4db95721": [
+      {
+        "target": "fw-28a02434",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-3947a422",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-3efa1c64",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-4987ed0e",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-51bf6aea",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-74c298a8",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-7e0fc57e",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-80e5ec94",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-97346839",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-adb93d64",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-b22d4065",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-c80f97d0",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-c90efaa3",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-d5279fb2",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-f43956d8",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-faf384ce",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-28a02434",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-3947a422",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-3efa1c64",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-4987ed0e",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-51bf6aea",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-74c298a8",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-7e0fc57e",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-80e5ec94",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-97346839",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-adb93d64",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-b22d4065",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-c80f97d0",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-c90efaa3",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-d5279fb2",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-f43956d8",
+        "relation": "related_to",
+        "weight": 0.3
+      },
+      {
+        "target": "fw-faf384ce",
+        "relation": "related_to",
+        "weight": 0.3
+      }
+    ],
+    "truth-073d5947": [
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      },
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      }
+    ],
+    "truth-37a2cff8": [
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      },
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      }
+    ],
+    "truth-98aa4055": [
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      },
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      }
+    ],
+    "truth-e2c877ec": [
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      },
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      }
+    ],
+    "truth-e4e759f0": [
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      },
+      {
+        "target": "mem-b417ba76",
+        "relation": "derives_from",
+        "weight": 0.7
+      }
+    ]
+  }
+}

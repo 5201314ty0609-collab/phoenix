@@ -1,0 +1,19 @@
+{
+  "status": "normal",
+  "last_updated": "2026-06-06T09:07:42.384129+00:00",
+  "metrics": {
+    "total_calls": 30,
+    "tool_distribution": {
+      "assistant": 14,
+      "user": 7,
+      "last-prompt": 2,
+      "ai-title": 2,
+      "mode": 2,
+      "permission-mode": 2,
+      "attachment": 1
+    },
+    "dominant_percentage": 46.7
+  },
+  "warnings": [],
+  "recommendation": "continue"
+}

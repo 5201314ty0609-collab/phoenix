@@ -1,0 +1,24 @@
+{
+  "id": "truth-98aa4055",
+  "type": "truth",
+  "title": "Truth: 消息清洗 (surrogate修复 + content类型转换) 防止 API 调用失败",
+  "description": "消息清洗 (surrogate修复 + content类型转换) 防止 API 调用失败",
+  "content": "{\"id\": \"truth-005\", \"statement\": \"消息清洗 (surrogate修复 + content类型转换) 防止 API 调用失败\", \"confidence\": 0.85, \"source\": \"MUNDO llm.py sanitize_messages\", \"stage\": \"observed\", \"observations\": 15}",
+  "confidence": 0.85,
+  "stage": "validated",
+  "domains": [
+    "core-values"
+  ],
+  "created_at": "2026-06-08T10:01:18.593273+00:00",
+  "updated_at": "2026-06-08T10:01:18.593278+00:00",
+  "source": {
+    "origin": "phoenix-soul"
+  },
+  "metadata": {
+    "observations": 15
+  },
+  "edges_out": [
+    "mem-b417ba76"
+  ],
+  "edges_in_count": 0
+}

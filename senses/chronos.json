@@ -1,0 +1,10 @@
+{
+  "status": "normal",
+  "last_updated": "2026-06-06T09:07:42.384676+00:00",
+  "metrics": {
+    "idle_seconds": 0,
+    "last_active_at": "unknown"
+  },
+  "warnings": [],
+  "recommendation": "continue"
+}

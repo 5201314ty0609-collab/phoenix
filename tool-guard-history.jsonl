@@ -1,0 +1,499 @@
+{"timestamp": "2026-06-12T02:47:25.587104+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:47:25.616956+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 2 次，建议换策略"}
+{"timestamp": "2026-06-12T02:47:25.644296+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 3 次，建议换策略; [朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:47:25.672851+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "block", "code": "exact_fail_block", "message": "[御史谏言] Bash 同参数连续失败 4 次，建议阻断"}
+{"timestamp": "2026-06-12T02:47:25.700910+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "block", "code": "exact_fail_block", "message": "[御史谏言] Bash 同参数连续失败 5 次，建议阻断"}
+{"timestamp": "2026-06-12T02:47:25.729219+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "halt", "code": "exact_fail_halt", "message": "[御史弹劾] Bash 同参数连续失败 6 次，判定死循环，强制中止"}
+{"timestamp": "2026-06-12T02:47:34.451364+00:00", "tool": "Bash", "args_hash": "6013b50779d02774", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:47:34.480004+00:00", "tool": "Bash", "args_hash": "19d90e5d7845a8c0", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:47:34.508691+00:00", "tool": "Bash", "args_hash": "20824ec7b8e9b184", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:47:34.536476+00:00", "tool": "Bash", "args_hash": "eb1f386d0e623da8", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 4 次，建议换工具"}
+{"timestamp": "2026-06-12T02:47:34.564550+00:00", "tool": "Bash", "args_hash": "555551a361c1f38a", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 5 次，建议换工具"}
+{"timestamp": "2026-06-12T02:47:34.593369+00:00", "tool": "Bash", "args_hash": "32a5196917c6dadf", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 6 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:47:34.621841+00:00", "tool": "Bash", "args_hash": "a94c544a43bde61b", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 7 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:47:34.650350+00:00", "tool": "Bash", "args_hash": "f2fb89d30bcdfa19", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 8 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:47:34.678503+00:00", "tool": "Bash", "args_hash": "b73b90cf4f0e5748", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 9 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:47:34.706597+00:00", "tool": "Bash", "args_hash": "51e9c9758474d7f5", "is_error": true, "decision": "halt", "code": "same_tool_halt", "message": "[御史弹劾] Bash 连续失败 10 次，强制中止"}
+{"timestamp": "2026-06-12T02:48:01.513520+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:48:01.541015+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:48:01.569051+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 3 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:48:01.597908+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 4 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:48:01.625754+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "block", "code": "no_progress_block", "message": "[御史谏言] Read 连续 5 次返回相同结果，原地踏步"}
+{"timestamp": "2026-06-12T02:48:01.653935+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "block", "code": "no_progress_block", "message": "[御史谏言] Read 连续 6 次返回相同结果，原地踏步"}
+{"timestamp": "2026-06-12T02:48:22.994860+00:00", "tool": "Bash", "args_hash": "7ea8f0e68dca98de", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:48:23.021887+00:00", "tool": "Bash", "args_hash": "7ea8f0e68dca98de", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 2 次，建议换策略"}
+{"timestamp": "2026-06-12T02:48:23.049696+00:00", "tool": "Bash", "args_hash": "7ea8f0e68dca98de", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 3 次，建议换策略; [朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:48:23.104573+00:00", "tool": "Bash", "args_hash": "7ea8f0e68dca98de", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:48:34.910217+00:00", "tool": "Bash", "args_hash": "2d2bdfc6be334aad", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:48:34.939058+00:00", "tool": "Bash", "args_hash": "2d2bdfc6be334aad", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 2 次，建议换策略"}
+{"timestamp": "2026-06-12T02:48:34.967592+00:00", "tool": "Bash", "args_hash": "2d2bdfc6be334aad", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 3 次，建议换策略; [朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:48:34.996255+00:00", "tool": "Bash", "args_hash": "2d2bdfc6be334aad", "is_error": true, "decision": "block", "code": "exact_fail_block", "message": "[御史谏言] Bash 同参数连续失败 4 次，建议阻断"}
+{"timestamp": "2026-06-12T02:49:25.182552+00:00", "tool": "Bash", "args_hash": "7ea8f0e68dca98de", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:25.211420+00:00", "tool": "Bash", "args_hash": "88b98ae5fcaddad2", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:25.240178+00:00", "tool": "Bash", "args_hash": "3956ab9e48107c93", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:49:25.269128+00:00", "tool": "Bash", "args_hash": "054e4193c73b2c03", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 4 次，建议换工具"}
+{"timestamp": "2026-06-12T02:49:25.297808+00:00", "tool": "Bash", "args_hash": "d1daa3c9f5dd422a", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 5 次，建议换工具"}
+{"timestamp": "2026-06-12T02:49:42.589400+00:00", "tool": "WebSearch", "args_hash": "9219726990450ff5", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:43.322715+00:00", "tool": "WebSearch", "args_hash": "80e5fc1b8d1dd3f9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:43.816010+00:00", "tool": "WebFetch", "args_hash": "83d32de7bb145019", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:43.845897+00:00", "tool": "WebFetch", "args_hash": "295da4459a5058ac", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:44.224505+00:00", "tool": "WebSearch", "args_hash": "89fd8d3bd6ee80fb", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:44.225804+00:00", "tool": "WebFetch", "args_hash": "9286f9ea4cec33eb", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:44.533179+00:00", "tool": "WebSearch", "args_hash": "036abf89ececd1e4", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:44.811392+00:00", "tool": "WebFetch", "args_hash": "dd42d98a0bef1265", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:46.357630+00:00", "tool": "WebSearch", "args_hash": "88422b9e1f8c29e0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:46.408571+00:00", "tool": "WebSearch", "args_hash": "b463178f83d1d19a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:49.527761+00:00", "tool": "WebFetch", "args_hash": "e86fdab26dd819e0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:49.791810+00:00", "tool": "WebFetch", "args_hash": "c27ef8686ae6b155", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:50.741005+00:00", "tool": "WebFetch", "args_hash": "cc93462fd00c669c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:51.846475+00:00", "tool": "WebFetch", "args_hash": "3101523419bd92d0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:52.373962+00:00", "tool": "WebFetch", "args_hash": "672b6216f7a5da72", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:53.626056+00:00", "tool": "WebFetch", "args_hash": "cd1b0dfec655443f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:54.388663+00:00", "tool": "WebFetch", "args_hash": "f9d72f26940f0dd8", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:54.628580+00:00", "tool": "WebFetch", "args_hash": "9da56dffbfe99f0c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:57.336400+00:00", "tool": "WebFetch", "args_hash": "07ab43c816ee71ca", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:58.979617+00:00", "tool": "WebFetch", "args_hash": "f1e6f8d37ee5ce67", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:59.082503+00:00", "tool": "WebFetch", "args_hash": "57a25d6c82f570dc", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:49:59.097099+00:00", "tool": "WebFetch", "args_hash": "8cb10506201fd1c8", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:02.782820+00:00", "tool": "WebFetch", "args_hash": "f2baf699543cd658", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:05.651561+00:00", "tool": "WebFetch", "args_hash": "a054148214d7807e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:06.459484+00:00", "tool": "WebFetch", "args_hash": "3c7766de26b0f697", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:07.457251+00:00", "tool": "Write", "args_hash": "951fb9dcfe5f0b13", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:08.201382+00:00", "tool": "WebFetch", "args_hash": "a049a25ffbebc27a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:10.675266+00:00", "tool": "WebFetch", "args_hash": "9c1a4faab56b2baa", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:11.230597+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:11.254511+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 2 次，建议换策略"}
+{"timestamp": "2026-06-12T02:50:11.278237+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 3 次，建议换策略; [朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:50:11.301804+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "block", "code": "exact_fail_block", "message": "[御史谏言] Bash 同参数连续失败 4 次，建议阻断"}
+{"timestamp": "2026-06-12T02:50:11.324956+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "block", "code": "exact_fail_block", "message": "[御史谏言] Bash 同参数连续失败 5 次，建议阻断"}
+{"timestamp": "2026-06-12T02:50:11.347751+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "halt", "code": "exact_fail_halt", "message": "[御史弹劾] Bash 同参数连续失败 6 次，判定死循环，强制中止"}
+{"timestamp": "2026-06-12T02:50:11.371140+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:11.417205+00:00", "tool": "Bash", "args_hash": "6013b50779d02774", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:11.440963+00:00", "tool": "Bash", "args_hash": "19d90e5d7845a8c0", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:11.464505+00:00", "tool": "Bash", "args_hash": "20824ec7b8e9b184", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:50:11.487241+00:00", "tool": "Bash", "args_hash": "eb1f386d0e623da8", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 4 次，建议换工具"}
+{"timestamp": "2026-06-12T02:50:11.510179+00:00", "tool": "Bash", "args_hash": "555551a361c1f38a", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 5 次，建议换工具"}
+{"timestamp": "2026-06-12T02:50:11.533123+00:00", "tool": "Bash", "args_hash": "32a5196917c6dadf", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 6 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:50:11.556240+00:00", "tool": "Bash", "args_hash": "a94c544a43bde61b", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 7 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:50:11.579656+00:00", "tool": "Bash", "args_hash": "f2fb89d30bcdfa19", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 8 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:50:11.602797+00:00", "tool": "Bash", "args_hash": "b73b90cf4f0e5748", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 9 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:50:11.626192+00:00", "tool": "Bash", "args_hash": "51e9c9758474d7f5", "is_error": true, "decision": "halt", "code": "same_tool_halt", "message": "[御史弹劾] Bash 连续失败 10 次，强制中止"}
+{"timestamp": "2026-06-12T02:50:11.672681+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:11.696143+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:11.719148+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 3 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:50:11.742065+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 4 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:50:11.765321+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "block", "code": "no_progress_block", "message": "[御史谏言] Read 连续 5 次返回相同结果，原地踏步"}
+{"timestamp": "2026-06-12T02:50:11.788857+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "block", "code": "no_progress_block", "message": "[御史谏言] Read 连续 6 次返回相同结果，原地踏步"}
+{"timestamp": "2026-06-12T02:50:11.812119+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:11.858910+00:00", "tool": "Bash", "args_hash": "f54bef8783d6ce7c", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:11.881863+00:00", "tool": "Bash", "args_hash": "f54bef8783d6ce7c", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 2 次，建议换策略"}
+{"timestamp": "2026-06-12T02:50:11.904813+00:00", "tool": "Bash", "args_hash": "f54bef8783d6ce7c", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 3 次，建议换策略; [朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:50:11.927736+00:00", "tool": "Bash", "args_hash": "f54bef8783d6ce7c", "is_error": true, "decision": "block", "code": "exact_fail_block", "message": "[御史谏言] Bash 同参数连续失败 4 次，建议阻断"}
+{"timestamp": "2026-06-12T02:50:12.020840+00:00", "tool": "Read", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:12.044897+00:00", "tool": "Read", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:12.068401+00:00", "tool": "Read", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 3 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:50:12.091857+00:00", "tool": "Read", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 4 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:50:12.138106+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:12.149879+00:00", "tool": "WebFetch", "args_hash": "eed5bf0e5d8c177f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:12.161905+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:12.185168+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:12.208321+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:12.231643+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:12.290134+00:00", "tool": "Bash", "args_hash": "b4e25b7a2a72a9cc", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:12.557068+00:00", "tool": "WebFetch", "args_hash": "f9c0d4f0776a3730", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:15.127235+00:00", "tool": "WebFetch", "args_hash": "5df016db3334bf06", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:15.674634+00:00", "tool": "WebFetch", "args_hash": "44c893446311310c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:16.054125+00:00", "tool": "WebFetch", "args_hash": "0430859c5b23f20d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:16.894210+00:00", "tool": "WebFetch", "args_hash": "e04deaf36127f80c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:17.018357+00:00", "tool": "WebFetch", "args_hash": "6ebb60bce56ee771", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:18.568950+00:00", "tool": "Read", "args_hash": "b56ccc24b7af581b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:18.883508+00:00", "tool": "WebFetch", "args_hash": "5523b70f745762c4", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:19.007356+00:00", "tool": "WebFetch", "args_hash": "2b8d5ab1e770d4fd", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:19.024384+00:00", "tool": "Bash", "args_hash": "7e0204644e4cbd16", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:19.732821+00:00", "tool": "WebSearch", "args_hash": "bb0140a92e238edb", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:19.786055+00:00", "tool": "WebSearch", "args_hash": "2c94b1ec1d1305df", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:20.800156+00:00", "tool": "WebFetch", "args_hash": "c2e44cd0f4d3ce41", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:20.928353+00:00", "tool": "Bash", "args_hash": "6ce9c823a11a8e21", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:21.029299+00:00", "tool": "Bash", "args_hash": "3fdbbf67303bc100", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:22.725448+00:00", "tool": "WebFetch", "args_hash": "368631e91eae3d39", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:23.595638+00:00", "tool": "WebFetch", "args_hash": "8c9e11d6f48e2b55", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:23.807725+00:00", "tool": "WebFetch", "args_hash": "888c15dbbd196489", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:24.440660+00:00", "tool": "WebFetch", "args_hash": "9478c09c1dc79232", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:28.026322+00:00", "tool": "WebFetch", "args_hash": "626984263cc282b6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:29.271173+00:00", "tool": "WebFetch", "args_hash": "df5c01cd17ee2dc6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:30.245817+00:00", "tool": "WebFetch", "args_hash": "2265d02979381f88", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:30.635982+00:00", "tool": "WebFetch", "args_hash": "956bd766ff1affe0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:30.872335+00:00", "tool": "Bash", "args_hash": "c95bfecaa29b6054", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:31.345963+00:00", "tool": "WebSearch", "args_hash": "76834f80e430b3cd", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:32.057486+00:00", "tool": "WebSearch", "args_hash": "19cbfe9422bcd830", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:32.309881+00:00", "tool": "WebFetch", "args_hash": "e2721ea593028f75", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:32.433533+00:00", "tool": "Bash", "args_hash": "7c5d7a084810281e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:34.299468+00:00", "tool": "WebFetch", "args_hash": "eba4d329d0b3366b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:34.472482+00:00", "tool": "WebSearch", "args_hash": "aaba3c5a6d41628a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:35.121686+00:00", "tool": "WebFetch", "args_hash": "75669a9201002154", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:35.134737+00:00", "tool": "WebFetch", "args_hash": "9f6faa692e11720f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:35.210884+00:00", "tool": "WebFetch", "args_hash": "77040c605816ac44", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:35.700924+00:00", "tool": "Bash", "args_hash": "dd27febe2907e371", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:37.434009+00:00", "tool": "WebFetch", "args_hash": "a6b0af7b01c38345", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:39.060885+00:00", "tool": "WebFetch", "args_hash": "5c234cc53ff03f23", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:41.444347+00:00", "tool": "WebFetch", "args_hash": "f0c9f70f38c1327a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:43.049107+00:00", "tool": "WebFetch", "args_hash": "158270c981b2bc3f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:49.088127+00:00", "tool": "WebSearch", "args_hash": "0ff2ad4cd754fc92", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:50.539647+00:00", "tool": "WebFetch", "args_hash": "20496a499ebc5575", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:51.141801+00:00", "tool": "WebSearch", "args_hash": "3816f07da011de83", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:51.617246+00:00", "tool": "WebFetch", "args_hash": "4981fc28f515e936", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:55.421145+00:00", "tool": "WebFetch", "args_hash": "4e525631ec1537fd", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:55.678673+00:00", "tool": "WebFetch", "args_hash": "3091ce50f0c898fb", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:55.702416+00:00", "tool": "WebFetch", "args_hash": "d6cd229214c6a7c9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:55.874314+00:00", "tool": "WebFetch", "args_hash": "070c2769cfb77473", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:56.705834+00:00", "tool": "WebFetch", "args_hash": "2b813ebaca9a6998", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:57.980065+00:00", "tool": "WebFetch", "args_hash": "593c2882ed154205", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:58.112865+00:00", "tool": "WebFetch", "args_hash": "8350924bb9fbcb8a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:50:58.907837+00:00", "tool": "WebSearch", "args_hash": "0fa64f65cf42fd57", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:00.922684+00:00", "tool": "WebFetch", "args_hash": "47eeb71f1daf5d15", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:00.922758+00:00", "tool": "WebFetch", "args_hash": "fc8b3bb5aa622317", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:01.100603+00:00", "tool": "WebFetch", "args_hash": "690213f099b367bb", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:01.909904+00:00", "tool": "WebFetch", "args_hash": "ac0accd4487bb4ce", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:03.081877+00:00", "tool": "WebFetch", "args_hash": "407e93e8d1eb508c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:03.245655+00:00", "tool": "WebFetch", "args_hash": "5b4d18b2a46b9539", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:05.208866+00:00", "tool": "WebFetch", "args_hash": "3705f8a15cdc6d5d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:05.280491+00:00", "tool": "WebFetch", "args_hash": "aa40bb328c0f3ca4", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:07.283788+00:00", "tool": "WebFetch", "args_hash": "7f977a5064b47863", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:09.290995+00:00", "tool": "WebFetch", "args_hash": "7ceef73b833c9ab6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:14.277308+00:00", "tool": "WebFetch", "args_hash": "4e33f8166c66eef2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:15.987918+00:00", "tool": "WebFetch", "args_hash": "2e0637c68dbabe7e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:24.727420+00:00", "tool": "WebFetch", "args_hash": "e529704fd6d46a82", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:24.875581+00:00", "tool": "StructuredOutput", "args_hash": "8467aac10fa0e6ed", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:25.082727+00:00", "tool": "WebFetch", "args_hash": "d1c3600d3134f299", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:27.845342+00:00", "tool": "WebFetch", "args_hash": "5b21a3267c417748", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:28.421682+00:00", "tool": "WebFetch", "args_hash": "eccb9c254fc6a251", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:29.631183+00:00", "tool": "WebFetch", "args_hash": "6cf845a19bfbb65f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:30.082922+00:00", "tool": "WebSearch", "args_hash": "208c27cd7f42ca80", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:31.471112+00:00", "tool": "WebFetch", "args_hash": "f4d765e8ab3a768e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:31.931797+00:00", "tool": "WebFetch", "args_hash": "8bae8ffb98b2f927", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:33.787663+00:00", "tool": "WebFetch", "args_hash": "c2b29ed050a1f98f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:34.478016+00:00", "tool": "WebFetch", "args_hash": "27ab41c58572d28d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:34.706474+00:00", "tool": "WebFetch", "args_hash": "b6236264df10b8df", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:36.002447+00:00", "tool": "WebFetch", "args_hash": "08d11fa94a35b502", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:36.065683+00:00", "tool": "WebSearch", "args_hash": "a214f8b9b464c493", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:36.544094+00:00", "tool": "WebFetch", "args_hash": "b5a37a72d8fda6ec", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:36.723558+00:00", "tool": "WebFetch", "args_hash": "2388575fa193f8cb", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:37.639287+00:00", "tool": "WebFetch", "args_hash": "75e85441d0741376", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:37.819732+00:00", "tool": "WebFetch", "args_hash": "a76c5e4c2cd25552", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:38.644576+00:00", "tool": "WebFetch", "args_hash": "dcd93d4dfc6725d2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:40.583632+00:00", "tool": "Bash", "args_hash": "29be473bcd52c973", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:43.575167+00:00", "tool": "Bash", "args_hash": "5b9523142d6c0e63", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:43.857268+00:00", "tool": "WebFetch", "args_hash": "24ed99a154fba6db", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:44.203297+00:00", "tool": "WebFetch", "args_hash": "f7034161a15aaa4e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:44.675891+00:00", "tool": "WebFetch", "args_hash": "7ac1d8e9e12a2953", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:45.018709+00:00", "tool": "WebFetch", "args_hash": "f919b03b1d853b40", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:46.979648+00:00", "tool": "WebFetch", "args_hash": "f0365ae6f375bc1d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:50.308646+00:00", "tool": "WebFetch", "args_hash": "414ed79095ddc4c0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:50.568468+00:00", "tool": "StructuredOutput", "args_hash": "9e7dec8974e810cf", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:51.559160+00:00", "tool": "WebFetch", "args_hash": "643312d79e20bb70", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:51:51.598084+00:00", "tool": "Bash", "args_hash": "dd0ed0bd9a7e072e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:05.940364+00:00", "tool": "WebFetch", "args_hash": "c8152c8e6fc1fe64", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:05.986996+00:00", "tool": "StructuredOutput", "args_hash": "b87d37540477f30f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:07.205481+00:00", "tool": "WebFetch", "args_hash": "c12a8e0e69cc5f2f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:07.549584+00:00", "tool": "WebFetch", "args_hash": "07e3020e38747510", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:08.401592+00:00", "tool": "WebFetch", "args_hash": "524848ee01083666", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:08.857577+00:00", "tool": "WebFetch", "args_hash": "dcea760d47c6c109", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:10.696025+00:00", "tool": "StructuredOutput", "args_hash": "a69ed12ad1657dbd", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:11.442246+00:00", "tool": "WebFetch", "args_hash": "80ed4b25bc150f6c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:11.767052+00:00", "tool": "WebFetch", "args_hash": "af89800426e75973", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:14.980882+00:00", "tool": "WebFetch", "args_hash": "7aaf2d3dcec8afce", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:16.658730+00:00", "tool": "WebFetch", "args_hash": "e76ce3f2cce93e91", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:18.505853+00:00", "tool": "WebFetch", "args_hash": "057ca1fa8c70f6bd", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:21.267994+00:00", "tool": "Agent", "args_hash": "857c9c08de4c1d18", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:22.355990+00:00", "tool": "StructuredOutput", "args_hash": "9904700d2d6fe377", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:22.687035+00:00", "tool": "WebFetch", "args_hash": "32037430e3c07c23", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:24.742992+00:00", "tool": "WebFetch", "args_hash": "7da2962d3e71f00b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:25.304317+00:00", "tool": "StructuredOutput", "args_hash": "c97fe58aa5229a06", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:27.328727+00:00", "tool": "WebFetch", "args_hash": "0f2ec18a165cbe69", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:31.367646+00:00", "tool": "WebFetch", "args_hash": "f92d570cdde7c43a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:32.646423+00:00", "tool": "WebFetch", "args_hash": "444ce63f65bf0982", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:35.238480+00:00", "tool": "WebFetch", "args_hash": "5b8670a32a6af77b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:35.315850+00:00", "tool": "WebFetch", "args_hash": "689f8f3eff5737a0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:36.954371+00:00", "tool": "WebFetch", "args_hash": "3c69aa89afe5845d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:39.486775+00:00", "tool": "WebFetch", "args_hash": "550b95f3fb7d0e7f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:40.663888+00:00", "tool": "WebFetch", "args_hash": "f3476ed6aa4e6575", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:40.778558+00:00", "tool": "WebFetch", "args_hash": "096fbff5898f27bb", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:41.907978+00:00", "tool": "WebFetch", "args_hash": "cc83dc9981073a42", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:43.948781+00:00", "tool": "WebFetch", "args_hash": "b8ef970160154a73", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:45.920460+00:00", "tool": "WebFetch", "args_hash": "9a57e4ab82bd8460", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:46.316801+00:00", "tool": "WebFetch", "args_hash": "f097b7574ad68c0b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:48.037724+00:00", "tool": "Edit", "args_hash": "07aca79182a18bca", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:53.207436+00:00", "tool": "WebFetch", "args_hash": "892ffb4c4aa3a880", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:54.850992+00:00", "tool": "WebFetch", "args_hash": "81c4135df453564a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:55.536812+00:00", "tool": "WebFetch", "args_hash": "86618411eef5c362", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:55.974969+00:00", "tool": "WebFetch", "args_hash": "e6c9505b265c4ed9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:56.242987+00:00", "tool": "WebFetch", "args_hash": "4873dd54837e0a08", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:56.480031+00:00", "tool": "WebFetch", "args_hash": "9a2c64aeb21810a9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:57.350307+00:00", "tool": "WebFetch", "args_hash": "cebcfb1525393315", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:59.125710+00:00", "tool": "WebFetch", "args_hash": "14cc78e85c979f47", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:52:59.784216+00:00", "tool": "WebFetch", "args_hash": "391d0ec854c06cf0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:53:01.356222+00:00", "tool": "WebFetch", "args_hash": "d7ac5e3b88a446d3", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:53:04.453293+00:00", "tool": "WebFetch", "args_hash": "2af7c1a2f9dcfb26", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:53:05.230799+00:00", "tool": "StructuredOutput", "args_hash": "b77e2485d41332c7", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:53:06.561334+00:00", "tool": "WebFetch", "args_hash": "f8d782d6bf150345", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:53:06.577797+00:00", "tool": "WebFetch", "args_hash": "744a45124fa66fc8", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:53:07.565356+00:00", "tool": "WebFetch", "args_hash": "468fe6df35ea0f88", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:53:09.717118+00:00", "tool": "Bash", "args_hash": "294392c378031143", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:53:27.592747+00:00", "tool": "Edit", "args_hash": "d4bcf6c8974120c2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:58:37.609831+00:00", "tool": "Edit", "args_hash": "ab2668ca47355abf", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:58:43.690592+00:00", "tool": "Edit", "args_hash": "de5ca96571da0486", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:19.255011+00:00", "tool": "Edit", "args_hash": "8dd2713a5ecb66b7", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:26.830341+00:00", "tool": "Edit", "args_hash": "7f47e10e7354302e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:35.691625+00:00", "tool": "Edit", "args_hash": "2fe3f99b437aa3d8", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:42.808899+00:00", "tool": "Edit", "args_hash": "b94ea42a692b419f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.011627+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.031384+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 2 次，建议换策略"}
+{"timestamp": "2026-06-12T02:59:48.054004+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 3 次，建议换策略; [朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:59:48.074780+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "block", "code": "exact_fail_block", "message": "[御史谏言] Bash 同参数连续失败 4 次，建议阻断"}
+{"timestamp": "2026-06-12T02:59:48.094777+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "block", "code": "exact_fail_block", "message": "[御史谏言] Bash 同参数连续失败 5 次，建议阻断"}
+{"timestamp": "2026-06-12T02:59:48.114079+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": true, "decision": "halt", "code": "exact_fail_halt", "message": "[御史弹劾] Bash 同参数连续失败 6 次，判定死循环，强制中止"}
+{"timestamp": "2026-06-12T02:59:48.133758+00:00", "tool": "Bash", "args_hash": "ef59e5a995456e9f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.172589+00:00", "tool": "Bash", "args_hash": "6013b50779d02774", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.192132+00:00", "tool": "Bash", "args_hash": "19d90e5d7845a8c0", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.212473+00:00", "tool": "Bash", "args_hash": "20824ec7b8e9b184", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:59:48.232253+00:00", "tool": "Bash", "args_hash": "eb1f386d0e623da8", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 4 次，建议换工具"}
+{"timestamp": "2026-06-12T02:59:48.251625+00:00", "tool": "Bash", "args_hash": "555551a361c1f38a", "is_error": true, "decision": "warn", "code": "same_tool_warn", "message": "[朝臣谏言] Bash 连续失败 5 次，建议换工具"}
+{"timestamp": "2026-06-12T02:59:48.271132+00:00", "tool": "Bash", "args_hash": "32a5196917c6dadf", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 6 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:59:48.290761+00:00", "tool": "Bash", "args_hash": "a94c544a43bde61b", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 7 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:59:48.310389+00:00", "tool": "Bash", "args_hash": "f2fb89d30bcdfa19", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 8 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:59:48.330531+00:00", "tool": "Bash", "args_hash": "b73b90cf4f0e5748", "is_error": true, "decision": "block", "code": "same_tool_block", "message": "[御史谏言] Bash 连续失败 9 次，工具可能不可用"}
+{"timestamp": "2026-06-12T02:59:48.349786+00:00", "tool": "Bash", "args_hash": "51e9c9758474d7f5", "is_error": true, "decision": "halt", "code": "same_tool_halt", "message": "[御史弹劾] Bash 连续失败 10 次，强制中止"}
+{"timestamp": "2026-06-12T02:59:48.387887+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.406672+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.425882+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 3 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:59:48.444874+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 4 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:59:48.464611+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "block", "code": "no_progress_block", "message": "[御史谏言] Read 连续 5 次返回相同结果，原地踏步"}
+{"timestamp": "2026-06-12T02:59:48.483822+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "block", "code": "no_progress_block", "message": "[御史谏言] Read 连续 6 次返回相同结果，原地踏步"}
+{"timestamp": "2026-06-12T02:59:48.502980+00:00", "tool": "Read", "args_hash": "dd7f709696b53c7f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.541415+00:00", "tool": "Bash", "args_hash": "f54bef8783d6ce7c", "is_error": true, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.561334+00:00", "tool": "Bash", "args_hash": "f54bef8783d6ce7c", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 2 次，建议换策略"}
+{"timestamp": "2026-06-12T02:59:48.581315+00:00", "tool": "Bash", "args_hash": "f54bef8783d6ce7c", "is_error": true, "decision": "warn", "code": "exact_fail_warn", "message": "[朝臣谏言] Bash 同参数连续失败 3 次，建议换策略; [朝臣谏言] Bash 连续失败 3 次，建议换工具"}
+{"timestamp": "2026-06-12T02:59:48.600905+00:00", "tool": "Bash", "args_hash": "f54bef8783d6ce7c", "is_error": true, "decision": "block", "code": "exact_fail_block", "message": "[御史谏言] Bash 同参数连续失败 4 次，建议阻断"}
+{"timestamp": "2026-06-12T02:59:48.676899+00:00", "tool": "Read", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.696639+00:00", "tool": "Read", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.715743+00:00", "tool": "Read", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 3 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:59:48.734984+00:00", "tool": "Read", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "warn", "code": "no_progress_warn", "message": "[朝臣谏言] Read 连续 4 次返回相同结果，可能在原地踏步"}
+{"timestamp": "2026-06-12T02:59:48.773499+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.793372+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.812786+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.832276+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.852077+00:00", "tool": "Write", "args_hash": "d60dfdbaad3b8e9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:48.901741+00:00", "tool": "Bash", "args_hash": "379c66a5dd648c09", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:57.339922+00:00", "tool": "Edit", "args_hash": "0803c2da1783abdf", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T02:59:59.460884+00:00", "tool": "TaskUpdate", "args_hash": "b2cc84c890534701", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:03:18.233504+00:00", "tool": "Bash", "args_hash": "833098c12f2f1805", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:03:19.059460+00:00", "tool": "Bash", "args_hash": "3bdce9f4b0e8cfaa", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:03:24.412065+00:00", "tool": "Bash", "args_hash": "60055dc7dec7490d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:03:39.779092+00:00", "tool": "TaskCreate", "args_hash": "21d8bbfaff3c60f4", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:03:43.896142+00:00", "tool": "TaskUpdate", "args_hash": "e7f876880149001a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:04:45.626816+00:00", "tool": "Write", "args_hash": "6c15ec463ad343bd", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:04:50.001515+00:00", "tool": "Bash", "args_hash": "ca147b2008ea900a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:04:50.540865+00:00", "tool": "Bash", "args_hash": "f3039fbf80a36c4b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:05:26.911651+00:00", "tool": "Bash", "args_hash": "aff76abefeb9e562", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:05:29.892682+00:00", "tool": "Bash", "args_hash": "f8793a28ead612e2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:05:31.358873+00:00", "tool": "Bash", "args_hash": "d3a5c1242c6d4b04", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:05:38.810473+00:00", "tool": "Bash", "args_hash": "098d1066c9c128b6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:06:31.793090+00:00", "tool": "Write", "args_hash": "c4314570f0ce67e6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:06:35.495497+00:00", "tool": "Bash", "args_hash": "e52a1d1839953769", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:06:41.902054+00:00", "tool": "Read", "args_hash": "99a0258acbd1a59d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:07:50.339414+00:00", "tool": "Bash", "args_hash": "e6c37fd879b9e150", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:07:50.757631+00:00", "tool": "Bash", "args_hash": "98beb7cb398b79d0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:07:51.179650+00:00", "tool": "Bash", "args_hash": "4f0e76c67577f897", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:08:13.375097+00:00", "tool": "Bash", "args_hash": "2ebed0124325a63a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:08:14.701188+00:00", "tool": "Bash", "args_hash": "6eee8fead035d03f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:08:17.861638+00:00", "tool": "Bash", "args_hash": "af1291d0cdd2d8d4", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:08:26.066947+00:00", "tool": "Bash", "args_hash": "b452e8904fde53a2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:08:26.147726+00:00", "tool": "Bash", "args_hash": "143acad746289be0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:07.741706+00:00", "tool": "Bash", "args_hash": "1f590b40e7f26471", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:08.167761+00:00", "tool": "Bash", "args_hash": "08d919f43956b115", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:08.506116+00:00", "tool": "Bash", "args_hash": "ef511dcbbcbcafb1", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:12.097838+00:00", "tool": "Bash", "args_hash": "9525e1e4d63c5d95", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:13.316359+00:00", "tool": "Bash", "args_hash": "66f67a1c9cb2dc5e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:15.076315+00:00", "tool": "Bash", "args_hash": "6ef4022fb5969631", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:17.524615+00:00", "tool": "Bash", "args_hash": "ce853559f535e41d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:17.798230+00:00", "tool": "Bash", "args_hash": "ff755edda102c37f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:43.793300+00:00", "tool": "Bash", "args_hash": "8978960592eb1a0f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:09:55.508138+00:00", "tool": "Bash", "args_hash": "3e1afecdc5664534", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:10:26.945781+00:00", "tool": "Agent", "args_hash": "4cb076c57b41e0f5", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:10:34.933142+00:00", "tool": "Edit", "args_hash": "6203eacfed222ed0", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:10:40.351565+00:00", "tool": "Edit", "args_hash": "3b421ed071a96932", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:10:51.307550+00:00", "tool": "Edit", "args_hash": "0f80d1f619752d26", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:11:20.349143+00:00", "tool": "Edit", "args_hash": "53fbf4f867cce870", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:11:30.401446+00:00", "tool": "Edit", "args_hash": "08d3c47ae02ddb07", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:11:40.366617+00:00", "tool": "Edit", "args_hash": "5eb4a109734068a8", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:11:46.727661+00:00", "tool": "Read", "args_hash": "ed4293755753fae9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:11:55.322609+00:00", "tool": "Edit", "args_hash": "7b39067fe0b09a84", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:12:03.165828+00:00", "tool": "Edit", "args_hash": "719c538211eb20bc", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:12:06.980733+00:00", "tool": "Bash", "args_hash": "6a409603ce9bb944", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:12:07.409189+00:00", "tool": "Bash", "args_hash": "f89b18dfe3d6970f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:12:16.324173+00:00", "tool": "Edit", "args_hash": "1ae33b89d33828c1", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:12:21.819456+00:00", "tool": "Edit", "args_hash": "dbb7c27d6ea1de0f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:12:24.801345+00:00", "tool": "Bash", "args_hash": "55877459f7375574", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-12T03:12:28.356435+00:00", "tool": "TaskUpdate", "args_hash": "b2e1b621c33d7328", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:35:12.550291+00:00", "tool": "Bash", "args_hash": "24b40341c8a2ac24", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:35:22.482290+00:00", "tool": "WebFetch", "args_hash": "3b3a3ad1abf6d111", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:35:37.765966+00:00", "tool": "WebFetch", "args_hash": "1e8a6b648202171e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:36:35.068881+00:00", "tool": "Bash", "args_hash": "5109c473409d9a28", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:36:35.165633+00:00", "tool": "Bash", "args_hash": "54a241c2ced52059", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:36:36.091238+00:00", "tool": "WebFetch", "args_hash": "70e8d95475f50931", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:36:40.232235+00:00", "tool": "WebFetch", "args_hash": "f6d241257d8cea81", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:37:12.484634+00:00", "tool": "WebFetch", "args_hash": "4a6f9801e7728344", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:39:02.391439+00:00", "tool": "WebFetch", "args_hash": "798691be21642b69", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:39:02.906456+00:00", "tool": "WebFetch", "args_hash": "471b66cb590cce67", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:39:07.196329+00:00", "tool": "WebFetch", "args_hash": "8c0d79f5f6870bdb", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:39:38.056575+00:00", "tool": "WebFetch", "args_hash": "3f219c03a2958b97", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:39:44.856146+00:00", "tool": "WebFetch", "args_hash": "b0a9422682a3e0f2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:39:50.082578+00:00", "tool": "WebFetch", "args_hash": "25812f2aab06aff8", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:39:50.165835+00:00", "tool": "WebFetch", "args_hash": "ad54f5b6a39cfd11", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:39:59.346414+00:00", "tool": "WebFetch", "args_hash": "ca25117b5d73a555", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:40:18.212460+00:00", "tool": "Bash", "args_hash": "19ba5804e4f6e4d3", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:40:26.038500+00:00", "tool": "Bash", "args_hash": "d3193b2152258928", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:40:30.631736+00:00", "tool": "Bash", "args_hash": "005c0a08e4b23a2f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:40:45.339351+00:00", "tool": "WebFetch", "args_hash": "ee914978c0a55546", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:40:46.506729+00:00", "tool": "WebFetch", "args_hash": "7b5924bd077ab8c5", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:40:48.292152+00:00", "tool": "WebFetch", "args_hash": "54475184d803c63a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:40:50.802232+00:00", "tool": "WebFetch", "args_hash": "27ff092d92c294db", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:42:31.266318+00:00", "tool": "Bash", "args_hash": "d34a24d1853f2a81", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:43:33.922376+00:00", "tool": "WebSearch", "args_hash": "5971ce6ccd2513f7", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:43:35.669731+00:00", "tool": "Bash", "args_hash": "368a874c6e4f2832", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:44:04.989227+00:00", "tool": "WebFetch", "args_hash": "f431c6f79d27351b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:44:06.704334+00:00", "tool": "Bash", "args_hash": "2925bf8603e3210f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:44:12.120231+00:00", "tool": "WebFetch", "args_hash": "59c0121bba5cc08c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:44:25.571765+00:00", "tool": "WebFetch", "args_hash": "ed5a79c1b01e95a9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:44:31.010483+00:00", "tool": "WebFetch", "args_hash": "ffc5bc77b47ea209", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:45:03.778920+00:00", "tool": "Write", "args_hash": "3b532cb0a9eb4dbf", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:45:07.756226+00:00", "tool": "Edit", "args_hash": "2e3fa94156acdd3b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:48:48.511792+00:00", "tool": "TaskCreate", "args_hash": "7f9d42433121a462", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:48:54.646552+00:00", "tool": "TaskUpdate", "args_hash": "0a37c67e4ef6305e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:50:34.413251+00:00", "tool": "Write", "args_hash": "0fd5cf950d98aba6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:50:39.870909+00:00", "tool": "Bash", "args_hash": "72f766de813cc791", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:50:44.002201+00:00", "tool": "Bash", "args_hash": "36a6437ad7bbaee9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:51:41.914936+00:00", "tool": "Write", "args_hash": "d25d49319d3a6587", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:51:49.789344+00:00", "tool": "Read", "args_hash": "64ee540df1555fff", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:51:50.248147+00:00", "tool": "Bash", "args_hash": "d75e55637c2cc1dc", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:52:29.055703+00:00", "tool": "Bash", "args_hash": "4a337c54adfda61f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:53:01.261510+00:00", "tool": "Bash", "args_hash": "2f967d0c1c5585ec", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:53:04.390611+00:00", "tool": "Read", "args_hash": "a5c70fea40868053", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:53:25.260797+00:00", "tool": "Agent", "args_hash": "14ad34b6b139541a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:53:38.926431+00:00", "tool": "Edit", "args_hash": "e60eff7c2dbab625", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:53:48.825279+00:00", "tool": "Edit", "args_hash": "ff114370202a92e6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:53:53.315166+00:00", "tool": "Bash", "args_hash": "56b362820ef0aba6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:54:16.163460+00:00", "tool": "Bash", "args_hash": "e69650c53aa2b0b9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:54:23.159840+00:00", "tool": "Edit", "args_hash": "2e3957e0f3313267", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:54:29.429430+00:00", "tool": "Edit", "args_hash": "75878d8957c00715", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:54:33.190289+00:00", "tool": "Bash", "args_hash": "37d6ba71b0292ea1", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:55:01.048195+00:00", "tool": "Edit", "args_hash": "0b9d17a489421102", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:59:28.149192+00:00", "tool": "Edit", "args_hash": "5f7861a5be7497b2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:59:40.208522+00:00", "tool": "Edit", "args_hash": "c10348cf6cde1813", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:59:47.994050+00:00", "tool": "Bash", "args_hash": "7cf09f021d9faf36", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T08:59:58.839980+00:00", "tool": "TaskUpdate", "args_hash": "9303759589e9cc26", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:02:11.910936+00:00", "tool": "WebFetch", "args_hash": "bc787f19f2462f5d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:02:12.018581+00:00", "tool": "Bash", "args_hash": "d7a5cad247e25540", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:02:31.180943+00:00", "tool": "Bash", "args_hash": "695e89d319db74da", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:04:18.933015+00:00", "tool": "Bash", "args_hash": "236566bf18715430", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:04:28.964073+00:00", "tool": "TaskCreate", "args_hash": "3dc9e72573008f95", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:04:34.209790+00:00", "tool": "TaskUpdate", "args_hash": "e19a204a4dc53a15", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:04:38.350085+00:00", "tool": "Read", "args_hash": "95fdd895c766dfcd", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:04:44.595597+00:00", "tool": "Read", "args_hash": "9aad000201a25a5d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:05:31.072345+00:00", "tool": "Edit", "args_hash": "ddfcd0be1537856b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:06:32.584042+00:00", "tool": "Edit", "args_hash": "cb5f4a28322748e2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:06:35.726779+00:00", "tool": "Bash", "args_hash": "111fdccfaf165485", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:07:22.643684+00:00", "tool": "Edit", "args_hash": "190e6424cb6f4ca8", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:07:29.993239+00:00", "tool": "Edit", "args_hash": "00ddf3827e521508", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:07:37.642405+00:00", "tool": "Edit", "args_hash": "86b5a8bed082f2cd", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:07:41.294934+00:00", "tool": "Bash", "args_hash": "4ff19b8752945e17", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:07:55.380261+00:00", "tool": "Write", "args_hash": "fad13c932d2cb93c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:08:18.751489+00:00", "tool": "Bash", "args_hash": "8d1d42d6e760984e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:08:29.089468+00:00", "tool": "Edit", "args_hash": "3847a4ef3dd9a6ba", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:08:43.179726+00:00", "tool": "Edit", "args_hash": "a0cf0677a59476a8", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:09:01.568891+00:00", "tool": "Bash", "args_hash": "0b8089ee53f2535a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:09:06.812107+00:00", "tool": "Edit", "args_hash": "dfac595f62ff988c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:09:10.609339+00:00", "tool": "Bash", "args_hash": "03d8be5c7623f672", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:09:13.263113+00:00", "tool": "TaskUpdate", "args_hash": "d60ee6c773a33491", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:16:35.652391+00:00", "tool": "TaskCreate", "args_hash": "86865325c41a71a9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:16:40.855474+00:00", "tool": "TaskUpdate", "args_hash": "9a01ed2fa2b41b33", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:17:13.564481+00:00", "tool": "Write", "args_hash": "543d6451cb262417", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:18:01.182398+00:00", "tool": "Write", "args_hash": "32c0df17979bc5ae", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:18:13.846331+00:00", "tool": "Bash", "args_hash": "055b2fb9ffc33c31", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:18:52.284567+00:00", "tool": "Write", "args_hash": "a584466fde8a75c6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:19:06.853709+00:00", "tool": "Edit", "args_hash": "0ff74d0b90db6561", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:19:15.183214+00:00", "tool": "Edit", "args_hash": "1b456d62d8c64b5c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:19:19.982738+00:00", "tool": "Bash", "args_hash": "7cb22f4e24663513", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:19:27.769407+00:00", "tool": "TaskUpdate", "args_hash": "fcf19e664f29f077", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:20:19.171846+00:00", "tool": "Bash", "args_hash": "54ed05eb2d7d76a2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:20:24.646055+00:00", "tool": "Bash", "args_hash": "eba4b2f5ea58c2f6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:21:52.329570+00:00", "tool": "TaskCreate", "args_hash": "050a96a79cbc8699", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:21:57.375896+00:00", "tool": "TaskUpdate", "args_hash": "fd6ed902f4384785", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:22:21.942763+00:00", "tool": "Bash", "args_hash": "52a18f251c25fa70", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:22:26.405566+00:00", "tool": "Read", "args_hash": "2d4d60819d89b7d7", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:23:02.918042+00:00", "tool": "Edit", "args_hash": "39ec53e44d274cba", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:23:18.354753+00:00", "tool": "Edit", "args_hash": "022641ac085da8ad", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:24:27.999374+00:00", "tool": "Write", "args_hash": "641165f49a6f4feb", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:24:45.842148+00:00", "tool": "Bash", "args_hash": "578ec1852166734d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:24:52.793348+00:00", "tool": "Bash", "args_hash": "2e11cb9a2c9ada5b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:24:59.334979+00:00", "tool": "Bash", "args_hash": "27ec51bb36696369", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:25:05.795612+00:00", "tool": "Bash", "args_hash": "71d5e05ac32f73df", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:25:42.610480+00:00", "tool": "Edit", "args_hash": "32acf842b9eada7b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:25:49.961029+00:00", "tool": "Bash", "args_hash": "8455a4b9244f6fae", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:25:53.198428+00:00", "tool": "Bash", "args_hash": "f74707b31f70a00c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:26:12.023728+00:00", "tool": "Edit", "args_hash": "5292c234d605048e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:26:27.464712+00:00", "tool": "Bash", "args_hash": "09540c10dddc429e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:26:34.963569+00:00", "tool": "Edit", "args_hash": "4f39a16c548364e3", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:26:42.148393+00:00", "tool": "Edit", "args_hash": "d52d1bd744c17eed", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:26:52.528354+00:00", "tool": "Bash", "args_hash": "fc19caca12d658c1", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:27:01.854031+00:00", "tool": "Bash", "args_hash": "fc6e87361a8a06c2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:27:04.704119+00:00", "tool": "TaskUpdate", "args_hash": "2a319c5980b90ca4", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:29:18.666723+00:00", "tool": "TaskCreate", "args_hash": "8c48c708d4583305", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:29:22.425901+00:00", "tool": "TaskUpdate", "args_hash": "c14fbea52a53eb30", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:30:50.727747+00:00", "tool": "Write", "args_hash": "4acbc8f18c2432d4", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:30:57.022338+00:00", "tool": "Bash", "args_hash": "08b6191df682c66f", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:31:01.489522+00:00", "tool": "Bash", "args_hash": "c08076de3fdf7c27", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:31:04.614001+00:00", "tool": "TaskUpdate", "args_hash": "68b9242155a0e48c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:32:58.793861+00:00", "tool": "TaskCreate", "args_hash": "cc8e94eefe89e555", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:33:02.393789+00:00", "tool": "TaskUpdate", "args_hash": "6ece3151aea80994", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:33:25.404420+00:00", "tool": "Write", "args_hash": "d03ddcb70ecba342", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:33:28.992399+00:00", "tool": "Read", "args_hash": "a260bdeb9c71f0e6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:33:41.831877+00:00", "tool": "Edit", "args_hash": "13aa4b4f8fcfea42", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:33:52.689064+00:00", "tool": "Edit", "args_hash": "1acc562802204e62", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:34:00.930489+00:00", "tool": "Edit", "args_hash": "257659e5d7488b30", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:34:04.571832+00:00", "tool": "Read", "args_hash": "28f34b04c79e8d56", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:34:19.634124+00:00", "tool": "Edit", "args_hash": "be0b700b095d02be", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:34:28.455128+00:00", "tool": "Bash", "args_hash": "594866c6b4509d0c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:34:36.222736+00:00", "tool": "Bash", "args_hash": "fd50bdbd4dee9f23", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:34:45.876359+00:00", "tool": "Bash", "args_hash": "ec585e1421d0e721", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:34:54.125197+00:00", "tool": "Bash", "args_hash": "c75e43ecb298e8f2", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:36:54.286810+00:00", "tool": "Bash", "args_hash": "f5993731cb400232", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:37:00.804046+00:00", "tool": "TaskUpdate", "args_hash": "a99f8fbd62a8afe7", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:40:56.815676+00:00", "tool": "TaskCreate", "args_hash": "f98da8bd34e064c1", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:41:01.061608+00:00", "tool": "TaskUpdate", "args_hash": "58e3fb3c560dcf21", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:41:35.281104+00:00", "tool": "Write", "args_hash": "157b9fad1e2a2fe6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:41:39.964586+00:00", "tool": "Bash", "args_hash": "24e813928a5434e3", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:41:45.819272+00:00", "tool": "Edit", "args_hash": "649f5a1b770e720b", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:41:50.289949+00:00", "tool": "Edit", "args_hash": "257159669ce3b6d5", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:42:16.924999+00:00", "tool": "Edit", "args_hash": "16b7b0a6694b7252", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:42:24.835281+00:00", "tool": "Edit", "args_hash": "924ebf3003ce9e19", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:42:40.270585+00:00", "tool": "Edit", "args_hash": "48e57766372ef41a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:42:47.115380+00:00", "tool": "Edit", "args_hash": "a634b1e5cc63f125", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:42:55.455305+00:00", "tool": "Edit", "args_hash": "a536871bc7b5560c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:43:09.215915+00:00", "tool": "Bash", "args_hash": "47ace99a7bb170d3", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:43:25.918321+00:00", "tool": "Bash", "args_hash": "0ce7ef6360b88a03", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:43:29.744586+00:00", "tool": "Bash", "args_hash": "024c0230c538e63a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:43:36.305794+00:00", "tool": "Bash", "args_hash": "1401cd7fcdcfbcb6", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:43:39.593089+00:00", "tool": "Bash", "args_hash": "df8f3e939af38f98", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:43:42.068167+00:00", "tool": "TaskUpdate", "args_hash": "8d7cdf568fed0016", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:46:49.756688+00:00", "tool": "Edit", "args_hash": "bb328c5a96b4ac5a", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:47:06.274657+00:00", "tool": "Edit", "args_hash": "10c8f5974ea8a5f9", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:47:19.697375+00:00", "tool": "Write", "args_hash": "7203993b2a9c412c", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:47:27.715251+00:00", "tool": "Bash", "args_hash": "801d6a17bdf80360", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:47:37.056820+00:00", "tool": "Bash", "args_hash": "cd18d6b94397d3fc", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:50:45.641371+00:00", "tool": "Bash", "args_hash": "009a4214781cfa65", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:50:49.944066+00:00", "tool": "Bash", "args_hash": "9389990b5f3ffb9d", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:50:54.400166+00:00", "tool": "TaskCreate", "args_hash": "3bf9df155bc65ce8", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:50:57.192231+00:00", "tool": "TaskUpdate", "args_hash": "651bf302e94fcec1", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:51:08.623879+00:00", "tool": "Bash", "args_hash": "97c4411d83866bf1", "is_error": false, "decision": "allow", "code": "ok", "message": ""}
+{"timestamp": "2026-06-13T09:51:26.659731+00:00", "tool": "Bash", "args_hash": "a9b38229c8c01c4e", "is_error": false, "decision": "allow", "code": "ok", "message": ""}

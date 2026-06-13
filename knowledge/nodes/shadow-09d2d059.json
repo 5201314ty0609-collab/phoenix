@@ -1,0 +1,22 @@
+{
+  "id": "shadow-09d2d059",
+  "type": "shadow",
+  "title": "Anti-pattern: 硬编码密钥/密码/Token 在源代码中",
+  "description": "硬编码密钥/密码/Token 在源代码中",
+  "content": "{\"id\": \"shadow-003\", \"pattern\": \"硬编码密钥/密码/Token 在源代码中\", \"consequence\": \"安全泄露，密钥曝光\", \"severity\": \"critical\", \"detection\": \"代码中包含 api_key = \\\"...\\\" 或 password = \\\"...\\\"\", \"prevention\": \"ALWAYS use environment variables or secret managers\", \"source\": \"ECC security.md + MUNDO approval.py\"}",
+  "confidence": 0.7,
+  "stage": "active",
+  "domains": [
+    "anti-pattern"
+  ],
+  "created_at": "2026-06-08T10:01:18.593540+00:00",
+  "updated_at": "2026-06-08T10:01:18.593546+00:00",
+  "source": {
+    "origin": "phoenix-shadow"
+  },
+  "metadata": {
+    "severity": "critical"
+  },
+  "edges_out": [],
+  "edges_in_count": 7
+}

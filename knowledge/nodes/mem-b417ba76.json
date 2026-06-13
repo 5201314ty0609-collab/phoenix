@@ -1,0 +1,28 @@
+{
+  "id": "mem-b417ba76",
+  "type": "memory",
+  "title": "phoenix-genesis",
+  "description": "PHOENIX 诞生记录 — 2026-06-05，五大系统融合",
+  "content": "# PHOENIX Genesis\n\n**诞生**: 2026-06-05 | **定位**: 自主进化型 Agent 系统\n\n## 五大融合源\n\n- **ECC** — 67 agents, 92 skills, 85 rules, 34 hooks (工具层)\n- **MUNDO Agent** — 上下文压缩, 六层记忆, 情感智慧, 多Agent调度 (编排层)\n- **Metacog** — 七感实时监测 (感知层)\n- **Claude Soul** — 框架生命周期, soul/shadow 身份 (进化层)\n- **Autoresearch** — Karpathy 自愈循环 (修正层)\n\n## 架构\n\n```\nPHOENIX\n├── 七感监测 → 实时感知自身状态\n├── 框架生命周期 → active→observed→validated→hardened\n├── 自愈引擎 → measure→change→verify→keep/discard\n└── 强制执行层级 → Level 1 (软建议) ~ Level 7 (硬阻断)\n```\n\n**Why:** PHOENIX 将 Claude Code 从静态配置升级为「活系统」\n**How to apply:** 每会话自动加载，phoenix/ 目录维护进化状态",
+  "confidence": 0.9,
+  "stage": "active",
+  "domains": [
+    "reference"
+  ],
+  "created_at": "2026-06-08T10:01:18.590560+00:00",
+  "updated_at": "2026-06-08T10:01:18.590569+00:00",
+  "source": {
+    "origin": "phoenix-memory",
+    "original_file": "phoenix-genesis.md"
+  },
+  "metadata": {
+    "file": "phoenix-genesis.md",
+    "archived": false
+  },
+  "edges_out": [
+    "mem-2e747664",
+    "mem-de5e216a",
+    "mem-4db95721"
+  ],
+  "edges_in_count": 6
+}

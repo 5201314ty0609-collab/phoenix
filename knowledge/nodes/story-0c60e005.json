@@ -1,0 +1,27 @@
+{
+  "id": "story-0c60e005",
+  "type": "story-event",
+  "title": "hermes_session: 用中文说：我已就绪",
+  "description": "用中文说：我已就绪",
+  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260607_230139_db96dc\", \"timestamp\": \"2026-06-08T09:32:47.901380+00:00\", \"date\": \"2026-06-08\", \"model\": \"deepseek-chat\", \"messages\": 1, \"tools\": 0, \"summary\": \"用中文说：我已就绪\"}",
+  "confidence": 0.5,
+  "stage": "active",
+  "domains": [
+    "story"
+  ],
+  "created_at": "2026-06-08T10:01:18.599082+00:00",
+  "updated_at": "2026-06-08T10:01:18.599088+00:00",
+  "source": {
+    "origin": "phoenix-story",
+    "session_id": "20260607_230139_db96dc"
+  },
+  "metadata": {
+    "event_type": "hermes_session",
+    "date": "2026-06-08",
+    "mood": ""
+  },
+  "edges_out": [
+    "story-0cfe5693"
+  ],
+  "edges_in_count": 1
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "PHOENIX Framework Schema v1.0",
+  "description": "Standardized schema for evolutionary frameworks that track agent behavior patterns through their lifecycle",
+  "required_fields": ["id", "trigger", "action", "confidence", "stage", "observations"],
+  "schema": {
+    "id": {
+      "type": "string",
+      "description": "Unique kebab-case identifier for this framework",
+      "example": "prefer-immutable-patterns"
+    },
+    "trigger": {
+      "type": "string",
+      "description": "The condition or context that activates this framework",
+      "example": "when modifying state in TypeScript or Python"
+    },
+    "action": {
+      "type": "string",
+      "description": "The prescribed behavior or response",
+      "example": "use spread operator or copy constructors, never mutate in place"
+    },
+    "confidence": {
+      "type": "float",
+      "description": "0.0 to 1.0 confidence score based on observation success rate",
+      "range": [0.0, 1.0]
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["active", "observed", "validated", "hardened"],
+      "description": "Current lifecycle stage"
+    },
+    "enforcement_level": {
+      "type": "integer",
+      "description": "1=CLAUDE.md advice, 2=Memory injection, 3=Skill guidance, 4=Rule file, 5=Hook warning, 6=Hook block, 7=Session abort",
+      "range": [1, 7]
+    },
+    "observations": {
+      "type": "integer",
+      "description": "Total number of times this pattern has been observed"
+    },
+    "successes": {
+      "type": "integer",
+      "description": "Number of times the pattern led to a successful outcome"
+    },
+    "failures": {
+      "type": "integer",
+      "description": "Number of times the pattern failed to produce the desired outcome"
+    },
+    "domains": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Tags for categorization (e.g., code-style, security, workflow)"
+    },
+    "evolved_from": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "IDs of instincts or frameworks this evolved from"
+    },
+    "created_at": {"type": "string", "format": "ISO8601"},
+    "promoted_at": {
+      "type": "object",
+      "properties": {
+        "active": {"type": "string", "format": "ISO8601"},
+        "observed": {"type": "string", "format": "ISO8601"},
+        "validated": {"type": "string", "format": "ISO8601"},
+        "hardened": {"type": "string", "format": "ISO8601"}
+      }
+    },
+    "amendments": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "IDs of amendments that modified this framework"
+    }
+  },
+  "promotion_thresholds": {
+    "active_to_observed": {
+      "min_observations": 3,
+      "min_confidence": 0.3
+    },
+    "observed_to_validated": {
+      "min_observations": 10,
+      "min_confidence": 0.6,
+      "min_success_rate": 0.7
+    },
+    "validated_to_hardened": {
+      "min_observations": 50,
+      "min_confidence": 0.9,
+      "min_success_rate": 0.9,
+      "zero_contradictions": true
+    }
+  }
+}

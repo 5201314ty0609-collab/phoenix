@@ -1,0 +1,27 @@
+{
+  "id": "fw-f43956d8",
+  "type": "framework",
+  "title": "pattern-eb99f10a856c",
+  "description": "Tool sequence detected: Bash→Read → Tool 'Read' completed successfully",
+  "content": "{\"id\": \"pattern-eb99f10a856c\", \"trigger\": \"Tool sequence detected: Bash→Read\", \"action\": \"Tool 'Read' completed successfully\", \"tool_signature\": \"Bash→Read\", \"confidence\": 0.2, \"stage\": \"active\", \"enforcement_level\": 1, \"observations\": 1, \"successes\": 1, \"failures\": 0, \"domains\": [\"auto-detected\"], \"evolved_from\": [], \"created_at\": \"2026-06-06T09:07:25.973780+00:00\", \"promoted_at\": {\"active\": \"2026-06-06T09:07:25.973781+00:00\", \"observed\": null, \"validated\": null, \"hardened\": null}, \"amendments\": []}",
+  "confidence": 0.2,
+  "stage": "active",
+  "domains": [
+    "auto-detected"
+  ],
+  "created_at": "2026-06-08T10:01:18.592754+00:00",
+  "updated_at": "2026-06-08T10:01:18.592759+00:00",
+  "source": {
+    "origin": "phoenix-framework",
+    "original_file": "pattern-eb99f10a856c.json"
+  },
+  "metadata": {
+    "tool_signature": "Bash→Read",
+    "enforcement_level": 1,
+    "observations": 1,
+    "successes": 1,
+    "failures": 0
+  },
+  "edges_out": [],
+  "edges_in_count": 1
+}

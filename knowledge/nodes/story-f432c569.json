@@ -1,0 +1,27 @@
+{
+  "id": "story-f432c569",
+  "type": "story-event",
+  "title": "session_end: PHOENIX v1.1 升级 — GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-age",
+  "description": "PHOENIX v1.1 升级 — GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-agents)→Stop-hook guard+Heartbeat监测+Prompt-",
+  "content": "{\"event\": \"session_end\", \"timestamp\": \"2026-06-05T19:56:50Z\", \"date\": \"2026-06-06\", \"summary\": \"PHOENIX v1.1 升级 — GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-agents)→Stop-hook guard+Heartbeat监测+Prompt-as-Code协调+Context预清理。记忆清理(归档2条,精简2条,建立筛选原则)。Notes同步改为一天一条追加模式。换节点多次确保网络顺畅。\", \"mood\": \"正常\"}",
+  "confidence": 0.5,
+  "stage": "active",
+  "domains": [
+    "story"
+  ],
+  "created_at": "2026-06-08T10:01:18.595075+00:00",
+  "updated_at": "2026-06-08T10:01:18.595081+00:00",
+  "source": {
+    "origin": "phoenix-story",
+    "session_id": ""
+  },
+  "metadata": {
+    "event_type": "session_end",
+    "date": "2026-06-06",
+    "mood": "正常"
+  },
+  "edges_out": [
+    "story-01c6d88c"
+  ],
+  "edges_in_count": 1
+}

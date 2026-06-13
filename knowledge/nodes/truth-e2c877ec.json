@@ -1,0 +1,24 @@
+{
+  "id": "truth-e2c877ec",
+  "type": "truth",
+  "title": "Truth: 写完代码立即触发 code-reviewer agent，bug 密度降低 50%",
+  "description": "写完代码立即触发 code-reviewer agent，bug 密度降低 50%",
+  "content": "{\"id\": \"truth-003\", \"statement\": \"写完代码立即触发 code-reviewer agent，bug 密度降低 50%\", \"confidence\": 0.88, \"source\": \"ECC rules/agents.md\", \"stage\": \"validated\", \"observations\": 40}",
+  "confidence": 0.88,
+  "stage": "validated",
+  "domains": [
+    "core-values"
+  ],
+  "created_at": "2026-06-08T10:01:18.593129+00:00",
+  "updated_at": "2026-06-08T10:01:18.593135+00:00",
+  "source": {
+    "origin": "phoenix-soul"
+  },
+  "metadata": {
+    "observations": 40
+  },
+  "edges_out": [
+    "mem-b417ba76"
+  ],
+  "edges_in_count": 0
+}

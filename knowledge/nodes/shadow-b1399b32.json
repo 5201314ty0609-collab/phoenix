@@ -1,0 +1,22 @@
+{
+  "id": "shadow-b1399b32",
+  "type": "shadow",
+  "title": "Anti-pattern: 工具调用失败后不分析错误就重试相同命令",
+  "description": "工具调用失败后不分析错误就重试相同命令",
+  "content": "{\"id\": \"shadow-007\", \"pattern\": \"工具调用失败后不分析错误就重试相同命令\", \"consequence\": \"重复失败，浪费时间\", \"severity\": \"medium\", \"detection\": \"terminal 返回错误后重试相同命令\", \"prevention\": \"MUNDO: 工具失败 → 分析错误信息 → 修复 → 重试\", \"source\": \"MUNDO system prompt\"}",
+  "confidence": 0.7,
+  "stage": "active",
+  "domains": [
+    "anti-pattern"
+  ],
+  "created_at": "2026-06-08T10:01:18.593828+00:00",
+  "updated_at": "2026-06-08T10:01:18.593833+00:00",
+  "source": {
+    "origin": "phoenix-shadow"
+  },
+  "metadata": {
+    "severity": "medium"
+  },
+  "edges_out": [],
+  "edges_in_count": 7
+}

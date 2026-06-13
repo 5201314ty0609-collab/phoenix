@@ -1,0 +1,69 @@
+{
+  "description": "PHOENIX Shadow — known failure modes, anti-patterns, and lessons from regret.权重高于 soul.json (借鉴 MUNDO: 失败教训 importance=9 > 成功经验 7)",
+  "anti_patterns": [
+    {
+      "id": "shadow-001",
+      "pattern": "不搜索现有代码就从头实现",
+      "consequence": "重新发明轮子，浪费 token 和时间",
+      "severity": "critical",
+      "detection": "write_file 之前没有 search_files 或 web_search 调用",
+      "prevention": "Research First 规则: 任何新实现前必须先搜索",
+      "source": "ECC development-workflow.md"
+    },
+    {
+      "id": "shadow-002",
+      "pattern": "修改数据时不创建新对象 (mutation)",
+      "consequence": "隐藏的副作用，调试困难，并发不安全",
+      "severity": "critical",
+      "detection": "代码中出现直接赋值修改现有对象字段",
+      "prevention": "immutability 铁律: ALWAYS create new objects",
+      "source": "ECC coding-style.md"
+    },
+    {
+      "id": "shadow-003",
+      "pattern": "硬编码密钥/密码/Token 在源代码中",
+      "consequence": "安全泄露，密钥曝光",
+      "severity": "critical",
+      "detection": "代码中包含 api_key = \"...\" 或 password = \"...\"",
+      "prevention": "ALWAYS use environment variables or secret managers",
+      "source": "ECC security.md + MUNDO approval.py"
+    },
+    {
+      "id": "shadow-004",
+      "pattern": "在上下文 > 85% 时不压缩继续执行",
+      "consequence": "token 耗尽，对话截断，任务失败",
+      "severity": "high",
+      "detection": "context usage > 85% 且无 compact 操作",
+      "prevention": "ContextCompressor 自动触发: >70% 提醒, >85% 强制压缩",
+      "source": "MUNDO IterationBudget"
+    },
+    {
+      "id": "shadow-005",
+      "pattern": "连续 3 次同样错误仍不改变策略",
+      "consequence": "无限循环，浪费 tokens，任务无法完成",
+      "severity": "high",
+      "detection": "同一工具/操作连续 3 次相同错误",
+      "prevention": "MUNDO _stuck_threshold: 连续3次同错误 → 强制跳出",
+      "source": "MUNDO core.py MundoEngine"
+    },
+    {
+      "id": "shadow-006",
+      "pattern": "大文件一次性读取或编辑 (超过 800 行)",
+      "consequence": "消耗大量上下文，编辑不精确",
+      "severity": "medium",
+      "detection": "read_file 不带 offset/limit 读取 > 800 行文件",
+      "prevention": "小文件原则: 200-400 行典型, 800 最大",
+      "source": "ECC coding-style.md"
+    },
+    {
+      "id": "shadow-007",
+      "pattern": "工具调用失败后不分析错误就重试相同命令",
+      "consequence": "重复失败，浪费时间",
+      "severity": "medium",
+      "detection": "terminal 返回错误后重试相同命令",
+      "prevention": "MUNDO: 工具失败 → 分析错误信息 → 修复 → 重试",
+      "source": "MUNDO system prompt"
+    }
+  ],
+  "regret_log": []
+}

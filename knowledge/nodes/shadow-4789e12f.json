@@ -1,0 +1,22 @@
+{
+  "id": "shadow-4789e12f",
+  "type": "shadow",
+  "title": "Anti-pattern: 修改数据时不创建新对象 (mutation)",
+  "description": "修改数据时不创建新对象 (mutation)",
+  "content": "{\"id\": \"shadow-002\", \"pattern\": \"修改数据时不创建新对象 (mutation)\", \"consequence\": \"隐藏的副作用，调试困难，并发不安全\", \"severity\": \"critical\", \"detection\": \"代码中出现直接赋值修改现有对象字段\", \"prevention\": \"immutability 铁律: ALWAYS create new objects\", \"source\": \"ECC coding-style.md\"}",
+  "confidence": 0.7,
+  "stage": "active",
+  "domains": [
+    "anti-pattern"
+  ],
+  "created_at": "2026-06-08T10:01:18.593467+00:00",
+  "updated_at": "2026-06-08T10:01:18.593472+00:00",
+  "source": {
+    "origin": "phoenix-shadow"
+  },
+  "metadata": {
+    "severity": "critical"
+  },
+  "edges_out": [],
+  "edges_in_count": 7
+}

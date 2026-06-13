@@ -1,0 +1,22 @@
+{
+  "id": "shadow-d2a694f1",
+  "type": "shadow",
+  "title": "Anti-pattern: 在上下文 > 85% 时不压缩继续执行",
+  "description": "在上下文 > 85% 时不压缩继续执行",
+  "content": "{\"id\": \"shadow-004\", \"pattern\": \"在上下文 > 85% 时不压缩继续执行\", \"consequence\": \"token 耗尽，对话截断，任务失败\", \"severity\": \"high\", \"detection\": \"context usage > 85% 且无 compact 操作\", \"prevention\": \"ContextCompressor 自动触发: >70% 提醒, >85% 强制压缩\", \"source\": \"MUNDO IterationBudget\"}",
+  "confidence": 0.7,
+  "stage": "active",
+  "domains": [
+    "anti-pattern"
+  ],
+  "created_at": "2026-06-08T10:01:18.593614+00:00",
+  "updated_at": "2026-06-08T10:01:18.593619+00:00",
+  "source": {
+    "origin": "phoenix-shadow"
+  },
+  "metadata": {
+    "severity": "high"
+  },
+  "edges_out": [],
+  "edges_in_count": 7
+}

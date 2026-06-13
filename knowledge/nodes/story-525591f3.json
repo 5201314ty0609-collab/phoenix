@@ -1,0 +1,27 @@
+{
+  "id": "story-525591f3",
+  "type": "story-event",
+  "title": "hermes_session: 你是哪个 AI？你的核心身份是什么？用一句话回答。",
+  "description": "你是哪个 AI？你的核心身份是什么？用一句话回答。",
+  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_172629_fd5b1e\", \"timestamp\": \"2026-06-08T09:32:47.901317+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 2, \"tools\": 0, \"summary\": \"你是哪个 AI？你的核心身份是什么？用一句话回答。\"}",
+  "confidence": 0.5,
+  "stage": "active",
+  "domains": [
+    "story"
+  ],
+  "created_at": "2026-06-08T10:01:18.598932+00:00",
+  "updated_at": "2026-06-08T10:01:18.598938+00:00",
+  "source": {
+    "origin": "phoenix-story",
+    "session_id": "20260608_172629_fd5b1e"
+  },
+  "metadata": {
+    "event_type": "hermes_session",
+    "date": "2026-06-08",
+    "mood": ""
+  },
+  "edges_out": [
+    "story-6847d20e"
+  ],
+  "edges_in_count": 1
+}

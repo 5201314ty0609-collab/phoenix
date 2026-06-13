@@ -1,0 +1,27 @@
+{
+  "id": "mem-2e747664",
+  "type": "memory",
+  "title": "phoenix-vision",
+  "description": "PHOENIX 长期愿景 — 复合型创作者，无限可能性",
+  "content": "# PHOENIX 愿景\n\n## 定位\n\n**复合型创作者 (Compound Creator)** — 不是单一工具，是一个不断生长的能力网络。每个新能力是可插拔模块，不影响核心进化引擎。\n\n## 核心原则\n\n1. **模块化** — 工程软件连接是能力之一，不是全部\n2. **可扩展** — 新能力即插即用\n3. **独立与协同并存** — 模块独立运作，编排层统一调度\n4. **持续进化** — 七感监测 + 框架生命周期 + 自愈引擎是所有模块的底层支撑\n\n## 能力蓝图\n\n```\nPHOENIX Core (进化引擎)\n├── 🏗️ 工程 (SolidWorks, MATLAB, ...)\n├── 💻 开发 (代码, 多语言, DevOps)\n├── 📝 创作 (内容, 网站, 知识管理)\n├── 🧠 研究 (深度搜索, 论文, 学术)\n└── 🔄 自进化 (七感, 框架, 自愈)\n```\n\n## 三阶段\n\n1. **起步期** — 完善自进化基础设施\n2. **独立期** — 拥有独立 Agent 运行时\n3. **开放期** — 可被他人部署使用\n\n## 时宇的原话\n\n> \"我希望phoenix是一个复合型的创作者，你不仅能完成工程软件的连接以及调用，你还能将其独立出来作为你的一部分，而不是你的全部，你应该有无限的可能性\"\n\n**Why:** PHOENIX 从「配置层」升级为「复合型创作平台」的战略方向\n**How to apply:** 新功能遵循模块化原则，独立可插拔，不影响核心",
+  "confidence": 0.9,
+  "stage": "active",
+  "domains": [
+    "reference"
+  ],
+  "created_at": "2026-06-08T10:01:18.590696+00:00",
+  "updated_at": "2026-06-08T10:01:18.590702+00:00",
+  "source": {
+    "origin": "phoenix-memory",
+    "original_file": "phoenix-vision.md"
+  },
+  "metadata": {
+    "file": "phoenix-vision.md",
+    "archived": false
+  },
+  "edges_out": [
+    "mem-de5e216a",
+    "mem-4db95721"
+  ],
+  "edges_in_count": 2
+}

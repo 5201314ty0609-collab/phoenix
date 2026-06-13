@@ -1,0 +1,33 @@
+{
+  "id": "concept-37c52129",
+  "type": "concept",
+  "title": "Heal Rule: connection_refused",
+  "description": "连接拒绝 → 等待后重试",
+  "content": "{\"pattern\": \"Connection refused|ECONNREFUSED|could not connect\", \"action\": \"retry_with_delay\", \"description\": \"连接拒绝 → 等待后重试\", \"auto_apply\": true, \"success_count\": 0, \"fail_count\": 0}",
+  "confidence": 0.4,
+  "stage": "active",
+  "domains": [
+    "self-healing",
+    "automation"
+  ],
+  "created_at": "2026-06-08T10:01:18.601222+00:00",
+  "updated_at": "2026-06-08T10:01:18.601228+00:00",
+  "source": {
+    "origin": "phoenix-heal-rules"
+  },
+  "metadata": {
+    "auto_apply": true,
+    "success_count": 0,
+    "fail_count": 0
+  },
+  "edges_out": [
+    "shadow-09d2d059",
+    "shadow-4789e12f",
+    "shadow-78b98e5b",
+    "shadow-7fd4e0d7",
+    "shadow-b1399b32",
+    "shadow-c496db56",
+    "shadow-d2a694f1"
+  ],
+  "edges_in_count": 0
+}

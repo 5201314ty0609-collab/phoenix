@@ -1,0 +1,22 @@
+{
+  "id": "shadow-78b98e5b",
+  "type": "shadow",
+  "title": "Anti-pattern: 不搜索现有代码就从头实现",
+  "description": "不搜索现有代码就从头实现",
+  "content": "{\"id\": \"shadow-001\", \"pattern\": \"不搜索现有代码就从头实现\", \"consequence\": \"重新发明轮子，浪费 token 和时间\", \"severity\": \"critical\", \"detection\": \"write_file 之前没有 search_files 或 web_search 调用\", \"prevention\": \"Research First 规则: 任何新实现前必须先搜索\", \"source\": \"ECC development-workflow.md\"}",
+  "confidence": 0.7,
+  "stage": "active",
+  "domains": [
+    "anti-pattern"
+  ],
+  "created_at": "2026-06-08T10:01:18.593389+00:00",
+  "updated_at": "2026-06-08T10:01:18.593394+00:00",
+  "source": {
+    "origin": "phoenix-shadow"
+  },
+  "metadata": {
+    "severity": "critical"
+  },
+  "edges_out": [],
+  "edges_in_count": 7
+}

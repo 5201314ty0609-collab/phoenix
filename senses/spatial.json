@@ -1,0 +1,13 @@
+{
+  "status": "normal",
+  "last_updated": "2026-06-06T09:07:42.384500+00:00",
+  "metrics": {
+    "unique_files_touched": 12,
+    "tool_calls": 30,
+    "files_per_call": 0.4
+  },
+  "warnings": [],
+  "recommendation": "continue",
+  "trend": "may_contract",
+  "trend_updated": "2026-06-13T09:09:10.572413+00:00"
+}

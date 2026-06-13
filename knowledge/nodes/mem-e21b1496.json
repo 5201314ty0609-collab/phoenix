@@ -1,0 +1,29 @@
+{
+  "id": "mem-e21b1496",
+  "type": "memory",
+  "title": "user-profile",
+  "description": "李时宇 (HolyTy) 的个人档案 — 身份、背景、目标、偏好",
+  "content": "# 李时宇 (HolyTy)\n\n## 基本信息\n\n- **姓名**: 李时宇\n- **英文名/GitHub**: HolyTy\n- **年龄**: 21 岁\n- **生日**: 2005年1月8日\n- **星座**: 摩羯座\n- **MBTI**: ESTP\n- **学校**: 南京航空航天大学金城学院\n- **专业**: 新能源汽车\n- **年级**: 大三（即将面临假期实习）\n\n## 重要关系\n\n- **黄鹏**: 朋友，网站 lihongwei-cn.github.io，MUNDO Agent v1.2.0 作者\n- 黄鹏的网站名是 lihongwei，不是他本人的名字\n\n## 技术背景\n\n- AI Agent 爱好者，认为这是\"能持续成长持续发展的项目\"\n- 想抓住 AI 发展的大船\n- 目标是成为内容产出者（content creator）\n- 想与 AI Agent 共同发展\n\n## 当前目标\n\n- 假期寻找实习机会\n- 继续深耕 AI Agent 领域\n- 建设 PHOENIX 项目和网站\n- 产出有影响力的内容\n\n## 沟通偏好\n\n- 用中文交流\n- 喜欢\"bro\"这样的朋友式称呼\n- 风格直接、不废话\n- 重视并肩作战的伙伴关系\n\n## 关键日期\n\n- 2026年6月5日: PHOENIX 诞生（与 Claude Code 共同创建）\n\n**Why:** 李时宇是 PHOENIX 的共同创建者，了解他的背景和目标对持续协作至关重要\n**How to apply:** 每次会话开始时回忆此档案，调整沟通风格和建议方向（关注实习、内容创作、AI Agent 发展）",
+  "confidence": 0.9,
+  "stage": "active",
+  "domains": [
+    "reference"
+  ],
+  "created_at": "2026-06-08T10:01:18.590815+00:00",
+  "updated_at": "2026-06-08T10:01:18.590821+00:00",
+  "source": {
+    "origin": "phoenix-memory",
+    "original_file": "user-profile.md"
+  },
+  "metadata": {
+    "file": "user-profile.md",
+    "archived": false
+  },
+  "edges_out": [
+    "mem-b417ba76",
+    "mem-2e747664",
+    "mem-de5e216a",
+    "mem-4db95721"
+  ],
+  "edges_in_count": 0
+}

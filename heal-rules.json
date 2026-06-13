@@ -1,0 +1,79 @@
+{
+  "tool_timeout": {
+    "pattern": "timeout|timed out|TimeoutError",
+    "action": "increase_timeout",
+    "description": "工具调用超时 → 增加 timeout 参数",
+    "escalation": 2,
+    "escalation_observations": 0,
+    "confidence": 0.5,
+    "success_count": 0,
+    "fail_count": 0,
+    "last_used": "2026-06-11T04:03:56.507487+00:00"
+  },
+  "api_rate_limit": {
+    "pattern": "rate.limit|429|too many requests",
+    "action": "backoff_retry",
+    "description": "API 限流 → 指数退避重试",
+    "escalation": 1,
+    "escalation_observations": 0,
+    "confidence": 0.5,
+    "success_count": 0,
+    "fail_count": 0,
+    "last_used": null
+  },
+  "context_overflow": {
+    "pattern": "context.*length|token.*limit|context.*window",
+    "action": "force_compact",
+    "description": "上下文溢出 → 强制压缩",
+    "escalation": 1,
+    "escalation_observations": 0,
+    "confidence": 0.5,
+    "success_count": 0,
+    "fail_count": 0,
+    "last_used": null
+  },
+  "file_not_found": {
+    "pattern": "No such file|FileNotFoundError|ENOENT",
+    "action": "search_and_suggest",
+    "description": "文件未找到 → 搜索替代路径",
+    "escalation": 1,
+    "escalation_observations": 0,
+    "confidence": 0.3,
+    "success_count": 0,
+    "fail_count": 0,
+    "last_used": null
+  },
+  "import_error": {
+    "pattern": "ModuleNotFoundError|ImportError|No module named",
+    "action": "suggest_install",
+    "description": "模块缺失 → 建议 pip/npm install",
+    "escalation": 1,
+    "escalation_observations": 0,
+    "confidence": 0.3,
+    "success_count": 0,
+    "fail_count": 0,
+    "last_used": null
+  },
+  "permission_denied": {
+    "pattern": "Permission denied|EACCES|not permitted",
+    "action": "suggest_sudo_or_chmod",
+    "description": "权限拒绝 → 建议 chmod 或检查权限",
+    "escalation": 1,
+    "escalation_observations": 0,
+    "confidence": 0.3,
+    "success_count": 0,
+    "fail_count": 0,
+    "last_used": null
+  },
+  "connection_refused": {
+    "pattern": "Connection refused|ECONNREFUSED|could not connect",
+    "action": "retry_with_delay",
+    "description": "连接拒绝 → 等待后重试",
+    "escalation": 1,
+    "escalation_observations": 0,
+    "confidence": 0.5,
+    "success_count": 0,
+    "fail_count": 0,
+    "last_used": null
+  }
+}

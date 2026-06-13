@@ -1,0 +1,14 @@
+{
+  "status": "warning",
+  "last_updated": "2026-06-06T09:07:42.383632+00:00",
+  "metrics": {
+    "errors_in_window": 3,
+    "window_size": 5,
+    "unique_error_hashes": 3,
+    "repeated_errors": 0
+  },
+  "warnings": [
+    "3 errors in last 5 calls"
+  ],
+  "recommendation": "Pause and analyze root cause"
+}

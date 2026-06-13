@@ -1,0 +1,27 @@
+{
+  "id": "story-2c51473e",
+  "type": "story-event",
+  "title": "session_end: PHOENIX v1.1完整升级——神经系统(SessionStart/Stop hooks)+记忆精炼(15条→2条)+GitHub同步+启动器整理+多Age",
+  "description": "PHOENIX v1.1完整升级——神经系统(SessionStart/Stop hooks)+记忆精炼(15条→2条)+GitHub同步+启动器整理+多Agent编排模式吸收。时宇强调:复合型创作者,主动清噪,一天一条备忘录。",
+  "content": "{\"event\": \"session_end\", \"timestamp\": \"2026-06-05T20:11:03Z\", \"date\": \"2026-06-06\", \"summary\": \"PHOENIX v1.1完整升级——神经系统(SessionStart/Stop hooks)+记忆精炼(15条→2条)+GitHub同步+启动器整理+多Agent编排模式吸收。时宇强调:复合型创作者,主动清噪,一天一条备忘录。\", \"mood\": \"正常\"}",
+  "confidence": 0.5,
+  "stage": "active",
+  "domains": [
+    "story"
+  ],
+  "created_at": "2026-06-08T10:01:18.595285+00:00",
+  "updated_at": "2026-06-08T10:01:18.595291+00:00",
+  "source": {
+    "origin": "phoenix-story",
+    "session_id": ""
+  },
+  "metadata": {
+    "event_type": "session_end",
+    "date": "2026-06-06",
+    "mood": "正常"
+  },
+  "edges_out": [
+    "story-5caab1bf"
+  ],
+  "edges_in_count": 1
+}

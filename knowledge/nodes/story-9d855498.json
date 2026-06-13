@@ -1,0 +1,27 @@
+{
+  "id": "story-9d855498",
+  "type": "story-event",
+  "title": "evolution-cycle: Cycle complete: 0↑ 0↓",
+  "description": "Cycle complete: 0↑ 0↓",
+  "content": "{\"event\": \"evolution-cycle\", \"timestamp\": \"2026-06-06T09:07:42.351262+00:00\", \"description\": \"Cycle complete: 0↑ 0↓\", \"details\": {\"checked\": 16, \"promoted\": 0, \"demoted\": 0, \"rules_generated\": 0, \"active\": 16, \"observed\": 0, \"validated\": 0, \"hardened\": 0}}",
+  "confidence": 0.5,
+  "stage": "active",
+  "domains": [
+    "story"
+  ],
+  "created_at": "2026-06-08T10:01:18.595588+00:00",
+  "updated_at": "2026-06-08T10:01:18.595594+00:00",
+  "source": {
+    "origin": "phoenix-story",
+    "session_id": ""
+  },
+  "metadata": {
+    "event_type": "evolution-cycle",
+    "date": "",
+    "mood": ""
+  },
+  "edges_out": [
+    "story-5e38423f"
+  ],
+  "edges_in_count": 1
+}

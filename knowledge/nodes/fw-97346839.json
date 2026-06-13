@@ -1,0 +1,27 @@
+{
+  "id": "fw-97346839",
+  "type": "framework",
+  "title": "pattern-fb84873a3607",
+  "description": "Tool sequence detected: TaskCreate → Tool 'TaskCreate' completed successfully",
+  "content": "{\"id\": \"pattern-fb84873a3607\", \"trigger\": \"Tool sequence detected: TaskCreate\", \"action\": \"Tool 'TaskCreate' completed successfully\", \"tool_signature\": \"TaskCreate\", \"confidence\": 0.2, \"stage\": \"active\", \"enforcement_level\": 1, \"observations\": 1, \"successes\": 1, \"failures\": 0, \"domains\": [\"auto-detected\"], \"evolved_from\": [], \"created_at\": \"2026-06-06T09:07:26.011139+00:00\", \"promoted_at\": {\"active\": \"2026-06-06T09:07:26.011140+00:00\", \"observed\": null, \"validated\": null, \"hardened\": null}, \"amendments\": []}",
+  "confidence": 0.2,
+  "stage": "active",
+  "domains": [
+    "auto-detected"
+  ],
+  "created_at": "2026-06-08T10:01:18.592860+00:00",
+  "updated_at": "2026-06-08T10:01:18.592865+00:00",
+  "source": {
+    "origin": "phoenix-framework",
+    "original_file": "pattern-fb84873a3607.json"
+  },
+  "metadata": {
+    "tool_signature": "TaskCreate",
+    "enforcement_level": 1,
+    "observations": 1,
+    "successes": 1,
+    "failures": 0
+  },
+  "edges_out": [],
+  "edges_in_count": 1
+}

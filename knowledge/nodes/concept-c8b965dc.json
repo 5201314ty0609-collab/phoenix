@@ -1,0 +1,33 @@
+{
+  "id": "concept-c8b965dc",
+  "type": "concept",
+  "title": "Heal Rule: api_rate_limit",
+  "description": "API 限流 → 指数退避重试",
+  "content": "{\"pattern\": \"rate.limit|429|too many requests\", \"action\": \"backoff_retry\", \"description\": \"API 限流 → 指数退避重试\", \"auto_apply\": true, \"success_count\": 0, \"fail_count\": 0}",
+  "confidence": 0.4,
+  "stage": "active",
+  "domains": [
+    "self-healing",
+    "automation"
+  ],
+  "created_at": "2026-06-08T10:01:18.600824+00:00",
+  "updated_at": "2026-06-08T10:01:18.600830+00:00",
+  "source": {
+    "origin": "phoenix-heal-rules"
+  },
+  "metadata": {
+    "auto_apply": true,
+    "success_count": 0,
+    "fail_count": 0
+  },
+  "edges_out": [
+    "shadow-09d2d059",
+    "shadow-4789e12f",
+    "shadow-78b98e5b",
+    "shadow-7fd4e0d7",
+    "shadow-b1399b32",
+    "shadow-c496db56",
+    "shadow-d2a694f1"
+  ],
+  "edges_in_count": 0
+}

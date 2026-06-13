@@ -1,0 +1,41 @@
+{
+  "id": "mem-4db95721",
+  "type": "memory",
+  "title": "hermes-phoenix-deployment",
+  "description": "PHOENIX独立Agent部署—全部5步完成(Hermes+Core注入+MCP桥+记忆融合+自愈循环)",
+  "content": "## PHOENIX v2.0 独立 Agent 部署 — 全部完成 (2026-06-08)\n\n### 完成的五步\n\n1. **Hermes 本地能力盘点** ✅\n   - Hermes Agent v0.16.0, 72 skills, 18+ 工具集\n   - Anthropic Claude Sonnet 4.6, 中文回复正常\n\n2. **PHOENIX Core 注入** ✅\n   - SOUL.md: PHOENIX 身份、七感元认知、铁律\n   - phoenix-core skill v1.1.0: 72+1 技能，Hermes 自动识别\n   - on_session_start/end 钩子 + reasoning_effort=high\n\n3. **MCP 双向桥** ✅\n   - Hermes → Claude Code: claude-code skill + terminal delegation\n   - Claude Code → Hermes: mcp-servers.json + hermes mcp serve\n\n4. **记忆融合** ✅\n   - memory-bridge.py: PHOENIX 文件记忆 ↔ Hermes SQLite/FTS5 双向同步\n   - 会话钩子自动运行: start 导出 PHOENIX→Hermes, end 导入 Hermes→PHOENIX\n   - 统一搜索: --query 跨两端检索\n\n5. **自愈循环落地** ✅\n   - self-heal.py: measure→change→verify→learn 四阶段自动化\n   - 7 条默认自愈规则 (4 自动 + 3 手动确认)\n   - 愈合日志 + 规则升降级 + session_end 自动触发\n\n### 架构现状\n```\nPHOENIX v2.0 (Hermes 身体 + PHOENIX Core 大脑)\n  ├── Hermes Agent v0.16.0 — 常驻编排器\n  │   ├── Claude Sonnet 4.6\n  │   ├── SOUL.md — PHOENIX 人格\n  │   ├── phoenix-core skill — 七感+进化+自愈+强制层级\n  │   ├── memory-bridge.py — 统一记忆层\n  │   └── self-heal.py — 自愈引擎\n  │\n  ├── Claude Code — 编码引擎\n  │   └── MCP ↔ Hermes 双向互通\n  │\n  └── 钩子自动化\n      ├── on_session_start: 心跳 + 记忆同步\n      └── on_session_end: 记忆保存 + 自愈循环\n```\n\n### 待做\n- Telegram 接入 (后置)\n- 自愈规则从日志中积累真实数据 (tool_timeout 已有 3 次失败记录)\n- 框架进化引擎从 active→observed 首次升级\n\n**Why:** 昨夜讨论的 PHOENIX 独立 Agent 落地计划，今天五步全部执行完毕。\n**How to apply:** Hermes 是 PHOENIX 的独立运行时。`hermes` CLI 直接对话，`hermes mcp serve` 向 Claude Code 暴露工具。",
+  "confidence": 0.9,
+  "stage": "active",
+  "domains": [
+    "reference"
+  ],
+  "created_at": "2026-06-08T10:01:18.590059+00:00",
+  "updated_at": "2026-06-08T10:01:18.590187+00:00",
+  "source": {
+    "origin": "phoenix-memory",
+    "original_file": "hermes-phoenix-deployment.md"
+  },
+  "metadata": {
+    "file": "hermes-phoenix-deployment.md",
+    "archived": false
+  },
+  "edges_out": [
+    "fw-28a02434",
+    "fw-3947a422",
+    "fw-3efa1c64",
+    "fw-4987ed0e",
+    "fw-51bf6aea",
+    "fw-74c298a8",
+    "fw-7e0fc57e",
+    "fw-80e5ec94",
+    "fw-97346839",
+    "fw-adb93d64",
+    "fw-b22d4065",
+    "fw-c80f97d0",
+    "fw-c90efaa3",
+    "fw-d5279fb2",
+    "fw-f43956d8",
+    "fw-faf384ce"
+  ],
+  "edges_in_count": 4
+}
