@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "source": "MUNDO v2.0.9 Tool Guard",
+  "thresholds": {
+    "exact_fail": {
+      "warn": 2,
+      "block": 4,
+      "halt": 6
+    },
+    "same_tool_fail": {
+      "warn": 3,
+      "block": 6,
+      "halt": 10
+    },
+    "no_progress": {
+      "warn": 2,
+      "block": 4,
+      "halt": 6
+    }
+  },
+  "hard_stop_enabled": true,
+  "observe_window": 50,
+  "reset_on_success": true
+}
