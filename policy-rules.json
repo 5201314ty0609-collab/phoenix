@@ -1,0 +1,191 @@
+{
+  "rules": [
+    {
+      "id": "pol-block-rm-rf",
+      "priority": 100,
+      "domain": "security",
+      "condition": "action matches 'rm -rf /|git push --force|sudo rm'",
+      "action": "block",
+      "message": "Destructive system command blocked",
+      "chain": "security-gate",
+      "chain_order": 1
+    },
+    {
+      "id": "pol-block-secret-leak",
+      "priority": 99,
+      "domain": "security",
+      "condition": "file_content contains secret patterns (API_KEY, token, password)",
+      "action": "block",
+      "message": "Potential secret leak detected",
+      "chain": "security-gate",
+      "chain_order": 2
+    },
+    {
+      "id": "pol-warn-system-dir",
+      "priority": 80,
+      "domain": "security",
+      "condition": "target_path starts with /etc|/usr|/System",
+      "action": "warn",
+      "message": "Writing to system directory requires confirmation",
+      "chain": "file-safety",
+      "chain_order": 1
+    },
+    {
+      "id": "pol-warn-ssh-key",
+      "priority": 79,
+      "domain": "security",
+      "condition": "target_path contains .ssh|id_rsa|authorized_keys",
+      "action": "warn",
+      "message": "SSH key operation detected",
+      "chain": "file-safety",
+      "chain_order": 2
+    },
+    {
+      "id": "pol-quality-file-size",
+      "priority": 60,
+      "domain": "code-quality",
+      "condition": "write_content lines > 800",
+      "action": "warn",
+      "message": "File exceeds 800-line limit (PHOENIX coding standard)",
+      "chain": "quality-gate",
+      "chain_order": 1
+    },
+    {
+      "id": "pol-quality-nesting",
+      "priority": 55,
+      "domain": "code-quality",
+      "condition": "code has nesting depth > 4",
+      "action": "warn",
+      "message": "Deep nesting detected (>4 levels)",
+      "chain": "quality-gate",
+      "chain_order": 2
+    },
+    {
+      "id": "pol-quality-function-length",
+      "priority": 54,
+      "domain": "code-quality",
+      "condition": "function length > 50 lines",
+      "action": "warn",
+      "message": "Function exceeds 50-line limit",
+      "chain": "quality-gate",
+      "chain_order": 3
+    },
+    {
+      "id": "pol-taste-em-dash",
+      "priority": 70,
+      "domain": "design-taste",
+      "condition": "output contains '—' (em-dash)",
+      "action": "block",
+      "message": "Em-dash banned by Taste-Skill Anti-Slop rules",
+      "chain": "taste-gate",
+      "chain_order": 1
+    },
+    {
+      "id": "pol-taste-ai-purple",
+      "priority": 68,
+      "domain": "design-taste",
+      "condition": "color value in #7C3AED..#8B5CF6 range",
+      "action": "warn",
+      "message": "AI-purple detected — use Catppuccin Mocha palette",
+      "chain": "taste-gate",
+      "chain_order": 2
+    },
+    {
+      "id": "pol-taste-inter-default",
+      "priority": 66,
+      "domain": "design-taste",
+      "condition": "font-family is 'Inter' without deliberate choice",
+      "action": "warn",
+      "message": "Inter as default font — deliberate choice required",
+      "chain": "taste-gate",
+      "chain_order": 3
+    },
+    {
+      "id": "pol-context-pressure",
+      "priority": 85,
+      "domain": "context",
+      "condition": "context_usage > 70%",
+      "action": "warn",
+      "message": "Context pressure >70% — compact before proceeding",
+      "chain": "context-guard",
+      "chain_order": 1
+    },
+    {
+      "id": "pol-context-critical",
+      "priority": 90,
+      "domain": "context",
+      "condition": "context_usage > 85%",
+      "action": "block",
+      "message": "Context critical >85% — force compact required",
+      "chain": "context-guard",
+      "chain_order": 2
+    },
+    {
+      "id": "pol-evolution-stale",
+      "priority": 40,
+      "domain": "evolution",
+      "condition": "days_since_last_evolution > 3",
+      "action": "warn",
+      "message": "Evolution engine idle >3 days — consider running evolve",
+      "chain": "evolution-guard",
+      "chain_order": 1
+    },
+    {
+      "id": "pol-evolution-no-promotions",
+      "priority": 35,
+      "domain": "evolution",
+      "condition": "active_frameworks >= 10 AND validated_frameworks == 0",
+      "action": "warn",
+      "message": "10+ active frameworks with zero promotions — review accumulation",
+      "chain": "evolution-guard",
+      "chain_order": 2
+    },
+    {
+      "id": "pol-sense-cascade",
+      "priority": 75,
+      "domain": "metacognition",
+      "condition": "nociception_errors > 2 in 5 calls",
+      "action": "block",
+      "message": "Error cascade detected — pause and analyze root cause",
+      "chain": "sense-guard",
+      "chain_order": 1
+    }
+  ],
+  "chains": {
+    "security-gate": {
+      "description": "Critical security checks (Lv7)",
+      "stop_on_block": true
+    },
+    "file-safety": {
+      "description": "File system safety (Lv6)",
+      "stop_on_block": false
+    },
+    "quality-gate": {
+      "description": "Code quality standards",
+      "stop_on_block": false
+    },
+    "taste-gate": {
+      "description": "Design taste enforcement (Anti-Slop)",
+      "stop_on_block": true
+    },
+    "context-guard": {
+      "description": "Context pressure monitoring (O2)",
+      "stop_on_block": true
+    },
+    "sense-guard": {
+      "description": "Metacognitive sense alerts",
+      "stop_on_block": true
+    },
+    "evolution-guard": {
+      "description": "Evolution health checks",
+      "stop_on_block": false
+    }
+  },
+  "config": {
+    "version": "1.0.0",
+    "source": "MUNDO v2.0.9 Policy Engine",
+    "default_priority": 50,
+    "chain_evaluation": "ordered"
+  },
+  "updated_at": "2026-06-11T03:47:18.593325+00:00"
+}
