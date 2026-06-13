@@ -133,12 +133,6 @@
     <div id="users-mini"></div>
   </div>
 
-  <div class="card" onclick="openModal('toolbox')">
-    <h3>🧰 工具箱<span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">PHOENIX 内置工具 & 外部资源</span></h3>
-    <div class="why">命令行工具、API 端点、外部 Skill 仓库——你能用 PHOENIX 做什么</div>
-    <div id="toolbox-mini"></div>
-  </div>
-
   <div class="card" onclick="openModal('modules')">
     <h3>🧩 系统模块<span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">引擎健康度</span></h3>
     <div class="why">PHOENIX 由哪些模块组成，每个模块是否正常运行</div>
@@ -198,7 +192,6 @@ function miniSenses(d){
 function miniDrift(d){const dr=d?.drift||{};return m('倾向','frugal=保守 · spend=探索 · drift=随性')+m('当前',dr.direction||'?')+m('稳定性',dr.stability||'?');}
 function miniToolGuard(d){const s=(d||{}).summary||{};return m('观测次数',s.total_observed||0)+m('阻断次数',s.total_blocked||0,'r')+m('强制中止',s.total_halted||0,'r');}
 function miniUsers(d){const u=(d||{}).users||[];return u.slice(0,4).map(x=>`<div class="metric"><span class="l">${x.tier_icon} ${x.name}</span><span class="v" style="font-size:0.65rem">${x.tier_label}${x.persona_status==='active'?' · 画像OK':''}</span></div>`).join('')||'<div class="empty">加载中</div>';}
-function miniToolbox(){return '<div class="metric"><span class="l">🛡️ 工具防护</span><span class="v" style="font-size:0.65rem">防死循环</span></div><div class="metric"><span class="l">🗂️ 技能注册</span><span class="v" style="font-size:0.65rem">62 skills</span></div><div class="metric"><span class="l">📜 时间线</span><span class="v" style="font-size:0.65rem">审计回放</span></div><div class="metric"><span class="l">🧬 记忆引擎</span><span class="v" style="font-size:0.65rem">自动画像</span></div>';}
 function miniModules(d){const mods=(d||{}).modules||{};return m('模块总数',mods.total_modules||0,'g')+m('代码总行数',mods.total_lines||0);}
 function miniTimeline(d){const e=((d||{}).entries||[]).slice(0,8);return e.length?e.map(x=>`<div class="tl-line"><span class="ts">${(x.timestamp||'').slice(11,19)}</span><span class="tp">${(x.event_type||'?').slice(0,14)}</span><span class="bd">${(x.summary||'').slice(0,80)}</span></div>`).join(''):'<div class="empty">暂无事件</div>';}
 
@@ -239,25 +232,6 @@ const MOD={
     const u=D.users?.users||[];
     return u.map(x=>`<div style="padding:10px;margin:4px 0;background:var(--surface-alt);border-radius:6px;display:flex;justify-content:space-between;align-items:center"><div><strong>${x.tier_icon} ${x.name}</strong> <span style="font-size:0.65rem;color:var(--text-dim);margin-left:6px">${x.tier_label}</span>${x.persona_status==='active'?' <span style="font-size:0.6rem;color:var(--green)">画像已激活</span>':''}</div><div style="font-size:0.68rem;color:var(--text-dim)">${x.total_grains||0} 条对话</div></div>`).join('')+'<div class="empty" style="margin-top:8px;font-size:0.65rem">注册新成员: <code>python3 user_manager.py register &lt;名字&gt; user</code></div>';
   },a:''},
-  toolbox:{t:'🧰 工具箱 · PHOENIX 内置工具 & 外部资源',e:'<strong>PHOENIX 自带的命令行工具和 API 端点。</strong>每个工具都可以在终端独立运行。外部资源从 LiHongwei Skill 云仓库精选整合。',r:()=>{
-    return `<h4 style="color:var(--accent);margin-bottom:8px">🔧 命令行工具</h4>
-      <div style="font-size:0.75rem;line-height:1.8">
-        <div class="metric"><span class="l"><code>tool-guard.py</code></span><span class="v" style="font-size:0.65rem">工具循环防护 · observe/check/reset/stats</span></div>
-        <div class="metric"><span class="l"><code>skill-registry.py</code></span><span class="v" style="font-size:0.65rem">技能依赖管理 · list/deps/chain/validate</span></div>
-        <div class="metric"><span class="l"><code>nexsandglass.py</code></span><span class="v" style="font-size:0.65rem">四层记忆引擎 · write/drift/persona/analyze</span></div>
-        <div class="metric"><span class="l"><code>policy-engine.py</code></span><span class="v" style="font-size:0.65rem">策略引擎 · check/list/chains/stats</span></div>
-        <div class="metric"><span class="l"><code>timeline.py</code></span><span class="v" style="font-size:0.65rem">执行时间线 · migrate/query/replay/stats</span></div>
-        <div class="metric"><span class="l"><code>user_manager.py</code></span><span class="v" style="font-size:0.65rem">用户管理 · setup/register/list/promote</span></div>
-        <div class="metric"><span class="l"><code>event-bus/bus.py</code></span><span class="v" style="font-size:0.65rem">事件总线 · emit/subscribe/tail/stats</span></div>
-        <div class="metric"><span class="l"><code>server.py</code></span><span class="v" style="font-size:0.65rem">Web 仪表盘 · HTTP API + SSE 推送</span></div>
-      </div>
-      <h4 style="color:var(--accent);margin:14px 0 8px">🌐 外部资源</h4>
-      <div style="font-size:0.75rem;line-height:1.8">
-        <div class="metric"><span class="l">📦 Skill 云仓库</span><span class="v" style="font-size:0.65rem"><a href="https://lihongwei-cn.github.io/lihongwei-cn/" target="_blank" style="color:var(--accent-alt)">165 个 AI Skill · 22 分类 →</a></span></div>
-        <div class="metric"><span class="l">📐 全局规范部署</span><span class="v" style="font-size:0.65rem">统一规范同步到 6 个 AI Agent</span></div>
-      </div>
-      <div class="empty" style="margin-top:12px;font-size:0.65rem">更多工具通过 <code>python3 &lt;模块名&gt;.py</code> 查看完整用法</div>`;
-  },a:''},
   modules:{t:'🧩 系统模块',e:'<strong>PHOENIX 由12个模块组成，全部用 Python 标准库编写，零外部依赖。</strong>每个模块独立可测试。',r:()=>{
     const mods=D.modules?.modules||{};const descs={'tool-guard':'工具循环防护','skill-registry':'技能依赖管理','nexsandglass':'四层记忆引擎','policy-engine':'策略引擎','timeline':'执行时间线','server':'HTTP API服务器','inspector':'系统巡检','event-bus':'事件总线'};
     return Object.entries(mods).map(([n,m])=>`<div class="metric"><span class="l">${n}</span><span class="v" style="font-size:0.7rem">${m.lines}行 · ${descs[n]||m.summary||''}</span></div>`).join('');
@@ -283,7 +257,7 @@ function load(){
     }
   }
   fetchJSON('/api/status',function(d){D.status=d;try{buildWelcome(D.persona||{})}catch(e){};try{document.getElementById('senses-mini').innerHTML=miniSenses(d||{})}catch(e){};done()});
-  fetchJSON('/api/modules',function(d){D.modules=d;try{document.getElementById('toolbox-mini').innerHTML=miniToolbox();document.getElementById('modules-mini').innerHTML=miniModules(d||{})}catch(e){};done()});
+  fetchJSON('/api/modules',function(d){D.modules=d;try{document.getElementById('modules-mini').innerHTML=miniModules(d||{})}catch(e){};done()});
   fetchJSON('/api/timeline?limit=20',function(d){D.timeline=d;try{document.getElementById('timeline-mini').innerHTML=miniTimeline(d||{})}catch(e){};done()});
   fetchJSON('/api/persona',function(d){D.persona=d;try{buildWelcome(d||{});document.getElementById('persona-mini').innerHTML=miniPersona(d||{})}catch(e){};done()});
   fetchJSON('/api/tool-guard',function(d){D.toolguard=d;try{document.getElementById('toolguard-mini').innerHTML=miniToolGuard(d||{})}catch(e){};done()});

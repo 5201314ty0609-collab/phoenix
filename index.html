@@ -5,12 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PHOENIX · Self-Evolving Agent Harness</title>
 <style>
-  :root {
-    --bg:#1a1b26;--surface:#24283b;--surface-alt:#1f2335;
-    --border:rgba(255,255,255,0.06);--text:#c0caf5;--text-dim:#565f89;
-    --accent:#e0af68;--accent-alt:#7aa2f7;--red:#f7768e;--green:#9ece6a;
-    --font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-  }
+  :root{--bg:#1a1b26;--surface:#24283b;--surface-alt:#1f2335;--border:rgba(255,255,255,0.06);--text:#c0caf5;--text-dim:#565f89;--accent:#e0af68;--accent-alt:#7aa2f7;--red:#f7768e;--green:#9ece6a;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6}
   .hero{text-align:center;padding:80px 20px 60px;border-bottom:1px solid var(--border)}
@@ -25,58 +20,46 @@
   .btn{padding:10px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s}
   .btn.primary{background:var(--accent);color:var(--bg)}.btn.primary:hover{opacity:.9}
   .btn.secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}.btn.secondary:hover{border-color:var(--accent)}
-
   .section{padding:60px 20px;max-width:1000px;margin:0 auto}
   .section h2{font-size:1.6rem;font-weight:700;text-align:center;margin-bottom:8px}
   .section .s2{font-size:0.8rem;color:var(--text-dim);text-align:center;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:40px}
-
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
   .card{background:var(--surface);border-radius:12px;padding:24px;border:1px solid var(--border);transition:border-color .2s,transform .1s}
   .card:hover{border-color:var(--accent);transform:translateY(-2px)}
   .card .icon{font-size:2rem;margin-bottom:12px}
   .card h3{font-size:1rem;margin-bottom:8px}
   .card p{font-size:0.82rem;color:var(--text-dim);line-height:1.5}
-
   .arch{background:var(--surface);border-radius:12px;padding:32px;border:1px solid var(--border);overflow-x:auto}
   .arch .layer{display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
   .arch .layer:last-child{border-bottom:none}
   .arch .lname{font-weight:700;min-width:100px;font-size:0.9rem}
   .arch .larrow{color:var(--accent);min-width:60px;text-align:center;font-size:0.8rem}
   .arch .ldesc{flex:1;font-size:0.78rem;color:var(--text-dim)}
-
   .users{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:24px}
   .user-card{background:var(--surface);border-radius:12px;padding:20px 28px;text-align:center;border:1px solid var(--border);min-width:160px}
   .user-card .tier-icon{font-size:2rem}
   .user-card .tier-name{font-weight:700;margin-top:6px}
   .user-card .tier-desc{font-size:0.72rem;color:var(--text-dim);margin-top:4px}
-
   table{width:100%;border-collapse:collapse;font-size:0.82rem}
   th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
   th{color:var(--accent);font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em}
-  .check{color:var(--green)}.cross{color:var(--red)}
-
+  .check{color:var(--green)}
   .stats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:24px}
   .stat{text-align:center;padding:16px 24px;background:var(--surface);border-radius:8px;border:1px solid var(--border)}
   .stat .num{font-size:2rem;font-weight:800;color:var(--accent)}
   .stat .label{font-size:0.72rem;color:var(--text-dim);margin-top:4px}
-
   footer{text-align:center;padding:40px;color:var(--text-dim);font-size:0.75rem;border-top:1px solid var(--border)}
   footer a{color:var(--accent);text-decoration:none}
-
   @media(max-width:768px){.hero h1{font-size:1.8rem}.section{padding:40px 16px}}
 </style>
 </head>
 <body>
 
+<!-- Hero -->
 <div class="hero">
   <h1>🐦‍🔥 PHOENIX</h1>
-  <div class="sub">
-    自进化 AI Agent 编排系统——融合 MUNDO 编排引擎与 NexSandglass 记忆架构。
-    实时监控 · 自动学习 · 自我进化。
-  </div>
-  <div class="sub" style="font-size:0.8rem;margin-top:6px">
-    Self-Evolving Agent Harness — Real-time monitoring, auto-learning persona, self-evolution engine.
-  </div>
+  <div class="sub">自进化 AI Agent 编排系统——融合 MUNDO 编排引擎与 NexSandglass 记忆架构。实时监控 · 自动学习 · 自我进化。</div>
+  <div class="sub" style="font-size:0.8rem;margin-top:6px">Self-Evolving Agent Harness — Monitor. Learn. Evolve.</div>
   <div class="badges">
     <span class="badge gold">Pure Python stdlib</span>
     <span class="badge blue">Zero Dependencies</span>
@@ -85,89 +68,79 @@
   <div class="cta">
     <a href="https://github.com/5201314ty0609-collab/phoenix" class="btn primary">GitHub →</a>
     <a href="#quickstart" class="btn secondary">快速开始</a>
-    <a href="dashboard.html" class="btn primary" style="background:var(--accent-alt)">📊 在线演示 Dashboard</a>
+    <a href="dashboard.html" class="btn primary" style="background:var(--accent-alt)">📊 仪表盘 Dashboard</a>
   </div>
 </div>
 
+<!-- Stats -->
 <div class="section">
   <div class="stats">
-    <div class="stat"><div class="num">12</div><div class="label">引擎模块 Modules</div></div>
-    <div class="stat"><div class="num">4,500+</div><div class="label">代码行数 Lines</div></div>
-    <div class="stat"><div class="num">100+</div><div class="label">测试用例 Tests</div></div>
-    <div class="stat"><div class="num">100%</div><div class="label">测试通过率 Pass Rate</div></div>
+    <div class="stat"><div class="num">12</div><div class="label">引擎模块</div></div>
+    <div class="stat"><div class="num">4,500+</div><div class="label">代码行数</div></div>
+    <div class="stat"><div class="num">100+</div><div class="label">测试用例</div></div>
+    <div class="stat"><div class="num">100%</div><div class="label">通过率</div></div>
   </div>
 </div>
 
-<div class="section" id="architecture">
+<!-- Architecture -->
+<div class="section">
   <h2>🏗️ 四层记忆架构</h2>
-  <div class="s2">Four-Layer Memory Architecture · 吸收自 NexSandglass V2.9.3</div>
+  <div class="s2">Four-Layer Memory Architecture · 吸收自 NexSandglass</div>
   <div class="arch">
     <div class="layer"><div class="lname">L4 灵魂蒸馏</div><div class="larrow">← 合成 →</div><div class="ldesc">四层画像自动构建——基础锚点·兴趣图谱·交互协议·认知内核。每条声明附溯源码防 LLM 幻觉。</div></div>
-    <div class="layer"><div class="lname">L3 决策检测</div><div class="larrow">← 识别 →</div><div class="ldesc">双语(CN/EN)选择模式匹配——显式选择·命令式决策·放弃信号·偏好声明。决策链追踪。</div></div>
-    <div class="layer"><div class="lname">L2 偏移率</div><div class="larrow">← 量化 →</div><div class="ldesc">决策倾向时间变化——frugal/spend/drift 三方向。四级稳定性。趋势斜率。融入 7-Sense 预测。</div></div>
+    <div class="layer"><div class="lname">L3 决策检测</div><div class="larrow">← 识别 →</div><div class="ldesc">双语(CN/EN)选择模式匹配——显式选择·命令式决策·放弃信号·偏好声明。</div></div>
+    <div class="layer"><div class="lname">L2 偏移率</div><div class="larrow">← 量化 →</div><div class="ldesc">决策倾向时间变化——frugal/spend/drift 三方向。四级稳定性。融入 7-Sense 预测。</div></div>
     <div class="layer"><div class="lname">L1 沙粒写入</div><div class="larrow">← 采集 →</div><div class="ldesc">纯文本追加 + SQLite 双写 + FTS5 全文搜索。不可变数据。每会话自动采集。</div></div>
   </div>
 </div>
 
+<!-- Core Capabilities -->
 <div class="section">
   <h2>🧩 核心能力</h2>
-  <div class="s2">Core Capabilities · 吸收自 MUNDO v2.0.9 + 自主改进</div>
+  <div class="s2">Core Capabilities · 吸收自 MUNDO + 自主改进</div>
   <div class="grid">
-    <div class="card">
-      <div class="icon">🛡️</div>
-      <h3>工具防护 Tool Guard</h3>
-      <p>三种检测器（精确失败·同工具失败·无进展）× 四级决策链（允许→警告→阻断→中止）。防止 Agent 陷入死循环。</p>
-    </div>
-    <div class="card">
-      <div class="icon">🗂️</div>
-      <h3>技能管理 Skill Registry</h3>
-      <p>62 个技能的依赖拓扑验证。循环依赖检测。冲突声明。自动加载顺序。增量元数据——不改动已有文件。</p>
-    </div>
-    <div class="card">
-      <div class="icon">📜</div>
-      <h3>策略引擎 Policy Engine</h3>
-      <p>15 条规则 × 7 条链 × 优先级仲裁。安全门·质量门·品味门·上下文守卫·进化守卫。可审计。</p>
-    </div>
-    <div class="card">
-      <div class="icon">📊</div>
-      <h3>Web 控制台 Dashboard</h3>
-      <p>9 个监控面板。SSE 实时推送。中英双语。一键操作（重置防护·重建画像·重算偏移）。可部署。</p>
-    </div>
-    <div class="card">
-      <div class="icon">👥</div>
-      <h3>用户层级 User Tiers</h3>
-      <p>三层体系——创始人·合伙人（≥10沙粒）·使用者。自动升级。首次部署引导。硬编码创始人保护。</p>
-    </div>
-    <div class="card">
-      <div class="icon">👁️</div>
-      <h3>七感监测 7-Sense</h3>
-      <p>O2(上下文压力)·Nociception(错误痛觉)·Drift(话题漂移)·Echo(重复)·Chronos(时间)·Spatial(空间)·Vestibular(平衡)。趋势预测。</p>
-    </div>
+    <div class="card"><div class="icon">🛡️</div><h3>工具防护</h3><p>三种检测器 × 四级决策链。防止 Agent 陷入死循环、重复失败或原地踏步。</p></div>
+    <div class="card"><div class="icon">🗂️</div><h3>技能管理</h3><p>62 个技能的依赖拓扑验证。循环依赖检测。冲突声明。自动加载顺序。</p></div>
+    <div class="card"><div class="icon">📜</div><h3>策略引擎</h3><p>15 条规则 × 7 条链 × 优先级仲裁。安全门·质量门·品味门。</p></div>
+    <div class="card"><div class="icon">📊</div><h3>Web 仪表盘</h3><p>9 个监测面板。SSE 实时推送。中英双语。一键操作。</p></div>
+    <div class="card"><div class="icon">👥</div><h3>用户层级</h3><p>创始人·合伙人·使用者。自动升级。首次部署引导。</p></div>
+    <div class="card"><div class="icon">👁️</div><h3>七感监测</h3><p>O2·Nociception·Drift·Echo·Chronos·Spatial·Vestibular。趋势预测。</p></div>
   </div>
 </div>
 
+<!-- Toolbox -->
+<div class="section">
+  <h2>🧰 工具箱</h2>
+  <div class="s2">Built-in CLI Tools & External Resources</div>
+  <div class="grid">
+    <div class="card"><div class="icon">🛡️</div><h3>tool-guard.py</h3><p>工具循环防护——三种检测器×四级决策链。防止 Agent 陷入死循环。</p></div>
+    <div class="card"><div class="icon">🗂️</div><h3>skill-registry.py</h3><p>62 技能依赖拓扑验证。循环依赖检测·冲突声明·自动加载顺序。</p></div>
+    <div class="card"><div class="icon">🧬</div><h3>nexsandglass.py</h3><p>四层记忆引擎。沙粒写入·偏移率·决策检测·灵魂蒸馏。</p></div>
+    <div class="card"><div class="icon">⚙️</div><h3>policy-engine.py</h3><p>15 规则×7 链×优先级仲裁。安全门·质量门·品味门。</p></div>
+    <div class="card"><div class="icon">📜</div><h3>timeline.py</h3><p>SQLite+FTS5 执行追踪。迁移·查询·回放·导出。</p></div>
+    <div class="card"><div class="icon">👥</div><h3>user_manager.py</h3><p>三层用户体系。创始人·合伙人·使用者。自动升级。</p></div>
+    <div class="card"><div class="icon">📡</div><h3>event-bus/bus.py</h3><p>25 事件类型发布订阅。支持 Hermes 桥接。</p></div>
+    <div class="card"><div class="icon">🌐</div><h3>server.py</h3><p>HTTP API + SSE 推送 + 仪表盘。纯 stdlib。</p></div>
+  </div>
+  <h3 style="color:var(--accent);font-size:0.9rem;margin:28px 0 14px;text-align:center">🌐 外部资源 External Resources</h3>
+  <div class="grid">
+    <div class="card"><div class="icon">📦</div><h3>Skill 云仓库</h3><p>165 个 AI Skill · 22 分类——学术·工程·创意·AI。<br><a href="https://lihongwei-cn.github.io/lihongwei-cn/" target="_blank" style="color:var(--accent-alt)">lihongwei-cn.github.io →</a></p></div>
+    <div class="card"><div class="icon">📐</div><h3>全局规范部署</h3><p>统一规范同步到 6 个 AI Agent（Claude Code·Codex·Hermes·Cursor·Windsurf·Copilot）。</p></div>
+  </div>
+</div>
+
+<!-- User Tiers -->
 <div class="section">
   <h2>👥 用户层级</h2>
   <div class="s2">User Tier System</div>
   <div class="users">
-    <div class="user-card">
-      <div class="tier-icon">👑</div>
-      <div class="tier-name">创始人 Founder</div>
-      <div class="tier-desc">全权限·不可降级<br>holyty + PHOENIX</div>
-    </div>
-    <div class="user-card">
-      <div class="tier-icon">⭐</div>
-      <div class="tier-name">合伙人 Partner</div>
-      <div class="tier-desc">画像已激活·完整功能<br>≥10 对话沙粒自动升级</div>
-    </div>
-    <div class="user-card">
-      <div class="tier-icon">🌱</div>
-      <div class="tier-name">使用者 User</div>
-      <div class="tier-desc">学习期·基础功能<br>注册默认层级</div>
-    </div>
+    <div class="user-card"><div class="tier-icon">👑</div><div class="tier-name">创始人 Founder</div><div class="tier-desc">全权限·不可降级<br>holyty + PHOENIX</div></div>
+    <div class="user-card"><div class="tier-icon">⭐</div><div class="tier-name">合伙人 Partner</div><div class="tier-desc">画像已激活·完整功能<br>≥10 对话沙粒自动升级</div></div>
+    <div class="user-card"><div class="tier-icon">🌱</div><div class="tier-name">使用者 User</div><div class="tier-desc">学习期·基础功能<br>注册默认层级</div></div>
   </div>
 </div>
 
+<!-- API -->
 <div class="section">
   <h2>📡 API 端点</h2>
   <div class="s2">HTTP API Endpoints</div>
@@ -186,6 +159,7 @@
   </table>
 </div>
 
+<!-- Improvements -->
 <div class="section">
   <h2>🆚 与原版的区别</h2>
   <div class="s2">Improvements over MUNDO & NexSandglass</div>
@@ -202,9 +176,10 @@
   </table>
 </div>
 
+<!-- Quick Start -->
 <div class="section" id="quickstart">
   <h2>🚀 部署你自己的 PHOENIX</h2>
-  <div class="s2">Deploy Your Own PHOENIX Instance</div>
+  <div class="s2">Deploy Your Own Instance</div>
   <div class="card" style="max-width:650px;margin:0 auto">
     <pre style="font-size:0.8rem;color:var(--text);line-height:1.8">
 <span style="color:var(--text-dim)"># 1. 克隆仓库</span>
@@ -221,12 +196,7 @@ python3 server.py
 <span style="color:var(--accent)">http://127.0.0.1:8765</span>
     </pre>
     <p style="font-size:0.75rem;color:var(--text-dim);margin-top:12px">
-      <strong>零依赖。</strong>Python 3.9+ 即可。不需要 pip install 任何东西。<br>
-      注册后你是 🌱 使用者——积累 10 条对话后自动升级为 ⭐ 合伙人。<br>
-      仪表盘地址: <a href="dashboard.html" style="color:var(--accent)">dashboard.html</a>（需先启动 server.py）
-    </p>
-    <p style="font-size:0.7rem;color:var(--accent-alt);margin-top:8px">
-      📊 <a href="dashboard.html" style="color:var(--accent-alt)">查看仪表盘演示页面</a>——了解 PHOENIX 上线后的样子
+      <strong>零依赖。</strong>Python 3.9+ 即可。不需要 pip install 任何东西。
     </p>
   </div>
 </div>
@@ -234,10 +204,7 @@ python3 server.py
 <footer>
   🐦‍🔥 PHOENIX · Self-Evolving Agent Harness v1.3.0
   · <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a>
-  · 创始人: <a href="#">holyty</a> + PHOENIX
-  · MIT License
-  <br><br>
-  Built with Python stdlib only · Zero external dependencies
+  · 创始人: holyty + PHOENIX · MIT License
 </footer>
 
 </body>
