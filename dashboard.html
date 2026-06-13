@@ -42,8 +42,8 @@
   .metric .l{color:var(--text-dim)}.metric .v{font-weight:600}
   .v.g{color:var(--green)}.v.w{color:var(--yellow)}.v.r{color:var(--red)}
 
-  .sense-row{display:flex;gap:4px;flex-wrap:wrap;overflow:hidden}
-  .s-dot{padding:4px 8px;border-radius:12px;font-size:0.62rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .sense-row{display:flex;gap:3px;flex-wrap:wrap}
+  .s-dot{padding:3px 6px;border-radius:10px;font-size:0.6rem;font-weight:600;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .s-dot.g{background:rgba(158,206,106,.1);color:var(--green)}
   .s-dot.w{background:rgba(224,175,104,.1);color:var(--yellow)}
   .s-dot.r{background:rgba(247,118,142,.1);color:var(--red)}
@@ -185,8 +185,13 @@ function miniPersona(d){
 
 function miniSenses(d){
   const s=d?.senses||{};
-  const names={o2:'压力',nociception:'错误',drift:'漂移',echo:'重复',chronos:'节奏',spatial:'空间',vestibular:'平衡'};
-  return Object.entries(s).map(([n,v])=>{let c='g';if(v.trend==='alert')c='r';else if(v.trend==='warn')c='w';return`<span class="s-dot ${c}">${names[n]||n}:${v.state||'ok'}</span>`;}).join('');
+  const labels={o2:'O₂',nociception:'痛',drift:'偏',echo:'回',chronos:'时',spatial:'空',vestibular:'衡'};
+  const full={o2:'O2 压力',nociception:'痛觉',drift:'漂移',echo:'回声',chronos:'时间',spatial:'空间',vestibular:'平衡'};
+  return Object.entries(s).map(([n,v])=>{
+    let c='g',st=v.state||'ok';if(st==='unknown')st='-';
+    if(v.trend==='alert')c='r';else if(v.trend==='warn')c='w';
+    return`<span class="s-dot ${c}" title="${full[n]||n}: ${st}${v.trend?' · '+v.trend:''}">${labels[n]||n[0]}</span>`;
+  }).join('');
 }
 
 function miniDrift(d){const dr=d?.drift||{};return m('倾向','frugal=保守 · spend=探索 · drift=随性')+m('当前',dr.direction||'?')+m('稳定性',dr.stability||'?');}
