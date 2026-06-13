@@ -146,7 +146,7 @@
   </div>
 </div>
 
-<footer>PHOENIX v1.3.0 · <span id="refresh-label"></span> · <a href="https://github.com/5201314ty0609-collab/phoenix" target="_blank" style="color:var(--accent);text-decoration:none">GitHub</a></footer>
+<footer>PHOENIX v1.3.0 · Dashboard v3 (callback) · <span id="refresh-label"></span> · <a href="https://github.com/5201314ty0609-collab/phoenix" target="_blank" style="color:var(--accent);text-decoration:none">GitHub</a></footer>
 
 <!-- ═══ Modal ═══ -->
 <div class="modal-overlay" id="mo" onclick="closeM(event)">
@@ -159,18 +159,19 @@
 <div id="toasts"></div>
 
 <script>
-const API='';let D={};let sseOk=false;
+var D={};
 
-async function G(p){try{const c=new AbortController();const t=setTimeout(()=>c.abort(),8000);const r=await fetch(API+p,{signal:c.signal});clearTimeout(t);return r.ok?await r.json():null}catch(e){console.log('Fetch fail:',p,e.message);return null}}
-async function P(p,b){try{const r=await fetch(API+p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});return r.ok?await r.json():null}catch(e){return null}}
+function fetchJSON(path, callback){
+  fetch(path).then(function(r){return r.json()}).then(function(d){callback(d)}).catch(function(){callback(null)});
+}
 
-function T(m,ok=true){const t=document.createElement('div');t.className='toast '+(ok?'ok':'err');t.textContent=m;document.getElementById('toasts').appendChild(t);setTimeout(()=>t.remove(),2500)}
-async function act(path,body){const r=await P('/api/'+path,body);if(r&&r.status==='ok'){T('✅ '+(r.action||'完成'));load()}else{T('❌ 操作失败',false)}}
+function T(m,ok){var t=document.createElement('div');t.className='toast '+(ok?'ok':'err');t.textContent=m;document.getElementById('toasts').appendChild(t);setTimeout(function(){t.remove()},2500)}
 
-// ── Connection ──
-function setConn(ok,msg){sseOk=ok;document.getElementById('conn-dot').className='dot '+(ok?'ok':'wait');document.getElementById('conn-text').textContent=msg||(ok?'PHOENIX 引擎已连接':'PHOENIX 引擎运行中 (轮询模式)');document.getElementById('conn-time').textContent=new Date().toLocaleTimeString('zh-CN')}
-
-// ── Mini renders ──
+function setConn(ok,msg){
+  document.getElementById('conn-dot').className='dot '+(ok?'ok':'wait');
+  document.getElementById('conn-text').textContent=msg||(ok?'PHOENIX 引擎已连接':'PHOENIX 引擎运行中');
+  document.getElementById('conn-time').textContent=new Date().toLocaleTimeString('zh-CN');
+}
 function m(l,v,c=''){return`<div class="metric"><span class="l">${l}</span><span class="v${c?' '+c:''}">${v}</span></div>`}
 
 function miniPersona(d){
@@ -225,7 +226,7 @@ const MOD={
     const d=D.toolguard||{},s=d.summary||{},a=d.alerts||{};let ah='';
     for(const[k,v]of Object.entries(a.exact_failures||{}))ah+=`<div style="padding:6px 10px;margin:3px 0;background:rgba(247,118,142,.08);border-left:2px solid var(--red);border-radius:3px;font-size:0.72rem">🔁 ${k.split(':')[0]} 同一操作连续失败 ${v} 次</div>`;
     for(const[k,v]of Object.entries(a.tool_failures||{}))ah+=`<div style="padding:6px 10px;margin:3px 0;background:rgba(224,175,104,.08);border-left:2px solid var(--yellow);border-radius:3px;font-size:0.72rem">⚠️ ${k} 连续失败 ${v} 次</div>`;
-    return m('总观测','已检查 '+((s.total_observed||0)+' 次工具调用')+m('警告',s.total_warned||0,'w')+m('阻断',s.total_blocked||0,'r')+m('中止',s.total_halted||0,'r')+'<h4 style="margin-top:12px;color:var(--text-dim)">活跃警报</h4>'+(ah||'<div class="empty">✅ 一切正常，没有警报</div>');
+    return m('总观测','已检查 '+((s.total_observed||0))+' 次工具调用')+m('警告',s.total_warned||0,'w')+m('阻断',s.total_blocked||0,'r')+m('中止',s.total_halted||0,'r')+'<h4 style="margin-top:12px;color:var(--text-dim)">活跃警报</h4>'+(ah||'<div class="empty">✅ 一切正常，没有警报</div>');
   },a:'<button class="btn danger" onclick="if(confirm(\"确定重置所有计数器？\"))act(\'tool-guard/reset\',{tool:\'all\'})">重置所有计数器</button>'},
   users:{t:'👥 团队成员',e:'<strong>三层体系，自动升级。</strong>创始人(👑 holyty + PHOENIX)有全部权限且不可降级。新成员注册从使用者(🌱)起步，积累≥10条对话沙粒后自动升级为合伙人(⭐)并获得完整画像功能。',r:()=>{
     const u=D.users?.users||[];
@@ -246,39 +247,27 @@ function closeM(e){if(e&&e.target!==document.getElementById('mo'))return;documen
 function fTL(){const q=(document.getElementById('tl-q')?.value||'').toLowerCase();const t=(document.getElementById('tl-t')?.value||'');const e=D.timeline?.entries||[];const f=e.filter(x=>{const et=x.event_type||'';if(t&&!et.startsWith(t))return false;if(q){const s=(x.summary||'')+JSON.stringify(x.payload||{});if(!s.toLowerCase().includes(q))return false;}return true});document.getElementById('tl-all').innerHTML=f.slice(0,50).map(x=>`<div class="tl-line"><span class="ts">${(x.timestamp||'').slice(0,19)}</span><span class="tp">${x.event_type||'?'}</span><span class="bd">${(x.summary||'').slice(0,100)}</span></div>`).join('')||'<div class="empty">无匹配事件</div>'}
 
 // ── Load: data first, then SSE ──
-async function load(){
-  setConn(false,'加载数据中...');
-  const [status,modules,timeline,persona,toolguard,skills,users]=await Promise.all([
-    G('/api/status'),G('/api/modules'),G('/api/timeline?limit=20'),
-    G('/api/persona'),G('/api/tool-guard'),G('/api/skills'),G('/api/users')
-  ]);
-  D={status,modules,timeline,persona,toolguard,skills,users};
-  // Render all — each wrapped in try-catch so one failure doesn't block others
-  try{buildWelcome(persona||{})}catch(e){console.log(e)}
-  try{document.getElementById('persona-mini').innerHTML=miniPersona(persona||{})}catch(e){}
-  try{document.getElementById('senses-mini').innerHTML=miniSenses(status||{})}catch(e){}
-  try{document.getElementById('drift-mini').innerHTML=miniDrift(persona||{})}catch(e){}
-  try{document.getElementById('toolguard-mini').innerHTML=miniToolGuard(toolguard||{})}catch(e){}
-  try{document.getElementById('users-mini').innerHTML=miniUsers(users||{})}catch(e){}
-  try{document.getElementById('modules-mini').innerHTML=miniModules(modules||{})}catch(e){}
-  try{document.getElementById('timeline-mini').innerHTML=miniTimeline(timeline||{})}catch(e){}
-  document.getElementById('refresh-label').textContent='更新于 '+new Date().toLocaleTimeString('zh-CN');
-  setConn(true,'PHOENIX 引擎已连接');
+function load(){
+  setConn(false,'加载中...');
+  var count=0,total=7;
+  function done(){
+    count++;if(count>=total){
+      document.getElementById('refresh-label').textContent='更新于 '+new Date().toLocaleTimeString('zh-CN');
+      setConn(true,'PHOENIX 引擎已连接');
+    }
+  }
+  fetchJSON('/api/status',function(d){D.status=d;try{buildWelcome(D.persona||{})}catch(e){};try{document.getElementById('senses-mini').innerHTML=miniSenses(d||{})}catch(e){};done()});
+  fetchJSON('/api/modules',function(d){D.modules=d;try{document.getElementById('modules-mini').innerHTML=miniModules(d||{})}catch(e){};done()});
+  fetchJSON('/api/timeline?limit=20',function(d){D.timeline=d;try{document.getElementById('timeline-mini').innerHTML=miniTimeline(d||{})}catch(e){};done()});
+  fetchJSON('/api/persona',function(d){D.persona=d;try{buildWelcome(d||{});document.getElementById('persona-mini').innerHTML=miniPersona(d||{})}catch(e){};done()});
+  fetchJSON('/api/tool-guard',function(d){D.toolguard=d;try{document.getElementById('toolguard-mini').innerHTML=miniToolGuard(d||{})}catch(e){};done()});
+  fetchJSON('/api/skills',function(d){D.skills=d;done()});
+  fetchJSON('/api/users',function(d){D.users=d;try{document.getElementById('users-mini').innerHTML=miniUsers(d||{})}catch(e){};done()});
 }
 
-// ── SSE: secondary, non-blocking ──
-function initSSE(){
-  try{
-    const s=new EventSource('/api/stream');
-    s.addEventListener('connected',()=>{setConn(true,'PHOENIX 实时连接已建立')});
-    s.addEventListener('sand_ingested',(e)=>{try{const d=JSON.parse(e.data);setConn(true,`新对话已采集 · ${d.total_grains||'?'} 条沙粒`);load();}catch{}});
-    s.onerror=()=>{setConn(false,'实时连接断开，使用轮询模式');setTimeout(()=>{if(!sseOk)initSSE();},10000)};
-  }catch(e){setConn(false,'实时连接不可用，使用轮询模式')}
-}
-
-load().then(()=>{setTimeout(initSSE,500)});
+load();
 setInterval(load,30000);
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeM()});
 </script>
 </body>
 </html>
