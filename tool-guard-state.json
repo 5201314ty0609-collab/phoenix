@@ -6,41 +6,6 @@
   "recent_calls": [
     {
       "tool": "Bash",
-      "args_hash": "88b269f0ca0a1680",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-13T10:15:10.391416+00:00"
-    },
-    {
-      "tool": "Bash",
-      "args_hash": "4369f18d7feed591",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-13T10:16:27.734347+00:00"
-    },
-    {
-      "tool": "Edit",
-      "args_hash": "9508f5e2af1d16a5",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-13T10:16:42.182443+00:00"
-    },
-    {
-      "tool": "Edit",
-      "args_hash": "72d4db9cebab7dfd",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-13T10:16:53.695451+00:00"
-    },
-    {
-      "tool": "Bash",
-      "args_hash": "6d35d76ca9ddb43c",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-13T10:17:05.044124+00:00"
-    },
-    {
-      "tool": "Bash",
       "args_hash": "85d4333dff8553d9",
       "is_error": false,
       "decision": "allow",
@@ -353,12 +318,47 @@
       "is_error": false,
       "decision": "allow",
       "timestamp": "2026-06-13T10:41:32.608668+00:00"
+    },
+    {
+      "tool": "Bash",
+      "args_hash": "de63c7b58bde19c9",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-13T10:41:49.002877+00:00"
+    },
+    {
+      "tool": "Bash",
+      "args_hash": "92a422646d671e5f",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-13T10:47:02.555653+00:00"
+    },
+    {
+      "tool": "Edit",
+      "args_hash": "95c5f65c4e9db332",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-13T10:47:13.843732+00:00"
+    },
+    {
+      "tool": "Edit",
+      "args_hash": "764f94f200116169",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-13T10:47:20.063966+00:00"
+    },
+    {
+      "tool": "Edit",
+      "args_hash": "1e26b67131d67e1f",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-13T10:47:35.708675+00:00"
     }
   ],
-  "total_observed": 586,
+  "total_observed": 591,
   "total_warned": 36,
   "total_blocked": 27,
   "total_halted": 6,
   "created_at": "2026-06-12T02:47:19.735292+00:00",
-  "updated_at": "2026-06-13T10:41:32.608799+00:00"
+  "updated_at": "2026-06-13T10:47:35.708809+00:00"
 }

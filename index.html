@@ -113,14 +113,14 @@
   <h2>🧰 工具箱</h2>
   <div class="s2">Built-in CLI Tools & External Resources</div>
   <div class="grid">
-    <div class="card"><div class="icon">🛡️</div><h3>tool-guard.py</h3><p>工具循环防护——三种检测器×四级决策链。防止 Agent 陷入死循环。</p></div>
-    <div class="card"><div class="icon">🗂️</div><h3>skill-registry.py</h3><p>62 技能依赖拓扑验证。循环依赖检测·冲突声明·自动加载顺序。</p></div>
-    <div class="card"><div class="icon">🧬</div><h3>nexsandglass.py</h3><p>四层记忆引擎。沙粒写入·偏移率·决策检测·灵魂蒸馏。</p></div>
-    <div class="card"><div class="icon">⚙️</div><h3>policy-engine.py</h3><p>15 规则×7 链×优先级仲裁。安全门·质量门·品味门。</p></div>
-    <div class="card"><div class="icon">📜</div><h3>timeline.py</h3><p>SQLite+FTS5 执行追踪。迁移·查询·回放·导出。</p></div>
-    <div class="card"><div class="icon">👥</div><h3>user_manager.py</h3><p>三层用户体系。创始人·合伙人·使用者。自动升级。</p></div>
-    <div class="card"><div class="icon">📡</div><h3>event-bus/bus.py</h3><p>25 事件类型发布订阅。支持 Hermes 桥接。</p></div>
-    <div class="card"><div class="icon">🌐</div><h3>server.py</h3><p>HTTP API + SSE 推送 + 仪表盘。纯 stdlib。</p></div>
+    <div class="card"><div class="icon">🛡️</div><h3>tool-guard.py · 工具防护</h3><p>防止 Agent 陷入死循环。三种检测器 × 四级决策链(允许→警告→阻断→中止)。<br><code>observe Bash '{"cmd":"ls"}' --error</code><br><code>check Bash '{"cmd":"ls"}'</code><br><code>stats</code> · <code>reset</code></p></div>
+    <div class="card"><div class="icon">🗂️</div><h3>skill-registry.py · 技能管理</h3><p>62 技能依赖拓扑验证。循环依赖检测·冲突声明·自动加载顺序。<br><code>list --origin ECC</code> · <code>deps django-verification</code><br><code>validate</code> · <code>chain django-verification</code></p></div>
+    <div class="card"><div class="icon">🧬</div><h3>nexsandglass.py · 记忆引擎</h3><p>四层记忆——沙粒写入·偏移率·决策检测·灵魂蒸馏。<br><code>write s1 --role user --content "..."</code><br><code>drift --days 7</code> · <code>persona</code> · <code>analyze</code></p></div>
+    <div class="card"><div class="icon">⚙️</div><h3>policy-engine.py · 策略引擎</h3><p>15 规则×7 链×优先级仲裁。安全门·质量门·品味门·上下文守卫。<br><code>check "write_file /etc/hosts"</code><br><code>list --domain security</code> · <code>chains</code></p></div>
+    <div class="card"><div class="icon">📜</div><h3>timeline.py · 时间线</h3><p>SQLite+FTS5 执行追踪，支持回放和导出。<br><code>migrate</code> · <code>query --type tool% --limit 50</code><br><code>replay &lt;session_id&gt;</code> · <code>export --format csv</code></p></div>
+    <div class="card"><div class="icon">👥</div><h3>user_manager.py · 用户管理</h3><p>三层体系(创始人·合伙人·使用者)自动升级。<br><code>setup</code> · <code>register &lt;name&gt; user</code><br><code>list</code> · <code>promote &lt;user_id&gt;</code></p></div>
+    <div class="card"><div class="icon">📡</div><h3>event-bus/bus.py · 事件总线</h3><p>25 事件类型发布订阅，支持 Hermes 桥接。<br><code>emit session.start phoenix</code><br><code>subscribe "type:heal.*" /tmp/alerts.jsonl</code><br><code>tail --source hermes</code> · <code>bridge --hermes</code></p></div>
+    <div class="card"><div class="icon">🌐</div><h3>server.py · Web 服务</h3><p>HTTP API + SSE 推送 + 仪表盘。纯 stdlib，零依赖。<br><code>python3 server.py --port 8765</code><br>→ <code>http://127.0.0.1:8765</code></p></div>
   </div>
   <h3 style="color:var(--accent);font-size:0.9rem;margin:28px 0 14px;text-align:center">🌐 外部资源 External Resources</h3>
   <div class="grid">
