@@ -3,209 +3,294 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PHOENIX · Self-Evolving Agent Harness</title>
+<title>PHOENIX — Self-Evolving Agent Harness</title>
+<meta name="description" content="PHOENIX is a self-evolving agent harness fusing five-layer architecture, seven-sense metacognition, and autonomous framework evolution.">
 <style>
-  :root{--bg:#1a1b26;--surface:#24283b;--surface-alt:#1f2335;--border:rgba(255,255,255,0.06);--text:#c0caf5;--text-dim:#565f89;--accent:#e0af68;--accent-alt:#7aa2f7;--red:#f7768e;--green:#9ece6a;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif}
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6}
-  .hero{text-align:center;padding:80px 20px 60px;border-bottom:1px solid var(--border)}
-  .hero h1{font-size:3rem;font-weight:800;letter-spacing:-0.03em}
-  .hero .sub{font-size:1.1rem;color:var(--text-dim);margin-top:12px;max-width:600px;margin-left:auto;margin-right:auto}
-  .hero .badges{display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap}
-  .badge{padding:6px 16px;border-radius:20px;font-size:0.8rem;font-weight:600}
-  .badge.gold{background:rgba(224,175,104,.15);color:var(--accent)}
-  .badge.blue{background:rgba(122,162,247,.15);color:var(--accent-alt)}
-  .badge.green{background:rgba(158,206,106,.15);color:var(--green)}
-  .hero .cta{margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .btn{padding:10px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s}
-  .btn.primary{background:var(--accent);color:var(--bg)}.btn.primary:hover{opacity:.9}
-  .btn.secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}.btn.secondary:hover{border-color:var(--accent)}
-  .section{padding:60px 20px;max-width:1000px;margin:0 auto}
-  .section h2{font-size:1.6rem;font-weight:700;text-align:center;margin-bottom:8px}
-  .section .s2{font-size:0.8rem;color:var(--text-dim);text-align:center;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:40px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-  .card{background:var(--surface);border-radius:12px;padding:24px;border:1px solid var(--border);transition:border-color .2s,transform .1s}
-  .card:hover{border-color:var(--accent);transform:translateY(-2px)}
-  .card .icon{font-size:2rem;margin-bottom:12px}
-  .card h3{font-size:1rem;margin-bottom:8px}
-  .card p{font-size:0.82rem;color:var(--text-dim);line-height:1.5}
-  .arch{background:var(--surface);border-radius:12px;padding:32px;border:1px solid var(--border);overflow-x:auto}
-  .arch .layer{display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
-  .arch .layer:last-child{border-bottom:none}
-  .arch .lname{font-weight:700;min-width:100px;font-size:0.9rem}
-  .arch .larrow{color:var(--accent);min-width:60px;text-align:center;font-size:0.8rem}
-  .arch .ldesc{flex:1;font-size:0.78rem;color:var(--text-dim)}
-  .users{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:24px}
-  .user-card{background:var(--surface);border-radius:12px;padding:20px 28px;text-align:center;border:1px solid var(--border);min-width:160px}
-  .user-card .tier-icon{font-size:2rem}
-  .user-card .tier-name{font-weight:700;margin-top:6px}
-  .user-card .tier-desc{font-size:0.72rem;color:var(--text-dim);margin-top:4px}
-  table{width:100%;border-collapse:collapse;font-size:0.82rem}
-  th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
-  th{color:var(--accent);font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em}
-  .check{color:var(--green)}
-  .stats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:24px}
-  .stat{text-align:center;padding:16px 24px;background:var(--surface);border-radius:8px;border:1px solid var(--border)}
-  .stat .num{font-size:2rem;font-weight:800;color:var(--accent)}
-  .stat .label{font-size:0.72rem;color:var(--text-dim);margin-top:4px}
-  footer{text-align:center;padding:40px;color:var(--text-dim);font-size:0.75rem;border-top:1px solid var(--border)}
-  footer a{color:var(--accent);text-decoration:none}
-  @media(max-width:768px){.hero h1{font-size:1.8rem}.section{padding:40px 16px}}
+  :root {
+    --bg: #08080e;
+    --surface: #111119;
+    --surface-raised: #181824;
+    --text: #e4e0db;
+    --text-muted: #8a8580;
+    --accent: #f49e42;
+    --accent-glow: #f49e4240;
+    --secondary: #c86b2c;
+    --warm-dark: #2a2420;
+    --border: #222228;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+    --text-body: clamp(1rem, 0.92rem + 0.3vw, 1.1rem);
+    --text-hero: clamp(2.4rem, 1.8rem + 2vw, 4rem);
+    --text-h2: clamp(1.6rem, 1.3rem + 1vw, 2.2rem);
+    --space-section: clamp(3rem, 2rem + 4vw, 6rem);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --duration: 200ms;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 1.5rem; }
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.5rem; max-width: 1060px; margin: 0 auto; }
+  .nav-brand { font-weight: 700; font-size: 1.1rem; color: var(--accent); letter-spacing: 0.02em; text-decoration: none; }
+  .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color var(--duration); }
+  .nav-links a:hover { color: var(--text); }
+  .hero { padding: var(--space-section) 0 calc(var(--space-section) * 0.6); }
+  .hero-badge { display: inline-block; padding: 0.3em 0.8em; border-radius: 100px; background: var(--accent-glow); color: var(--accent); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 1.5rem; }
+  .hero h1 { font-size: var(--text-hero); font-weight: 800; line-height: 1.08; letter-spacing: -0.025em; max-width: 10em; }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub { font-size: 1.2rem; color: var(--text-muted); margin-top: 1.2rem; max-width: 32em; line-height: 1.5; }
+  .hero-meta { display: flex; gap: 1.2rem; margin-top: 1.8rem; flex-wrap: wrap; }
+  .hero-meta span { font-size: 0.82rem; color: var(--text-muted); padding: 0.25em 0.7em; border-radius: 6px; background: var(--surface); border: 1px solid var(--border); }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 2rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stat-value { font-size: 2rem; font-weight: 800; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
+  section { padding: var(--space-section) 0; }
+  .section-header { margin-bottom: 2.5rem; }
+  .section-header h2 { font-size: var(--text-h2); font-weight: 750; letter-spacing: -0.015em; }
+  .section-header p { color: var(--text-muted); margin-top: 0.4rem; max-width: 36em; }
+  .section-num { font-size: 0.7rem; font-weight: 600; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+  .bento { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .bento-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; transition: border-color var(--duration); }
+  .bento-card:hover { border-color: rgba(244,158,66,0.25); }
+  .bento-card.wide { grid-column: span 2; }
+  .bento-card h3 { font-size: 1rem; font-weight: 650; margin: 0.5rem 0 0.4rem; }
+  .bento-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
+  .bento-card .emoji { font-size: 1.5rem; display: block; }
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; transition: border-color var(--duration); }
+  .feature-card:hover { border-color: rgba(244,158,66,0.25); }
+  .feature-card .icon { font-size: 1.4rem; margin-bottom: 0.6rem; display: block; }
+  .feature-card h3 { font-size: 0.95rem; font-weight: 650; margin-bottom: 0.3rem; }
+  .feature-card p { font-size: 0.84rem; color: var(--text-muted); }
+  .tools { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.3rem; transition: border-color var(--duration); }
+  .tool-card:hover { border-color: var(--warm-dark); }
+  .tool-card code { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); display: block; margin-bottom: 0.2rem; word-break: break-all; }
+  .tool-card .desc { font-size: 0.8rem; color: var(--text-muted); }
+  .table-wrap { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th, td { padding: 0.7rem 1rem; text-align: left; }
+  th { background: var(--surface-raised); font-weight: 650; color: var(--text); border-bottom: 1px solid var(--border); }
+  td { border-bottom: 1px solid var(--border); color: var(--text-muted); }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { color: var(--text); font-weight: 550; }
+  .check { color: #4caf50; } .warn { color: var(--accent); }
+  .deploy-block { background: var(--surface-raised); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; overflow-x: auto; }
+  .deploy-block pre { font-family: var(--mono); font-size: 0.82rem; color: var(--text); line-height: 1.7; }
+  .deploy-block .cmd { color: var(--accent); }
+  footer { border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; color: var(--text-muted); font-size: 0.82rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 768px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .bento { grid-template-columns: 1fr; } .bento-card.wide { grid-column: span 1; }
+    .features { grid-template-columns: 1fr; } .tools { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
 </style>
 </head>
 <body>
 
-<!-- Hero -->
-<div class="hero">
-  <h1>🐦‍🔥 PHOENIX</h1>
-  <div class="sub">自进化 AI Agent 编排系统——融合 MUNDO 编排引擎与 NexSandglass 记忆架构。实时监控 · 自动学习 · 自我进化。</div>
-  <div class="sub" style="font-size:0.8rem;margin-top:6px">Self-Evolving Agent Harness — Monitor. Learn. Evolve.</div>
-  <div class="badges">
-    <span class="badge gold">Pure Python stdlib</span>
-    <span class="badge blue">Zero Dependencies</span>
-    <span class="badge green">MIT License</span>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/phoenix/" class="nav-brand">PHOENIX</a>
+    <div class="nav-links">
+      <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
   </div>
-  <div class="cta">
-    <a href="https://github.com/5201314ty0609-collab/phoenix" class="btn primary">GitHub →</a>
-    <a href="#quickstart" class="btn secondary">快速开始</a>
-    <a href="dashboard.html" class="btn primary" style="background:var(--accent-alt)">📊 仪表盘 Dashboard</a>
-    <a href="dashboard-viz.html" class="btn primary" style="background:var(--green)">📈 可视化控制台 Visualization</a>
+</nav>
+
+<header class="hero container">
+  <div class="hero-badge">v1.3.0 · MIT License</div>
+  <h1><span>PHOENIX</span><br>Self-Evolving Agent Harness</h1>
+  <p class="hero-sub">Five-layer architecture fusing memory, metacognition, and autonomous framework evolution. Monitor. Learn. Evolve.</p>
+  <div class="hero-meta">
+    <span>Pure Python stdlib</span>
+    <span>Zero Dependencies</span>
+    <span>35 Engine Modules</span>
+    <span>15 Rule Files</span>
   </div>
-</div>
+</header>
 
-<!-- Stats -->
-<div class="section">
-  <div class="stats">
-    <div class="stat"><div class="num">12</div><div class="label">引擎模块</div></div>
-    <div class="stat"><div class="num">4,500+</div><div class="label">代码行数</div></div>
-    <div class="stat"><div class="num">100+</div><div class="label">测试用例</div></div>
-    <div class="stat"><div class="num">100%</div><div class="label">通过率</div></div>
+<div class="container"><div class="stats">
+  <div><div class="stat-value">35</div><div class="stat-label">Engine Modules</div></div>
+  <div><div class="stat-value">15</div><div class="stat-label">Rule Files</div></div>
+  <div><div class="stat-value">7</div><div class="stat-label">Sense Systems</div></div>
+  <div><div class="stat-value">74</div><div class="stat-label">Health Score / 100</div></div>
+</div></div>
+
+<section class="container">
+  <div class="section-header">
+    <div class="section-num">01 / ARCHITECTURE</div>
+    <h2>Five-Layer Architecture</h2>
+    <p>From kernel-level safety to autonomous evolution, each layer builds on the last.</p>
   </div>
-</div>
-
-<!-- Architecture -->
-<div class="section">
-  <h2>🏗️ 四层记忆架构</h2>
-  <div class="s2">Four-Layer Memory Architecture · 吸收自 NexSandglass</div>
-  <div class="arch">
-    <div class="layer"><div class="lname">L4 灵魂蒸馏</div><div class="larrow">← 合成 →</div><div class="ldesc">四层画像自动构建——基础锚点·兴趣图谱·交互协议·认知内核。每条声明附溯源码防 LLM 幻觉。</div></div>
-    <div class="layer"><div class="lname">L3 决策检测</div><div class="larrow">← 识别 →</div><div class="ldesc">双语(CN/EN)选择模式匹配——显式选择·命令式决策·放弃信号·偏好声明。</div></div>
-    <div class="layer"><div class="lname">L2 偏移率</div><div class="larrow">← 量化 →</div><div class="ldesc">决策倾向时间变化——frugal/spend/drift 三方向。四级稳定性。融入 7-Sense 预测。</div></div>
-    <div class="layer"><div class="lname">L1 沙粒写入</div><div class="larrow">← 采集 →</div><div class="ldesc">纯文本追加 + SQLite 双写 + FTS5 全文搜索。不可变数据。每会话自动采集。</div></div>
+  <div class="bento">
+    <div class="bento-card wide">
+      <span class="emoji">&#x1F6E1;</span>
+      <h3>Safety Layer</h3>
+      <p>AST-level bash guard (42 DANGER signals), mutation testing gate with 6 strategies, tool guard with circuit breaker pattern. Safety enforced at kernel level, not prompt level.</p>
+    </div>
+    <div class="bento-card">
+      <span class="emoji">&#x1F441;</span>
+      <h3>Perception</h3>
+      <p>Seven-sense metacognition with OpenTelemetry-native tracing. O2 vitality, Nociception pain, Chronos timing, all quantified and queryable.</p>
+    </div>
+    <div class="bento-card">
+      <span class="emoji">&#x1F9E0;</span>
+      <h3>Knowledge</h3>
+      <p>FTS5 + vector + graph hybrid retrieval with RRF fusion. Auto-capture memory with Ebbinghaus decay across 4 memory types.</p>
+    </div>
+    <div class="bento-card wide">
+      <span class="emoji">&#x26A1;</span>
+      <h3>Execution Layer</h3>
+      <p>Crash-proof task planning with 6 lifecycle hooks and SHA-256 attestation. Git-native coordination protocol (GNAP). Seven PostToolUse hooks for automated quality gates.</p>
+    </div>
+    <div class="bento-card">
+      <span class="emoji">&#x1F331;</span>
+      <h3>Evolution</h3>
+      <p>DSPy-inspired rule health scoring. Self-evolving framework pipeline: raw to observed to validated to hardened. Reflection engine with structured feedback loops.</p>
+    </div>
   </div>
-</div>
+</section>
 
-<!-- Core Capabilities -->
-<div class="section">
-  <h2>🧩 核心能力</h2>
-  <div class="s2">Core Capabilities · 吸收自 MUNDO + 自主改进</div>
-  <div class="grid">
-    <div class="card"><div class="icon">🛡️</div><h3>工具防护</h3><p>三种检测器 × 四级决策链。防止 Agent 陷入死循环、重复失败或原地踏步。</p></div>
-    <div class="card"><div class="icon">🗂️</div><h3>技能管理</h3><p>62 个技能的依赖拓扑验证。循环依赖检测。冲突声明。自动加载顺序。</p></div>
-    <div class="card"><div class="icon">📜</div><h3>策略引擎</h3><p>15 条规则 × 7 条链 × 优先级仲裁。安全门·质量门·品味门。</p></div>
-    <div class="card"><div class="icon">📊</div><h3>Web 仪表盘</h3><p>9 个监测面板。SSE 实时推送。中英双语。一键操作。</p></div>
-    <div class="card"><div class="icon">👥</div><h3>用户层级</h3><p>创始人·合伙人·使用者。自动升级。首次部署引导。</p></div>
-    <div class="card"><div class="icon">👁️</div><h3>七感监测</h3><p>上下文压力·错误感知·话题漂移·重复检测·时间节奏·空间感知·工具平衡。趋势预测。</p></div>
+<section class="container">
+  <div class="section-header">
+    <div class="section-num">02 / CAPABILITIES</div>
+    <h2>Core Systems</h2>
+    <p>Each module is independently testable, collectively forming the harness.</p>
   </div>
-</div>
-
-<!-- Toolbox -->
-<div class="section">
-  <h2>🧰 工具箱</h2>
-  <div class="s2">Built-in CLI Tools & External Resources</div>
-  <div class="grid">
-    <div class="card"><div class="icon">🛡️</div><h3>tool-guard.py · 工具防护</h3><p>防止 Agent 陷入死循环。三种检测器 × 四级决策链(允许→警告→阻断→中止)。<br><code>observe Bash '{"cmd":"ls"}' --error</code><br><code>check Bash '{"cmd":"ls"}'</code><br><code>stats</code> · <code>reset</code></p></div>
-    <div class="card"><div class="icon">🗂️</div><h3>skill-registry.py · 技能管理</h3><p>62 技能依赖拓扑验证。循环依赖检测·冲突声明·自动加载顺序。<br><code>list --origin ECC</code> · <code>deps django-verification</code><br><code>validate</code> · <code>chain django-verification</code></p></div>
-    <div class="card"><div class="icon">🧬</div><h3>nexsandglass.py · 记忆引擎</h3><p>四层记忆——沙粒写入·偏移率·决策检测·灵魂蒸馏。<br><code>write s1 --role user --content "..."</code><br><code>drift --days 7</code> · <code>persona</code> · <code>analyze</code></p></div>
-    <div class="card"><div class="icon">⚙️</div><h3>policy-engine.py · 策略引擎</h3><p>15 规则×7 链×优先级仲裁。安全门·质量门·品味门·上下文守卫。<br><code>check "write_file /etc/hosts"</code><br><code>list --domain security</code> · <code>chains</code></p></div>
-    <div class="card"><div class="icon">📜</div><h3>timeline.py · 时间线</h3><p>SQLite+FTS5 执行追踪，支持回放和导出。<br><code>migrate</code> · <code>query --type tool% --limit 50</code><br><code>replay &lt;session_id&gt;</code> · <code>export --format csv</code></p></div>
-    <div class="card"><div class="icon">👥</div><h3>user_manager.py · 用户管理</h3><p>三层体系(创始人·合伙人·使用者)自动升级。<br><code>setup</code> · <code>register &lt;name&gt; user</code><br><code>list</code> · <code>promote &lt;user_id&gt;</code></p></div>
-    <div class="card"><div class="icon">📡</div><h3>event-bus/bus.py · 事件总线</h3><p>25 事件类型发布订阅，支持 Hermes 桥接。<br><code>emit session.start phoenix</code><br><code>subscribe "type:heal.*" /tmp/alerts.jsonl</code><br><code>tail --source hermes</code> · <code>bridge --hermes</code></p></div>
-    <div class="card"><div class="icon">🌐</div><h3>server.py · Web 服务</h3><p>HTTP API + SSE 推送 + 仪表盘。纯 stdlib，零依赖。<br><code>python3 server.py --port 8765</code><br>→ <code>http://127.0.0.1:8765</code></p></div>
+  <div class="features">
+    <div class="feature-card">
+      <span class="icon">&#x1F6E1;</span>
+      <h3>Intelligent Recovery</h3>
+      <p>6 error categories, 9 recovery strategies, circuit breaker pattern. Absorbed from MUNDO v2.2.3.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F4CA;</span>
+      <h3>Cost Tracker</h3>
+      <p>7 waste categories, A-F health grade, per-rule token attribution. CodeBurn-inspired with percentage-based scoring.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F9EC;</span>
+      <h3>Mutation Gate</h3>
+      <p>6 Python mutation strategies. MUTATION VERIFY step in TDD pipeline. SWE-Mutation (ACL 2026) validated.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F4CB;</span>
+      <h3>Task Planning</h3>
+      <p>Filesystem as external working memory. Deterministic completion gate judges disk artifacts, not transcripts.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F3A8;</span>
+      <h3>Design Knowledge</h3>
+      <p>67 UI styles, 161 color palettes, industry-specific anti-patterns. Absorbed from UI UX Pro Max (92K stars).</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F4E1;</span>
+      <h3>Observability</h3>
+      <p>7-sense radar charts, SQLite trace storage, Langfuse-compatible JSON export. Zero external dependencies.</p>
+    </div>
   </div>
-  <h3 style="color:var(--accent);font-size:0.9rem;margin:28px 0 14px;text-align:center">🌐 外部资源 External Resources</h3>
-  <div class="grid">
-    <div class="card"><div class="icon">📦</div><h3>Skill 云仓库</h3><p>165 个 AI Skill · 22 分类——学术·工程·创意·AI。<br><a href="https://lihongwei-cn.github.io/lihongwei-cn/" target="_blank" style="color:var(--accent-alt)">lihongwei-cn.github.io →</a></p></div>
-    <div class="card"><div class="icon">📐</div><h3>全局规范部署</h3><p>统一规范同步到 6 个 AI Agent（Claude Code·Codex·Hermes·Cursor·Windsurf·Copilot）。</p></div>
+</section>
+
+<section class="container">
+  <div class="section-header">
+    <div class="section-num">03 / TOOLBOX</div>
+    <h2>CLI Tools</h2>
+    <p>Every module exposes a command-line interface. Zero configuration required.</p>
   </div>
-</div>
-
-<!-- User Tiers -->
-<div class="section">
-  <h2>👥 用户层级</h2>
-  <div class="s2">User Tier System</div>
-  <div class="users">
-    <div class="user-card"><div class="tier-icon">👑</div><div class="tier-name">创始人 Founder</div><div class="tier-desc">全权限·不可降级<br>holyty + PHOENIX</div></div>
-    <div class="user-card"><div class="tier-icon">⭐</div><div class="tier-name">合伙人 Partner</div><div class="tier-desc">画像已激活·完整功能<br>≥10 对话沙粒自动升级</div></div>
-    <div class="user-card"><div class="tier-icon">🌱</div><div class="tier-name">使用者 User</div><div class="tier-desc">学习期·基础功能<br>注册默认层级</div></div>
+  <div class="tools">
+    <div class="tool-card"><div>
+      <code>python3 phoenix-bash-guard.py check "cmd"</code>
+      <span class="desc">AST-level bash safety gate with 42 DANGER signals</span>
+    </div></div>
+    <div class="tool-card"><div>
+      <code>python3 phoenix-cost-tracker.py report</code>
+      <span class="desc">Token health report with A-F grade and waste analysis</span>
+    </div></div>
+    <div class="tool-card"><div>
+      <code>python3 phoenix-mutation-gate.py run src test</code>
+      <span class="desc">Mutation testing gate with AI-ready fix-prompt generation</span>
+    </div></div>
+    <div class="tool-card"><div>
+      <code>python3 phoenix-plan.py init --slug "task"</code>
+      <span class="desc">Crash-proof task planning with SHA-256 attestation</span>
+    </div></div>
+    <div class="tool-card"><div>
+      <code>python3 knowledge-base.py search "q" --hybrid</code>
+      <span class="desc">FTS5 + vector + graph hybrid retrieval with RRF fusion</span>
+    </div></div>
+    <div class="tool-card"><div>
+      <code>python3 phoenix-observability.py dashboard</code>
+      <span class="desc">7-sense radar chart with Langfuse-compatible traces</span>
+    </div></div>
+    <div class="tool-card"><div>
+      <code>python3 phoenix-auto-memory.py recall "query"</code>
+      <span class="desc">Auto-capture memory with Ebbinghaus decay scoring</span>
+    </div></div>
+    <div class="tool-card"><div>
+      <code>python3 phoenix-rule-health.py dashboard</code>
+      <span class="desc">Rule effectiveness scoring with optimization recommendations</span>
+    </div></div>
   </div>
-</div>
+</section>
 
-<!-- API -->
-<div class="section">
-  <h2>📡 API 端点</h2>
-  <div class="s2">HTTP API Endpoints</div>
-  <table>
-    <tr><th>端点</th><th>方法</th><th>说明</th></tr>
-    <tr><td>/api/status</td><td>GET</td><td>系统状态 + 7-Sense + 偏移 + 进化</td></tr>
-    <tr><td>/api/modules</td><td>GET</td><td>模块清单（行数·大小·摘要）</td></tr>
-    <tr><td>/api/timeline</td><td>GET</td><td>执行时间线（可过滤·可搜索）</td></tr>
-    <tr><td>/api/persona</td><td>GET</td><td>NexSandglass 四层蒸馏画像</td></tr>
-    <tr><td>/api/tool-guard</td><td>GET</td><td>工具防护状态 + 活跃警报</td></tr>
-    <tr><td>/api/users</td><td>GET</td><td>用户层级列表</td></tr>
-    <tr><td>/api/stream</td><td>GET</td><td>SSE 实时事件流</td></tr>
-    <tr><td>/api/persona/rebuild</td><td>POST</td><td>强制重建画像</td></tr>
-    <tr><td>/api/tool-guard/reset</td><td>POST</td><td>重置工具防护计数器</td></tr>
-    <tr><td>/api/drift/recalc</td><td>POST</td><td>重算 30 天偏移率</td></tr>
-  </table>
-</div>
-
-<!-- Improvements -->
-<div class="section">
-  <h2>🆚 与原版的区别</h2>
-  <div class="s2">Improvements over MUNDO & NexSandglass</div>
-  <table>
-    <tr><th>改进项</th><th>MUNDO 原版</th><th>NexSandglass 原版</th><th>PHOENIX</th></tr>
-    <tr><td>决策检测语言</td><td>—</td><td>仅中文</td><td class="check">中英双语</td></tr>
-    <tr><td>存储方式</td><td>—</td><td>纯文本</td><td class="check">SQLite+FTS5 双写</td></tr>
-    <tr><td>测试覆盖</td><td>8 测试</td><td>0 测试</td><td class="check">100+ 测试 · 100%</td></tr>
-    <tr><td>Hook 集成</td><td>—</td><td>—</td><td class="check">stdin hook + SSE推送</td></tr>
-    <tr><td>Web 界面</td><td>—</td><td>—</td><td class="check">交互式仪表盘</td></tr>
-    <tr><td>用户体系</td><td>—</td><td>—</td><td class="check">三层层级+自动升级</td></tr>
-    <tr><td>数据不可变</td><td>—</td><td>无</td><td class="check">frozen dataclass</td></tr>
-    <tr><td>连接安全</td><td>—</td><td>手动close</td><td class="check">上下文管理器</td></tr>
-  </table>
-</div>
-
-<!-- Quick Start -->
-<div class="section" id="quickstart">
-  <h2>🚀 部署你自己的 PHOENIX</h2>
-  <div class="s2">Deploy Your Own Instance</div>
-  <div class="card" style="max-width:650px;margin:0 auto">
-    <pre style="font-size:0.8rem;color:var(--text);line-height:1.8">
-<span style="color:var(--text-dim)"># 1. 克隆仓库</span>
-git clone https://github.com/5201314ty0609-collab/phoenix.git
-cd phoenix
-
-<span style="color:var(--text-dim)"># 2. 创建你的身份（只需一次）</span>
-python3 user_manager.py setup
-
-<span style="color:var(--text-dim)"># 3. 启动控制台</span>
-python3 server.py
-
-<span style="color:var(--text-dim)"># 4. 打开浏览器</span>
-<span style="color:var(--accent)">http://127.0.0.1:8765</span>
-    </pre>
-    <p style="font-size:0.75rem;color:var(--text-dim);margin-top:12px">
-      <strong>零依赖。</strong>Python 3.9+ 即可。不需要 pip install 任何东西。
-    </p>
+<section class="container">
+  <div class="section-header">
+    <div class="section-num">04 / COMPARISON</div>
+    <h2>Over MUNDO and NexSandglass</h2>
+    <p>PHOENIX absorbs the best ideas from its predecessors and hardens them with production engineering.</p>
   </div>
-</div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Dimension</th><th>MUNDO</th><th>NexSandglass</th><th>PHOENIX</th></tr></thead>
+    <tbody>
+      <tr><td>Error Recovery</td><td class="warn">Basic retry</td><td class="warn">None</td><td class="check">6 categories + 9 strategies + circuit breaker</td></tr>
+      <tr><td>Context Management</td><td class="warn">Simple truncation</td><td class="warn">Sand grain only</td><td class="check">Chunk priority eviction + O2 vitality + sandbox</td></tr>
+      <tr><td>Task Planning</td><td class="warn">Prompt-based</td><td class="warn">None</td><td class="check">Filesystem external memory + SHA-256 attestation</td></tr>
+      <tr><td>Knowledge Base</td><td class="warn">File-based</td><td class="warn">Sparse SSE</td><td class="check">FTS5 + vector + graph hybrid with RRF fusion</td></tr>
+      <tr><td>Safety</td><td class="warn">Prompt guard only</td><td class="warn">None</td><td class="check">AST bash guard + mutation gate + tool guard</td></tr>
+      <tr><td>Observability</td><td class="warn">None</td><td class="warn">Drift rate only</td><td class="check">7-sense tracing + Langfuse export + cost attribution</td></tr>
+      <tr><td>Test Coverage</td><td class="warn">Manual only</td><td class="warn">None</td><td class="check">Mutation-verified TDD with 6 strategies</td></tr>
+      <tr><td>Design Knowledge</td><td class="warn">None</td><td class="warn">None</td><td class="check">67 styles + 161 palettes + industry anti-patterns</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="container">
+  <div class="section-header">
+    <div class="section-num">05 / DEPLOY</div>
+    <h2>Get Started</h2>
+    <p>Clone, configure, and launch. PHOENIX runs with zero external dependencies.</p>
+  </div>
+  <div class="deploy-block">
+    <pre><span class="cmd">git clone</span> https://github.com/5201314ty0609-collab/phoenix.git
+<span class="cmd">cd</span> phoenix
+<span class="cmd">python3</span> server.py
+<span class="cmd">open</span> http://localhost:8420</pre>
+  </div>
+</section>
 
 <footer>
-  🐦‍🔥 PHOENIX · Self-Evolving Agent Harness v1.3.0
-  · <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a>
-  · 创始人: holyty + PHOENIX · MIT License
+  <p>PHOENIX v1.3.0 · <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a> · holyty + PHOENIX · MIT License</p>
 </footer>
 
 </body>

@@ -93,7 +93,10 @@
     "efbce980825314b4": 1,
     "e8ea800e39e7f503": 2,
     "7e7a3aca2ee54c82": 1,
-    "9deac827b2edc4d8": 1
+    "9deac827b2edc4d8": 1,
+    "c76437d97deebe62": 1,
+    "8bb3f5e46602daa9": 1,
+    "d322f81f3e114522": 1
   },
   "escalations": [
     {
@@ -154,8 +157,8 @@
     }
   ],
   "total_blocked": 13,
-  "total_warned": 84,
+  "total_warned": 87,
   "total_allowed": 82,
   "created_at": "2026-06-16T16:17:11.481656+00:00",
-  "updated_at": "2026-06-16T16:51:41.398167+00:00"
+  "updated_at": "2026-06-16T16:55:46.225967+00:00"
 }

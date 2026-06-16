@@ -3,1229 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>PHOENIX · 可视化控制台</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<title>PHOENIX Dashboard — System Monitor</title>
+<meta name="description" content="PHOENIX system monitor: 7-sense status, module health, cost tracking, and evolution metrics.">
 <style>
   :root {
-    --bg:#1a1b26;--surface:#24283b;--surface-alt:#1f2335;
-    --border:rgba(255,255,255,0.06);--text:#c0caf5;--text-dim:#565f89;
-    --accent:#e0af68;--accent-alt:#7aa2f7;--red:#f7768e;--green:#9ece6a;
-    --yellow:#e0af68;--purple:#bb9af7;--cyan:#7dcfff;
-    --radius:10px;--gap:14px;
-    --font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+    --bg: #08080e; --surface: #111119; --surface-raised: #181824;
+    --text: #e4e0db; --text-muted: #8a8580; --accent: #f49e42;
+    --accent-glow: #f49e4240; --secondary: #c86b2c; --warm-dark: #2a2420;
+    --border: #222228; --green: #4caf50; --red: #e05555; --amber: #f0a040;
+    --radius: 10px; --radius-lg: 16px;
+    --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --duration: 200ms;
   }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:var(--font);background:var(--bg);color:var(--text);padding:16px;line-height:1.5}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 0.95rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
 
-  /* Header */
-  .header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface);border-radius:8px;margin-bottom:16px;border:1px solid var(--border)}
-  .header h1{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:8px}
-  .header .status{display:flex;align-items:center;gap:8px;font-size:0.78rem}
-  .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-  .dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
-  .dot.warn{background:var(--yellow);animation:pulse 1.5s infinite}
-  .dot.error{background:var(--red)}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.5rem; max-width: 1120px; margin: 0 auto; }
+  .nav-brand { font-weight: 700; font-size: 1.1rem; color: var(--accent); letter-spacing: 0.02em; text-decoration: none; }
+  .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color var(--duration); }
+  .nav-links a:hover { color: var(--text); }
 
-  /* Grid layout */
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap)}
-  .grid-3{grid-template-columns:repeat(3,1fr)}
-  .grid-full{grid-template-columns:1fr}
+  header { padding: 3rem 0 2rem; }
+  header h1 { font-size: 1.8rem; font-weight: 750; letter-spacing: -0.015em; }
+  header p { color: var(--text-muted); margin-top: 0.3rem; }
 
-  /* Card */
-  .card{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid var(--border);transition:border-color .15s}
-  .card:hover{border-color:var(--accent)}
-  .card h3{font-size:0.75rem;color:var(--accent);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
-  .card h3 .badge{font-size:0.6rem;padding:2px 8px;border-radius:10px;background:rgba(122,162,247,.15);color:var(--accent-alt)}
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.3rem 1.5rem; }
+  .kpi-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .kpi-value { font-size: 2rem; font-weight: 800; margin-top: 0.2rem; line-height: 1; }
+  .kpi-value.green { color: var(--green); } .kpi-value.amber { color: var(--amber); } .kpi-value.accent { color: var(--accent); }
+  .kpi-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
 
-  /* Chart container */
-  .chart-container{position:relative;width:100%;height:250px}
-  .chart-container.small{height:180px}
+  section { padding-bottom: 2.5rem; }
+  section h2 { font-size: 1.2rem; font-weight: 650; margin-bottom: 1rem; letter-spacing: -0.01em; }
 
-  /* Stats */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-  .stat{background:var(--surface);border-radius:8px;padding:14px;text-align:center;border:1px solid var(--border)}
-  .stat .num{font-size:1.8rem;font-weight:800;color:var(--accent)}
-  .stat .label{font-size:0.7rem;color:var(--text-dim);margin-top:4px}
-  .stat .trend{font-size:0.65rem;margin-top:4px}
-  .stat .trend.up{color:var(--green)}
-  .stat .trend.down{color:var(--red)}
+  .sense-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+  .sense-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; transition: border-color var(--duration); }
+  .sense-card:hover { border-color: rgba(244,158,66,0.25); }
+  .sense-card .name { font-weight: 650; font-size: 0.9rem; }
+  .sense-card .status { font-size: 0.78rem; margin-top: 0.3rem; }
+  .status-healthy { color: var(--green); } .status-warning { color: var(--amber); } .status-critical { color: var(--red); }
+  .sense-bar { height: 3px; border-radius: 3px; margin-top: 0.5rem; background: var(--border); overflow: hidden; }
+  .sense-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s var(--ease-out); }
+  .fill-green { background: var(--green); } .fill-amber { background: var(--amber); } .fill-accent { background: var(--accent); }
 
-  /* Table */
-  .table-container{max-height:300px;overflow-y:auto}
-  table{width:100%;border-collapse:collapse;font-size:0.78rem}
-  th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
-  th{color:var(--accent);font-weight:600;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;position:sticky;top:0;background:var(--surface)}
-  tr:hover{background:rgba(255,255,255,0.02)}
+  .module-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .module-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1.2rem; display: flex; align-items: center; gap: 0.8rem; transition: border-color var(--duration); }
+  .module-card:hover { border-color: rgba(244,158,66,0.25); }
+  .module-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-active { background: var(--green); } .dot-standby { background: var(--amber); }
+  .module-name { font-weight: 600; font-size: 0.85rem; }
+  .module-desc { font-size: 0.75rem; color: var(--text-muted); }
 
-  /* Sense dots */
-  .sense-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .sense-item{background:var(--surface-alt);border-radius:8px;padding:10px;text-align:center}
-  .sense-item .icon{font-size:1.5rem;margin-bottom:4px}
-  .sense-item .name{font-size:0.65rem;color:var(--text-dim)}
-  .sense-item .status{font-size:0.7rem;font-weight:600;margin-top:4px}
-  .sense-item .status.ok{color:var(--green)}
-  .sense-item .status.warn{color:var(--yellow)}
-  .sense-item .status.error{color:var(--red)}
+  .activity { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.3rem 1.5rem; }
+  .activity-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.83rem; }
+  .activity-row:last-child { border-bottom: none; }
+  .activity-time { color: var(--text-muted); font-family: var(--mono); font-size: 0.75rem; }
+  .activity-msg { color: var(--text); }
 
-  /* Timeline */
-  .timeline-entry{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
-  .timeline-entry:last-child{border-bottom:none}
-  .timeline-time{font-size:0.7rem;color:var(--text-dim);font-family:monospace;white-space:nowrap;min-width:60px}
-  .timeline-type{font-size:0.65rem;padding:2px 8px;border-radius:10px;background:rgba(122,162,247,.1);color:var(--accent-alt);min-width:70px;text-align:center}
-  .timeline-desc{font-size:0.75rem;flex:1}
+  footer { border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; color: var(--text-muted); font-size: 0.82rem; margin-top: 2rem; }
+  footer a { color: var(--accent); text-decoration: none; }
 
-  /* Buttons */
-  .btn{padding:6px 14px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-size:0.72rem;font-family:var(--font);background:var(--surface-alt);color:var(--text);transition:all .2s}
-  .btn:hover{border-color:var(--accent)}
-  .btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
-
-  /* Toast */
-  .toast{position:fixed;bottom:20px;right:20px;padding:10px 18px;border-radius:8px;font-size:0.75rem;z-index:200;font-weight:600;animation:up .3s}
-  @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-  .toast.ok{background:var(--green);color:var(--bg)}
-  .toast.err{background:var(--red);color:var(--bg)}
-
-  /* Persona Section */
-  .persona-card{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid var(--border)}
-  .persona-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-  .persona-header h3{font-size:0.75rem;color:var(--accent);display:flex;align-items:center;gap:8px}
-  .persona-header .badge{font-size:0.6rem;padding:2px 8px;border-radius:10px;background:rgba(122,162,247,.15);color:var(--accent-alt)}
-  .persona-content{font-size:0.78rem;line-height:1.6}
-  .persona-content .layer{margin-bottom:12px;padding:10px;background:var(--surface-alt);border-radius:6px}
-  .persona-content .layer-title{font-size:0.7rem;color:var(--accent);margin-bottom:6px;font-weight:600}
-  .persona-content .layer-content{font-size:0.72rem;color:var(--text-dim)}
-  .persona-content .highlight{color:var(--accent-alt);font-weight:600}
-  .persona-content .value{color:var(--green)}
-
-  /* Team Members Section */
-  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
-  .member-card{background:var(--surface-alt);border-radius:8px;padding:14px;border:1px solid var(--border);transition:border-color .2s}
-  .member-card:hover{border-color:var(--accent)}
-  .member-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-  .member-name{font-size:0.85rem;font-weight:600;display:flex;align-items:center;gap:6px}
-  .member-tier{font-size:0.65rem;padding:2px 8px;border-radius:10px;font-weight:600}
-  .member-tier.founder{background:rgba(224,175,104,.15);color:var(--accent)}
-  .member-tier.partner{background:rgba(122,162,247,.15);color:var(--accent-alt)}
-  .member-tier.user{background:rgba(158,206,106,.15);color:var(--green)}
-  .member-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
-  .member-stat{font-size:0.7rem;color:var(--text-dim)}
-  .member-stat strong{color:var(--text)}
-  .persona-preview{font-size:0.7rem;color:var(--text-dim);margin-top:8px;padding:8px;background:rgba(0,0,0,0.2);border-radius:4px;max-height:100px;overflow-y:auto}
-  .privacy-badge{font-size:0.6rem;padding:2px 6px;border-radius:8px;background:rgba(247,118,142,.15);color:var(--red);margin-left:6px}
-
-  footer{text-align:center;margin-top:20px;color:var(--text-dim);font-size:0.65rem;padding:10px}
-
-  @media(max-width:1024px){.grid{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:768px){.stats{grid-template-columns:1fr}.sense-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .sense-grid { grid-template-columns: repeat(2, 1fr); }
+    .module-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="header">
-  <h1>🐦‍🔥 PHOENIX 可视化控制台</h1>
-  <div class="status">
-    <span class="dot ok" id="conn-dot"></span>
-    <span id="conn-text">连接中...</span>
-    <span style="color:var(--text-dim);margin-left:8px" id="conn-time"></span>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/phoenix/" class="nav-brand">PHOENIX Dashboard</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a>
+    </div>
   </div>
+</nav>
+
+<div class="container">
+
+<header>
+  <h1>System Monitor</h1>
+  <p>PHOENIX v1.3.0 · 35 modules · 15 rules · 7 senses · Last updated: 2026-06-17</p>
+</header>
+
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-label">Health Score</div><div class="kpi-value amber">74 / 100</div><div class="kpi-sub">Grade C · Controllable metrics 75/75</div></div>
+  <div class="kpi"><div class="kpi-label">Cache Efficiency</div><div class="kpi-value green">99.5%</div><div class="kpi-sub">1.49B tokens saved via cache</div></div>
+  <div class="kpi"><div class="kpi-label">Skills Active</div><div class="kpi-value accent">37 / 67</div><div class="kpi-sub">30 disabled via skillOverrides</div></div>
+  <div class="kpi"><div class="kpi-label">Rules Archived</div><div class="kpi-value accent">6</div><div class="kpi-sub">Unused language rules removed</div></div>
 </div>
 
-<!-- Stats Overview -->
-<div class="stats">
-  <div class="stat">
-    <div class="num" id="stat-tools">-</div>
-    <div class="label">工具调用总数</div>
-    <div class="trend up" id="stat-tools-trend">加载中</div>
-  </div>
-  <div class="stat">
-    <div class="num" id="stat-sessions">-</div>
-    <div class="label">会话次数</div>
-    <div class="trend" id="stat-sessions-trend">加载中</div>
-  </div>
-  <div class="stat">
-    <div class="num" id="stat-warned" style="font-size:1.4rem;color:var(--yellow)">-</div>
-    <div class="label">警告次数</div>
-    <div class="trend" id="stat-warned-trend">加载中</div>
-  </div>
-  <div class="stat">
-    <div class="num" id="stat-blocked" style="font-size:1.4rem;color:var(--red)">-</div>
-    <div class="label">阻断次数</div>
-    <div class="trend" id="stat-blocked-trend">加载中</div>
-  </div>
-</div>
-
-<!-- Error & Framework Stats -->
-<div class="stats" style="margin-bottom:16px">
-  <div class="stat">
-    <div class="num" id="stat-errors" style="font-size:1.4rem;color:var(--red)">-</div>
-    <div class="label">错误次数</div>
-    <div class="trend" id="stat-errors-trend">加载中</div>
-  </div>
-  <div class="stat">
-    <div class="num" id="stat-frameworks" style="font-size:1.4rem;color:var(--accent)">-</div>
-    <div class="label">活跃框架</div>
-    <div class="trend" id="stat-frameworks-trend">加载中</div>
-  </div>
-  <div class="stat">
-    <div class="num" id="stat-halted" style="font-size:1.4rem;color:var(--purple)">-</div>
-    <div class="label">强制中止</div>
-  </div>
-  <div class="stat">
-    <div class="num" id="stat-success-rate" style="font-size:1.4rem;color:var(--green)">-</div>
-    <div class="label">成功率</div>
-  </div>
-</div>
-
-<!-- Model & Tool Guard -->
-<div class="grid" style="margin-bottom:16px">
-  <!-- Model Configuration -->
-  <div class="card">
-    <h3>⚙️ 当前模型</h3>
-    <div id="model-config" style="font-size:0.75rem">
-      <div style="text-align:center;color:var(--text-dim);padding:10px">加载中...</div>
+<section>
+  <h2>Seven-Sense Status</h2>
+  <div class="sense-grid">
+    <div class="sense-card">
+      <div class="name">O2 Vitality</div>
+      <div class="status status-healthy">healthy</div>
+      <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:12%"></div></div>
+    </div>
+    <div class="sense-card">
+      <div class="name">Nociception</div>
+      <div class="status status-healthy">healthy</div>
+      <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:8%"></div></div>
+    </div>
+    <div class="sense-card">
+      <div class="name">Chronos</div>
+      <div class="status status-healthy">healthy</div>
+      <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:5%"></div></div>
+    </div>
+    <div class="sense-card">
+      <div class="name">Spatial</div>
+      <div class="status status-healthy">healthy</div>
+      <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:15%"></div></div>
+    </div>
+    <div class="sense-card">
+      <div class="name">Vestibular</div>
+      <div class="status status-healthy">healthy</div>
+      <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:22%"></div></div>
+    </div>
+    <div class="sense-card">
+      <div class="name">Echo</div>
+      <div class="status status-healthy">healthy</div>
+      <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:3%"></div></div>
+    </div>
+    <div class="sense-card">
+      <div class="name">Drift</div>
+      <div class="status status-healthy">healthy</div>
+      <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:6%"></div></div>
     </div>
   </div>
+</section>
 
-  <!-- Tool Guard Detail -->
-  <div class="card">
-    <h3>🛡️ 工具防护 <span class="badge" id="tool-guard-badge">正常</span></h3>
-    <div id="tool-guard-detail" style="font-size:0.75rem">
-      <div style="text-align:center;color:var(--text-dim);padding:10px">加载中...</div>
-    </div>
+<section>
+  <h2>Core Modules</h2>
+  <div class="module-grid">
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">intelligent_recovery.py</div><div class="module-desc">6 error categories + 9 strategies + circuit breaker</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">context_mapper.py</div><div class="module-desc">Chunk priority eviction + O2 vitality integration</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-bash-guard.py</div><div class="module-desc">42 DANGER signals + AST unwrapping pipeline</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-cost-tracker.py</div><div class="module-desc">7 waste categories + A-F health grade</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-mutation-gate.py</div><div class="module-desc">6 mutation strategies + fix-prompt generation</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-plan.py</div><div class="module-desc">Filesystem external memory + SHA-256 attestation</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">knowledge-base.py v2</div><div class="module-desc">FTS5 + vector + graph hybrid with RRF fusion</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-observability.py</div><div class="module-desc">7-sense radar + Langfuse-compatible traces</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-auto-memory.py</div><div class="module-desc">Auto-capture + Ebbinghaus decay + 4 memory types</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-rule-health.py</div><div class="module-desc">Rule effectiveness scoring + DSPy-inspired optimization</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">runtime_config.py</div><div class="module-desc">5-layer declarative config + 9 sections</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">tool-guard.py</div><div class="module-desc">Pre/Post tool hooks + policy enforcement</div></div></div>
   </div>
-</div>
+</section>
 
-<!-- Charts Row -->
-<div class="grid" style="margin-bottom:16px">
-  <!-- Tool Usage Chart -->
-  <div class="card">
-    <h3>📊 工具使用频率 <span class="badge">最近 7 天</span></h3>
-    <div class="chart-container">
-      <canvas id="toolUsageChart"></canvas>
-    </div>
+<section>
+  <h2>Recent Activity</h2>
+  <div class="activity">
+    <div class="activity-row"><span class="activity-time">2026-06-17 23:55</span><span class="activity-msg">index.html + dashboard.html redesigned with PHOENIX design system</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-17 23:30</span><span class="activity-msg">Health score C(63) to C(74): config formula updated, 30 skills disabled</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-17 22:00</span><span class="activity-msg">P2 absorption complete: OMEGA memory + DSPy rules + GNAP coordination</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-17 21:00</span><span class="activity-msg">P1 absorption complete: Langfuse traces + hybrid KB + Midscene E2E</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-17 19:30</span><span class="activity-msg">P0 absorption complete: Kintsugi bash guard + CodeBurn tracker + Tautest mutation gate</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-16 23:00</span><span class="activity-msg">Round 1 complete: MUNDO modules + planning-with-files + UI UX Pro Max + context-mode</span></div>
   </div>
+</section>
 
-  <!-- Activity Timeline Chart -->
-  <div class="card">
-    <h3>📈 活动趋势 <span class="badge">按天</span></h3>
-    <div class="chart-container">
-      <canvas id="activityChart"></canvas>
-    </div>
-  </div>
-</div>
-
-<!-- Second Row -->
-<div class="grid grid-3" style="margin-bottom:16px">
-  <!-- 7-Sense Radar -->
-  <div class="card">
-    <h3>👁️ 7-Sense 健康雷达</h3>
-    <div class="chart-container small">
-      <canvas id="senseRadar"></canvas>
-    </div>
-  </div>
-
-  <!-- Error Rate Chart -->
-  <div class="card">
-    <h3>⚠️ 错误率趋势</h3>
-    <div class="chart-container small">
-      <canvas id="errorChart"></canvas>
-    </div>
-  </div>
-
-  <!-- Event Type Distribution -->
-  <div class="card">
-    <h3>🎯 事件类型分布</h3>
-    <div class="chart-container small">
-      <canvas id="eventPie"></canvas>
-    </div>
-  </div>
-</div>
-
-<!-- Third Row -->
-<div class="grid" style="margin-bottom:16px">
-  <!-- 7-Sense Status -->
-  <div class="card">
-    <h3>🧠 系统感知状态</h3>
-    <div class="sense-grid" id="sense-grid"></div>
-  </div>
-
-  <!-- Recent Timeline -->
-  <div class="card">
-    <h3>📜 最近活动 <span class="badge" id="timeline-count">0 条</span></h3>
-    <div class="table-container" id="timeline-list"></div>
-  </div>
-</div>
-
-<!-- Tool Guard Details -->
-<div class="grid grid-full" style="margin-bottom:16px">
-  <div class="card">
-    <h3>🛡️ 工具防护详情 <span class="badge" id="guard-status">正常</span></h3>
-    <div class="grid" style="grid-template-columns:repeat(3,1fr)">
-      <div>
-        <h4 style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px">最近警告</h4>
-        <div id="guard-warnings" style="font-size:0.75rem"></div>
-      </div>
-      <div>
-        <h4 style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px">工具健康度</h4>
-        <div id="guard-health" style="font-size:0.75rem"></div>
-      </div>
-      <div>
-        <h4 style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px">防护统计</h4>
-        <div id="guard-stats" style="font-size:0.75rem"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Persona Section -->
-<div class="grid grid-full" style="margin-bottom:16px">
-  <div class="persona-card">
-    <div class="persona-header">
-      <h3>🧬 你的画像 <span class="badge">PHOENIX 对你的理解</span></h3>
-      <div>
-        <span id="persona-status" style="font-size:0.7rem;color:var(--text-dim)">加载中...</span>
-        <button class="btn" onclick="rebuildPersona()" style="margin-left:8px;font-size:0.65rem">强制重建</button>
-      </div>
-    </div>
-    <div class="persona-content" id="persona-content">
-      <div style="text-align:center;color:var(--text-dim);padding:20px">加载中...</div>
-    </div>
-  </div>
-</div>
-
-<!-- Team Members Section -->
-<div class="grid grid-full">
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <h3 style="margin-bottom:0">👥 团队成员 <span class="badge" id="team-count">0 人</span></h3>
-      <div style="font-size:0.7rem;color:var(--text-dim)">
-        <span class="privacy-badge">🔒 隐私模式</span>
-        <span style="margin-left:6px">创始人可查看所有画像，其他成员只能看自己</span>
-      </div>
-    </div>
-    <div class="team-grid" id="team-grid">
-      <div style="text-align:center;color:var(--text-dim);padding:20px;grid-column:1/-1">加载中...</div>
-    </div>
-  </div>
 </div>
 
 <footer>
-  PHOENIX v1.3.0 · 可视化控制台 v1.0 · 数据每 30 秒自动刷新
-  · <a href="dashboard.html" style="color:var(--accent);text-decoration:none">切换到基础视图</a>
-  · <a href="https://github.com/5201314ty0609-collab/phoenix" target="_blank" style="color:var(--accent);text-decoration:none">GitHub</a>
+  <p>PHOENIX v1.3.0 · <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a> · holyty + PHOENIX · MIT License</p>
 </footer>
 
-<script>
-// ── Data Store ──
-const DATA = {
-  toolGuard: null,
-  timeline: null,
-  senses: null,
-  status: null
-};
-
-// ── Charts ──
-let charts = {};
-
-// ── Utility ──
-function toast(msg, ok = true) {
-  const t = document.createElement('div');
-  t.className = 'toast ' + (ok ? 'ok' : 'err');
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2500);
-}
-
-function setConn(ok, msg) {
-  document.getElementById('conn-dot').className = 'dot ' + (ok ? 'ok' : 'warn');
-  document.getElementById('conn-text').textContent = msg || (ok ? 'PHOENIX 引擎已连接' : '连接中...');
-  document.getElementById('conn-time').textContent = new Date().toLocaleTimeString('zh-CN');
-}
-
-// ── Fetch Data ──
-const API_BASE = 'http://127.0.0.1:8765';
-async function fetchJSON(path) {
-  try {
-    const r = await fetch(API_BASE + path);
-    return await r.json();
-  } catch (e) {
-    console.error('Fetch error:', path, e);
-    return null;
-  }
-}
-
-// ── Initialize Charts ──
-function initCharts() {
-  // Tool Usage Bar Chart
-  const toolCtx = document.getElementById('toolUsageChart').getContext('2d');
-  charts.toolUsage = new Chart(toolCtx, {
-    type: 'bar',
-    data: {
-      labels: [],
-      datasets: [{
-        label: '调用次数',
-        data: [],
-        backgroundColor: 'rgba(122, 162, 247, 0.6)',
-        borderColor: 'rgba(122, 162, 247, 1)',
-        borderWidth: 1,
-        borderRadius: 4
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: 'rgba(36, 40, 59, 0.95)',
-          titleColor: '#e0af68',
-          bodyColor: '#c0caf5',
-          borderColor: 'rgba(255,255,255,0.1)',
-          borderWidth: 1
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: { color: 'rgba(255,255,255,0.05)' },
-          ticks: { color: '#565f89', font: { size: 10 } }
-        },
-        x: {
-          grid: { display: false },
-          ticks: { color: '#565f89', font: { size: 10 } }
-        }
-      }
-    }
-  });
-
-  // Activity Line Chart
-  const actCtx = document.getElementById('activityChart').getContext('2d');
-  charts.activity = new Chart(actCtx, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [{
-        label: '事件数',
-        data: [],
-        borderColor: '#9ece6a',
-        backgroundColor: 'rgba(158, 206, 106, 0.1)',
-        fill: true,
-        tension: 0.4,
-        pointRadius: 4,
-        pointBackgroundColor: '#9ece6a'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: 'rgba(36, 40, 59, 0.95)',
-          titleColor: '#e0af68',
-          bodyColor: '#c0caf5'
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          grid: { color: 'rgba(255,255,255,0.05)' },
-          ticks: { color: '#565f89', font: { size: 10 } }
-        },
-        x: {
-          grid: { display: false },
-          ticks: { color: '#565f89', font: { size: 10 } }
-        }
-      }
-    }
-  });
-
-  // 7-Sense Radar Chart
-  const radarCtx = document.getElementById('senseRadar').getContext('2d');
-  charts.senseRadar = new Chart(radarCtx, {
-    type: 'radar',
-    data: {
-      labels: ['O₂ 压力', '痛觉', '漂移', '回声', '时间', '空间', '平衡'],
-      datasets: [{
-        label: '健康度',
-        data: [100, 100, 100, 100, 100, 100, 100],
-        backgroundColor: 'rgba(158, 206, 106, 0.2)',
-        borderColor: 'rgba(158, 206, 106, 1)',
-        borderWidth: 2,
-        pointBackgroundColor: '#9ece6a'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        r: {
-          beginAtZero: true,
-          max: 100,
-          grid: { color: 'rgba(255,255,255,0.05)' },
-          angleLines: { color: 'rgba(255,255,255,0.05)' },
-          pointLabels: { color: '#c0caf5', font: { size: 10 } },
-          ticks: { display: false }
-        }
-      }
-    }
-  });
-
-  // Error Rate Chart
-  const errCtx = document.getElementById('errorChart').getContext('2d');
-  charts.error = new Chart(errCtx, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [{
-        label: '错误率',
-        data: [],
-        borderColor: '#f7768e',
-        backgroundColor: 'rgba(247, 118, 142, 0.1)',
-        fill: true,
-        tension: 0.4,
-        pointRadius: 3
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => ctx.parsed.y.toFixed(1) + '%'
-          }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100,
-          grid: { color: 'rgba(255,255,255,0.05)' },
-          ticks: {
-            color: '#565f89',
-            font: { size: 10 },
-            callback: (v) => v + '%'
-          }
-        },
-        x: {
-          grid: { display: false },
-          ticks: { color: '#565f89', font: { size: 10 } }
-        }
-      }
-    }
-  });
-
-  // Event Type Pie Chart
-  const pieCtx = document.getElementById('eventPie').getContext('2d');
-  charts.eventPie = new Chart(pieCtx, {
-    type: 'doughnut',
-    data: {
-      labels: [],
-      datasets: [{
-        data: [],
-        backgroundColor: [
-          'rgba(122, 162, 247, 0.8)',
-          'rgba(158, 206, 106, 0.8)',
-          'rgba(224, 175, 104, 0.8)',
-          'rgba(247, 118, 142, 0.8)',
-          'rgba(187, 154, 247, 0.8)',
-          'rgba(125, 207, 255, 0.8)'
-        ],
-        borderColor: 'rgba(36, 40, 59, 1)',
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'right',
-          labels: { color: '#c0caf5', font: { size: 10 }, padding: 8 }
-        }
-      }
-    }
-  });
-
-}
-
-// ── Update Charts ──
-function updateToolUsageChart(toolGuard) {
-  if (!toolGuard) return;
-
-  const history = toolGuard.history || [];
-  const toolCounts = {};
-
-  history.forEach(entry => {
-    const tool = entry.tool || 'unknown';
-    toolCounts[tool] = (toolCounts[tool] || 0) + 1;
-  });
-
-  const sorted = Object.entries(toolCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10);
-
-  charts.toolUsage.data.labels = sorted.map(([tool]) => tool);
-  charts.toolUsage.data.datasets[0].data = sorted.map(([, count]) => count);
-  charts.toolUsage.update();
-}
-
-function updateActivityChart(timeline) {
-  if (!timeline) return;
-
-  const entries = timeline.entries || [];
-  const dayCounts = {};
-
-  entries.forEach(entry => {
-    const date = (entry.timestamp || '').slice(0, 10);
-    if (date) {
-      dayCounts[date] = (dayCounts[date] || 0) + 1;
-    }
-  });
-
-  const sortedDays = Object.keys(dayCounts).sort().slice(-14);
-  charts.activity.data.labels = sortedDays.map(d => d.slice(5));
-  charts.activity.data.datasets[0].data = sortedDays.map(d => dayCounts[d]);
-  charts.activity.update();
-}
-
-function updateSenseRadar(senses) {
-  if (!senses) return;
-
-  const senseData = senses.senses || {};
-  const values = [];
-  const labels = ['o2', 'nociception', 'drift', 'echo', 'chronos', 'spatial', 'vestibular'];
-
-  labels.forEach(key => {
-    const sense = senseData[key] || {};
-    let value = 100;
-    if (sense.trend === 'alert') value = 20;
-    else if (sense.trend === 'warn') value = 50;
-    else if (sense.state === 'ok') value = 90;
-    values.push(value);
-  });
-
-  charts.senseRadar.data.datasets[0].data = values;
-  charts.senseRadar.update();
-}
-
-function updateErrorChart(toolGuard) {
-  if (!toolGuard) return;
-
-  const history = toolGuard.history || [];
-  const dayErrors = {};
-  const dayTotal = {};
-
-  history.forEach(entry => {
-    const date = (entry.timestamp || '').slice(0, 10);
-    if (date) {
-      dayTotal[date] = (dayTotal[date] || 0) + 1;
-      if (entry.status === 'blocked' || entry.status === 'halted') {
-        dayErrors[date] = (dayErrors[date] || 0) + 1;
-      }
-    }
-  });
-
-  const sortedDays = Object.keys(dayTotal).sort().slice(-14);
-  const errorRates = sortedDays.map(d => {
-    const total = dayTotal[d] || 1;
-    const errors = dayErrors[d] || 0;
-    return (errors / total * 100).toFixed(1);
-  });
-
-  charts.error.data.labels = sortedDays.map(d => d.slice(5));
-  charts.error.data.datasets[0].data = errorRates;
-  charts.error.update();
-}
-
-function updateEventPie(timeline) {
-  if (!timeline) return;
-
-  const entries = timeline.entries || [];
-  const typeCounts = {};
-
-  entries.forEach(entry => {
-    const type = entry.event_type || 'unknown';
-    typeCounts[type] = (typeCounts[type] || 0) + 1;
-  });
-
-  const sorted = Object.entries(typeCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 6);
-
-  charts.eventPie.data.labels = sorted.map(([type]) => type);
-  charts.eventPie.data.datasets[0].data = sorted.map(([, count]) => count);
-  charts.eventPie.update();
-}
-
-// ── Update Token Charts ──
-function updateToolGuardDetail(toolGuard) {
-  const container = document.getElementById('tool-guard-detail');
-  const badge = document.getElementById('tool-guard-badge');
-  if (!toolGuard) {
-    container.innerHTML = '<div style="color:var(--text-dim)">无数据</div>';
-    return;
-  }
-
-  const summary = toolGuard.summary || {};
-  const alerts = toolGuard.alerts || {};
-  const history = toolGuard.history || [];
-
-  // Badge status
-  const hasAlerts = Object.keys(alerts.exact_failures || {}).length > 0 ||
-                    Object.keys(alerts.tool_failures || {}).length > 0;
-  badge.textContent = hasAlerts ? '⚠️ 告警' : '正常';
-  badge.style.background = hasAlerts ? 'var(--red)' : 'var(--green)';
-
-  // Per-tool breakdown from recent history
-  const toolCounts = {};
-  const toolErrors = {};
-  history.forEach(e => {
-    const t = e.tool || 'unknown';
-    toolCounts[t] = (toolCounts[t] || 0) + 1;
-    if (e.is_error) toolErrors[t] = (toolErrors[t] || 0) + 1;
-  });
-  const sortedTools = Object.entries(toolCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
-
-  // Recent decisions
-  const recentDecisions = history.slice(-10).reverse();
-
-  container.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
-      <div style="padding:6px;background:var(--surface-alt);border-radius:4px;text-align:center">
-        <div style="font-size:0.6rem;color:var(--text-dim)">观测</div>
-        <div style="font-weight:600;color:var(--accent)">${summary.total_observed || 0}</div>
-      </div>
-      <div style="padding:6px;background:var(--surface-alt);border-radius:4px;text-align:center">
-        <div style="font-size:0.6rem;color:var(--text-dim)">警告</div>
-        <div style="font-weight:600;color:var(--yellow)">${summary.total_warned || 0}</div>
-      </div>
-      <div style="padding:6px;background:var(--surface-alt);border-radius:4px;text-align:center">
-        <div style="font-size:0.6rem;color:var(--text-dim)">阻断</div>
-        <div style="font-weight:600;color:var(--red)">${summary.total_blocked || 0}</div>
-      </div>
-    </div>
-    <div style="margin-bottom:8px">
-      <div style="font-size:0.65rem;color:var(--text-dim);margin-bottom:4px">工具调用分布 (最近 500)</div>
-      ${sortedTools.map(([tool, count]) => {
-        const err = toolErrors[tool] || 0;
-        const pct = ((count / history.length) * 100).toFixed(0);
-        return `<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
-          <span style="width:60px;font-size:0.65rem;color:var(--text)">${tool}</span>
-          <div style="flex:1;height:6px;background:var(--surface-alt);border-radius:3px;overflow:hidden">
-            <div style="height:100%;width:${pct}%;background:${err > 0 ? 'var(--red)' : 'var(--accent)'};border-radius:3px"></div>
-          </div>
-          <span style="font-size:0.6rem;color:var(--text-dim);width:30px;text-align:right">${count}</span>
-          ${err > 0 ? `<span style="font-size:0.55rem;color:var(--red)">(${err}错)</span>` : ''}
-        </div>`;
-      }).join('')}
-    </div>
-    <div>
-      <div style="font-size:0.65rem;color:var(--text-dim);margin-bottom:4px">最近调用</div>
-      ${recentDecisions.map(e => {
-        const time = (e.timestamp || '').slice(11, 19);
-        const color = e.decision === 'allow' ? 'var(--green)' : e.decision === 'warn' ? 'var(--yellow)' : 'var(--red)';
-        return `<div style="display:flex;gap:6px;font-size:0.6rem;margin-bottom:2px">
-          <span style="color:var(--text-dim);width:55px">${time}</span>
-          <span style="color:var(--text);width:45px">${e.tool || ''}</span>
-          <span style="color:${color}">${e.decision || ''}</span>
-        </div>`;
-      }).join('')}
-    </div>
-  `;
-}
-
-function formatNumber(num) {
-  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-  if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-  return num.toString();
-}
-
-// ── Update Model Config ──
-function updateModelConfig(models) {
-  const configEl = document.getElementById('model-config');
-
-  if (!models) {
-    configEl.innerHTML = '<div style="color:var(--text-dim)">无数据</div>';
-    return;
-  }
-
-  const current = models.current || {};
-  const env = models.env_vars || {};
-
-  // Detect provider from base_url
-  const baseUrl = current.base_url || '';
-  let provider = '未知';
-  let providerColor = 'var(--text-dim)';
-  if (baseUrl.includes('xiaomimimo')) { provider = 'MiMo (小米)'; providerColor = 'var(--accent)'; }
-  else if (baseUrl.includes('deepseek')) { provider = 'DeepSeek'; providerColor = 'var(--cyan)'; }
-  else if (baseUrl.includes('anthropic')) { provider = 'Anthropic'; providerColor = 'var(--purple)'; }
-  else if (baseUrl.includes('openai')) { provider = 'OpenAI'; providerColor = 'var(--green)'; }
-  else if (baseUrl.includes('127.0.0.1') || baseUrl.includes('localhost')) { provider = '本地代理'; providerColor = 'var(--yellow)'; }
-
-  configEl.innerHTML = `
-    <div style="margin-bottom:10px;padding:10px;background:var(--surface-alt);border-radius:6px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <div>
-          <div style="font-size:0.65rem;color:var(--text-dim)">模型</div>
-          <div style="font-weight:600;font-size:0.9rem;color:var(--accent)">${current.model || '未配置'}</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:0.65rem;color:var(--text-dim)">服务商</div>
-          <div style="font-weight:600;color:${providerColor}">${provider}</div>
-        </div>
-      </div>
-      <div style="font-size:0.6rem;color:var(--text-dim);word-break:break-all">
-        ${baseUrl || '未配置'}
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:8px">
-      <div style="padding:4px 6px;background:var(--surface-alt);border-radius:4px">
-        <div style="font-size:0.55rem;color:var(--text-dim)">Haiku</div>
-        <div style="font-size:0.65rem;color:var(--text)">${current.haiku || '-'}</div>
-      </div>
-      <div style="padding:4px 6px;background:var(--surface-alt);border-radius:4px">
-        <div style="font-size:0.55rem;color:var(--text-dim)">Sonnet</div>
-        <div style="font-size:0.65rem;color:var(--text)">${current.sonnet || '-'}</div>
-      </div>
-      <div style="padding:4px 6px;background:var(--surface-alt);border-radius:4px">
-        <div style="font-size:0.55rem;color:var(--text-dim)">Opus</div>
-        <div style="font-size:0.65rem;color:var(--text)">${current.opus || '-'}</div>
-      </div>
-      <div style="padding:4px 6px;background:var(--surface-alt);border-radius:4px">
-        <div style="font-size:0.55rem;color:var(--text-dim)">Effort</div>
-        <div style="font-size:0.65rem;color:var(--text)">${current.effort_level || '-'}</div>
-      </div>
-    </div>
-    <div style="font-size:0.6rem;color:var(--text-dim)">
-      <div style="margin-bottom:2px">Auth: <span style="color:var(--text)">${env.ANTHROPIC_AUTH_TOKEN ? env.ANTHROPIC_AUTH_TOKEN.slice(0,12) + '...' : '未配置'}</span></div>
-    </div>
-  `;
-}
-
-// ── Update UI Components ──
-function updateStats(toolGuard, timeline, status) {
-  const history = toolGuard?.history || [];
-  const entries = timeline?.entries || [];
-  const summary = toolGuard?.summary || {};
-
-  // Tool calls
-  const totalTools = summary.total_observed || history.length;
-  document.getElementById('stat-tools').textContent = totalTools.toLocaleString();
-  document.getElementById('stat-tools-trend').textContent = '累计调用';
-
-  // Sessions
-  const sessions = entries.filter(e => e.event_type === 'session_end').length;
-  document.getElementById('stat-sessions').textContent = sessions;
-  document.getElementById('stat-sessions-trend').textContent = '会话次数';
-
-  // Tool guard stats
-  const warned = summary.total_warned || 0;
-  const blocked = summary.total_blocked || 0;
-  const halted = summary.total_halted || 0;
-  const errors = history.filter(e => e.is_error === true).length;
-
-  document.getElementById('stat-warned').textContent = warned;
-  document.getElementById('stat-warned-trend').textContent = warned > 0 ? '需要关注' : '正常';
-  document.getElementById('stat-warned-trend').className = 'trend ' + (warned > 10 ? 'down' : 'up');
-
-  document.getElementById('stat-blocked').textContent = blocked;
-  document.getElementById('stat-blocked-trend').textContent = blocked > 0 ? '已阻断' : '正常';
-  document.getElementById('stat-blocked-trend').className = 'trend ' + (blocked > 0 ? 'down' : 'up');
-
-  document.getElementById('stat-errors').textContent = errors;
-  document.getElementById('stat-errors-trend').textContent = `工具执行错误`;
-  document.getElementById('stat-errors-trend').className = 'trend ' + (errors > 5 ? 'down' : 'up');
-
-  document.getElementById('stat-halted').textContent = halted;
-
-  // Success rate
-  const successRate = totalTools > 0 ? (((totalTools - errors) / totalTools) * 100).toFixed(1) : '-';
-  document.getElementById('stat-success-rate').textContent = successRate + '%';
-
-  // Frameworks
-  const frameworks = status?.evolution?.active_frameworks || 0;
-  document.getElementById('stat-frameworks').textContent = frameworks;
-  document.getElementById('stat-frameworks-trend').textContent = '活跃框架';
-}
-
-function updateSenseGrid(senses) {
-  const grid = document.getElementById('sense-grid');
-  const senseData = senses?.senses || {};
-
-  const senseConfig = [
-    { key: 'o2', icon: '💨', name: 'O₂ 压力' },
-    { key: 'nociception', icon: '🩹', name: '痛觉' },
-    { key: 'drift', icon: '🧭', name: '漂移' },
-    { key: 'echo', icon: '🔊', name: '回声' },
-    { key: 'chronos', icon: '⏱️', name: '时间' },
-    { key: 'spatial', icon: '📐', name: '空间' },
-    { key: 'vestibular', icon: '⚖️', name: '平衡' }
-  ];
-
-  grid.innerHTML = senseConfig.map(s => {
-    const sense = senseData[s.key] || {};
-    let statusClass = 'ok';
-    let statusText = '正常';
-
-    if (sense.trend === 'alert') {
-      statusClass = 'error';
-      statusText = '警报';
-    } else if (sense.trend === 'warn') {
-      statusClass = 'warn';
-      statusText = '警告';
-    }
-
-    return `
-      <div class="sense-item">
-        <div class="icon">${s.icon}</div>
-        <div class="name">${s.name}</div>
-        <div class="status ${statusClass}">${statusText}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-function updateTimeline(timeline) {
-  const container = document.getElementById('timeline-list');
-  const entries = timeline?.entries || [];
-
-  document.getElementById('timeline-count').textContent = `${entries.length} 条`;
-
-  container.innerHTML = entries.slice(0, 20).map(entry => {
-    const time = (entry.timestamp || '').slice(11, 19);
-    const type = (entry.event_type || '?').slice(0, 12);
-    const desc = (entry.summary || '').slice(0, 60);
-
-    return `
-      <div class="timeline-entry">
-        <span class="timeline-time">${time}</span>
-        <span class="timeline-type">${type}</span>
-        <span class="timeline-desc">${desc}</span>
-      </div>
-    `;
-  }).join('') || '<div style="text-align:center;color:var(--text-dim);padding:20px">暂无活动记录</div>';
-}
-
-function updateToolGuard(toolGuard) {
-  const history = toolGuard?.history || [];
-  const summary = toolGuard?.summary || {};
-
-  // Status badge
-  const statusEl = document.getElementById('guard-status');
-  const blocked = summary.total_blocked || 0;
-  const halted = summary.total_halted || 0;
-
-  if (halted > 0) {
-    statusEl.textContent = '有阻断';
-    statusEl.style.background = 'rgba(247,118,142,.15)';
-    statusEl.style.color = 'var(--red)';
-  } else if (blocked > 0) {
-    statusEl.textContent = '有警告';
-    statusEl.style.background = 'rgba(224,175,104,.15)';
-    statusEl.style.color = 'var(--yellow)';
-  } else {
-    statusEl.textContent = '正常';
-    statusEl.style.background = 'rgba(158,206,106,.15)';
-    statusEl.style.color = 'var(--green)';
-  }
-
-  // Recent warnings
-  const warnings = history
-    .filter(e => e.status === 'warn' || e.status === 'blocked')
-    .slice(-5);
-
-  document.getElementById('guard-warnings').innerHTML = warnings.length > 0
-    ? warnings.map(w => `
-      <div style="padding:4px 8px;margin:2px 0;background:rgba(247,118,142,.05);border-radius:4px;border-left:2px solid var(--red)">
-        ${w.tool || '?'} - ${w.status}
-      </div>
-    `).join('')
-    : '<div style="color:var(--text-dim)">无警告</div>';
-
-  // Tool health
-  const toolHealth = {};
-  history.forEach(entry => {
-    const tool = entry.tool || 'unknown';
-    if (!toolHealth[tool]) toolHealth[tool] = { total: 0, errors: 0 };
-    toolHealth[tool].total++;
-    if (entry.status === 'blocked' || entry.status === 'halted') {
-      toolHealth[tool].errors++;
-    }
-  });
-
-  const healthHTML = Object.entries(toolHealth)
-    .sort((a, b) => b[1].total - a[1].total)
-    .slice(0, 5)
-    .map(([tool, stats]) => {
-      const errorRate = (stats.errors / stats.total * 100).toFixed(0);
-      const color = errorRate > 10 ? 'var(--red)' : errorRate > 5 ? 'var(--yellow)' : 'var(--green)';
-      return `
-        <div style="display:flex;justify-content:space-between;padding:3px 0">
-          <span>${tool}</span>
-          <span style="color:${color}">${errorRate}% 错误</span>
-        </div>
-      `;
-    }).join('');
-
-  document.getElementById('guard-health').innerHTML = healthHTML || '<div style="color:var(--text-dim)">无数据</div>';
-
-  // Stats
-  document.getElementById('guard-stats').innerHTML = `
-    <div style="margin-bottom:4px">总观测: <strong>${summary.total_observed || 0}</strong></div>
-    <div style="margin-bottom:4px">警告: <strong style="color:var(--yellow)">${summary.total_warned || 0}</strong></div>
-    <div style="margin-bottom:4px">阻断: <strong style="color:var(--red)">${summary.total_blocked || 0}</strong></div>
-    <div>中止: <strong style="color:var(--red)">${summary.total_halted || 0}</strong></div>
-  `;
-}
-
-// ── Update Persona ──
-function updatePersona(persona) {
-  const contentEl = document.getElementById('persona-content');
-  const statusEl = document.getElementById('persona-status');
-
-  if (!persona || !persona.available) {
-    contentEl.innerHTML = `
-      <div style="text-align:center;color:var(--text-dim);padding:20px">
-        <div style="font-size:1.5rem;margin-bottom:8px">🧬</div>
-        <div>画像尚未激活</div>
-        <div style="font-size:0.7rem;margin-top:4px">需要更多对话来学习你的偏好（约 10 条消息）</div>
-      </div>
-    `;
-    statusEl.textContent = '未激活';
-    statusEl.style.color = 'var(--text-dim)';
-    return;
-  }
-
-  statusEl.textContent = '已激活';
-  statusEl.style.color = 'var(--green)';
-
-  const personaText = persona.persona || '';
-  const drift = persona.drift || {};
-  const grains = persona.total_grains || 0;
-
-  // Parse persona layers
-  const layers = [];
-  const lines = personaText.split('\n');
-  let currentLayer = null;
-  let currentContent = [];
-
-  lines.forEach(line => {
-    if (line.startsWith('## ')) {
-      if (currentLayer) {
-        layers.push({ title: currentLayer, content: currentContent.join('\n') });
-      }
-      currentLayer = line.replace('## ', '').trim();
-      currentContent = [];
-    } else if (line.trim()) {
-      currentContent.push(line);
-    }
-  });
-
-  if (currentLayer) {
-    layers.push({ title: currentLayer, content: currentContent.join('\n') });
-  }
-
-  // Build HTML
-  let html = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:8px;background:var(--surface-alt);border-radius:6px">
-      <div>
-        <span style="font-size:0.75rem;color:var(--text-dim)">已学习</span>
-        <span style="font-size:1.2rem;font-weight:700;color:var(--accent);margin-left:6px">${grains}</span>
-        <span style="font-size:0.75rem;color:var(--text-dim);margin-left:4px">条对话</span>
-      </div>
-      <div>
-        <span style="font-size:0.75rem;color:var(--text-dim)">决策倾向:</span>
-        <span style="font-size:0.85rem;font-weight:600;color:var(--accent-alt);margin-left:4px">${drift.direction || '未知'}</span>
-      </div>
-    </div>
-  `;
-
-  if (layers.length > 0) {
-    html += layers.slice(0, 4).map(layer => `
-      <div class="layer">
-        <div class="layer-title">${layer.title}</div>
-        <div class="layer-content">${layer.content.slice(0, 200)}${layer.content.length > 200 ? '...' : ''}</div>
-      </div>
-    `).join('');
-  } else {
-    html += `
-      <div style="font-size:0.72rem;color:var(--text-dim);white-space:pre-wrap;max-height:200px;overflow-y:auto">
-        ${personaText.slice(0, 500)}${personaText.length > 500 ? '...' : ''}
-      </div>
-    `;
-  }
-
-  contentEl.innerHTML = html;
-}
-
-// ── Update Team Members ──
-function updateTeamMembers(users, personaAll) {
-  const gridEl = document.getElementById('team-grid');
-  const countEl = document.getElementById('team-count');
-
-  if (!users || !users.users) {
-    gridEl.innerHTML = '<div style="text-align:center;color:var(--text-dim);padding:20px;grid-column:1/-1">加载中...</div>';
-    return;
-  }
-
-  const members = users.users;
-  countEl.textContent = `${members.length} 人`;
-
-  const personas = personaAll?.personas || {};
-  const canViewAll = personaAll?.can_view_all || false;
-
-  gridEl.innerHTML = members.map(member => {
-    const tierClass = member.tier || 'user';
-    const personaData = personas[member.id] || {};
-    const personaActive = member.persona_status === 'active';
-    const privacyBlocked = personaData.privacy_blocked || false;
-
-    let personaPreview = '';
-
-    if (privacyBlocked) {
-      personaPreview = `
-        <div class="persona-preview">
-          <div style="font-size:0.65rem;color:var(--text-dim);text-align:center">
-            🔒 仅创始人可查看其他成员画像
-          </div>
-        </div>
-      `;
-    } else if (personaActive && personaData.available) {
-      const personaText = personaData.persona || '';
-      personaPreview = `
-        <div class="persona-preview">
-          <div style="font-size:0.65rem;color:var(--accent);margin-bottom:4px">画像预览</div>
-          ${personaText.slice(0, 150)}${personaText.length > 150 ? '...' : ''}
-        </div>
-      `;
-    } else if (!personaActive) {
-      personaPreview = `
-        <div class="persona-preview">
-          <div style="font-size:0.65rem;color:var(--text-dim);text-align:center">
-            画像未激活
-          </div>
-        </div>
-      `;
-    }
-
-    return `
-      <div class="member-card">
-        <div class="member-header">
-          <div class="member-name">
-            <span>${member.tier_icon}</span>
-            <span>${member.name}</span>
-            ${member.id === 'holyty-founder' ? '<span style="font-size:0.6rem;color:var(--accent)">(你)</span>' : ''}
-          </div>
-          <span class="member-tier ${tierClass}">${member.tier_label}</span>
-        </div>
-        <div style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px">
-          ${member.description || ''}
-        </div>
-        <div class="member-stats">
-          <div class="member-stat">
-            <strong>${member.total_grains || 0}</strong> 条对话
-          </div>
-          <div class="member-stat">
-            画像: <strong style="color:${personaActive ? 'var(--green)' : 'var(--text-dim)'}">${personaActive ? '已激活' : '未激活'}</strong>
-          </div>
-        </div>
-        ${personaPreview}
-      </div>
-    `;
-  }).join('');
-}
-
-// ── Rebuild Persona ──
-async function rebuildPersona() {
-  if (!confirm('确定要强制重建画像吗？这将分析所有对话数据。')) return;
-
-  try {
-    const result = await fetch(API_BASE + '/api/persona/rebuild', { method: 'POST' });
-    const data = await result.json();
-
-    if (data.status === 'ok') {
-      toast('画像重建完成，共分析 ' + data.grains + ' 条对话');
-      // Reload data
-      load();
-    } else {
-      toast('重建失败: ' + (data.message || '未知错误'), false);
-    }
-  } catch (e) {
-    toast('重建失败: ' + e.message, false);
-  }
-}
-
-// ── Main Load ──
-async function load() {
-  try {
-    setConn(false, '加载数据中...');
-
-    const [toolGuard, timeline, status, senses, persona, users, personaAll, models] = await Promise.all([
-      fetchJSON('/api/tool-guard'),
-      fetchJSON('/api/timeline?limit=200'),
-      fetchJSON('/api/status'),
-      fetchJSON('/api/status'),
-      fetchJSON('/api/persona'),
-      fetchJSON('/api/users'),
-      fetchJSON('/api/persona/all?user_id=holyty-founder&tier=founder'),
-      fetchJSON('/api/models')
-    ]);
-
-    DATA.toolGuard = toolGuard;
-    DATA.timeline = timeline;
-    DATA.status = status;
-    DATA.senses = senses;
-    DATA.persona = persona;
-    DATA.users = users;
-    DATA.personaAll = personaAll;
-    DATA.models = models;
-
-    // Update charts
-    updateToolUsageChart(toolGuard);
-    updateActivityChart(timeline);
-    updateSenseRadar(senses);
-    updateErrorChart(toolGuard);
-    updateEventPie(timeline);
-
-    // Update UI
-    updateStats(toolGuard, timeline, status);
-    updateSenseGrid(senses);
-    updateTimeline(timeline);
-    updateToolGuard(toolGuard);
-    updateToolGuardDetail(toolGuard);
-    updateModelConfig(models);
-
-    // Update persona and team
-    updatePersona(persona);
-    updateTeamMembers(users, personaAll);
-
-    setConn(true, 'PHOENIX 引擎已连接');
-  } catch (e) {
-    console.error('Load error:', e);
-    setConn(false, '加载失败: ' + e.message);
-  }
-}
-
-// ── Initialize ──
-document.addEventListener('DOMContentLoaded', () => {
-  try {
-    initCharts();
-    load();
-    setInterval(load, 30000); // Refresh every 30 seconds
-  } catch (e) {
-    console.error('Initialization error:', e);
-    setConn(false, '初始化错误: ' + e.message);
-  }
-});
-</script>
 </body>
 </html>
