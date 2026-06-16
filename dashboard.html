@@ -3,276 +3,1229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PHOENIX · 控制台</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>PHOENIX · 可视化控制台</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {
     --bg:#1a1b26;--surface:#24283b;--surface-alt:#1f2335;
     --border:rgba(255,255,255,0.06);--text:#c0caf5;--text-dim:#565f89;
     --accent:#e0af68;--accent-alt:#7aa2f7;--red:#f7768e;--green:#9ece6a;
+    --yellow:#e0af68;--purple:#bb9af7;--cyan:#7dcfff;
     --radius:10px;--gap:14px;
     --font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:var(--font);background:var(--bg);color:var(--text);padding:16px;line-height:1.5}
 
-  /* Connection bar */
-  .conn-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:var(--surface);border-radius:8px;margin-bottom:16px;font-size:0.72rem;border:1px solid var(--border)}
-  .conn-bar .dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:6px}
-  .conn-bar .dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
-  .conn-bar .dot.wait{background:var(--yellow);animation:pulse 1.5s infinite}
+  /* Header */
+  .header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface);border-radius:8px;margin-bottom:16px;border:1px solid var(--border)}
+  .header h1{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:8px}
+  .header .status{display:flex;align-items:center;gap:8px;font-size:0.78rem}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
+  .dot.warn{background:var(--yellow);animation:pulse 1.5s infinite}
+  .dot.error{background:var(--red)}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-  /* Welcome card */
-  .welcome{background:linear-gradient(135deg,var(--surface) 0%,rgba(224,175,104,.05) 100%);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;border:1px solid var(--accent);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-  .welcome .greet{font-size:1.2rem;font-weight:700}
-  .welcome .greet .name{color:var(--accent)}
-  .welcome .traits{display:flex;gap:8px;flex-wrap:wrap}
-  .welcome .trait{padding:4px 14px;border-radius:14px;font-size:0.72rem;font-weight:600}
-  .welcome .trait.style{background:rgba(122,162,247,.15);color:var(--accent-alt)}
-  .welcome .trait.value{background:rgba(158,206,106,.12);color:var(--green)}
-  .welcome .trait.drift{background:rgba(224,175,104,.12);color:var(--accent)}
+  /* Grid layout */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap)}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .grid-full{grid-template-columns:1fr}
 
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--gap)}
-  .card{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid var(--border);cursor:pointer;transition:border-color .15s}
+  /* Card */
+  .card{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid var(--border);transition:border-color .15s}
   .card:hover{border-color:var(--accent)}
-  .card h3{font-size:0.75rem;color:var(--accent);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-  .card .why{font-size:0.65rem;color:var(--text-dim);margin-bottom:8px;font-style:italic}
+  .card h3{font-size:0.75rem;color:var(--accent);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+  .card h3 .badge{font-size:0.6rem;padding:2px 8px;border-radius:10px;background:rgba(122,162,247,.15);color:var(--accent-alt)}
 
-  .metric{display:flex;justify-content:space-between;padding:2px 0;font-size:0.78rem}
-  .metric .l{color:var(--text-dim)}.metric .v{font-weight:600}
-  .v.g{color:var(--green)}.v.w{color:var(--yellow)}.v.r{color:var(--red)}
+  /* Chart container */
+  .chart-container{position:relative;width:100%;height:250px}
+  .chart-container.small{height:180px}
 
-  .sense-row{display:flex;gap:3px;flex-wrap:wrap}
-  .s-dot{padding:3px 6px;border-radius:10px;font-size:0.6rem;font-weight:600;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .s-dot.g{background:rgba(158,206,106,.1);color:var(--green)}
-  .s-dot.w{background:rgba(224,175,104,.1);color:var(--yellow)}
-  .s-dot.r{background:rgba(247,118,142,.1);color:var(--red)}
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  .stat{background:var(--surface);border-radius:8px;padding:14px;text-align:center;border:1px solid var(--border)}
+  .stat .num{font-size:1.8rem;font-weight:800;color:var(--accent)}
+  .stat .label{font-size:0.7rem;color:var(--text-dim);margin-top:4px}
+  .stat .trend{font-size:0.65rem;margin-top:4px}
+  .stat .trend.up{color:var(--green)}
+  .stat .trend.down{color:var(--red)}
 
-  .tl-line{font-size:0.68rem;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.02);display:flex;gap:8px}
-  .tl-line .ts{color:var(--text-dim);font-family:monospace;white-space:nowrap}
-  .tl-line .tp{color:var(--accent-alt);min-width:70px;font-size:0.62rem}
-  .tl-line .bd{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* Table */
+  .table-container{max-height:300px;overflow-y:auto}
+  table{width:100%;border-collapse:collapse;font-size:0.78rem}
+  th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  th{color:var(--accent);font-weight:600;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;position:sticky;top:0;background:var(--surface)}
+  tr:hover{background:rgba(255,255,255,0.02)}
 
-  .empty{text-align:center;padding:20px;color:var(--text-dim);font-size:0.72rem}
+  /* Sense dots */
+  .sense-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .sense-item{background:var(--surface-alt);border-radius:8px;padding:10px;text-align:center}
+  .sense-item .icon{font-size:1.5rem;margin-bottom:4px}
+  .sense-item .name{font-size:0.65rem;color:var(--text-dim)}
+  .sense-item .status{font-size:0.7rem;font-weight:600;margin-top:4px}
+  .sense-item .status.ok{color:var(--green)}
+  .sense-item .status.warn{color:var(--yellow)}
+  .sense-item .status.error{color:var(--red)}
 
-  /* Modal */
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;justify-content:center;align-items:flex-start;padding:30px 16px;overflow-y:auto}
-  .modal-overlay.open{display:flex}
-  .modal{background:var(--surface);border-radius:var(--radius);width:100%;max-width:700px;border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.5);animation:in .2s}
-  @keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-  .modal-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
-  .modal-head h2{font-size:1rem}
-  .modal-close{background:none;border:none;color:var(--text-dim);font-size:1.2rem;cursor:pointer;padding:4px 8px}
-  .modal-close:hover{color:var(--red)}
-  .modal-body{padding:20px;max-height:55vh;overflow-y:auto}
-  .modal-body .explain{background:var(--surface-alt);padding:12px 14px;border-radius:8px;margin-bottom:16px;font-size:0.75rem;color:var(--text-dim);line-height:1.5}
-  .modal-body .explain strong{color:var(--accent)}
-  .modal-actions{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+  /* Timeline */
+  .timeline-entry{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+  .timeline-entry:last-child{border-bottom:none}
+  .timeline-time{font-size:0.7rem;color:var(--text-dim);font-family:monospace;white-space:nowrap;min-width:60px}
+  .timeline-type{font-size:0.65rem;padding:2px 8px;border-radius:10px;background:rgba(122,162,247,.1);color:var(--accent-alt);min-width:70px;text-align:center}
+  .timeline-desc{font-size:0.75rem;flex:1}
 
-  .btn{padding:7px 16px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-size:0.76rem;font-family:var(--font);background:var(--surface-alt);color:var(--text);transition:all .2s}
+  /* Buttons */
+  .btn{padding:6px 14px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-size:0.72rem;font-family:var(--font);background:var(--surface-alt);color:var(--text);transition:all .2s}
   .btn:hover{border-color:var(--accent)}
-  .btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:600}
-  .btn.danger{border-color:var(--red);color:var(--red)}
-  .btn.danger:hover{background:var(--red);color:var(--bg)}
+  .btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
 
-  .toast{position:fixed;bottom:20px;right:20px;padding:12px 20px;border-radius:8px;font-size:0.78rem;z-index:200;font-weight:600;animation:up .3s}
+  /* Toast */
+  .toast{position:fixed;bottom:20px;right:20px;padding:10px 18px;border-radius:8px;font-size:0.75rem;z-index:200;font-weight:600;animation:up .3s}
   @keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-  .toast.ok{background:var(--green);color:var(--bg)}.toast.err{background:var(--red);color:var(--bg)}
+  .toast.ok{background:var(--green);color:var(--bg)}
+  .toast.err{background:var(--red);color:var(--bg)}
 
-  footer{text-align:center;margin-top:24px;color:var(--text-dim);font-size:0.65rem;padding:12px}
-  .loading-text{color:var(--text-dim);animation:pulse 1s infinite}
+  /* Persona Section */
+  .persona-card{background:var(--surface);border-radius:var(--radius);padding:16px;border:1px solid var(--border)}
+  .persona-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .persona-header h3{font-size:0.75rem;color:var(--accent);display:flex;align-items:center;gap:8px}
+  .persona-header .badge{font-size:0.6rem;padding:2px 8px;border-radius:10px;background:rgba(122,162,247,.15);color:var(--accent-alt)}
+  .persona-content{font-size:0.78rem;line-height:1.6}
+  .persona-content .layer{margin-bottom:12px;padding:10px;background:var(--surface-alt);border-radius:6px}
+  .persona-content .layer-title{font-size:0.7rem;color:var(--accent);margin-bottom:6px;font-weight:600}
+  .persona-content .layer-content{font-size:0.72rem;color:var(--text-dim)}
+  .persona-content .highlight{color:var(--accent-alt);font-weight:600}
+  .persona-content .value{color:var(--green)}
 
-  @media(max-width:768px){.grid{grid-template-columns:1fr}.welcome{flex-direction:column;align-items:flex-start}}
+  /* Team Members Section */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+  .member-card{background:var(--surface-alt);border-radius:8px;padding:14px;border:1px solid var(--border);transition:border-color .2s}
+  .member-card:hover{border-color:var(--accent)}
+  .member-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .member-name{font-size:0.85rem;font-weight:600;display:flex;align-items:center;gap:6px}
+  .member-tier{font-size:0.65rem;padding:2px 8px;border-radius:10px;font-weight:600}
+  .member-tier.founder{background:rgba(224,175,104,.15);color:var(--accent)}
+  .member-tier.partner{background:rgba(122,162,247,.15);color:var(--accent-alt)}
+  .member-tier.user{background:rgba(158,206,106,.15);color:var(--green)}
+  .member-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+  .member-stat{font-size:0.7rem;color:var(--text-dim)}
+  .member-stat strong{color:var(--text)}
+  .persona-preview{font-size:0.7rem;color:var(--text-dim);margin-top:8px;padding:8px;background:rgba(0,0,0,0.2);border-radius:4px;max-height:100px;overflow-y:auto}
+  .privacy-badge{font-size:0.6rem;padding:2px 6px;border-radius:8px;background:rgba(247,118,142,.15);color:var(--red);margin-left:6px}
+
+  footer{text-align:center;margin-top:20px;color:var(--text-dim);font-size:0.65rem;padding:10px}
+
+  @media(max-width:1024px){.grid{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:768px){.stats{grid-template-columns:1fr}.sense-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<!-- Connection Bar -->
-<div class="conn-bar">
-  <span><span class="dot wait" id="conn-dot"></span><span id="conn-text">正在连接 PHOENIX 引擎...</span></span>
-  <span style="color:var(--text-dim)" id="conn-time"></span>
-</div>
-
-<!-- Welcome Card -->
-<div class="welcome" id="welcome">
-  <div>
-    <div class="greet" id="greet-line">连接中...</div>
-  </div>
-  <div class="traits" id="traits-bar"></div>
-</div>
-
-<!-- Grid -->
-<div class="grid">
-  <div class="card" onclick="openModal('persona')">
-    <h3>🧬 你的画像<span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">PHOENIX 对你的理解</span></h3>
-    <div class="why">从你的对话中自动学习——沟通风格、价值观、决策模式</div>
-    <div id="persona-mini"></div>
-  </div>
-
-  <div class="card" onclick="openModal('senses')">
-    <h3>👁️ 系统感知<span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">7个自检指标</span></h3>
-    <div class="why">PHOENIX 的自我监测——是否压力过大？是否在犯错？</div>
-    <div class="sense-row" id="senses-mini"></div>
-  </div>
-
-  <div class="card" onclick="openModal('drift')">
-    <h3>📈 决策趋势<span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">你在怎么变</span></h3>
-    <div class="why">追踪你的选择倾向——更保守还是更愿意尝试新方案？</div>
-    <div id="drift-mini"></div>
-  </div>
-
-  <div class="card" onclick="openModal('toolguard')">
-    <h3>🛡️ 安全防护<span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">防止卡死</span></h3>
-    <div class="why">监测 PHOENIX 是否陷入死循环、重复失败或原地踏步</div>
-    <div id="toolguard-mini"></div>
-  </div>
-
-  <div class="card" onclick="openModal('users')">
-    <h3>👥 团队成员<span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">谁在用 PHOENIX</span></h3>
-    <div class="why">创始人、合伙人、使用者——按画像成熟度自动升级</div>
-    <div id="users-mini"></div>
-  </div>
-
-  <div class="card" onclick="openModal('modules')">
-    <h3>🧩 系统模块<span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">引擎健康度</span></h3>
-    <div class="why">PHOENIX 由哪些模块组成，每个模块是否正常运行</div>
-    <div id="modules-mini"></div>
-  </div>
-
-  <div class="card" onclick="openModal('timeline')" style="grid-column:1/-1">
-    <h3>📜 最近活动<span style="font-size:0.6rem;color:var(--text-dim);font-weight:400">PHOENIX 做了什么</span></h3>
-    <div class="why">按时间排列的系统事件——会话、工具调用、自愈、进化</div>
-    <div id="timeline-mini"></div>
+<!-- Header -->
+<div class="header">
+  <h1>🐦‍🔥 PHOENIX 可视化控制台</h1>
+  <div class="status">
+    <span class="dot ok" id="conn-dot"></span>
+    <span id="conn-text">连接中...</span>
+    <span style="color:var(--text-dim);margin-left:8px" id="conn-time"></span>
   </div>
 </div>
 
-<footer>PHOENIX v1.3.0 · Dashboard v3 (callback) · <span id="refresh-label"></span> · <a href="dashboard-viz.html" style="color:var(--green);text-decoration:none">📈 可视化控制台</a> · <a href="https://github.com/5201314ty0609-collab/phoenix" target="_blank" style="color:var(--accent);text-decoration:none">GitHub</a></footer>
-
-<!-- ═══ Modal ═══ -->
-<div class="modal-overlay" id="mo" onclick="closeM(event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-head"><div><h2 id="mo-title"></h2></div><button class="modal-close" onclick="closeM()">✕</button></div>
-    <div class="modal-body" id="mo-body"></div>
-    <div class="modal-actions" id="mo-actions"></div>
+<!-- Stats Overview -->
+<div class="stats">
+  <div class="stat">
+    <div class="num" id="stat-tools">-</div>
+    <div class="label">工具调用总数</div>
+    <div class="trend up" id="stat-tools-trend">加载中</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="stat-sessions">-</div>
+    <div class="label">会话次数</div>
+    <div class="trend" id="stat-sessions-trend">加载中</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="stat-warned" style="font-size:1.4rem;color:var(--yellow)">-</div>
+    <div class="label">警告次数</div>
+    <div class="trend" id="stat-warned-trend">加载中</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="stat-blocked" style="font-size:1.4rem;color:var(--red)">-</div>
+    <div class="label">阻断次数</div>
+    <div class="trend" id="stat-blocked-trend">加载中</div>
   </div>
 </div>
-<div id="toasts"></div>
+
+<!-- Error & Framework Stats -->
+<div class="stats" style="margin-bottom:16px">
+  <div class="stat">
+    <div class="num" id="stat-errors" style="font-size:1.4rem;color:var(--red)">-</div>
+    <div class="label">错误次数</div>
+    <div class="trend" id="stat-errors-trend">加载中</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="stat-frameworks" style="font-size:1.4rem;color:var(--accent)">-</div>
+    <div class="label">活跃框架</div>
+    <div class="trend" id="stat-frameworks-trend">加载中</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="stat-halted" style="font-size:1.4rem;color:var(--purple)">-</div>
+    <div class="label">强制中止</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="stat-success-rate" style="font-size:1.4rem;color:var(--green)">-</div>
+    <div class="label">成功率</div>
+  </div>
+</div>
+
+<!-- Model & Tool Guard -->
+<div class="grid" style="margin-bottom:16px">
+  <!-- Model Configuration -->
+  <div class="card">
+    <h3>⚙️ 当前模型</h3>
+    <div id="model-config" style="font-size:0.75rem">
+      <div style="text-align:center;color:var(--text-dim);padding:10px">加载中...</div>
+    </div>
+  </div>
+
+  <!-- Tool Guard Detail -->
+  <div class="card">
+    <h3>🛡️ 工具防护 <span class="badge" id="tool-guard-badge">正常</span></h3>
+    <div id="tool-guard-detail" style="font-size:0.75rem">
+      <div style="text-align:center;color:var(--text-dim);padding:10px">加载中...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="grid" style="margin-bottom:16px">
+  <!-- Tool Usage Chart -->
+  <div class="card">
+    <h3>📊 工具使用频率 <span class="badge">最近 7 天</span></h3>
+    <div class="chart-container">
+      <canvas id="toolUsageChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Activity Timeline Chart -->
+  <div class="card">
+    <h3>📈 活动趋势 <span class="badge">按天</span></h3>
+    <div class="chart-container">
+      <canvas id="activityChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Second Row -->
+<div class="grid grid-3" style="margin-bottom:16px">
+  <!-- 7-Sense Radar -->
+  <div class="card">
+    <h3>👁️ 7-Sense 健康雷达</h3>
+    <div class="chart-container small">
+      <canvas id="senseRadar"></canvas>
+    </div>
+  </div>
+
+  <!-- Error Rate Chart -->
+  <div class="card">
+    <h3>⚠️ 错误率趋势</h3>
+    <div class="chart-container small">
+      <canvas id="errorChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Event Type Distribution -->
+  <div class="card">
+    <h3>🎯 事件类型分布</h3>
+    <div class="chart-container small">
+      <canvas id="eventPie"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Third Row -->
+<div class="grid" style="margin-bottom:16px">
+  <!-- 7-Sense Status -->
+  <div class="card">
+    <h3>🧠 系统感知状态</h3>
+    <div class="sense-grid" id="sense-grid"></div>
+  </div>
+
+  <!-- Recent Timeline -->
+  <div class="card">
+    <h3>📜 最近活动 <span class="badge" id="timeline-count">0 条</span></h3>
+    <div class="table-container" id="timeline-list"></div>
+  </div>
+</div>
+
+<!-- Tool Guard Details -->
+<div class="grid grid-full" style="margin-bottom:16px">
+  <div class="card">
+    <h3>🛡️ 工具防护详情 <span class="badge" id="guard-status">正常</span></h3>
+    <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+      <div>
+        <h4 style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px">最近警告</h4>
+        <div id="guard-warnings" style="font-size:0.75rem"></div>
+      </div>
+      <div>
+        <h4 style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px">工具健康度</h4>
+        <div id="guard-health" style="font-size:0.75rem"></div>
+      </div>
+      <div>
+        <h4 style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px">防护统计</h4>
+        <div id="guard-stats" style="font-size:0.75rem"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Persona Section -->
+<div class="grid grid-full" style="margin-bottom:16px">
+  <div class="persona-card">
+    <div class="persona-header">
+      <h3>🧬 你的画像 <span class="badge">PHOENIX 对你的理解</span></h3>
+      <div>
+        <span id="persona-status" style="font-size:0.7rem;color:var(--text-dim)">加载中...</span>
+        <button class="btn" onclick="rebuildPersona()" style="margin-left:8px;font-size:0.65rem">强制重建</button>
+      </div>
+    </div>
+    <div class="persona-content" id="persona-content">
+      <div style="text-align:center;color:var(--text-dim);padding:20px">加载中...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Team Members Section -->
+<div class="grid grid-full">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="margin-bottom:0">👥 团队成员 <span class="badge" id="team-count">0 人</span></h3>
+      <div style="font-size:0.7rem;color:var(--text-dim)">
+        <span class="privacy-badge">🔒 隐私模式</span>
+        <span style="margin-left:6px">创始人可查看所有画像，其他成员只能看自己</span>
+      </div>
+    </div>
+    <div class="team-grid" id="team-grid">
+      <div style="text-align:center;color:var(--text-dim);padding:20px;grid-column:1/-1">加载中...</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  PHOENIX v1.3.0 · 可视化控制台 v1.0 · 数据每 30 秒自动刷新
+  · <a href="dashboard.html" style="color:var(--accent);text-decoration:none">切换到基础视图</a>
+  · <a href="https://github.com/5201314ty0609-collab/phoenix" target="_blank" style="color:var(--accent);text-decoration:none">GitHub</a>
+</footer>
 
 <script>
-var D={};
+// ── Data Store ──
+const DATA = {
+  toolGuard: null,
+  timeline: null,
+  senses: null,
+  status: null
+};
 
-function fetchJSON(path, callback){
-  fetch(path).then(function(r){return r.json()}).then(function(d){callback(d)}).catch(function(){callback(null)});
+// ── Charts ──
+let charts = {};
+
+// ── Utility ──
+function toast(msg, ok = true) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + (ok ? 'ok' : 'err');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
 }
 
-function T(m,ok){var t=document.createElement('div');t.className='toast '+(ok?'ok':'err');t.textContent=m;document.getElementById('toasts').appendChild(t);setTimeout(function(){t.remove()},2500)}
-
-function setConn(ok,msg){
-  document.getElementById('conn-dot').className='dot '+(ok?'ok':'wait');
-  document.getElementById('conn-text').textContent=msg||(ok?'PHOENIX 引擎已连接':'PHOENIX 引擎运行中');
-  document.getElementById('conn-time').textContent=new Date().toLocaleTimeString('zh-CN');
-}
-function m(l,v,c=''){return`<div class="metric"><span class="l">${l}</span><span class="v${c?' '+c:''}">${v}</span></div>`}
-
-function miniPersona(d){
-  if(!d||!d.available) return '<div class="empty">画像尚未激活——需要更多对话来学习你的偏好</div>';
-  const p=d.persona||'',layers=d.layers||{};
-  const proto=layers.protocol||{},kernel=layers.kernel||{};
-  const style=proto.style||'学习中';
-  const values=(kernel.core_values||[]).slice(0,4);
-  return `<div style="font-size:0.78rem">沟通风格: <strong style="color:var(--accent-alt)">${style}</strong> · ${values.map(v=>'<span style="color:var(--green)">'+v+'</span>').join(' · ')}</div>`;
+function setConn(ok, msg) {
+  document.getElementById('conn-dot').className = 'dot ' + (ok ? 'ok' : 'warn');
+  document.getElementById('conn-text').textContent = msg || (ok ? 'PHOENIX 引擎已连接' : '连接中...');
+  document.getElementById('conn-time').textContent = new Date().toLocaleTimeString('zh-CN');
 }
 
-function miniSenses(d){
-  const s=d?.senses||{};
-  const labels={o2:'O₂',nociception:'痛',drift:'偏',echo:'回',chronos:'时',spatial:'空',vestibular:'衡'};
-  const full={o2:'O2 压力',nociception:'痛觉',drift:'漂移',echo:'回声',chronos:'时间',spatial:'空间',vestibular:'平衡'};
-  return Object.entries(s).map(([n,v])=>{
-    let c='g',st=v.state||'ok';if(st==='unknown')st='-';
-    if(v.trend==='alert')c='r';else if(v.trend==='warn')c='w';
-    return`<span class="s-dot ${c}" title="${full[n]||n}: ${st}${v.trend?' · '+v.trend:''}">${labels[n]||n[0]}</span>`;
+// ── Fetch Data ──
+const API_BASE = 'http://127.0.0.1:8765';
+async function fetchJSON(path) {
+  try {
+    const r = await fetch(API_BASE + path);
+    return await r.json();
+  } catch (e) {
+    console.error('Fetch error:', path, e);
+    return null;
+  }
+}
+
+// ── Initialize Charts ──
+function initCharts() {
+  // Tool Usage Bar Chart
+  const toolCtx = document.getElementById('toolUsageChart').getContext('2d');
+  charts.toolUsage = new Chart(toolCtx, {
+    type: 'bar',
+    data: {
+      labels: [],
+      datasets: [{
+        label: '调用次数',
+        data: [],
+        backgroundColor: 'rgba(122, 162, 247, 0.6)',
+        borderColor: 'rgba(122, 162, 247, 1)',
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(36, 40, 59, 0.95)',
+          titleColor: '#e0af68',
+          bodyColor: '#c0caf5',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#565f89', font: { size: 10 } }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: '#565f89', font: { size: 10 } }
+        }
+      }
+    }
+  });
+
+  // Activity Line Chart
+  const actCtx = document.getElementById('activityChart').getContext('2d');
+  charts.activity = new Chart(actCtx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: '事件数',
+        data: [],
+        borderColor: '#9ece6a',
+        backgroundColor: 'rgba(158, 206, 106, 0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        pointBackgroundColor: '#9ece6a'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(36, 40, 59, 0.95)',
+          titleColor: '#e0af68',
+          bodyColor: '#c0caf5'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#565f89', font: { size: 10 } }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: '#565f89', font: { size: 10 } }
+        }
+      }
+    }
+  });
+
+  // 7-Sense Radar Chart
+  const radarCtx = document.getElementById('senseRadar').getContext('2d');
+  charts.senseRadar = new Chart(radarCtx, {
+    type: 'radar',
+    data: {
+      labels: ['O₂ 压力', '痛觉', '漂移', '回声', '时间', '空间', '平衡'],
+      datasets: [{
+        label: '健康度',
+        data: [100, 100, 100, 100, 100, 100, 100],
+        backgroundColor: 'rgba(158, 206, 106, 0.2)',
+        borderColor: 'rgba(158, 206, 106, 1)',
+        borderWidth: 2,
+        pointBackgroundColor: '#9ece6a'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 100,
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          angleLines: { color: 'rgba(255,255,255,0.05)' },
+          pointLabels: { color: '#c0caf5', font: { size: 10 } },
+          ticks: { display: false }
+        }
+      }
+    }
+  });
+
+  // Error Rate Chart
+  const errCtx = document.getElementById('errorChart').getContext('2d');
+  charts.error = new Chart(errCtx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: '错误率',
+        data: [],
+        borderColor: '#f7768e',
+        backgroundColor: 'rgba(247, 118, 142, 0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ctx.parsed.y.toFixed(1) + '%'
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: {
+            color: '#565f89',
+            font: { size: 10 },
+            callback: (v) => v + '%'
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: '#565f89', font: { size: 10 } }
+        }
+      }
+    }
+  });
+
+  // Event Type Pie Chart
+  const pieCtx = document.getElementById('eventPie').getContext('2d');
+  charts.eventPie = new Chart(pieCtx, {
+    type: 'doughnut',
+    data: {
+      labels: [],
+      datasets: [{
+        data: [],
+        backgroundColor: [
+          'rgba(122, 162, 247, 0.8)',
+          'rgba(158, 206, 106, 0.8)',
+          'rgba(224, 175, 104, 0.8)',
+          'rgba(247, 118, 142, 0.8)',
+          'rgba(187, 154, 247, 0.8)',
+          'rgba(125, 207, 255, 0.8)'
+        ],
+        borderColor: 'rgba(36, 40, 59, 1)',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: { color: '#c0caf5', font: { size: 10 }, padding: 8 }
+        }
+      }
+    }
+  });
+
+}
+
+// ── Update Charts ──
+function updateToolUsageChart(toolGuard) {
+  if (!toolGuard) return;
+
+  const history = toolGuard.history || [];
+  const toolCounts = {};
+
+  history.forEach(entry => {
+    const tool = entry.tool || 'unknown';
+    toolCounts[tool] = (toolCounts[tool] || 0) + 1;
+  });
+
+  const sorted = Object.entries(toolCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10);
+
+  charts.toolUsage.data.labels = sorted.map(([tool]) => tool);
+  charts.toolUsage.data.datasets[0].data = sorted.map(([, count]) => count);
+  charts.toolUsage.update();
+}
+
+function updateActivityChart(timeline) {
+  if (!timeline) return;
+
+  const entries = timeline.entries || [];
+  const dayCounts = {};
+
+  entries.forEach(entry => {
+    const date = (entry.timestamp || '').slice(0, 10);
+    if (date) {
+      dayCounts[date] = (dayCounts[date] || 0) + 1;
+    }
+  });
+
+  const sortedDays = Object.keys(dayCounts).sort().slice(-14);
+  charts.activity.data.labels = sortedDays.map(d => d.slice(5));
+  charts.activity.data.datasets[0].data = sortedDays.map(d => dayCounts[d]);
+  charts.activity.update();
+}
+
+function updateSenseRadar(senses) {
+  if (!senses) return;
+
+  const senseData = senses.senses || {};
+  const values = [];
+  const labels = ['o2', 'nociception', 'drift', 'echo', 'chronos', 'spatial', 'vestibular'];
+
+  labels.forEach(key => {
+    const sense = senseData[key] || {};
+    let value = 100;
+    if (sense.trend === 'alert') value = 20;
+    else if (sense.trend === 'warn') value = 50;
+    else if (sense.state === 'ok') value = 90;
+    values.push(value);
+  });
+
+  charts.senseRadar.data.datasets[0].data = values;
+  charts.senseRadar.update();
+}
+
+function updateErrorChart(toolGuard) {
+  if (!toolGuard) return;
+
+  const history = toolGuard.history || [];
+  const dayErrors = {};
+  const dayTotal = {};
+
+  history.forEach(entry => {
+    const date = (entry.timestamp || '').slice(0, 10);
+    if (date) {
+      dayTotal[date] = (dayTotal[date] || 0) + 1;
+      if (entry.status === 'blocked' || entry.status === 'halted') {
+        dayErrors[date] = (dayErrors[date] || 0) + 1;
+      }
+    }
+  });
+
+  const sortedDays = Object.keys(dayTotal).sort().slice(-14);
+  const errorRates = sortedDays.map(d => {
+    const total = dayTotal[d] || 1;
+    const errors = dayErrors[d] || 0;
+    return (errors / total * 100).toFixed(1);
+  });
+
+  charts.error.data.labels = sortedDays.map(d => d.slice(5));
+  charts.error.data.datasets[0].data = errorRates;
+  charts.error.update();
+}
+
+function updateEventPie(timeline) {
+  if (!timeline) return;
+
+  const entries = timeline.entries || [];
+  const typeCounts = {};
+
+  entries.forEach(entry => {
+    const type = entry.event_type || 'unknown';
+    typeCounts[type] = (typeCounts[type] || 0) + 1;
+  });
+
+  const sorted = Object.entries(typeCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6);
+
+  charts.eventPie.data.labels = sorted.map(([type]) => type);
+  charts.eventPie.data.datasets[0].data = sorted.map(([, count]) => count);
+  charts.eventPie.update();
+}
+
+// ── Update Token Charts ──
+function updateToolGuardDetail(toolGuard) {
+  const container = document.getElementById('tool-guard-detail');
+  const badge = document.getElementById('tool-guard-badge');
+  if (!toolGuard) {
+    container.innerHTML = '<div style="color:var(--text-dim)">无数据</div>';
+    return;
+  }
+
+  const summary = toolGuard.summary || {};
+  const alerts = toolGuard.alerts || {};
+  const history = toolGuard.history || [];
+
+  // Badge status
+  const hasAlerts = Object.keys(alerts.exact_failures || {}).length > 0 ||
+                    Object.keys(alerts.tool_failures || {}).length > 0;
+  badge.textContent = hasAlerts ? '⚠️ 告警' : '正常';
+  badge.style.background = hasAlerts ? 'var(--red)' : 'var(--green)';
+
+  // Per-tool breakdown from recent history
+  const toolCounts = {};
+  const toolErrors = {};
+  history.forEach(e => {
+    const t = e.tool || 'unknown';
+    toolCounts[t] = (toolCounts[t] || 0) + 1;
+    if (e.is_error) toolErrors[t] = (toolErrors[t] || 0) + 1;
+  });
+  const sortedTools = Object.entries(toolCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+  // Recent decisions
+  const recentDecisions = history.slice(-10).reverse();
+
+  container.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
+      <div style="padding:6px;background:var(--surface-alt);border-radius:4px;text-align:center">
+        <div style="font-size:0.6rem;color:var(--text-dim)">观测</div>
+        <div style="font-weight:600;color:var(--accent)">${summary.total_observed || 0}</div>
+      </div>
+      <div style="padding:6px;background:var(--surface-alt);border-radius:4px;text-align:center">
+        <div style="font-size:0.6rem;color:var(--text-dim)">警告</div>
+        <div style="font-weight:600;color:var(--yellow)">${summary.total_warned || 0}</div>
+      </div>
+      <div style="padding:6px;background:var(--surface-alt);border-radius:4px;text-align:center">
+        <div style="font-size:0.6rem;color:var(--text-dim)">阻断</div>
+        <div style="font-weight:600;color:var(--red)">${summary.total_blocked || 0}</div>
+      </div>
+    </div>
+    <div style="margin-bottom:8px">
+      <div style="font-size:0.65rem;color:var(--text-dim);margin-bottom:4px">工具调用分布 (最近 500)</div>
+      ${sortedTools.map(([tool, count]) => {
+        const err = toolErrors[tool] || 0;
+        const pct = ((count / history.length) * 100).toFixed(0);
+        return `<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          <span style="width:60px;font-size:0.65rem;color:var(--text)">${tool}</span>
+          <div style="flex:1;height:6px;background:var(--surface-alt);border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${err > 0 ? 'var(--red)' : 'var(--accent)'};border-radius:3px"></div>
+          </div>
+          <span style="font-size:0.6rem;color:var(--text-dim);width:30px;text-align:right">${count}</span>
+          ${err > 0 ? `<span style="font-size:0.55rem;color:var(--red)">(${err}错)</span>` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+    <div>
+      <div style="font-size:0.65rem;color:var(--text-dim);margin-bottom:4px">最近调用</div>
+      ${recentDecisions.map(e => {
+        const time = (e.timestamp || '').slice(11, 19);
+        const color = e.decision === 'allow' ? 'var(--green)' : e.decision === 'warn' ? 'var(--yellow)' : 'var(--red)';
+        return `<div style="display:flex;gap:6px;font-size:0.6rem;margin-bottom:2px">
+          <span style="color:var(--text-dim);width:55px">${time}</span>
+          <span style="color:var(--text);width:45px">${e.tool || ''}</span>
+          <span style="color:${color}">${e.decision || ''}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function formatNumber(num) {
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+  if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+  return num.toString();
+}
+
+// ── Update Model Config ──
+function updateModelConfig(models) {
+  const configEl = document.getElementById('model-config');
+
+  if (!models) {
+    configEl.innerHTML = '<div style="color:var(--text-dim)">无数据</div>';
+    return;
+  }
+
+  const current = models.current || {};
+  const env = models.env_vars || {};
+
+  // Detect provider from base_url
+  const baseUrl = current.base_url || '';
+  let provider = '未知';
+  let providerColor = 'var(--text-dim)';
+  if (baseUrl.includes('xiaomimimo')) { provider = 'MiMo (小米)'; providerColor = 'var(--accent)'; }
+  else if (baseUrl.includes('deepseek')) { provider = 'DeepSeek'; providerColor = 'var(--cyan)'; }
+  else if (baseUrl.includes('anthropic')) { provider = 'Anthropic'; providerColor = 'var(--purple)'; }
+  else if (baseUrl.includes('openai')) { provider = 'OpenAI'; providerColor = 'var(--green)'; }
+  else if (baseUrl.includes('127.0.0.1') || baseUrl.includes('localhost')) { provider = '本地代理'; providerColor = 'var(--yellow)'; }
+
+  configEl.innerHTML = `
+    <div style="margin-bottom:10px;padding:10px;background:var(--surface-alt);border-radius:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div>
+          <div style="font-size:0.65rem;color:var(--text-dim)">模型</div>
+          <div style="font-weight:600;font-size:0.9rem;color:var(--accent)">${current.model || '未配置'}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:0.65rem;color:var(--text-dim)">服务商</div>
+          <div style="font-weight:600;color:${providerColor}">${provider}</div>
+        </div>
+      </div>
+      <div style="font-size:0.6rem;color:var(--text-dim);word-break:break-all">
+        ${baseUrl || '未配置'}
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:8px">
+      <div style="padding:4px 6px;background:var(--surface-alt);border-radius:4px">
+        <div style="font-size:0.55rem;color:var(--text-dim)">Haiku</div>
+        <div style="font-size:0.65rem;color:var(--text)">${current.haiku || '-'}</div>
+      </div>
+      <div style="padding:4px 6px;background:var(--surface-alt);border-radius:4px">
+        <div style="font-size:0.55rem;color:var(--text-dim)">Sonnet</div>
+        <div style="font-size:0.65rem;color:var(--text)">${current.sonnet || '-'}</div>
+      </div>
+      <div style="padding:4px 6px;background:var(--surface-alt);border-radius:4px">
+        <div style="font-size:0.55rem;color:var(--text-dim)">Opus</div>
+        <div style="font-size:0.65rem;color:var(--text)">${current.opus || '-'}</div>
+      </div>
+      <div style="padding:4px 6px;background:var(--surface-alt);border-radius:4px">
+        <div style="font-size:0.55rem;color:var(--text-dim)">Effort</div>
+        <div style="font-size:0.65rem;color:var(--text)">${current.effort_level || '-'}</div>
+      </div>
+    </div>
+    <div style="font-size:0.6rem;color:var(--text-dim)">
+      <div style="margin-bottom:2px">Auth: <span style="color:var(--text)">${env.ANTHROPIC_AUTH_TOKEN ? env.ANTHROPIC_AUTH_TOKEN.slice(0,12) + '...' : '未配置'}</span></div>
+    </div>
+  `;
+}
+
+// ── Update UI Components ──
+function updateStats(toolGuard, timeline, status) {
+  const history = toolGuard?.history || [];
+  const entries = timeline?.entries || [];
+  const summary = toolGuard?.summary || {};
+
+  // Tool calls
+  const totalTools = summary.total_observed || history.length;
+  document.getElementById('stat-tools').textContent = totalTools.toLocaleString();
+  document.getElementById('stat-tools-trend').textContent = '累计调用';
+
+  // Sessions
+  const sessions = entries.filter(e => e.event_type === 'session_end').length;
+  document.getElementById('stat-sessions').textContent = sessions;
+  document.getElementById('stat-sessions-trend').textContent = '会话次数';
+
+  // Tool guard stats
+  const warned = summary.total_warned || 0;
+  const blocked = summary.total_blocked || 0;
+  const halted = summary.total_halted || 0;
+  const errors = history.filter(e => e.is_error === true).length;
+
+  document.getElementById('stat-warned').textContent = warned;
+  document.getElementById('stat-warned-trend').textContent = warned > 0 ? '需要关注' : '正常';
+  document.getElementById('stat-warned-trend').className = 'trend ' + (warned > 10 ? 'down' : 'up');
+
+  document.getElementById('stat-blocked').textContent = blocked;
+  document.getElementById('stat-blocked-trend').textContent = blocked > 0 ? '已阻断' : '正常';
+  document.getElementById('stat-blocked-trend').className = 'trend ' + (blocked > 0 ? 'down' : 'up');
+
+  document.getElementById('stat-errors').textContent = errors;
+  document.getElementById('stat-errors-trend').textContent = `工具执行错误`;
+  document.getElementById('stat-errors-trend').className = 'trend ' + (errors > 5 ? 'down' : 'up');
+
+  document.getElementById('stat-halted').textContent = halted;
+
+  // Success rate
+  const successRate = totalTools > 0 ? (((totalTools - errors) / totalTools) * 100).toFixed(1) : '-';
+  document.getElementById('stat-success-rate').textContent = successRate + '%';
+
+  // Frameworks
+  const frameworks = status?.evolution?.active_frameworks || 0;
+  document.getElementById('stat-frameworks').textContent = frameworks;
+  document.getElementById('stat-frameworks-trend').textContent = '活跃框架';
+}
+
+function updateSenseGrid(senses) {
+  const grid = document.getElementById('sense-grid');
+  const senseData = senses?.senses || {};
+
+  const senseConfig = [
+    { key: 'o2', icon: '💨', name: 'O₂ 压力' },
+    { key: 'nociception', icon: '🩹', name: '痛觉' },
+    { key: 'drift', icon: '🧭', name: '漂移' },
+    { key: 'echo', icon: '🔊', name: '回声' },
+    { key: 'chronos', icon: '⏱️', name: '时间' },
+    { key: 'spatial', icon: '📐', name: '空间' },
+    { key: 'vestibular', icon: '⚖️', name: '平衡' }
+  ];
+
+  grid.innerHTML = senseConfig.map(s => {
+    const sense = senseData[s.key] || {};
+    let statusClass = 'ok';
+    let statusText = '正常';
+
+    if (sense.trend === 'alert') {
+      statusClass = 'error';
+      statusText = '警报';
+    } else if (sense.trend === 'warn') {
+      statusClass = 'warn';
+      statusText = '警告';
+    }
+
+    return `
+      <div class="sense-item">
+        <div class="icon">${s.icon}</div>
+        <div class="name">${s.name}</div>
+        <div class="status ${statusClass}">${statusText}</div>
+      </div>
+    `;
   }).join('');
 }
 
-function miniDrift(d){const dr=d?.drift||{};return m('倾向','frugal=保守 · spend=探索 · drift=随性')+m('当前',dr.direction||'?')+m('稳定性',dr.stability||'?');}
-function miniToolGuard(d){const s=(d||{}).summary||{};return m('观测次数',s.total_observed||0)+m('阻断次数',s.total_blocked||0,'r')+m('强制中止',s.total_halted||0,'r');}
-function miniUsers(d){const u=(d||{}).users||[];return u.slice(0,4).map(x=>`<div class="metric"><span class="l">${x.tier_icon} ${x.name}</span><span class="v" style="font-size:0.65rem">${x.tier_label}${x.persona_status==='active'?' · 画像OK':''}</span></div>`).join('')||'<div class="empty">加载中</div>';}
-function miniModules(d){const mods=(d||{}).modules||{};return m('模块总数',mods.total_modules||0,'g')+m('代码总行数',mods.total_lines||0);}
-function miniTimeline(d){const e=((d||{}).entries||[]).slice(0,8);return e.length?e.map(x=>`<div class="tl-line"><span class="ts">${(x.timestamp||'').slice(11,19)}</span><span class="tp">${(x.event_type||'?').slice(0,14)}</span><span class="bd">${(x.summary||'').slice(0,80)}</span></div>`).join(''):'<div class="empty">暂无事件</div>';}
+function updateTimeline(timeline) {
+  const container = document.getElementById('timeline-list');
+  const entries = timeline?.entries || [];
 
-// ── Welcome card ──
-function buildWelcome(d){
-  if(!d||!d.available){document.getElementById('greet-line').innerHTML='你好，<span class="name">holyty</span> 👑';document.getElementById('traits-bar').innerHTML='<span class="trait drift">画像学习尚未开始——继续对话即可自动激活</span>';return;}
-  const layers=d.layers||{},proto=layers.protocol||{},kernel=layers.kernel||{};
-  document.getElementById('greet-line').innerHTML='你好，<span class="name">holyty</span> 👑';
-  const traits=[];
-  if(proto.style)traits.push(`<span class="trait style">沟通: ${proto.style}</span>`);
-  (kernel.core_values||[]).slice(0,3).forEach(v=>traits.push(`<span class="trait value">${v}</span>`));
-  if(d.drift)traits.push(`<span class="trait drift">倾向: ${d.drift.direction||'?'}</span>`);
-  traits.push(`<span class="trait" style="background:var(--surface-alt);color:var(--text-dim)">${d.total_grains||0} 条对话已学习</span>`);
-  document.getElementById('traits-bar').innerHTML=traits.join('');
+  document.getElementById('timeline-count').textContent = `${entries.length} 条`;
+
+  container.innerHTML = entries.slice(0, 20).map(entry => {
+    const time = (entry.timestamp || '').slice(11, 19);
+    const type = (entry.event_type || '?').slice(0, 12);
+    const desc = (entry.summary || '').slice(0, 60);
+
+    return `
+      <div class="timeline-entry">
+        <span class="timeline-time">${time}</span>
+        <span class="timeline-type">${type}</span>
+        <span class="timeline-desc">${desc}</span>
+      </div>
+    `;
+  }).join('') || '<div style="text-align:center;color:var(--text-dim);padding:20px">暂无活动记录</div>';
 }
 
-// ── Modal ──
-const MOD={
-  persona:{t:'🧬 你的画像 · PHOENIX 对你的理解',e:'<strong>这不是你填的表格，是 PHOENIX 从对话中自动学会的。</strong>每次对话自动摄入沙粒，积累≥10条后画像激活。四层信息——你会用什么技术、对什么感兴趣、怎么沟通最舒服、做决策的模式。',r:()=>{
-    const d=D.persona;if(!d||!d.available)return'<div class="empty">画像尚未激活。继续正常对话，PHOENIX 会自动学习。大约需要10条消息。</div>';
-    return`<pre style="font-size:0.72rem;max-height:380px;overflow-y:auto;background:var(--surface-alt);padding:14px;border-radius:6px;white-space:pre-wrap;font-family:var(--font)">${d.persona||''}</pre>`;
-  },a:'<button class="btn primary" onclick="act(\'persona/rebuild\',{})">强制重建画像 (分析全部对话)</button>'},
-  senses:{t:'👁️ 系统感知 · 7个自检指标',e:'<strong>PHOENIX 的自我监测系统。</strong>就像人的感官——O2感知上下文是否快满了，Nociception感觉是否在连续犯错，Drift检测话题是否跑偏了。绿色=正常，黄色=注意，红色=需要干预。',r:()=>{
-    const s=D.status?.senses||{};const names={o2:'O2 上下文压力——token快用完时会警告',nociception:'痛觉 错误感知——连续3次同样错误会阻断',drift:'漂移 话题偏离——跑题超过30%会提醒',echo:'回声 重复检测——同样模式重复3次会强制换策略',chronos:'时间 节奏——空闲>5分钟会检查是否卡住',spatial:'空间 文件感知——一次改>5个文件会提醒',vestibular:'平衡 工具多样性——80%只用一种工具会提醒'};
-    return Object.entries(s).map(([n,v])=>{let c='g';if(v.trend==='alert')c='r';else if(v.trend==='warn')c='w';return`<div style="margin:6px 0;padding:10px;background:var(--surface-alt);border-radius:6px"><strong style="color:var(--accent)">${n}</strong> <span class="s-dot ${c}">${v.state||'ok'}</span>${v.trend?` <span style="font-size:0.62rem;color:var(--text-dim)">趋势:${v.trend}</span>`:''}<br><span style="font-size:0.7rem;color:var(--text-dim)">${names[n]||''}</span></div>`;}).join('');
-  },a:''},
-  drift:{t:'📈 决策趋势 · 你在怎么变',e:'<strong>追踪的不是你是什么样，而是你在怎么变。</strong>frugal=倾向保守/本地/免费方案。spend=愿意投入/尝试新工具/付费。drift=随性/看情况。稳定性告诉你决策是否一致——波动大可能意味着在尝试新方向。',r:()=>{
-    const d=D.persona?.drift||{};const h=d.history||[];
-    return m('当前方向',d.direction||'?')+m('稳定性',d.stability||'?')+m('趋势斜率',(d.trend_slope||0).toFixed(3))+'<h4 style="margin-top:12px;color:var(--text-dim)">每日变化</h4>'+(h.filter(x=>x.total_signals>0).map(x=>`<div class="metric"><span class="l">${x.date}</span><span class="v">${x.drift_score>0?'+':''}${x.drift_score} (${x.total_signals}条)</span></div>`).join('')||'<div class="empty">积累更多对话后会显示每日变化趋势</div>');
-  },a:'<button class="btn primary" onclick="act(\'drift/recalc\',{})">重新计算30天趋势</button>'},
-  toolguard:{t:'🛡️ 安全防护 · 防止卡死',e:'<strong>PHOENIX 的自动刹车系统。</strong>当检测到同一个工具调用反复失败，会先警告、再阻断、最后强制中止——避免浪费 token 和时间。三种检测：精确失败(同一操作反复失败)、同工具失败(某个工具整体不可用)、无进展(读文件每次都返回一样的结果，说明在兜圈)。',r:()=>{
-    const d=D.toolguard||{},s=d.summary||{},a=d.alerts||{};let ah='';
-    for(const[k,v]of Object.entries(a.exact_failures||{}))ah+=`<div style="padding:6px 10px;margin:3px 0;background:rgba(247,118,142,.08);border-left:2px solid var(--red);border-radius:3px;font-size:0.72rem">🔁 ${k.split(':')[0]} 同一操作连续失败 ${v} 次</div>`;
-    for(const[k,v]of Object.entries(a.tool_failures||{}))ah+=`<div style="padding:6px 10px;margin:3px 0;background:rgba(224,175,104,.08);border-left:2px solid var(--yellow);border-radius:3px;font-size:0.72rem">⚠️ ${k} 连续失败 ${v} 次</div>`;
-    return m('总观测','已检查 '+((s.total_observed||0))+' 次工具调用')+m('警告',s.total_warned||0,'w')+m('阻断',s.total_blocked||0,'r')+m('中止',s.total_halted||0,'r')+'<h4 style="margin-top:12px;color:var(--text-dim)">活跃警报</h4>'+(ah||'<div class="empty">✅ 一切正常，没有警报</div>');
-  },a:'<button class="btn danger" onclick="if(confirm(\"确定重置所有计数器？\"))act(\'tool-guard/reset\',{tool:\'all\'})">重置所有计数器</button>'},
-  users:{t:'👥 团队成员',e:'<strong>三层体系，自动升级。</strong>创始人(👑 holyty + PHOENIX)有全部权限且不可降级。新成员注册从使用者(🌱)起步，积累≥10条对话沙粒后自动升级为合伙人(⭐)并获得完整画像功能。',r:()=>{
-    const u=D.users?.users||[];
-    return u.map(x=>`<div style="padding:10px;margin:4px 0;background:var(--surface-alt);border-radius:6px;display:flex;justify-content:space-between;align-items:center"><div><strong>${x.tier_icon} ${x.name}</strong> <span style="font-size:0.65rem;color:var(--text-dim);margin-left:6px">${x.tier_label}</span>${x.persona_status==='active'?' <span style="font-size:0.6rem;color:var(--green)">画像已激活</span>':''}</div><div style="font-size:0.68rem;color:var(--text-dim)">${x.total_grains||0} 条对话</div></div>`).join('')+'<div class="empty" style="margin-top:8px;font-size:0.65rem">注册新成员: <code>python3 user_manager.py register &lt;名字&gt; user</code></div>';
-  },a:''},
-  modules:{t:'🧩 系统模块',e:'<strong>PHOENIX 由12个模块组成，全部用 Python 标准库编写，零外部依赖。</strong>每个模块独立可测试。',r:()=>{
-    const mods=D.modules?.modules||{};const descs={'tool-guard':'工具循环防护','skill-registry':'技能依赖管理','nexsandglass':'四层记忆引擎','policy-engine':'策略引擎','timeline':'执行时间线','server':'HTTP API服务器','inspector':'系统巡检','event-bus':'事件总线'};
-    return Object.entries(mods).map(([n,m])=>`<div class="metric"><span class="l">${n}</span><span class="v" style="font-size:0.7rem">${m.lines}行 · ${descs[n]||m.summary||''}</span></div>`).join('');
-  },a:''},
-  timeline:{t:'📜 最近活动',e:'<strong>PHOENIX 的完整操作记录。</strong>每一次会话、每一次工具调用、每一次自愈、每一次进化——都有时间戳。按类型筛选，按关键词搜索。',r:()=>{
-    const e=D.timeline?.entries||[];
-    return`<div style="margin-bottom:10px;display:flex;gap:8px"><input type="text" id="tl-q" placeholder="搜索事件..." style="flex:1;background:var(--surface-alt);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:0.72rem" oninput="fTL()"><select id="tl-t" onchange="fTL()" style="background:var(--surface-alt);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:0.72rem"><option value="">全部</option><option value="session">会话</option><option value="tool">工具</option><option value="heal">自愈</option><option value="sense">感知</option><option value="evolution">进化</option></select></div><div id="tl-all">${e.slice(0,30).map(x=>`<div class="tl-line"><span class="ts">${(x.timestamp||'').slice(0,19)}</span><span class="tp">${x.event_type||'?'}</span><span class="bd">${(x.summary||'').slice(0,100)}</span></div>`).join('')||'<div class="empty">暂无事件</div>'}</div>`;
-  },a:''}
-};
+function updateToolGuard(toolGuard) {
+  const history = toolGuard?.history || [];
+  const summary = toolGuard?.summary || {};
 
-function openModal(k){const c=MOD[k];if(!c)return;document.getElementById('mo-title').textContent=c.t;document.getElementById('mo-body').innerHTML=`<div class="explain">${c.e}</div>${c.r()}`;document.getElementById('mo-actions').innerHTML=c.a||'';document.getElementById('mo').classList.add('open')}
-function closeM(e){if(e&&e.target!==document.getElementById('mo'))return;document.getElementById('mo').classList.remove('open')}
-function fTL(){const q=(document.getElementById('tl-q')?.value||'').toLowerCase();const t=(document.getElementById('tl-t')?.value||'');const e=D.timeline?.entries||[];const f=e.filter(x=>{const et=x.event_type||'';if(t&&!et.startsWith(t))return false;if(q){const s=(x.summary||'')+JSON.stringify(x.payload||{});if(!s.toLowerCase().includes(q))return false;}return true});document.getElementById('tl-all').innerHTML=f.slice(0,50).map(x=>`<div class="tl-line"><span class="ts">${(x.timestamp||'').slice(0,19)}</span><span class="tp">${x.event_type||'?'}</span><span class="bd">${(x.summary||'').slice(0,100)}</span></div>`).join('')||'<div class="empty">无匹配事件</div>'}
+  // Status badge
+  const statusEl = document.getElementById('guard-status');
+  const blocked = summary.total_blocked || 0;
+  const halted = summary.total_halted || 0;
 
-// ── Load: data first, then SSE ──
-function load(){
-  setConn(false,'加载中...');
-  var count=0,total=7;
-  function done(){
-    count++;if(count>=total){
-      document.getElementById('refresh-label').textContent='更新于 '+new Date().toLocaleTimeString('zh-CN');
-      setConn(true,'PHOENIX 引擎已连接');
-    }
+  if (halted > 0) {
+    statusEl.textContent = '有阻断';
+    statusEl.style.background = 'rgba(247,118,142,.15)';
+    statusEl.style.color = 'var(--red)';
+  } else if (blocked > 0) {
+    statusEl.textContent = '有警告';
+    statusEl.style.background = 'rgba(224,175,104,.15)';
+    statusEl.style.color = 'var(--yellow)';
+  } else {
+    statusEl.textContent = '正常';
+    statusEl.style.background = 'rgba(158,206,106,.15)';
+    statusEl.style.color = 'var(--green)';
   }
-  fetchJSON('/api/status',function(d){D.status=d;try{buildWelcome(D.persona||{})}catch(e){};try{document.getElementById('senses-mini').innerHTML=miniSenses(d||{})}catch(e){};done()});
-  fetchJSON('/api/modules',function(d){D.modules=d;try{document.getElementById('modules-mini').innerHTML=miniModules(d||{})}catch(e){};done()});
-  fetchJSON('/api/timeline?limit=20',function(d){D.timeline=d;try{document.getElementById('timeline-mini').innerHTML=miniTimeline(d||{})}catch(e){};done()});
-  fetchJSON('/api/persona',function(d){D.persona=d;try{buildWelcome(d||{});document.getElementById('persona-mini').innerHTML=miniPersona(d||{})}catch(e){};done()});
-  fetchJSON('/api/tool-guard',function(d){D.toolguard=d;try{document.getElementById('toolguard-mini').innerHTML=miniToolGuard(d||{})}catch(e){};done()});
-  fetchJSON('/api/skills',function(d){D.skills=d;done()});
-  fetchJSON('/api/users',function(d){D.users=d;try{document.getElementById('users-mini').innerHTML=miniUsers(d||{})}catch(e){};done()});
+
+  // Recent warnings
+  const warnings = history
+    .filter(e => e.status === 'warn' || e.status === 'blocked')
+    .slice(-5);
+
+  document.getElementById('guard-warnings').innerHTML = warnings.length > 0
+    ? warnings.map(w => `
+      <div style="padding:4px 8px;margin:2px 0;background:rgba(247,118,142,.05);border-radius:4px;border-left:2px solid var(--red)">
+        ${w.tool || '?'} - ${w.status}
+      </div>
+    `).join('')
+    : '<div style="color:var(--text-dim)">无警告</div>';
+
+  // Tool health
+  const toolHealth = {};
+  history.forEach(entry => {
+    const tool = entry.tool || 'unknown';
+    if (!toolHealth[tool]) toolHealth[tool] = { total: 0, errors: 0 };
+    toolHealth[tool].total++;
+    if (entry.status === 'blocked' || entry.status === 'halted') {
+      toolHealth[tool].errors++;
+    }
+  });
+
+  const healthHTML = Object.entries(toolHealth)
+    .sort((a, b) => b[1].total - a[1].total)
+    .slice(0, 5)
+    .map(([tool, stats]) => {
+      const errorRate = (stats.errors / stats.total * 100).toFixed(0);
+      const color = errorRate > 10 ? 'var(--red)' : errorRate > 5 ? 'var(--yellow)' : 'var(--green)';
+      return `
+        <div style="display:flex;justify-content:space-between;padding:3px 0">
+          <span>${tool}</span>
+          <span style="color:${color}">${errorRate}% 错误</span>
+        </div>
+      `;
+    }).join('');
+
+  document.getElementById('guard-health').innerHTML = healthHTML || '<div style="color:var(--text-dim)">无数据</div>';
+
+  // Stats
+  document.getElementById('guard-stats').innerHTML = `
+    <div style="margin-bottom:4px">总观测: <strong>${summary.total_observed || 0}</strong></div>
+    <div style="margin-bottom:4px">警告: <strong style="color:var(--yellow)">${summary.total_warned || 0}</strong></div>
+    <div style="margin-bottom:4px">阻断: <strong style="color:var(--red)">${summary.total_blocked || 0}</strong></div>
+    <div>中止: <strong style="color:var(--red)">${summary.total_halted || 0}</strong></div>
+  `;
 }
 
-load();
-setInterval(load,30000);
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeM()});
+// ── Update Persona ──
+function updatePersona(persona) {
+  const contentEl = document.getElementById('persona-content');
+  const statusEl = document.getElementById('persona-status');
+
+  if (!persona || !persona.available) {
+    contentEl.innerHTML = `
+      <div style="text-align:center;color:var(--text-dim);padding:20px">
+        <div style="font-size:1.5rem;margin-bottom:8px">🧬</div>
+        <div>画像尚未激活</div>
+        <div style="font-size:0.7rem;margin-top:4px">需要更多对话来学习你的偏好（约 10 条消息）</div>
+      </div>
+    `;
+    statusEl.textContent = '未激活';
+    statusEl.style.color = 'var(--text-dim)';
+    return;
+  }
+
+  statusEl.textContent = '已激活';
+  statusEl.style.color = 'var(--green)';
+
+  const personaText = persona.persona || '';
+  const drift = persona.drift || {};
+  const grains = persona.total_grains || 0;
+
+  // Parse persona layers
+  const layers = [];
+  const lines = personaText.split('\n');
+  let currentLayer = null;
+  let currentContent = [];
+
+  lines.forEach(line => {
+    if (line.startsWith('## ')) {
+      if (currentLayer) {
+        layers.push({ title: currentLayer, content: currentContent.join('\n') });
+      }
+      currentLayer = line.replace('## ', '').trim();
+      currentContent = [];
+    } else if (line.trim()) {
+      currentContent.push(line);
+    }
+  });
+
+  if (currentLayer) {
+    layers.push({ title: currentLayer, content: currentContent.join('\n') });
+  }
+
+  // Build HTML
+  let html = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:8px;background:var(--surface-alt);border-radius:6px">
+      <div>
+        <span style="font-size:0.75rem;color:var(--text-dim)">已学习</span>
+        <span style="font-size:1.2rem;font-weight:700;color:var(--accent);margin-left:6px">${grains}</span>
+        <span style="font-size:0.75rem;color:var(--text-dim);margin-left:4px">条对话</span>
+      </div>
+      <div>
+        <span style="font-size:0.75rem;color:var(--text-dim)">决策倾向:</span>
+        <span style="font-size:0.85rem;font-weight:600;color:var(--accent-alt);margin-left:4px">${drift.direction || '未知'}</span>
+      </div>
+    </div>
+  `;
+
+  if (layers.length > 0) {
+    html += layers.slice(0, 4).map(layer => `
+      <div class="layer">
+        <div class="layer-title">${layer.title}</div>
+        <div class="layer-content">${layer.content.slice(0, 200)}${layer.content.length > 200 ? '...' : ''}</div>
+      </div>
+    `).join('');
+  } else {
+    html += `
+      <div style="font-size:0.72rem;color:var(--text-dim);white-space:pre-wrap;max-height:200px;overflow-y:auto">
+        ${personaText.slice(0, 500)}${personaText.length > 500 ? '...' : ''}
+      </div>
+    `;
+  }
+
+  contentEl.innerHTML = html;
+}
+
+// ── Update Team Members ──
+function updateTeamMembers(users, personaAll) {
+  const gridEl = document.getElementById('team-grid');
+  const countEl = document.getElementById('team-count');
+
+  if (!users || !users.users) {
+    gridEl.innerHTML = '<div style="text-align:center;color:var(--text-dim);padding:20px;grid-column:1/-1">加载中...</div>';
+    return;
+  }
+
+  const members = users.users;
+  countEl.textContent = `${members.length} 人`;
+
+  const personas = personaAll?.personas || {};
+  const canViewAll = personaAll?.can_view_all || false;
+
+  gridEl.innerHTML = members.map(member => {
+    const tierClass = member.tier || 'user';
+    const personaData = personas[member.id] || {};
+    const personaActive = member.persona_status === 'active';
+    const privacyBlocked = personaData.privacy_blocked || false;
+
+    let personaPreview = '';
+
+    if (privacyBlocked) {
+      personaPreview = `
+        <div class="persona-preview">
+          <div style="font-size:0.65rem;color:var(--text-dim);text-align:center">
+            🔒 仅创始人可查看其他成员画像
+          </div>
+        </div>
+      `;
+    } else if (personaActive && personaData.available) {
+      const personaText = personaData.persona || '';
+      personaPreview = `
+        <div class="persona-preview">
+          <div style="font-size:0.65rem;color:var(--accent);margin-bottom:4px">画像预览</div>
+          ${personaText.slice(0, 150)}${personaText.length > 150 ? '...' : ''}
+        </div>
+      `;
+    } else if (!personaActive) {
+      personaPreview = `
+        <div class="persona-preview">
+          <div style="font-size:0.65rem;color:var(--text-dim);text-align:center">
+            画像未激活
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="member-card">
+        <div class="member-header">
+          <div class="member-name">
+            <span>${member.tier_icon}</span>
+            <span>${member.name}</span>
+            ${member.id === 'holyty-founder' ? '<span style="font-size:0.6rem;color:var(--accent)">(你)</span>' : ''}
+          </div>
+          <span class="member-tier ${tierClass}">${member.tier_label}</span>
+        </div>
+        <div style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px">
+          ${member.description || ''}
+        </div>
+        <div class="member-stats">
+          <div class="member-stat">
+            <strong>${member.total_grains || 0}</strong> 条对话
+          </div>
+          <div class="member-stat">
+            画像: <strong style="color:${personaActive ? 'var(--green)' : 'var(--text-dim)'}">${personaActive ? '已激活' : '未激活'}</strong>
+          </div>
+        </div>
+        ${personaPreview}
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Rebuild Persona ──
+async function rebuildPersona() {
+  if (!confirm('确定要强制重建画像吗？这将分析所有对话数据。')) return;
+
+  try {
+    const result = await fetch(API_BASE + '/api/persona/rebuild', { method: 'POST' });
+    const data = await result.json();
+
+    if (data.status === 'ok') {
+      toast('画像重建完成，共分析 ' + data.grains + ' 条对话');
+      // Reload data
+      load();
+    } else {
+      toast('重建失败: ' + (data.message || '未知错误'), false);
+    }
+  } catch (e) {
+    toast('重建失败: ' + e.message, false);
+  }
+}
+
+// ── Main Load ──
+async function load() {
+  try {
+    setConn(false, '加载数据中...');
+
+    const [toolGuard, timeline, status, senses, persona, users, personaAll, models] = await Promise.all([
+      fetchJSON('/api/tool-guard'),
+      fetchJSON('/api/timeline?limit=200'),
+      fetchJSON('/api/status'),
+      fetchJSON('/api/status'),
+      fetchJSON('/api/persona'),
+      fetchJSON('/api/users'),
+      fetchJSON('/api/persona/all?user_id=holyty-founder&tier=founder'),
+      fetchJSON('/api/models')
+    ]);
+
+    DATA.toolGuard = toolGuard;
+    DATA.timeline = timeline;
+    DATA.status = status;
+    DATA.senses = senses;
+    DATA.persona = persona;
+    DATA.users = users;
+    DATA.personaAll = personaAll;
+    DATA.models = models;
+
+    // Update charts
+    updateToolUsageChart(toolGuard);
+    updateActivityChart(timeline);
+    updateSenseRadar(senses);
+    updateErrorChart(toolGuard);
+    updateEventPie(timeline);
+
+    // Update UI
+    updateStats(toolGuard, timeline, status);
+    updateSenseGrid(senses);
+    updateTimeline(timeline);
+    updateToolGuard(toolGuard);
+    updateToolGuardDetail(toolGuard);
+    updateModelConfig(models);
+
+    // Update persona and team
+    updatePersona(persona);
+    updateTeamMembers(users, personaAll);
+
+    setConn(true, 'PHOENIX 引擎已连接');
+  } catch (e) {
+    console.error('Load error:', e);
+    setConn(false, '加载失败: ' + e.message);
+  }
+}
+
+// ── Initialize ──
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    initCharts();
+    load();
+    setInterval(load, 30000); // Refresh every 30 seconds
+  } catch (e) {
+    console.error('Initialization error:', e);
+    setConn(false, '初始化错误: ' + e.message);
+  }
+});
 </script>
 </body>
 </html>
