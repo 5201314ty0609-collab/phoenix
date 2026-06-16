@@ -1,4 +1,5 @@
 {
+  "trace_event": "file_churn",
   "status": "normal",
   "last_updated": "2026-06-06T09:07:42.384500+00:00",
   "metrics": {

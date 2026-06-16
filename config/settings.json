@@ -1,0 +1,135 @@
+{
+  "version": "1.0.0",
+  "llm": {
+    "provider": "xiaomi",
+    "model": "mimo-v2.5-pro",
+    "base_url": "https://token-plan-cn.xiaomimimo.com/v1",
+    "anthropic_base_url": "https://token-plan-cn.xiaomimimo.com/anthropic",
+    "max_tokens": 4096,
+    "temperature": 0.7,
+    "top_p": 1.0,
+    "stream": true,
+    "timeout": 120,
+    "retry_count": 3,
+    "retry_delay": 2.0,
+    "auto_select_model": false,
+    "fallback_model": "mimo-v2.5",
+    "fast_model": "mimo-v2-flash"
+  },
+  "context": {
+    "max_tokens": 128000,
+    "system_reserve": 4000,
+    "response_reserve": 8000,
+    "safety_margin": 2000,
+    "sprint_warn_threshold": 0.85,
+    "sprint_force_threshold": 0.9,
+    "normal_warn_threshold": 0.7,
+    "normal_force_threshold": 0.85,
+    "proactive_clear_threshold": 0.2,
+    "compress_target_ratio": 0.5,
+    "keep_recent_turns": 8,
+    "tool_output_max_chars": 2000,
+    "inject_memory": true,
+    "inject_project_rules": true,
+    "inject_soul_shadow": true,
+    "memory_budget_tokens": 3000,
+    "sprint_mode": true
+  },
+  "agent": {
+    "enabled": true,
+    "max_concurrent": 5,
+    "default_timeout": 300,
+    "worktree_isolation": false,
+    "agents": {
+      "planner": "planner",
+      "architect": "architect",
+      "code-reviewer": "code-reviewer",
+      "security-reviewer": "security-reviewer",
+      "tdd-guide": "tdd-guide",
+      "build-error-resolver": "build-error-resolver",
+      "deep-research": "deep-research-agent"
+    },
+    "auto_trigger": {
+      "after_code_write": [
+        "code-reviewer"
+      ],
+      "before_commit": [
+        "security-reviewer"
+      ],
+      "on_build_failure": [
+        "build-error-resolver"
+      ],
+      "complex_feature": [
+        "planner"
+      ]
+    }
+  },
+  "metacog": {
+    "enabled": true,
+    "monitor_interval_seconds": 10,
+    "o2_warn_ratio": 0.7,
+    "o2_critical_ratio": 0.85,
+    "nociception_cascade_window": 5,
+    "nociception_critical_count": 5,
+    "chronos_idle_minutes": 5,
+    "spatial_file_churn_limit": 5,
+    "vestibular_diversity_min": 0.2,
+    "echo_repeat_limit": 3,
+    "drift_deviation_limit": 0.3,
+    "auto_compact_on_critical": true,
+    "auto_pause_on_cascade": true,
+    "auto_notify_on_warning": false
+  },
+  "recovery": {
+    "enabled": true,
+    "max_total_retries": 10,
+    "circuit_breaker_enabled": true,
+    "circuit_breaker_threshold": 5,
+    "circuit_breaker_timeout": 60.0,
+    "transient_max_retries": 4,
+    "network_max_retries": 3,
+    "resource_max_retries": 2,
+    "logic_max_retries": 2,
+    "context_max_retries": 3,
+    "backoff_base": 1.0,
+    "backoff_max": 30.0,
+    "jitter_enabled": true
+  },
+  "memory": {
+    "enabled": true,
+    "db_path": "/Users/holyty/.claude/phoenix/knowledge-base.db",
+    "fts_enabled": true,
+    "auto_sync": true,
+    "auto_extract": true,
+    "auto_consolidate": true,
+    "max_facts": 200,
+    "max_context_chars": 12000
+  },
+  "evolution": {
+    "enabled": true,
+    "min_observations": 10,
+    "promotion_confidence": 0.6,
+    "promotion_success_rate": 0.7,
+    "hardening_confidence": 0.9,
+    "hardening_observations": 50,
+    "auto_amend": false
+  },
+  "display": {
+    "theme": "phoenix",
+    "language": "zh",
+    "stream_output": true,
+    "show_tool_output": true,
+    "max_tool_output_lines": 10,
+    "show_stats_on_complete": true,
+    "compact_mode": false
+  },
+  "policy": {
+    "enabled": true,
+    "audit_log": true,
+    "max_audit_entries": 1000,
+    "require_approval_for_destructive": true,
+    "auto_approve_safe_tools": true,
+    "allowed_tools_extra": [],
+    "blocked_tools": []
+  }
+}

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """PHOENIX Server API 测试"""
 
+from pathlib import Path
 import json
 import sys
 import time
-import urllib.request
 import urllib.error
-from pathlib import Path
+import urllib.request
+
 from threading import Thread
 
 sys.path.insert(0, str(Path.home() / ".claude" / "phoenix"))
-from server import PhoenixHandler, PHOENIX_HOME, PORT
 
 PASS, FAIL = 0, 0
 

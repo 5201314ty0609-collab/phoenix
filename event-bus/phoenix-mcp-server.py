@@ -12,11 +12,10 @@ Register in Hermes:
   hermes mcp add phoenix --command python3 --args ".../phoenix-mcp-server.py"
 """
 
+from pathlib import Path
 import json
-import os
 import subprocess
 import sys
-from pathlib import Path
 
 PHOENIX_HOME = Path.home() / ".claude/phoenix"
 KNOWLEDGE_GRAPH = Path.home() / ".claude/skills/phoenix/scripts/knowledge-graph.py"

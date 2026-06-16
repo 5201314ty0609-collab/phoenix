@@ -24,18 +24,17 @@ Usage:
   nexsandglass.py stats
 """
 
+from collections import defaultdict
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
 import hashlib
 import json
 import re
 import sqlite3
 import sys
 import time
-from collections import defaultdict
-from contextlib import contextmanager
-from dataclasses import dataclass, field
-from datetime import datetime, timezone, timedelta
-from pathlib import Path
-from typing import Optional
 
 # ── Paths ──────────────────────────────────────────────────────────────────
 PHOENIX_HOME = Path.home() / ".claude" / "phoenix"

@@ -22,14 +22,13 @@ Endpoints:
 Security: strips api_key, token, secret, password, auth, credential, bearer from all output.
 """
 
+from pathlib import Path
 import json
-import os
 import subprocess
 import sys
 import time
-from datetime import datetime, timezone, timedelta
+
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from pathlib import Path
 
 PHOENIX_HOME = Path.home() / ".claude/phoenix"
 KNOWLEDGE_GRAPH = Path.home() / ".claude/skills/phoenix/scripts/knowledge-graph.py"

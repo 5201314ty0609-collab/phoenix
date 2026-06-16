@@ -21,11 +21,11 @@ Usage:
   skill-registry.py init <name>                      为技能生成 skill.json 模板
 """
 
-import json
-import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
+import json
+import sys
 
 # ── Paths ──────────────────────────────────────────────────────────────────
 SKILLS_DIR = Path.home() / ".claude" / "skills"

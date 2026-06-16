@@ -10,11 +10,11 @@ Usage (in settings.json hook):
   python3 ~/.claude/phoenix/hooks/auto-ingest.py
 """
 
+from datetime import datetime, timezone
+from pathlib import Path
 import json
 import sys
 import time
-from datetime import datetime, timezone
-from pathlib import Path
 
 PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
 sys.path.insert(0, str(PHOENIX_HOME))

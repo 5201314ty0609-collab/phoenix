@@ -1,0 +1,114 @@
+{
+  "trace": {
+    "id": "sess-20260616-162750",
+    "name": "PHOENIX Session sess-20260616-162750",
+    "userId": "phoenix-agent",
+    "sessionId": "sess-20260616-162750",
+    "timestamp": "2026-06-16T16:27:50.961123+00:00",
+    "metadata": {
+      "overall_health": 100.0,
+      "sense_count": 7,
+      "tags": [],
+      "framework": "PHOENIX v1.2.0",
+      "observability_version": "1.0.0"
+    },
+    "tags": [
+      "phoenix",
+      "7-sense",
+      "metacognition"
+    ]
+  },
+  "observations": [
+    {
+      "name": "token_pressure",
+      "type": "EVENT",
+      "startTime": "2026-06-16T16:27:50.961123+00:00",
+      "level": "DEFAULT",
+      "statusMessage": "O2 (Vitality): normal (value=21.0)",
+      "metadata": {
+        "sense_id": "O2 (Vitality)",
+        "value": 21.0,
+        "status": "normal",
+        "unit": "percent"
+      }
+    },
+    {
+      "name": "error_cascade",
+      "type": "EVENT",
+      "startTime": "2026-06-16T16:27:50.964180+00:00",
+      "level": "DEFAULT",
+      "statusMessage": "Nociception (Pain): normal (value=0.0)",
+      "metadata": {
+        "sense_id": "Nociception (Pain)",
+        "value": 0.0,
+        "status": "normal",
+        "unit": "errors_per_window"
+      }
+    },
+    {
+      "name": "session_pacing",
+      "type": "EVENT",
+      "startTime": "2026-06-16T16:27:50.966802+00:00",
+      "level": "DEFAULT",
+      "statusMessage": "Chronos (Time): normal (value=0.0)",
+      "metadata": {
+        "sense_id": "Chronos (Time)",
+        "value": 0.0,
+        "status": "normal",
+        "unit": "idle_seconds"
+      }
+    },
+    {
+      "name": "file_churn",
+      "type": "EVENT",
+      "startTime": "2026-06-16T16:27:50.968772+00:00",
+      "level": "DEFAULT",
+      "statusMessage": "Spatial (Workspace): normal (value=0.4)",
+      "metadata": {
+        "sense_id": "Spatial (Workspace)",
+        "value": 0.4,
+        "status": "normal",
+        "unit": "files_per_call"
+      }
+    },
+    {
+      "name": "tool_diversity",
+      "type": "EVENT",
+      "startTime": "2026-06-16T16:27:50.970998+00:00",
+      "level": "DEFAULT",
+      "statusMessage": "Vestibular (Balance): normal (value=46.7)",
+      "metadata": {
+        "sense_id": "Vestibular (Balance)",
+        "value": 46.7,
+        "status": "normal",
+        "unit": "dominant_percent"
+      }
+    },
+    {
+      "name": "pattern_recurrence",
+      "type": "EVENT",
+      "startTime": "2026-06-16T16:27:50.973167+00:00",
+      "level": "DEFAULT",
+      "statusMessage": "Echo (Repetition): normal (value=0.0)",
+      "metadata": {
+        "sense_id": "Echo (Repetition)",
+        "value": 0.0,
+        "status": "normal",
+        "unit": "repeated_signatures"
+      }
+    },
+    {
+      "name": "focus_deviation",
+      "type": "EVENT",
+      "startTime": "2026-06-16T16:27:50.975299+00:00",
+      "level": "DEFAULT",
+      "statusMessage": "Drift (Focus): normal (value=0.0)",
+      "metadata": {
+        "sense_id": "Drift (Focus)",
+        "value": 0.0,
+        "status": "normal",
+        "unit": "deviation_percent"
+      }
+    }
+  ]
+}

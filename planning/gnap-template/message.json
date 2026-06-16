@@ -1,0 +1,54 @@
+{
+  "$schema": "https://phoenix.local/gnap/message.schema.json",
+  "$description": "GNAP Message — Run 内的单条消息记录，支持 replay/debug",
+  "template": {
+    "message_id": "string (required) — unique, typically run_id-seq",
+    "run_id": "string (required) — parent run",
+    "sequence": "integer — message order within run, starts at 1",
+    "role": "string — system | user | assistant | tool",
+    "content": "string — message content (may be truncated for long tool outputs)",
+    "tool_calls": [
+      {
+        "tool_name": "string",
+        "tool_input": "object",
+        "tool_output": "string — truncated if >10KB",
+        "duration_ms": "integer",
+        "error": "string — null if success"
+      }
+    ],
+    "metadata": {
+      "tokens": {
+        "input": "integer",
+        "output": "integer"
+      },
+      "model": "string",
+      "latency_ms": "integer"
+    },
+    "created_at": "string — ISO8601"
+  },
+  "example": {
+    "message_id": "run-code-reviewer-001-003",
+    "run_id": "run-code-reviewer-001",
+    "sequence": 3,
+    "role": "assistant",
+    "content": "Found a CRITICAL SQL injection vulnerability in login.ts line 45. The query uses string concatenation instead of parameterized queries.",
+    "tool_calls": [
+      {
+        "tool_name": "Read",
+        "tool_input": {"file_path": "src/auth/login.ts", "offset": 40, "limit": 20},
+        "tool_output": "45: const query = \"SELECT * FROM users WHERE email = '\" + email + \"'\";\n...",
+        "duration_ms": 150,
+        "error": null
+      }
+    ],
+    "metadata": {
+      "tokens": {
+        "input": 3500,
+        "output": 280
+      },
+      "model": "mimo-v2.5-pro",
+      "latency_ms": 1200
+    },
+    "created_at": "2026-06-17T00:02:15Z"
+  }
+}

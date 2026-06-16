@@ -4,12 +4,13 @@ PHOENIX Web Server — 独立 HTTP API + 仪表盘
 Pure Python stdlib. Zero dependencies.
 
 Endpoints:
-  GET  /                  PHOENIX Dashboard
+  GET  /                  PHOENIX Dashboard (基础视图)
+  GET  /viz               PHOENIX Visualization Dashboard (可视化控制台)
   GET  /api/status        System health + 7-Sense + drift
   GET  /api/modules       Module inventory
   GET  /api/timeline      Recent timeline (query: ?limit=20&type=X)
   GET  /api/persona       NexSandglass persona
-  GET  /api/tool-guard    Tool guard alerts
+  GET  /api/tool-guard    Tool guard alerts + history
   GET  /api/skills        Skill registry stats
   GET  /api/events        Event bus stats
 
@@ -17,10 +18,10 @@ Usage:
   python3 server.py [--port 8765] [--host 0.0.0.0]
 """
 
-import json
-import os
-import sys
 from datetime import datetime, timezone
+import json
+import sys
+
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 
@@ -29,12 +30,12 @@ class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
     """多线程 HTTP 服务器——支持 SSE 长连接不阻塞其他请求"""
     daemon_threads = True
 from pathlib import Path
-from typing import Optional
 from urllib.parse import urlparse, parse_qs
 
 PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
 sys.path.insert(0, str(PHOENIX_HOME))
 DASHBOARD_FILE = PHOENIX_HOME / "dashboard.html"
+DASHBOARD_VIZ_FILE = PHOENIX_HOME / "dashboard-viz.html"
 PORT = 8765
 HOST = "127.0.0.1"
 
@@ -59,7 +60,7 @@ def api_status() -> dict:
             try:
                 sense = json.loads(f.read_text())
                 senses[f.stem] = {
-                    "state": sense.get("state", "unknown"),
+                    "state": sense.get("status", sense.get("state", "unknown")),
                     "trend": sense.get("trend", ""),
                 }
             except (json.JSONDecodeError, OSError):
@@ -185,10 +186,111 @@ def api_persona() -> dict:
     return result
 
 
+def api_persona_all(params: dict = None) -> dict:
+    """获取所有用户画像（创始人可查看所有，其他用户只能查看自己）
+
+    Query params:
+        user_id: 当前用户 ID（用于权限检查）
+        tier: 当前用户层级（用于权限检查）
+    """
+    params = params or {}
+    current_user_id = params.get("user_id", ["holyty-founder"])[0]
+    current_tier = params.get("tier", ["user"])[0]
+
+    # Load users using UserManager
+    try:
+        from user_manager import UserManager
+        mgr = UserManager()
+        users_list = mgr.list_all()
+    except Exception:
+        users_list = []
+
+    # Determine what the current user can see
+    is_founder = current_tier == "founder" or current_user_id == "holyty-founder"
+
+    result = {
+        "current_user_id": current_user_id,
+        "current_tier": current_tier,
+        "can_view_all": is_founder,
+        "personas": {}
+    }
+
+    # For each user, load their persona if allowed
+    for user in users_list:
+        user_id = user.get("id", "")
+
+        # Check if we can view this user's persona
+        if not is_founder and user_id != current_user_id:
+            # Non-founders can only see themselves
+            result["personas"][user_id] = {
+                "available": False,
+                "privacy_blocked": True,
+                "message": "仅创始人可查看其他成员画像"
+            }
+            continue
+
+        # Load persona for this user
+        # For now, we only have one persona file (for holyty-founder)
+        # In a multi-user system, each user would have their own persona file
+        if user_id == "holyty-founder":
+            persona_file = PHOENIX_HOME / "nexsandglass" / "persona.md"
+            drift_file = PHOENIX_HOME / "nexsandglass" / "drift.json"
+            sand_db = PHOENIX_HOME / "nexsandglass" / "sand.db"
+
+            persona_data = {"available": False}
+
+            if persona_file.exists():
+                try:
+                    persona_data["persona"] = persona_file.read_text()[:3000]
+                    persona_data["available"] = True
+                except OSError:
+                    pass
+
+            if drift_file.exists():
+                try:
+                    drift = json.loads(drift_file.read_text())
+                    persona_data["drift"] = {
+                        "direction": drift.get("current_direction"),
+                        "stability": drift.get("stability"),
+                        "history": drift.get("history", [])[-7:],
+                    }
+                except (json.JSONDecodeError, OSError):
+                    pass
+
+            # Grain count
+            if sand_db.exists():
+                import sqlite3
+                try:
+                    db = sqlite3.connect(str(sand_db))
+                    count = db.execute("SELECT COUNT(*) FROM sand").fetchone()[0]
+                    db.close()
+                    persona_data["total_grains"] = count
+                except Exception:
+                    pass
+
+            result["personas"][user_id] = persona_data
+        else:
+            # For other users, check if they have a persona file
+            user_persona_file = PHOENIX_HOME / "nexsandglass" / f"persona-{user_id}.md"
+            if user_persona_file.exists():
+                try:
+                    result["personas"][user_id] = {
+                        "available": True,
+                        "persona": user_persona_file.read_text()[:3000]
+                    }
+                except OSError:
+                    result["personas"][user_id] = {"available": False}
+            else:
+                result["personas"][user_id] = {"available": False}
+
+    return result
+
+
 def api_tool_guard() -> dict:
     """工具防护状态"""
     state_file = PHOENIX_HOME / "tool-guard-state.json"
     config_file = PHOENIX_HOME / "tool-guard-config.json"
+    history_file = PHOENIX_HOME / "tool-guard-history.jsonl"
 
     result = {}
     if state_file.exists():
@@ -217,6 +319,21 @@ def api_tool_guard() -> dict:
             config = json.loads(config_file.read_text())
             result["thresholds"] = config.get("thresholds", {})
         except (json.JSONDecodeError, OSError):
+            pass
+
+    # Load history for visualization
+    if history_file.exists():
+        try:
+            history = []
+            with open(history_file) as f:
+                for line in f:
+                    if line.strip():
+                        try:
+                            history.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            pass
+            result["history"] = history[-500:]  # Last 500 entries
+        except OSError:
             pass
 
     return result
@@ -388,6 +505,81 @@ def api_sense_detail(params: dict) -> dict:
     return {"error": "sense not found"}
 
 
+def api_models(params: dict = None) -> dict:
+    """模型配置信息"""
+    settings_file = Path.home() / ".claude" / "settings.json"
+
+    result = {
+        "current": {},
+        "available": [],
+        "env_vars": {}
+    }
+
+    if settings_file.exists():
+        try:
+            settings = json.loads(settings_file.read_text())
+            env = settings.get("env", {})
+
+            result["current"] = {
+                "model": env.get("ANTHROPIC_MODEL", ""),
+                "haiku": env.get("ANTHROPIC_DEFAULT_HAIKU_MODEL", ""),
+                "sonnet": env.get("ANTHROPIC_DEFAULT_SONNET_MODEL", ""),
+                "opus": env.get("ANTHROPIC_DEFAULT_OPUS_MODEL", ""),
+                "base_url": env.get("ANTHROPIC_BASE_URL", ""),
+                "effort_level": env.get("CLAUDE_CODE_EFFORT_LEVEL", "default")
+            }
+
+            result["env_vars"] = env
+
+            # 检查代理状态
+            base_url = env.get("ANTHROPIC_BASE_URL", "")
+            if "127.0.0.1" in base_url or "localhost" in base_url:
+                result["proxy"] = {
+                    "enabled": True,
+                    "url": base_url,
+                    "status": "local"
+                }
+            else:
+                result["proxy"] = {
+                    "enabled": False,
+                    "url": base_url,
+                    "status": "direct"
+                }
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # 加载可用预设
+    result["presets"] = {
+        "mimo": {"name": "MiMo (小米)", "model": "mimo-v2.5-pro"},
+        "mimo-1m": {"name": "MiMo 1M (大上下文)", "model": "mimo-v2.5-pro[1M]"},
+        "deepseek": {"name": "DeepSeek V4 Pro", "model": "deepseek-v4-pro"},
+        "claude": {"name": "Claude (Anthropic)", "model": "claude-sonnet-4-6"},
+        "proxy": {"name": "Local Proxy (Token 追踪)", "model": "proxy"}
+    }
+
+    return result
+
+
+def api_model_list(params: dict = None) -> dict:
+    """列出可用模型（只读）"""
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "phoenix_model", PHOENIX_HOME / "phoenix-model.py"
+        )
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        manager = mod.ModelManager()
+
+        return {
+            "current": manager.get_current(),
+            "models": manager.list_models(),
+            "presets": mod.PRESETS
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
 # ── SSE (Server-Sent Events) ─────────────────────────────────────────────
 
 # SSE 客户端列表：每个客户端是一个 queue
@@ -462,6 +654,7 @@ GET_ROUTES = {
     "/api/modules": api_modules,
     "/api/timeline": api_timeline,
     "/api/persona": api_persona,
+    "/api/persona/all": api_persona_all,
     "/api/tool-guard": api_tool_guard,
     "/api/skills": api_skills,
     "/api/events": api_events,
@@ -469,6 +662,8 @@ GET_ROUTES = {
     "/api/sense/detail": api_sense_detail,
     "/api/stream": api_stream,
     "/api/users": api_users,
+    "/api/models": api_models,
+    "/api/model/list": api_model_list,
 }
 
 POST_ROUTES = {
@@ -529,7 +724,7 @@ class PhoenixHandler(BaseHTTPRequestHandler):
         if path in GET_ROUTES:
             handler = GET_ROUTES[path]
             is_sse = (path == "/api/stream")
-            if path in ("/api/timeline", "/api/timeline/detail", "/api/sense/detail"):
+            if path in ("/api/timeline", "/api/timeline/detail", "/api/sense/detail", "/api/persona/all", "/api/models"):
                 return handler(params), is_sse
             return handler(), is_sse
         return None, False
@@ -552,6 +747,31 @@ class PhoenixHandler(BaseHTTPRequestHandler):
                 except OSError:
                     pass
             self._send_html("<h1>PHOENIX Dashboard</h1><p>Dashboard file not found.</p>")
+            return
+
+        # Visualization Dashboard
+        if path == "/viz" or path == "/dashboard-viz":
+            if DASHBOARD_VIZ_FILE.exists():
+                try:
+                    html = DASHBOARD_VIZ_FILE.read_text()
+                    self._send_html(html)
+                    return
+                except OSError:
+                    pass
+            self._send_html("<h1>PHOENIX Visualization Dashboard</h1><p>Dashboard file not found.</p>")
+            return
+
+        # Test Dashboard
+        test_file = PHOENIX_HOME / "test-dashboard.html"
+        if path == "/test" or path == "/test-dashboard.html":
+            if test_file.exists():
+                try:
+                    html = test_file.read_text()
+                    self._send_html(html)
+                    return
+                except OSError:
+                    pass
+            self._send_html("<h1>Test Dashboard</h1><p>File not found.</p>")
             return
 
         # API routes

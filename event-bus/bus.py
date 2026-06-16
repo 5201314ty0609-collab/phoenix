@@ -13,15 +13,13 @@ Usage:
   bus.py bridge --hermes|--mundo    Run bridge adapter
 """
 
+from pathlib import Path
 import hashlib
 import json
 import os
 import re
 import sys
 import time
-from datetime import datetime, timezone, timedelta
-from pathlib import Path
-from typing import Optional
 
 # ── Paths ────────────────────────────────────────────────────────────────
 BUS_DIR = Path.home() / ".claude/phoenix/event-bus"

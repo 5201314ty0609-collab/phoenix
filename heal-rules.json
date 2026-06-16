@@ -1,79 +1,73 @@
 {
-  "tool_timeout": {
-    "pattern": "timeout|timed out|TimeoutError",
-    "action": "increase_timeout",
-    "description": "工具调用超时 → 增加 timeout 参数",
-    "escalation": 2,
-    "escalation_observations": 0,
-    "confidence": 0.5,
-    "success_count": 0,
-    "fail_count": 0,
-    "last_used": "2026-06-11T04:03:56.507487+00:00"
+  "_version": "2.0.0",
+  "_upgraded_from": "v1.0.0 (7 static regex rules)",
+  "_upgraded_to": "v2.0.0 (6 error categories + 9 recovery strategies + confidence scoring)",
+  "_source": "Absorbed from MUNDO Agent v2.2.3 intelligent_recovery.py (LiHongwei-cn)",
+  "_module": "intelligent_recovery.py",
+
+  "categories": {
+    "transient": {
+      "description": "瞬时错误（超时、限流、503）",
+      "default_strategy": "retry_backoff",
+      "escalation_threshold": 5,
+      "examples": ["timeout", "429 rate limit", "503 service unavailable"]
+    },
+    "resource": {
+      "description": "资源不足（内存、token、配额）",
+      "default_strategy": "compress_context",
+      "escalation_threshold": 3,
+      "examples": ["out of memory", "quota exceeded", "token limit"]
+    },
+    "permission": {
+      "description": "权限不足（401/403）",
+      "default_strategy": "ask_user",
+      "escalation_threshold": 1,
+      "examples": ["401 unauthorized", "403 forbidden", "EACCES"]
+    },
+    "network": {
+      "description": "网络问题（DNS、连接中断）",
+      "default_strategy": "switch_endpoint",
+      "escalation_threshold": 3,
+      "examples": ["connection refused", "DNS resolution", "broken pipe"]
+    },
+    "logic": {
+      "description": "逻辑错误（工具失败、参数错误）",
+      "default_strategy": "switch_tool",
+      "escalation_threshold": 3,
+      "examples": ["file not found", "type error", "invalid argument"]
+    },
+    "context": {
+      "description": "上下文溢出",
+      "default_strategy": "compress_context",
+      "escalation_threshold": 2,
+      "examples": ["context window exceeded", "prompt too long"]
+    }
   },
-  "api_rate_limit": {
-    "pattern": "rate.limit|429|too many requests",
-    "action": "backoff_retry",
-    "description": "API 限流 → 指数退避重试",
-    "escalation": 1,
-    "escalation_observations": 0,
-    "confidence": 0.5,
-    "success_count": 0,
-    "fail_count": 0,
-    "last_used": null
+
+  "strategies": {
+    "retry_immediate": {"description": "立即重试", "cost": "low", "success_rate_estimate": 0.6},
+    "retry_backoff": {"description": "指数退避重试+抖动", "cost": "medium", "success_rate_estimate": 0.8},
+    "retry_variation": {"description": "改变参数重试", "cost": "medium", "success_rate_estimate": 0.5},
+    "switch_endpoint": {"description": "切换API端点", "cost": "low", "success_rate_estimate": 0.7},
+    "switch_model": {"description": "切换模型（PHOENIX特有）", "cost": "high", "success_rate_estimate": 0.9},
+    "compress_context": {"description": "压缩上下文", "cost": "medium", "success_rate_estimate": 0.85},
+    "degrade_quality": {"description": "降级质量", "cost": "medium", "success_rate_estimate": 0.7},
+    "ask_user": {"description": "询问用户", "cost": "high", "success_rate_estimate": 1.0},
+    "switch_tool": {"description": "切换工具", "cost": "medium", "success_rate_estimate": 0.6},
+    "abort": {"description": "中止任务", "cost": "terminal", "success_rate_estimate": 0.0}
   },
-  "context_overflow": {
-    "pattern": "context.*length|token.*limit|context.*window",
-    "action": "force_compact",
-    "description": "上下文溢出 → 强制压缩",
-    "escalation": 1,
-    "escalation_observations": 0,
-    "confidence": 0.5,
-    "success_count": 0,
-    "fail_count": 0,
-    "last_used": null
+
+  "circuit_breaker": {
+    "enabled": true,
+    "default_failure_threshold": 5,
+    "default_recovery_timeout_seconds": 60,
+    "default_half_open_max": 2
   },
-  "file_not_found": {
-    "pattern": "No such file|FileNotFoundError|ENOENT",
-    "action": "search_and_suggest",
-    "description": "文件未找到 → 搜索替代路径",
-    "escalation": 1,
-    "escalation_observations": 0,
-    "confidence": 0.3,
-    "success_count": 0,
-    "fail_count": 0,
-    "last_used": null
-  },
-  "import_error": {
-    "pattern": "ModuleNotFoundError|ImportError|No module named",
-    "action": "suggest_install",
-    "description": "模块缺失 → 建议 pip/npm install",
-    "escalation": 1,
-    "escalation_observations": 0,
-    "confidence": 0.3,
-    "success_count": 0,
-    "fail_count": 0,
-    "last_used": null
-  },
-  "permission_denied": {
-    "pattern": "Permission denied|EACCES|not permitted",
-    "action": "suggest_sudo_or_chmod",
-    "description": "权限拒绝 → 建议 chmod 或检查权限",
-    "escalation": 1,
-    "escalation_observations": 0,
-    "confidence": 0.3,
-    "success_count": 0,
-    "fail_count": 0,
-    "last_used": null
-  },
-  "connection_refused": {
-    "pattern": "Connection refused|ECONNREFUSED|could not connect",
-    "action": "retry_with_delay",
-    "description": "连接拒绝 → 等待后重试",
-    "escalation": 1,
-    "escalation_observations": 0,
-    "confidence": 0.5,
-    "success_count": 0,
-    "fail_count": 0,
-    "last_used": null
+
+  "nociception_integration": {
+    "cascade_window_minutes": 5,
+    "healthy_threshold": 2,
+    "warning_threshold": 4,
+    "critical_threshold": 5
   }
 }

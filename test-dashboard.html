@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Test</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+body { font-family: monospace; background: #1a1b26; color: #c0caf5; padding: 20px; }
+.ok { color: #9ece6a; }
+.err { color: #f7768e; }
+</style>
+</head>
+<body>
+<h1>PHOENIX Dashboard Debug</h1>
+<div id="output"></div>
+
+<script>
+const out = document.getElementById('output');
+function log(msg, cls = '') {
+  const d = document.createElement('div');
+  d.className = cls;
+  d.textContent = new Date().toLocaleTimeString() + ' ' + msg;
+  out.appendChild(d);
+}
+
+async function test() {
+  log('Testing Chart.js...', '');
+  try {
+    const c = new Chart(document.createElement('canvas'), {type:'bar',data:{labels:['a'],datasets:[{data:[1]}]}});
+    c.destroy();
+    log('✅ Chart.js OK', 'ok');
+  } catch(e) {
+    log('❌ Chart.js failed: ' + e.message, 'err');
+  }
+
+  const endpoints = [
+    '/api/status',
+    '/api/tool-guard',
+    '/api/tokens',
+    '/api/models',
+    '/api/persona',
+    '/api/users',
+    '/api/timeline?limit=10',
+    '/api/persona/all?user_id=holyty-founder&tier=founder'
+  ];
+
+  for (const ep of endpoints) {
+    try {
+      const r = await fetch(ep);
+      const d = await r.json();
+      log('✅ ' + ep + ' - OK', 'ok');
+    } catch(e) {
+      log('❌ ' + ep + ' - ' + e.message, 'err');
+    }
+  }
+
+  log('Test complete', '');
+}
+
+test();
+</script>
+</body>
+</html>

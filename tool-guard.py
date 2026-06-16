@@ -34,13 +34,12 @@ Hook 集成（settings.json）:
   }
 """
 
-import hashlib
-import json
-import sys
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Optional
+import hashlib
+import json
+import sys
 
 # ── Paths ──────────────────────────────────────────────────────────────────
 PHOENIX_HOME = Path.home() / ".claude" / "phoenix"

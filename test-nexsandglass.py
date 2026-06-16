@@ -9,10 +9,10 @@ PHOENIX NexSandglass 测试套件
   L4: 画像构建、四层扫描、交互协议生成
 """
 
-import json
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
+import json
+import sys
 
 # Import the module
 sys.path.insert(0, str(Path.home() / ".claude" / "phoenix"))

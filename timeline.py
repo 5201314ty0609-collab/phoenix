@@ -12,13 +12,10 @@ Usage:
   timeline.py record <type> <source> [--payload '{}']
 """
 
+from pathlib import Path
 import json
-import os
 import sqlite3
 import sys
-from datetime import datetime, timezone, timedelta
-from pathlib import Path
-from typing import Optional
 
 PHOENIX_HOME = Path.home() / ".claude/phoenix"
 TIMELINE_DB = PHOENIX_HOME / "timeline.db"

@@ -11,12 +11,10 @@ Usage:
   policy-engine.py chains                              Show rule chains
 """
 
-import json
-import os
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+import json
+import sys
 
 PHOENIX_HOME = Path.home() / ".claude/phoenix"
 RULES_FILE = PHOENIX_HOME / "policy-rules.json"

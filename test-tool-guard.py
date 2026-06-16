@@ -8,10 +8,10 @@ PHOENIX Tool Guard 测试套件
   3. 无进展: ALLOW → WARN(2) → BLOCK(4) → HALT(6)
 """
 
+from pathlib import Path
 import json
 import subprocess
 import sys
-from pathlib import Path
 
 GUARD = Path.home() / ".claude/phoenix/tool-guard.py"
 PASS = 0

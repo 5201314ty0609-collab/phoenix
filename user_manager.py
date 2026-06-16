@@ -17,11 +17,11 @@ Usage:
   user_manager.py promote <user_id>      手动升级
 """
 
-import json
-import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+import json
+import sys
 
 PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
 USERS_FILE = PHOENIX_HOME / "users.json"

@@ -12,10 +12,10 @@ PHOENIX Skill Registry 测试套件
   7. 孤立技能识别
 """
 
+from pathlib import Path
 import json
 import subprocess
 import sys
-from pathlib import Path
 
 REGISTRY = Path.home() / ".claude/phoenix/skill-registry.py"
 PASS = 0
@@ -114,7 +114,6 @@ else:
 print("\n═══ 测试5: 循环依赖检测 ═══")
 
 # Create a temporary circular dependency
-import tempfile, os
 with tempfile.TemporaryDirectory() as tmpdir:
     # Skill A depends on B
     a_dir = Path(tmpdir) / "skill-a"

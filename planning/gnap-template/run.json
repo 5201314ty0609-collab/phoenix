@@ -1,0 +1,60 @@
+{
+  "$schema": "https://phoenix.local/gnap/run.schema.json",
+  "$description": "GNAP Run — 单次任务执行记录，一个 Task 可以有多个 Run（重试）",
+  "template": {
+    "run_id": "string (required) — unique run identifier",
+    "task_id": "string (required) — parent task",
+    "agent_id": "string (required) — executing agent",
+    "attempt_number": "integer — starts at 1",
+    "status": "string — pending | running | completed | failed | timeout | cancelled",
+    "started_at": "string — ISO8601",
+    "finished_at": "string — ISO8601",
+    "duration_seconds": "number — wall clock duration",
+    "parent_run": "string — parent run_id for nested runs",
+    "lock_file": "string — path to coordination lock",
+    "metrics": {
+      "tokens_used": "integer",
+      "tool_calls": "integer",
+      "errors": "integer",
+      "files_changed": "integer",
+      "coverage_pct": "number"
+    },
+    "result": {
+      "summary": "string — human-readable result",
+      "exit_code": "integer — 0 for success",
+      "output_files": ["array of produced file paths"],
+      "artifacts": ["array of artifact URLs/paths"]
+    },
+    "error": {
+      "message": "string — error description if failed",
+      "stack_trace": "string — full error trace",
+      "recoverable": "boolean — can retry?"
+    }
+  },
+  "example": {
+    "run_id": "run-code-reviewer-001",
+    "task_id": "task-review-auth-module",
+    "agent_id": "code-reviewer",
+    "attempt_number": 1,
+    "status": "completed",
+    "started_at": "2026-06-17T00:01:00Z",
+    "finished_at": "2026-06-17T00:03:30Z",
+    "duration_seconds": 150,
+    "parent_run": null,
+    "lock_file": ".gnap/locks/task-review-auth-module.lock",
+    "metrics": {
+      "tokens_used": 12500,
+      "tool_calls": 8,
+      "errors": 0,
+      "files_changed": 3,
+      "coverage_pct": 85.5
+    },
+    "result": {
+      "summary": "Auth module review complete. Found 1 CRITICAL (SQL injection), 2 HIGH, 5 MEDIUM.",
+      "exit_code": 0,
+      "output_files": ["review_report.md", "severity_breakdown.json"],
+      "artifacts": []
+    },
+    "error": null
+  }
+}
