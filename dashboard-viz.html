@@ -323,9 +323,7 @@ function toast(msg,ok){ const t=document.getElementById('toast');t.textContent=m
 // INIT
 // ═══════════════════════════════════════════════
 async function init(){
-  // First render with fallback data
-  buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
-  // Then fetch real data directly (same as refresh)
+  // Fetch real data FIRST, then render
   try{
     const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),3000);
     const r=await fetch(SERVER+'/api/stats',{signal:ctrl.signal});
@@ -338,13 +336,14 @@ async function init(){
       if(s.tool_usage) data.toolUsage=s.tool_usage;
       if(s.waste) data.wasteBreakdown=s.waste;
       if(s.module_list) data.moduleList=s.module_list;
-      buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
       setConnStatus('ok','live @ :8765');
       document.getElementById('footer-mode').textContent='Live Server';
       serverConnected=true;
-      toast('已连接 PHOENIX 服务器 / Connected','ok');
     }else{ setConnStatus('err','离线 / offline'); }
   }catch(e){ setConnStatus('err','离线 / offline'); }
+  // Render with whatever data we have (API or FALLBACK)
+  buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
+  if(serverConnected) toast('已连接 PHOENIX 服务器 / Connected','ok');
   refreshTimer=setInterval(refresh, serverConnected?10000:30000);
 }
 async function refresh(){
