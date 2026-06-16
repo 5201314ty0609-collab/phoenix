@@ -479,6 +479,49 @@ def api_stats() -> dict:
     except Exception:
         result["health_score"] = 0
 
+    # Waste breakdown analysis
+    waste = {}
+    total_calls = result.get("tool_calls", 0)
+    tool_usage = result.get("tool_usage", {})
+
+    # 1. Ghost skills: skills loaded but rarely/never invoked
+    try:
+        skills_dir = Path.home() / ".claude" / "skills"
+        if skills_dir.exists():
+            total_skills = len([d for d in skills_dir.iterdir() if d.is_dir() and (d / "SKILL.md").exists()])
+            # Skills referenced in tool usage are "active"
+            active_skills = sum(1 for k in tool_usage if k not in ("Bash", "Read", "Write", "Edit", "WebFetch", "WebSearch", "Agent", "TaskCreate", "TaskUpdate", "StructuredOutput"))
+            ghost = max(total_skills - active_skills, 0)
+            waste["ghost_skills"] = ghost
+    except Exception:
+        waste["ghost_skills"] = 0
+
+    # 2. Repeated context: Read calls that might be redundant
+    read_calls = tool_usage.get("Read", 0)
+    write_calls = tool_usage.get("Write", 0) + tool_usage.get("Edit", 0)
+    if read_calls > 0 and write_calls > 0:
+        # High read-to-write ratio suggests potential repeated reads
+        ratio = read_calls / max(write_calls, 1)
+        waste["repeated_context"] = max(int((ratio - 1.5) * 10), 0) if ratio > 1.5 else 0
+    else:
+        waste["repeated_context"] = 0
+
+    # 3. Tool imbalance: one tool dominates
+    if tool_usage:
+        max_tool = max(tool_usage.values())
+        dominant_pct = max_tool / max(total_calls, 1) * 100
+        waste["tool_imbalance"] = max(int(dominant_pct - 40), 0) if dominant_pct > 50 else 0
+    else:
+        waste["tool_imbalance"] = 0
+
+    # 4. Blocked attempts = direct waste
+    waste["blocked_attempts"] = result.get("blocked", 0)
+
+    # 5. Other waste (heuristic)
+    waste["other"] = max(total_calls // 100, 1) if total_calls > 0 else 0
+
+    result["waste"] = waste
+
     return result
 
 

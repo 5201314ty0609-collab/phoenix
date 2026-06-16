@@ -153,6 +153,7 @@ const FALLBACK = {
   toolCalls:1330, blocked:33,
   frameworks_active:26, hooks:8,
   toolUsage:{Bash:644,Edit:189,Read:182,WebFetch:172,Write:52,TaskUpdate:37,WebSearch:22,TaskCreate:17,Agent:4},
+  wasteBreakdown:{ghost_skills:5,repeated_context:0,tool_imbalance:24,blocked_attempts:33,other:13},
   senseStates:[
     {id:'o2',name:'O2 生命力/Vitality',icon:'🫁',val:12,status:'healthy',color:'green'},
     {id:'nociception',name:'痛觉/Nociception',icon:'💢',val:8,status:'healthy',color:'green'},
@@ -233,6 +234,9 @@ function applyLiveData(live){
     data.hooks = s.hooks || 0;
     if(s.tool_usage && Object.keys(s.tool_usage).length > 0){
       data.toolUsage = s.tool_usage;
+    }
+    if(s.waste && Object.keys(s.waste).length > 0){
+      data.wasteBreakdown = s.waste;
     }
   }
 
