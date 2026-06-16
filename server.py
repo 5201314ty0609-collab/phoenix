@@ -36,6 +36,7 @@ PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
 sys.path.insert(0, str(PHOENIX_HOME))
 DASHBOARD_FILE = PHOENIX_HOME / "dashboard.html"
 DASHBOARD_VIZ_FILE = PHOENIX_HOME / "dashboard-viz.html"
+INDEX_FILE = PHOENIX_HOME / "index.html"
 PORT = 8765
 HOST = "127.0.0.1"
 
@@ -737,8 +738,21 @@ class PhoenixHandler(BaseHTTPRequestHandler):
         path = parsed.path.rstrip("/") or "/"
         params = parse_qs(parsed.query)
 
-        # Dashboard
-        if path == "/" or path == "/dashboard":
+        # Landing page
+        if path == "/":
+            for html_file in [INDEX_FILE, DASHBOARD_FILE]:
+                if html_file.exists():
+                    try:
+                        html = html_file.read_text()
+                        self._send_html(html)
+                        return
+                    except OSError:
+                        pass
+            self._send_html("<h1>PHOENIX</h1><p>v1.3.0 — Self-Evolving Agent Harness</p>")
+            return
+
+        # Simple Dashboard
+        if path == "/dashboard":
             if DASHBOARD_FILE.exists():
                 try:
                     html = DASHBOARD_FILE.read_text()
