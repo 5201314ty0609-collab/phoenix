@@ -65,10 +65,10 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 <body>
 
 <div class="header">
-  <h1>PHOENIX Live Monitor</h1>
+  <h1>PHOENIX 实时监控 <span style="font-weight:400;color:var(--text-dim);font-size:0.65em">/ Live Monitor</span></h1>
   <div style="display:flex;align-items:center;gap:20px">
-    <a href="index.html" style="color:var(--text-dim);text-decoration:none;font-size:0.78rem">Home</a>
-    <a href="dashboard.html" style="color:var(--text-dim);text-decoration:none;font-size:0.78rem">Dashboard</a>
+    <a href="index.html" style="color:var(--text-dim);text-decoration:none;font-size:0.78rem">首页</a>
+    <a href="dashboard.html" style="color:var(--text-dim);text-decoration:none;font-size:0.78rem">仪表盘</a>
     <div class="conn">
     <span class="dot warn" id="conn-dot"></span>
     <span id="conn-text" style="font-family:var(--mono);font-size:0.72rem">detecting...</span>
@@ -78,28 +78,28 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 
 <!-- KPI Row 1 -->
 <div class="stats">
-  <div class="stat-card"><div class="num c-accent" id="kpi-modules">35</div><div class="label">引擎模块</div></div>
-  <div class="stat-card"><div class="num c-green" id="kpi-rules">15</div><div class="label">规则文件</div></div>
-  <div class="stat-card"><div class="num c-purple" id="kpi-senses">7</div><div class="label">感知系统</div></div>
-  <div class="stat-card"><div class="num c-yellow" id="kpi-health">74</div><div class="label">健康评分 /100</div></div>
+  <div class="stat-card"><div class="num c-accent" id="kpi-modules">35</div><div class="label">引擎模块 / Engine Modules</div></div>
+  <div class="stat-card"><div class="num c-green" id="kpi-rules">15</div><div class="label">规则文件 / Rule Files</div></div>
+  <div class="stat-card"><div class="num c-purple" id="kpi-senses">7</div><div class="label">感知系统 / Sense Systems</div></div>
+  <div class="stat-card"><div class="num c-yellow" id="kpi-health">74</div><div class="label">健康评分 / Health Score</div></div>
 </div>
 
 <!-- KPI Row 2 -->
 <div class="stats">
-  <div class="stat-card"><div class="num c-accent" id="kpi-tools">3116</div><div class="label">工具调用总数</div></div>
-  <div class="stat-card"><div class="num c-green" id="kpi-cache">99.5%</div><div class="label">缓存命中率</div></div>
-  <div class="stat-card"><div class="num c-red" id="kpi-blocked">12</div><div class="label">阻断次数</div></div>
-  <div class="stat-card"><div class="num c-yellow" id="kpi-cost">85</div><div class="label">预估花费 $</div></div>
+  <div class="stat-card"><div class="num c-accent" id="kpi-tools">3116</div><div class="label">工具调用 / Tool Calls</div></div>
+  <div class="stat-card"><div class="num c-green" id="kpi-cache">99.5%</div><div class="label">缓存命中率 / Cache Hit</div></div>
+  <div class="stat-card"><div class="num c-red" id="kpi-blocked">12</div><div class="label">阻断次数 / Blocked</div></div>
+  <div class="stat-card"><div class="num c-yellow" id="kpi-cost">85</div><div class="label">预估花费 / Est. Cost $</div></div>
 </div>
 
 <!-- Charts Row 1 -->
 <div class="grid">
   <div class="card">
-    <h3>Tool Usage <span class="badge" id="badge-tools">Bash 44%</span></h3>
+    <h3>工具使用 / Tool Usage <span class="badge" id="badge-tools">Bash 44%</span></h3>
     <div class="chart-wrap"><canvas id="toolChart"></canvas></div>
   </div>
   <div class="card">
-    <h3>7-Sense Health Radar</h3>
+    <h3>七感雷达 / 7-Sense Radar</h3>
     <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
   </div>
 </div>
@@ -107,15 +107,15 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 <!-- Charts Row 2 -->
 <div class="grid grid-3">
   <div class="card">
-    <h3>Session Activity</h3>
+    <h3>会话活动 / Session Activity</h3>
     <div class="chart-wrap sm"><canvas id="sessionChart"></canvas></div>
   </div>
   <div class="card">
-    <h3>Error Rate Trend</h3>
+    <h3>错误率趋势 / Error Rate Trend</h3>
     <div class="chart-wrap sm"><canvas id="errorChart"></canvas></div>
   </div>
   <div class="card">
-    <h3>Waste Breakdown</h3>
+    <h3>浪费分析 / Waste Breakdown</h3>
     <div class="chart-wrap sm"><canvas id="wasteChart"></canvas></div>
   </div>
 </div>
@@ -123,25 +123,25 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 <!-- Seven Sense + Modules -->
 <div class="grid">
   <div class="card">
-    <h3>7-Sense Status <span class="badge">all healthy</span></h3>
+    <h3>七感状态 / 7-Sense Status <span class="badge">全部健康 all healthy</span></h3>
     <div class="sense-grid" id="sense-grid"></div>
   </div>
   <div class="card">
-    <h3>Core Modules <span class="badge" id="badge-modules">35 total</span></h3>
+    <h3>核心模块 / Core Modules <span class="badge" id="badge-modules">35 个 / total</span></h3>
     <div class="module-list" id="module-list"></div>
   </div>
 </div>
 
 <!-- Timeline -->
 <div class="card" style="margin-bottom:14px">
-  <h3>Recent Activity <span class="badge" id="badge-timeline">7 events</span></h3>
+  <h3>最近活动 / Recent Activity <span class="badge" id="badge-timeline">7 条 / events</span></h3>
   <div class="tbl">
-    <table><thead><tr><th>Time</th><th>Type</th><th>Description</th></tr></thead>
+    <table><thead><tr><th>时间 / Time</th><th>类型 / Type</th><th>描述 / Description</th></tr></thead>
     <tbody id="timeline-body"></tbody></table>
   </div>
 </div>
 
-<footer>PHOENIX v1.3.0 · <span id="footer-mode">GitHub Pages</span> · Auto-refresh: <span id="footer-refresh">30s</span></footer>
+<footer>PHOENIX v1.3.0 · <span id="footer-mode">GitHub Pages</span> · 自动刷新 / Auto-refresh: <span id="footer-refresh">30s</span></footer>
 <div id="toast" style="display:none"></div>
 
 <script>
@@ -154,13 +154,13 @@ const STATIC = {
   sessions:15,
   toolUsage:{Bash:1385,Edit:526,Read:480,Write:259,TaskUpdate:184,TaskCreate:95,WebFetch:83,Agent:37,WebSearch:37,Other:30},
   senseStates:[
-    {id:'o2',name:'O2 Vitality',icon:'🫁',val:12,status:'healthy',color:'green'},
-    {id:'nociception',name:'Nociception',icon:'💢',val:8,status:'healthy',color:'green'},
-    {id:'chronos',name:'Chronos',icon:'⏱️',val:5,status:'healthy',color:'green'},
-    {id:'spatial',name:'Spatial',icon:'📍',val:15,status:'healthy',color:'green'},
-    {id:'vestibular',name:'Vestibular',icon:'⚖️',val:22,status:'healthy',color:'green'},
-    {id:'echo',name:'Echo',icon:'🔁',val:3,status:'healthy',color:'green'},
-    {id:'drift',name:'Drift',icon:'🧭',val:6,status:'healthy',color:'green'}
+    {id:'o2',name:'O2 生命力/Vitality',icon:'🫁',val:12,status:'healthy',color:'green'},
+    {id:'nociception',name:'痛觉/Nociception',icon:'💢',val:8,status:'healthy',color:'green'},
+    {id:'chronos',name:'时间/Chronos',icon:'⏱️',val:5,status:'healthy',color:'green'},
+    {id:'spatial',name:'空间/Spatial',icon:'📍',val:15,status:'healthy',color:'green'},
+    {id:'vestibular',name:'平衡/Vestibular',icon:'⚖️',val:22,status:'healthy',color:'green'},
+    {id:'echo',name:'回响/Echo',icon:'🔁',val:3,status:'healthy',color:'green'},
+    {id:'drift',name:'漂移/Drift',icon:'🧭',val:6,status:'healthy',color:'green'}
   ],
   moduleList:[
     'intelligent_recovery','context_mapper','phoenix-bash-guard','phoenix-cost-tracker',
@@ -170,13 +170,13 @@ const STATIC = {
     'user_manager','inspector','event-bus/bus','event-bus/phoenix-mcp-server'
   ],
   timeline:[
-    {time:'2026-06-17 23:55',type:'deploy',desc:'Website redesigned with PHOENIX design system'},
-    {time:'2026-06-17 23:30',type:'optimize',desc:'Health C(63)→C(74): 30 skills disabled, formula updated'},
-    {time:'2026-06-17 22:00',type:'absorb',desc:'P2 complete: OMEGA memory + DSPy rules + GNAP coordination'},
-    {time:'2026-06-17 21:00',type:'absorb',desc:'P1 complete: Langfuse traces + hybrid KB + Midscene E2E'},
-    {time:'2026-06-17 19:30',type:'absorb',desc:'P0 complete: Kintsugi bash guard + CodeBurn + Tautest'},
-    {time:'2026-06-16 23:00',type:'absorb',desc:'Round 1: MUNDO + planning-with-files + UI UX Pro Max'},
-    {time:'2026-06-16 20:00',type:'research',desc:'Two-round GitHub deep search: 70+ projects evaluated'}
+    {time:'2026-06-17 23:55',type:'deploy',desc:'网站全面双语化——中文在前英文在后 / Full bilingual redesign'},
+    {time:'2026-06-17 23:30',type:'optimize',desc:'健康评分 C(63)→C(74): 禁用30个Skill + 公式更新 / Health score optimization'},
+    {time:'2026-06-17 22:00',type:'absorb',desc:'P2 完成: OMEGA 记忆 + DSPy 规则 + GNAP 协调 / P2 absorption'},
+    {time:'2026-06-17 21:00',type:'absorb',desc:'P1 完成: Langfuse 追踪 + 混合知识库 + Midscene E2E / P1 absorption'},
+    {time:'2026-06-17 19:30',type:'absorb',desc:'P0 完成: Kintsugi 安全门禁 + CodeBurn + Tautest / P0 absorption'},
+    {time:'2026-06-16 23:00',type:'absorb',desc:'第一轮: MUNDO + planning-with-files + UI UX Pro Max / Round 1'},
+    {time:'2026-06-16 20:00',type:'research',desc:'两轮 GitHub 深度搜索: 70+ 项目评估 / Deep research'}
   ],
   wasteBreakdown:{ghost_skills:45,repeated_context:25,low_ratio:15,tool_imbalance:10,other:5},
   sessionsByDay:{'06-14':1,'06-15':4,'06-16':7,'06-17':3},
@@ -195,10 +195,10 @@ function setConnStatus(state, text){
   const dot=document.getElementById('conn-dot'), txt=document.getElementById('conn-text');
   dot.className='dot '+state; txt.textContent=text;
   serverConnected = (state === 'ok');
-  document.getElementById('footer-refresh').textContent = serverConnected ? '10s (live)' : 'static';
+  document.getElementById('footer-refresh').textContent = serverConnected ? '10s (实时/live)' : '静态/static';
 }
 async function tryConnect(){
-  setConnStatus('warn','connecting...');
+  setConnStatus('warn','连接中... / connecting');
   try{
     const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),3000);
     const r=await fetch(SERVER+'/api/status',{signal:ctrl.signal});
@@ -206,7 +206,7 @@ async function tryConnect(){
       document.getElementById('conn-time').textContent=new Date(j.phoenix?.timestamp||Date.now()).toLocaleTimeString();
       document.getElementById('footer-mode').textContent='Live Server'; return true; }
   }catch(e){}
-  setConnStatus('err','static mode'); document.getElementById('footer-mode').textContent='GitHub Pages';
+  setConnStatus('err','静态模式 / static'); document.getElementById('footer-mode').textContent='GitHub Pages';
   return false;
 }
 async function fetchLive(){
@@ -299,7 +299,7 @@ async function init(){
         data.modules=live.modules.total_modules;
         document.getElementById('kpi-modules').textContent=data.modules;
       }
-      toast('Connected to PHOENIX server','ok');
+      toast('已连接 PHOENIX 服务器 / Connected','ok');
     }
   }
   refreshTimer=setInterval(refresh, serverConnected?10000:30000);
@@ -307,8 +307,8 @@ async function init(){
 async function refresh(){
   if(!serverConnected){ await tryConnect(); return; }
   const live=await fetchLive();
-  if(!live){ setConnStatus('warn','reconnecting...');serverConnected=false;buildAllCharts();return; }
-  setConnStatus('ok','live @ :8765');
+  if(!live){ setConnStatus('warn','重连中... / reconnecting');serverConnected=false;buildAllCharts();return; }
+  setConnStatus('ok','实时 / live @ :8765');
   document.getElementById('conn-time').textContent=new Date().toLocaleTimeString();
 }
 init();

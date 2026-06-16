@@ -97,7 +97,30 @@
     "c76437d97deebe62": 1,
     "8bb3f5e46602daa9": 1,
     "d322f81f3e114522": 1,
-    "77fef6d489479a57": 1
+    "77fef6d489479a57": 1,
+    "0cf946977363d4ce": 1,
+    "51845b5a4ba998d8": 1,
+    "d5ac8ad4ad8eb406": 1,
+    "de8df3ef008bbcae": 1,
+    "4c6ef46d030101ef": 1,
+    "d4f277b38de156f3": 1,
+    "3ca4612a86fb5438": 1,
+    "85dbdfc8047dfe6a": 1,
+    "291420559c20b878": 1,
+    "f44461e622fd6ff5": 1,
+    "c8082ac3cd1dd3f3": 1,
+    "7642c2644f3abd46": 1,
+    "484a9b1c025f8b63": 2,
+    "f47a21e807b364d3": 1,
+    "c698a2622a55b566": 1,
+    "1cadbb2d4eb8674f": 1,
+    "a370b08a22904c98": 1,
+    "b213eeba7860eedc": 1,
+    "0330e6272b782f7d": 1,
+    "fdef63c88ce27246": 1,
+    "6deef9d0364732cd": 1,
+    "a333e00f2f179c1d": 1,
+    "b1a2cb2ec4ef94f3": 1
   },
   "escalations": [
     {
@@ -155,11 +178,18 @@
       "to_tier": "DANGER",
       "attempts": 2,
       "timestamp": "2026-06-16T16:45:41.860536+00:00"
+    },
+    {
+      "cmd_hash": "484a9b1c025f8b63",
+      "from_tier": "CAUTION",
+      "to_tier": "DANGER",
+      "attempts": 2,
+      "timestamp": "2026-06-16T17:10:45.166066+00:00"
     }
   ],
-  "total_blocked": 13,
-  "total_warned": 88,
-  "total_allowed": 90,
+  "total_blocked": 14,
+  "total_warned": 111,
+  "total_allowed": 94,
   "created_at": "2026-06-16T16:17:11.481656+00:00",
-  "updated_at": "2026-06-16T17:01:22.054670+00:00"
+  "updated_at": "2026-06-16T17:17:12.962805+00:00"
 }

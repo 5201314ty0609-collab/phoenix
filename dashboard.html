@@ -6,8 +6,8 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>PHOENIX Dashboard — System Monitor</title>
-<meta name="description" content="PHOENIX system monitor: 7-sense status, module health, cost tracking, and evolution metrics.">
+<title>PHOENIX · 系统仪表盘 / System Monitor</title>
+<meta name="description" content="PHOENIX 系统监控：七感状态、模块健康、成本追踪与进化指标。7-sense status, module health, cost tracking, and evolution metrics.">
 <style>
   :root {
     --bg: #08080e; --surface: #111119; --surface-raised: #181824;
@@ -15,35 +15,32 @@
     --accent-glow: #f49e4240; --secondary: #c86b2c; --warm-dark: #2a2420;
     --border: #222228; --green: #4caf50; --red: #e05555; --amber: #f0a040;
     --radius: 10px; --radius-lg: 16px;
-    --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font: system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
     --mono: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --duration: 200ms;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 0.95rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
   .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
-
   .nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.5rem; max-width: 1120px; margin: 0 auto; }
   .nav-brand { font-weight: 700; font-size: 1.1rem; color: var(--accent); letter-spacing: 0.02em; text-decoration: none; }
   .nav-links { display: flex; gap: 1.5rem; align-items: center; }
   .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color var(--duration); }
   .nav-links a:hover { color: var(--text); }
-
   header { padding: 3rem 0 2rem; }
   header h1 { font-size: 1.8rem; font-weight: 750; letter-spacing: -0.015em; }
-  header p { color: var(--text-muted); margin-top: 0.3rem; }
-
+  header .sub { color: var(--text-muted); margin-top: 0.3rem; font-size: 0.9rem; }
   .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
   .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.3rem 1.5rem; }
   .kpi-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .kpi-label .en { opacity: 0.6; font-size: 0.65rem; text-transform: none; }
   .kpi-value { font-size: 2rem; font-weight: 800; margin-top: 0.2rem; line-height: 1; }
   .kpi-value.green { color: var(--green); } .kpi-value.amber { color: var(--amber); } .kpi-value.accent { color: var(--accent); }
   .kpi-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
-
   section { padding-bottom: 2.5rem; }
   section h2 { font-size: 1.2rem; font-weight: 650; margin-bottom: 1rem; letter-spacing: -0.01em; }
-
+  section h2 .en { font-weight: 400; color: var(--text-muted); font-size: 0.8em; }
   .sense-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
   .sense-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; transition: border-color var(--duration); }
   .sense-card:hover { border-color: rgba(244,158,66,0.25); }
@@ -53,7 +50,6 @@
   .sense-bar { height: 3px; border-radius: 3px; margin-top: 0.5rem; background: var(--border); overflow: hidden; }
   .sense-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s var(--ease-out); }
   .fill-green { background: var(--green); } .fill-amber { background: var(--amber); } .fill-accent { background: var(--accent); }
-
   .module-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
   .module-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1.2rem; display: flex; align-items: center; gap: 0.8rem; transition: border-color var(--duration); }
   .module-card:hover { border-color: rgba(244,158,66,0.25); }
@@ -61,16 +57,13 @@
   .dot-active { background: var(--green); } .dot-standby { background: var(--amber); }
   .module-name { font-weight: 600; font-size: 0.85rem; }
   .module-desc { font-size: 0.75rem; color: var(--text-muted); }
-
   .activity { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.3rem 1.5rem; }
   .activity-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.83rem; }
   .activity-row:last-child { border-bottom: none; }
-  .activity-time { color: var(--text-muted); font-family: var(--mono); font-size: 0.75rem; }
-  .activity-msg { color: var(--text); }
-
+  .activity-time { color: var(--text-muted); font-family: var(--mono); font-size: 0.75rem; flex-shrink: 0; }
+  .activity-msg { color: var(--text); flex: 1; margin-left: 1rem; }
   footer { border-top: 1px solid var(--border); padding: 2rem 0; text-align: center; color: var(--text-muted); font-size: 0.82rem; margin-top: 2rem; }
   footer a { color: var(--accent); text-decoration: none; }
-
   @media (max-width: 768px) {
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     .sense-grid { grid-template-columns: repeat(2, 1fr); }
@@ -85,10 +78,10 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/phoenix/" class="nav-brand">PHOENIX Dashboard</a>
+    <a href="/phoenix/" class="nav-brand">PHOENIX 仪表盘</a>
     <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="dashboard-viz.html">Live Monitor</a>
+      <a href="index.html">首页</a>
+      <a href="dashboard-viz.html">实时监控</a>
       <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a>
     </div>
   </div>
@@ -97,85 +90,78 @@
 <div class="container">
 
 <header>
-  <h1>System Monitor</h1>
-  <p>PHOENIX v1.3.0 · 35 modules · 15 rules · 7 senses · Last updated: 2026-06-17</p>
+  <h1>系统监控 <span style="font-weight:400;color:var(--text-muted);font-size:0.7em">/ System Monitor</span></h1>
+  <p class="sub">PHOENIX v1.3.0 · 35 个模块 · 15 条规则 · 7 个感知系统 · 更新于 2026-06-17 / 35 modules · 15 rules · 7 senses</p>
 </header>
 
 <div class="kpi-grid">
-  <div class="kpi"><div class="kpi-label">Health Score</div><div class="kpi-value amber">74 / 100</div><div class="kpi-sub">Grade C · Controllable metrics 75/75</div></div>
-  <div class="kpi"><div class="kpi-label">Cache Efficiency</div><div class="kpi-value green">99.5%</div><div class="kpi-sub">1.49B tokens saved via cache</div></div>
-  <div class="kpi"><div class="kpi-label">Skills Active</div><div class="kpi-value accent">37 / 67</div><div class="kpi-sub">30 disabled via skillOverrides</div></div>
-  <div class="kpi"><div class="kpi-label">Rules Archived</div><div class="kpi-value accent">6</div><div class="kpi-sub">Unused language rules removed</div></div>
+  <div class="kpi"><div class="kpi-label">健康评分<span class="en"> / Health Score</span></div><div class="kpi-value amber">74 / 100</div><div class="kpi-sub">C 级 · 可控指标 75/75 满分 / Controllable metrics maxed</div></div>
+  <div class="kpi"><div class="kpi-label">缓存效率<span class="en"> / Cache Efficiency</span></div><div class="kpi-value green">99.5%</div><div class="kpi-sub">1.49B tokens 通过缓存节省 / tokens saved via cache</div></div>
+  <div class="kpi"><div class="kpi-label">活跃 Skill<span class="en"> / Skills Active</span></div><div class="kpi-value accent">37 / 67</div><div class="kpi-sub">30 个已禁用 / 30 disabled via skillOverrides</div></div>
+  <div class="kpi"><div class="kpi-label">已归档规则<span class="en"> / Rules Archived</span></div><div class="kpi-value accent">6</div><div class="kpi-sub">未使用的语言规则已移除 / Unused language rules removed</div></div>
 </div>
 
 <section>
-  <h2>Seven-Sense Status</h2>
+  <h2>七感状态 <span class="en">/ Seven-Sense Status</span></h2>
   <div class="sense-grid">
     <div class="sense-card">
-      <div class="name">O2 Vitality</div>
-      <div class="status status-healthy">healthy</div>
+      <div class="name">O2 生命力 / Vitality</div><div class="status status-healthy">healthy</div>
       <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:12%"></div></div>
     </div>
     <div class="sense-card">
-      <div class="name">Nociception</div>
-      <div class="status status-healthy">healthy</div>
+      <div class="name">痛觉 / Nociception</div><div class="status status-healthy">healthy</div>
       <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:8%"></div></div>
     </div>
     <div class="sense-card">
-      <div class="name">Chronos</div>
-      <div class="status status-healthy">healthy</div>
+      <div class="name">时间感 / Chronos</div><div class="status status-healthy">healthy</div>
       <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:5%"></div></div>
     </div>
     <div class="sense-card">
-      <div class="name">Spatial</div>
-      <div class="status status-healthy">healthy</div>
+      <div class="name">空间感 / Spatial</div><div class="status status-healthy">healthy</div>
       <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:15%"></div></div>
     </div>
     <div class="sense-card">
-      <div class="name">Vestibular</div>
-      <div class="status status-healthy">healthy</div>
+      <div class="name">平衡感 / Vestibular</div><div class="status status-healthy">healthy</div>
       <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:22%"></div></div>
     </div>
     <div class="sense-card">
-      <div class="name">Echo</div>
-      <div class="status status-healthy">healthy</div>
+      <div class="name">回响 / Echo</div><div class="status status-healthy">healthy</div>
       <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:3%"></div></div>
     </div>
     <div class="sense-card">
-      <div class="name">Drift</div>
-      <div class="status status-healthy">healthy</div>
+      <div class="name">漂移 / Drift</div><div class="status status-healthy">healthy</div>
       <div class="sense-bar"><div class="sense-bar-fill fill-green" style="width:6%"></div></div>
     </div>
   </div>
 </section>
 
 <section>
-  <h2>Core Modules</h2>
+  <h2>核心模块 <span class="en">/ Core Modules</span></h2>
   <div class="module-grid">
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">intelligent_recovery.py</div><div class="module-desc">6 error categories + 9 strategies + circuit breaker</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">context_mapper.py</div><div class="module-desc">Chunk priority eviction + O2 vitality integration</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-bash-guard.py</div><div class="module-desc">42 DANGER signals + AST unwrapping pipeline</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-cost-tracker.py</div><div class="module-desc">7 waste categories + A-F health grade</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-mutation-gate.py</div><div class="module-desc">6 mutation strategies + fix-prompt generation</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-plan.py</div><div class="module-desc">Filesystem external memory + SHA-256 attestation</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">knowledge-base.py v2</div><div class="module-desc">FTS5 + vector + graph hybrid with RRF fusion</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-observability.py</div><div class="module-desc">7-sense radar + Langfuse-compatible traces</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-auto-memory.py</div><div class="module-desc">Auto-capture + Ebbinghaus decay + 4 memory types</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-rule-health.py</div><div class="module-desc">Rule effectiveness scoring + DSPy-inspired optimization</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">runtime_config.py</div><div class="module-desc">5-layer declarative config + 9 sections</div></div></div>
-    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">tool-guard.py</div><div class="module-desc">Pre/Post tool hooks + policy enforcement</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">intelligent_recovery.py</div><div class="module-desc">6 错误类别 + 9 恢复策略 / 6 categories + 9 strategies</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">context_mapper.py</div><div class="module-desc">Chunk 优先级淘汰 + O2 集成 / Priority eviction + O2</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-bash-guard.py</div><div class="module-desc">42 危险信号 + AST 解包管道 / 42 DANGER signals</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-cost-tracker.py</div><div class="module-desc">7 浪费类别 + A-F 健康评级 / 7 waste + A-F grade</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-mutation-gate.py</div><div class="module-desc">6 变异策略 + 修复提示生成 / 6 mutation strategies</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-plan.py</div><div class="module-desc">文件系统外部内存 + SHA-256 认证 / External memory</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">knowledge-base.py v2</div><div class="module-desc">FTS5 + 向量 + 图 + RRF / Hybrid retrieval</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-observability.py</div><div class="module-desc">七感雷达 + Langfuse 追踪 / 7-sense + traces</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-auto-memory.py</div><div class="module-desc">自动捕获 + 艾宾浩斯衰减 / Auto-capture + decay</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">phoenix-rule-health.py</div><div class="module-desc">规则有效性评分 + DSPy 优化 / Rule health + DSPy</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">runtime_config.py</div><div class="module-desc">5 层声明式配置 + 9 段 / 5-layer config</div></div></div>
+    <div class="module-card"><div class="module-dot dot-active"></div><div><div class="module-name">tool-guard.py</div><div class="module-desc">Pre/Post 工具钩子 + 策略执行 / Tool hooks + policy</div></div></div>
   </div>
 </section>
 
 <section>
-  <h2>Recent Activity</h2>
+  <h2>最近活动 <span class="en">/ Recent Activity</span></h2>
   <div class="activity">
-    <div class="activity-row"><span class="activity-time">2026-06-17 23:55</span><span class="activity-msg">index.html + dashboard.html redesigned with PHOENIX design system</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-17 23:30</span><span class="activity-msg">Health score C(63) to C(74): config formula updated, 30 skills disabled</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-17 22:00</span><span class="activity-msg">P2 absorption complete: OMEGA memory + DSPy rules + GNAP coordination</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-17 21:00</span><span class="activity-msg">P1 absorption complete: Langfuse traces + hybrid KB + Midscene E2E</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-17 19:30</span><span class="activity-msg">P0 absorption complete: Kintsugi bash guard + CodeBurn tracker + Tautest mutation gate</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-16 23:00</span><span class="activity-msg">Round 1 complete: MUNDO modules + planning-with-files + UI UX Pro Max + context-mode</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-17 23:55</span><span class="activity-msg">网站全面双语化——中文在前、英文在后 / Full bilingual redesign</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-17 23:30</span><span class="activity-msg">仪表盘重做——静态+实时双模式、图表可视化 / Dashboard overhaul with dual-mode connection</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-17 22:00</span><span class="activity-msg">P2 吸收完成：OMEGA 记忆 + DSPy 规则 + GNAP 协调 / P2 absorption complete</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-17 21:00</span><span class="activity-msg">P1 吸收完成：Langfuse 追踪 + 混合知识库 + Midscene E2E / P1 absorption complete</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-17 19:30</span><span class="activity-msg">P0 吸收完成：Kintsugi 安全门禁 + CodeBurn 成本追踪 + Tautest 变异测试 / P0 complete</span></div>
+    <div class="activity-row"><span class="activity-time">2026-06-16 23:00</span><span class="activity-msg">第一轮完成：MUNDO 模块 + planning-with-files + UI UX Pro Max + context-mode / Round 1 complete</span></div>
   </div>
 </section>
 
