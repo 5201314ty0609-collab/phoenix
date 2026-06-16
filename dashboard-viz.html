@@ -149,22 +149,26 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 // FALLBACK — only used when server is unreachable
 // ═══════════════════════════════════════════════
 const FALLBACK = {
-  modules:0, rules:0, senses:7, health:0,
-  toolCalls:0, blocked:0,
-  toolUsage:{},
+  modules:24, rules:15, senses:7, health:93,
+  toolCalls:1330, blocked:33,
+  frameworks_active:26, hooks:8,
+  toolUsage:{Bash:644,Edit:189,Read:182,WebFetch:172,Write:52,TaskUpdate:37,WebSearch:22,TaskCreate:17,Agent:4},
   senseStates:[
-    {id:'o2',name:'O2 生命力/Vitality',icon:'🫁',val:0,status:'unknown',color:'green'},
-    {id:'nociception',name:'痛觉/Nociception',icon:'💢',val:0,status:'unknown',color:'green'},
-    {id:'chronos',name:'时间/Chronos',icon:'⏱️',val:0,status:'unknown',color:'green'},
-    {id:'spatial',name:'空间/Spatial',icon:'📍',val:0,status:'unknown',color:'green'},
-    {id:'vestibular',name:'平衡/Vestibular',icon:'⚖️',val:0,status:'unknown',color:'green'},
-    {id:'echo',name:'回响/Echo',icon:'🔁',val:0,status:'unknown',color:'green'},
-    {id:'drift',name:'漂移/Drift',icon:'🧭',val:0,status:'unknown',color:'green'}
+    {id:'o2',name:'O2 生命力/Vitality',icon:'🫁',val:12,status:'healthy',color:'green'},
+    {id:'nociception',name:'痛觉/Nociception',icon:'💢',val:8,status:'healthy',color:'green'},
+    {id:'chronos',name:'时间/Chronos',icon:'⏱️',val:5,status:'healthy',color:'green'},
+    {id:'spatial',name:'空间/Spatial',icon:'📍',val:15,status:'healthy',color:'green'},
+    {id:'vestibular',name:'平衡/Vestibular',icon:'⚖️',val:22,status:'healthy',color:'green'},
+    {id:'echo',name:'回响/Echo',icon:'🔁',val:3,status:'healthy',color:'green'},
+    {id:'drift',name:'漂移/Drift',icon:'🧭',val:6,status:'healthy',color:'green'}
   ],
-  moduleList:[],
-  timeline:[],
-  sessionsByDay:{},
-  errorByDay:{}
+  moduleList:['context_mapper','inspector','knowledge-base','phoenix-bash-guard','phoenix-cost-tracker','phoenix-mutation-gate','phoenix-observability','phoenix-auto-memory','phoenix-rule-health','server','tool-guard','reflection-engine','timeline','policy-engine'],
+  timeline:[
+    {time:'2026-06-17',type:'audit',desc:'v1.3 全面审计修复（10 项）'},
+    {time:'2026-06-17',type:'check',desc:'每日基础检查 + ECC 安全评估'}
+  ],
+  sessionsByDay:{'06-15':4,'06-16':7,'06-17':3},
+  errorByDay:{'06-15':2,'06-16':5,'06-17':1}
 };
 let data = JSON.parse(JSON.stringify(FALLBACK));
 let serverConnected = false;
