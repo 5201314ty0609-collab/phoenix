@@ -78,18 +78,18 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 
 <!-- KPI Row 1 -->
 <div class="stats">
-  <div class="stat-card"><div class="num c-accent" id="kpi-modules">35</div><div class="label">引擎模块 / Engine Modules</div></div>
-  <div class="stat-card"><div class="num c-green" id="kpi-rules">15</div><div class="label">规则文件 / Rule Files</div></div>
-  <div class="stat-card"><div class="num c-purple" id="kpi-senses">7</div><div class="label">感知系统 / Sense Systems</div></div>
-  <div class="stat-card"><div class="num c-yellow" id="kpi-health">74</div><div class="label">健康评分 / Health Score</div></div>
+  <div class="stat-card"><div class="num c-accent" id="kpi-modules">...</div><div class="label">引擎模块 / Engine Modules</div></div>
+  <div class="stat-card"><div class="num c-green" id="kpi-rules">...</div><div class="label">规则文件 / Rule Files</div></div>
+  <div class="stat-card"><div class="num c-purple" id="kpi-senses">...</div><div class="label">感知系统 / Sense Systems</div></div>
+  <div class="stat-card"><div class="num c-yellow" id="kpi-health">...</div><div class="label">健康评分 / Health Score</div></div>
 </div>
 
 <!-- KPI Row 2 -->
 <div class="stats">
-  <div class="stat-card"><div class="num c-accent" id="kpi-tools">3116</div><div class="label">工具调用 / Tool Calls</div></div>
-  <div class="stat-card"><div class="num c-green" id="kpi-cache">99.5%</div><div class="label">缓存命中率 / Cache Hit</div></div>
-  <div class="stat-card"><div class="num c-red" id="kpi-blocked">12</div><div class="label">阻断次数 / Blocked</div></div>
-  <div class="stat-card"><div class="num c-yellow" id="kpi-cost">85</div><div class="label">预估花费 / Est. Cost $</div></div>
+  <div class="stat-card"><div class="num c-accent" id="kpi-tools">...</div><div class="label">工具调用 / Tool Calls</div></div>
+  <div class="stat-card"><div class="num c-green" id="kpi-frameworks">...</div><div class="label">活跃框架 / Active Frameworks</div></div>
+  <div class="stat-card"><div class="num c-red" id="kpi-blocked">...</div><div class="label">阻断次数 / Blocked</div></div>
+  <div class="stat-card"><div class="num c-yellow" id="kpi-hooks">...</div><div class="label">Hook 脚本 / Hooks</div></div>
 </div>
 
 <!-- Charts Row 1 -->
@@ -127,7 +127,7 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
     <div class="sense-grid" id="sense-grid"></div>
   </div>
   <div class="card">
-    <h3>核心模块 / Core Modules <span class="badge" id="badge-modules">35 个 / total</span></h3>
+    <h3>核心模块 / Core Modules <span class="badge" id="badge-modules">加载中...</span></h3>
     <div class="module-list" id="module-list"></div>
   </div>
 </div>
@@ -146,43 +146,27 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 
 <script>
 // ═══════════════════════════════════════════════
-// STATIC DATA — Always available (no server needed)
+// FALLBACK — only used when server is unreachable
 // ═══════════════════════════════════════════════
-const STATIC = {
-  modules:35, rules:15, senses:7, health:74,
-  toolCalls:3116, cacheRate:99.5, blocked:12, cost:85,
-  sessions:15,
-  toolUsage:{Bash:1385,Edit:526,Read:480,Write:259,TaskUpdate:184,TaskCreate:95,WebFetch:83,Agent:37,WebSearch:37,Other:30},
+const FALLBACK = {
+  modules:0, rules:0, senses:7, health:0,
+  toolCalls:0, blocked:0,
+  toolUsage:{},
   senseStates:[
-    {id:'o2',name:'O2 生命力/Vitality',icon:'🫁',val:12,status:'healthy',color:'green'},
-    {id:'nociception',name:'痛觉/Nociception',icon:'💢',val:8,status:'healthy',color:'green'},
-    {id:'chronos',name:'时间/Chronos',icon:'⏱️',val:5,status:'healthy',color:'green'},
-    {id:'spatial',name:'空间/Spatial',icon:'📍',val:15,status:'healthy',color:'green'},
-    {id:'vestibular',name:'平衡/Vestibular',icon:'⚖️',val:22,status:'healthy',color:'green'},
-    {id:'echo',name:'回响/Echo',icon:'🔁',val:3,status:'healthy',color:'green'},
-    {id:'drift',name:'漂移/Drift',icon:'🧭',val:6,status:'healthy',color:'green'}
+    {id:'o2',name:'O2 生命力/Vitality',icon:'🫁',val:0,status:'unknown',color:'green'},
+    {id:'nociception',name:'痛觉/Nociception',icon:'💢',val:0,status:'unknown',color:'green'},
+    {id:'chronos',name:'时间/Chronos',icon:'⏱️',val:0,status:'unknown',color:'green'},
+    {id:'spatial',name:'空间/Spatial',icon:'📍',val:0,status:'unknown',color:'green'},
+    {id:'vestibular',name:'平衡/Vestibular',icon:'⚖️',val:0,status:'unknown',color:'green'},
+    {id:'echo',name:'回响/Echo',icon:'🔁',val:0,status:'unknown',color:'green'},
+    {id:'drift',name:'漂移/Drift',icon:'🧭',val:0,status:'unknown',color:'green'}
   ],
-  moduleList:[
-    'intelligent_recovery','context_mapper','phoenix-bash-guard','phoenix-cost-tracker',
-    'phoenix-mutation-gate','phoenix-plan','knowledge-base','phoenix-observability',
-    'phoenix-auto-memory','phoenix-rule-health','runtime_config','tool-guard','server',
-    'policy-engine','reflection-engine','timeline','skill-registry','nexsandglass',
-    'user_manager','inspector','event-bus/bus','event-bus/phoenix-mcp-server'
-  ],
-  timeline:[
-    {time:'2026-06-17 23:55',type:'deploy',desc:'网站全面双语化——中文在前英文在后 / Full bilingual redesign'},
-    {time:'2026-06-17 23:30',type:'optimize',desc:'健康评分 C(63)→C(74): 禁用30个Skill + 公式更新 / Health score optimization'},
-    {time:'2026-06-17 22:00',type:'absorb',desc:'P2 完成: OMEGA 记忆 + DSPy 规则 + GNAP 协调 / P2 absorption'},
-    {time:'2026-06-17 21:00',type:'absorb',desc:'P1 完成: Langfuse 追踪 + 混合知识库 + Midscene E2E / P1 absorption'},
-    {time:'2026-06-17 19:30',type:'absorb',desc:'P0 完成: Kintsugi 安全门禁 + CodeBurn + Tautest / P0 absorption'},
-    {time:'2026-06-16 23:00',type:'absorb',desc:'第一轮: MUNDO + planning-with-files + UI UX Pro Max / Round 1'},
-    {time:'2026-06-16 20:00',type:'research',desc:'两轮 GitHub 深度搜索: 70+ 项目评估 / Deep research'}
-  ],
-  wasteBreakdown:{ghost_skills:45,repeated_context:25,low_ratio:15,tool_imbalance:10,other:5},
-  sessionsByDay:{'06-14':1,'06-15':4,'06-16':7,'06-17':3},
-  errorByDay:{'06-14':0,'06-15':2,'06-16':5,'06-17':1}
+  moduleList:[],
+  timeline:[],
+  sessionsByDay:{},
+  errorByDay:{}
 };
-let data = JSON.parse(JSON.stringify(STATIC)); // mutable copy
+let data = JSON.parse(JSON.stringify(FALLBACK));
 let serverConnected = false;
 let charts = {};
 let refreshTimer = null;
@@ -201,26 +185,69 @@ async function tryConnect(){
   setConnStatus('warn','连接中... / connecting');
   try{
     const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),3000);
-    const r=await fetch(SERVER+'/api/status',{signal:ctrl.signal});
-    if(r.ok){ const j=await r.json(); setConnStatus('ok','live @ :8765');
-      document.getElementById('conn-time').textContent=new Date(j.phoenix?.timestamp||Date.now()).toLocaleTimeString();
+    const r=await fetch(SERVER+'/api/stats',{signal:ctrl.signal});
+    if(r.ok){ setConnStatus('ok','live @ :8765');
+      document.getElementById('conn-time').textContent=new Date().toLocaleTimeString();
       document.getElementById('footer-mode').textContent='Live Server'; return true; }
   }catch(e){}
-  setConnStatus('err','静态模式 / static'); document.getElementById('footer-mode').textContent='GitHub Pages';
+  setConnStatus('err','离线 / offline — 请启动 server.py'); document.getElementById('footer-mode').textContent='GitHub Pages';
   return false;
 }
 async function fetchLive(){
   if(!serverConnected) return null;
   try{
     const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),5000);
-    const[status,modules,timeline]=await Promise.all([
+    const[stats,status,timeline]=await Promise.all([
+      fetch(SERVER+'/api/stats',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null),
       fetch(SERVER+'/api/status',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(SERVER+'/api/modules',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null),
       fetch(SERVER+'/api/timeline?limit=20',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null)
     ]);
-    return {status,modules,timeline};
+    return {stats,status,timeline};
   }catch(e){}
   return null;
+}
+
+// ═══════════════════════════════════════════════
+// APPLY LIVE DATA → data object + DOM
+// ═══════════════════════════════════════════════
+function applyLiveData(live){
+  if(!live) return;
+  const s = live.stats;
+  const st = live.status;
+  const tl = live.timeline;
+
+  // KPIs from /api/stats
+  if(s){
+    data.modules = s.modules || 0;
+    data.rules = s.rules || 0;
+    data.senses = s.senses || 0;
+    data.toolCalls = s.tool_calls || 0;
+    data.blocked = s.blocked || 0;
+    data.health = s.health_score || 0;
+    data.moduleList = s.module_list || [];
+    data.frameworks_active = s.frameworks_active || 0;
+    data.hooks = s.hooks || 0;
+    if(s.tool_usage && Object.keys(s.tool_usage).length > 0){
+      data.toolUsage = s.tool_usage;
+    }
+  }
+
+  // Senses from /api/status
+  if(st?.senses){
+    data.senseStates = data.senseStates.map(sx => ({
+      ...sx,
+      status: st.senses[sx.id]?.state || sx.status
+    }));
+  }
+
+  // Timeline from /api/timeline
+  if(tl?.entries?.length){
+    data.timeline = tl.entries.slice(-10).map(e => ({
+      time: e.timestamp || e.time || '',
+      type: e.type || 'event',
+      desc: e.message || e.description || JSON.stringify(e).slice(0, 80)
+    }));
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -264,16 +291,21 @@ function buildSenses(){
 }
 function buildModules(){
   document.getElementById('module-list').innerHTML=data.moduleList.map(m=>`<div class="module-item"><span class="module-dot"></span>${m}.py</div>`).join('');
-  document.getElementById('badge-modules').textContent=data.moduleList.length+' active';
+  document.getElementById('badge-modules').textContent=data.moduleList.length+' 个 / total';
 }
 function buildTimeline(){
   document.getElementById('timeline-body').innerHTML=data.timeline.map(t=>`<tr><td style="font-family:var(--mono);font-size:0.7rem;color:var(--text-dim)">${t.time.slice(-8)}</td><td style="font-size:0.68rem">${t.type}</td><td>${t.desc}</td></tr>`).join('');
   document.getElementById('badge-timeline').textContent=data.timeline.length+' events';
 }
 function buildKPIs(){
+  document.getElementById('kpi-modules').textContent=data.modules;
+  document.getElementById('kpi-rules').textContent=data.rules;
+  document.getElementById('kpi-senses').textContent=data.senses;
+  document.getElementById('kpi-health').textContent=data.health;
   document.getElementById('kpi-tools').textContent=data.toolCalls.toLocaleString();
   document.getElementById('kpi-blocked').textContent=data.blocked;
-  document.getElementById('kpi-cost').textContent=data.cost;
+  if(data.frameworks_active !== undefined) document.getElementById('kpi-frameworks').textContent=data.frameworks_active;
+  if(data.hooks !== undefined) document.getElementById('kpi-hooks').textContent=data.hooks;
 }
 function toast(msg,ok){ const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(ok?'ok':'err');t.style.display='block';setTimeout(()=>t.style.display='none',2500); }
 
@@ -281,24 +313,15 @@ function toast(msg,ok){ const t=document.getElementById('toast');t.textContent=m
 // INIT
 // ═══════════════════════════════════════════════
 async function init(){
+  // First render with fallback data
   buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
+  // Then try to connect and get real data
   const connected=await tryConnect();
   if(connected){
     const live=await fetchLive();
     if(live){
-      if(live.status?.senses){
-        const ss=live.status.senses;
-        data.senseStates=data.senseStates.map(s=>({...s,status:ss[s.id]?.state||s.status}));
-        buildSenses();
-      }
-      if(live.timeline?.entries?.length){
-        data.timeline=live.timeline.entries.slice(-10).map(e=>({time:e.timestamp||e.time||'',type:e.type||'event',desc:e.message||e.description||JSON.stringify(e).slice(0,80)}));
-        buildTimeline();
-      }
-      if(live.modules?.total_modules){
-        data.modules=live.modules.total_modules;
-        document.getElementById('kpi-modules').textContent=data.modules;
-      }
+      applyLiveData(live);
+      buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
       toast('已连接 PHOENIX 服务器 / Connected','ok');
     }
   }
@@ -307,9 +330,12 @@ async function init(){
 async function refresh(){
   if(!serverConnected){ await tryConnect(); return; }
   const live=await fetchLive();
-  if(!live){ setConnStatus('warn','重连中... / reconnecting');serverConnected=false;buildAllCharts();return; }
+  if(!live){ setConnStatus('warn','重连中... / reconnecting');serverConnected=false;return; }
+  applyLiveData(live);
   setConnStatus('ok','实时 / live @ :8765');
   document.getElementById('conn-time').textContent=new Date().toLocaleTimeString();
+  // Rebuild charts with new data
+  buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
 }
 init();
 </script>

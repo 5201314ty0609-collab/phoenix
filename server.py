@@ -400,6 +400,88 @@ def api_events() -> dict:
     }
 
 
+def api_stats() -> dict:
+    """综合实时统计 — 仪表盘专用"""
+    result = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "modules": 0,
+        "rules": 0,
+        "senses": 0,
+        "frameworks_active": 0,
+        "hooks": 0,
+        "tool_calls": 0,
+        "tool_usage": {},
+        "blocked": 0,
+        "health_score": 0,
+    }
+
+    # Count Python modules (excluding test files)
+    py_files = [f for f in PHOENIX_HOME.glob("*.py") if not f.name.startswith("test_") and not f.name.startswith("test-")]
+    result["modules"] = len(py_files)
+    result["module_list"] = sorted([f.stem for f in py_files])
+
+    # Count rules
+    rules_dir = Path.home() / ".claude" / "rules" / "phoenix"
+    if rules_dir.exists():
+        result["rules"] = len(list(rules_dir.glob("*.md")))
+
+    # Count senses
+    senses_dir = PHOENIX_HOME / "senses"
+    if senses_dir.exists():
+        result["senses"] = len(list(senses_dir.glob("*.json")))
+
+    # Count active frameworks
+    fw_dir = PHOENIX_HOME / "frameworks" / "active"
+    if fw_dir.exists():
+        result["frameworks_active"] = len(list(fw_dir.glob("*.json")))
+
+    # Count hooks
+    hooks_dir = PHOENIX_HOME / "hooks"
+    if hooks_dir.exists():
+        result["hooks"] = len([f for f in hooks_dir.iterdir() if f.suffix in ('.sh', '.py')])
+
+    # Tool usage from tool-guard history
+    history_file = PHOENIX_HOME / "tool-guard-history.jsonl"
+    if history_file.exists():
+        tool_counts = {}
+        blocked_count = 0
+        try:
+            with open(history_file) as f:
+                for line in f:
+                    if line.strip():
+                        try:
+                            entry = json.loads(line)
+                            tool = entry.get("tool", "unknown")
+                            tool_counts[tool] = tool_counts.get(tool, 0) + 1
+                            if entry.get("decision") in ("block", "halt"):
+                                blocked_count += 1
+                        except json.JSONDecodeError:
+                            pass
+            result["tool_usage"] = dict(sorted(tool_counts.items(), key=lambda x: -x[1])[:10])
+            result["tool_calls"] = sum(tool_counts.values())
+            result["blocked"] = blocked_count
+        except OSError:
+            pass
+
+    # Health score from rule health
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "rule_health", PHOENIX_HOME / "phoenix-rule-health.py"
+        )
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        if hasattr(mod, "generate_report"):
+            rules = mod.generate_report()
+            healthy = sum(1 for r in rules if not r.needs_attention)
+            total = len(rules)
+            result["health_score"] = round(healthy / max(total, 1) * 100) if total else 0
+    except Exception:
+        result["health_score"] = 0
+
+    return result
+
+
 # ── Action APIs (POST) ─────────────────────────────────────────────────────
 
 def api_evolve(params: dict = None) -> dict:
@@ -652,6 +734,7 @@ def _poll_sse_events():
 
 GET_ROUTES = {
     "/api/status": api_status,
+    "/api/stats": api_stats,
     "/api/modules": api_modules,
     "/api/timeline": api_timeline,
     "/api/persona": api_persona,
