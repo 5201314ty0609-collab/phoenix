@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "created_at": "2026-06-08T00:00:00Z",
-  "updated_at": "2026-06-16T14:52:56.690989+00:00",
+  "updated_at": "2026-06-16T18:15:21.397425+00:00",
   "decay_rate": 0.3,
   "baseline": {
     "mood": "正常",
@@ -12,6 +12,6 @@
     "mood": "正常",
     "active_concerns": [],
     "open_threads": [],
-    "session_count": 13
+    "session_count": 17
   }
 }
