@@ -80,8 +80,8 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 <div class="stats">
   <div class="stat-card"><div class="num c-accent" id="kpi-modules">...</div><div class="label">引擎模块 / Engine Modules</div></div>
   <div class="stat-card"><div class="num c-green" id="kpi-rules">...</div><div class="label">规则文件 / Rule Files</div></div>
-  <div class="stat-card"><div class="num c-purple" id="kpi-senses">...</div><div class="label">感知系统 / Sense Systems</div></div>
-  <div class="stat-card"><div class="num c-yellow" id="kpi-health">...</div><div class="label">健康评分 / Health Score</div></div>
+  <div class="stat-card"><div class="num c-purple" id="kpi-rule-health">...</div><div class="label">规则健康 / Rule Health</div></div>
+  <div class="stat-card"><div class="num c-yellow" id="kpi-cost-health">...</div><div class="label">成本健康 / Cost Health</div></div>
 </div>
 
 <!-- KPI Row 2 -->
@@ -149,7 +149,7 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 // FALLBACK — only used when server is unreachable
 // ═══════════════════════════════════════════════
 const FALLBACK = {
-  modules:24, rules:15, senses:7, health:93,
+  modules:24, rules:15, senses:7, rule_health:93, cost_health:71, cost_grade:'C',
   toolCalls:1330, blocked:33,
   frameworks_active:26, hooks:8,
   toolUsage:{Bash:644,Edit:189,Read:182,WebFetch:172,Write:52,TaskUpdate:37,WebSearch:22,TaskCreate:17,Agent:4},
@@ -228,7 +228,9 @@ function applyLiveData(live){
     data.senses = s.senses || 0;
     data.toolCalls = s.tool_calls || 0;
     data.blocked = s.blocked || 0;
-    data.health = s.health_score || 0;
+    data.rule_health = s.rule_health || 0;
+    data.cost_health = s.cost_health || 0;
+    data.cost_grade = s.cost_grade || 'F';
     data.moduleList = s.module_list || [];
     data.frameworks_active = s.frameworks_active || 0;
     data.hooks = s.hooks || 0;
@@ -308,8 +310,8 @@ function buildTimeline(){
 function buildKPIs(){
   document.getElementById('kpi-modules').textContent=data.modules;
   document.getElementById('kpi-rules').textContent=data.rules;
-  document.getElementById('kpi-senses').textContent=data.senses;
-  document.getElementById('kpi-health').textContent=data.health;
+  document.getElementById('kpi-rule-health').textContent=data.rule_health+'%';
+  document.getElementById('kpi-cost-health').textContent=data.cost_health+' ('+data.cost_grade+'级)';
   document.getElementById('kpi-tools').textContent=data.toolCalls.toLocaleString();
   document.getElementById('kpi-blocked').textContent=data.blocked;
   if(data.frameworks_active !== undefined) document.getElementById('kpi-frameworks').textContent=data.frameworks_active;

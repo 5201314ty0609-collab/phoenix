@@ -463,7 +463,7 @@ def api_stats() -> dict:
         except OSError:
             pass
 
-    # Health score from rule health
+    # Rule health score (规则健康度)
     try:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
@@ -475,9 +475,30 @@ def api_stats() -> dict:
             rules = mod.generate_report()
             healthy = sum(1 for r in rules if not r.needs_attention)
             total = len(rules)
-            result["health_score"] = round(healthy / max(total, 1) * 100) if total else 0
+            result["rule_health"] = round(healthy / max(total, 1) * 100) if total else 0
     except Exception:
-        result["health_score"] = 0
+        result["rule_health"] = 0
+
+    # Cost health score (成本健康度) from cost tracker
+    try:
+        import importlib.util
+        spec3 = importlib.util.spec_from_file_location(
+            "cost_tracker", PHOENIX_HOME / "phoenix-cost-tracker.py"
+        )
+        mod3 = importlib.util.module_from_spec(spec3)
+        spec3.loader.exec_module(mod3)
+        sessions = mod3.parse_all_sessions()
+        overheads = mod3.analyze_config_overhead()
+        waste = mod3.detect_waste(sessions, overheads)
+        report = mod3.generate_report(sessions, overheads, waste)
+        result["cost_health"] = report.health_score
+        result["cost_grade"] = report.health_grade
+    except Exception:
+        result["cost_health"] = 0
+        result["cost_grade"] = "F"
+
+    # Combined score: average of both
+    result["health_score"] = round((result.get("rule_health", 0) + result.get("cost_health", 0)) / 2)
 
     # Waste breakdown analysis
     waste = {}
