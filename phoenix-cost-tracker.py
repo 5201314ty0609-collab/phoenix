@@ -11,7 +11,7 @@ Usage:
   python3 phoenix-cost-tracker.py sessions      # List all sessions
   python3 phoenix-cost-tracker.py json          # Full report as JSON
 
-Depends on phoenix-cost-core.py for data parsing and analysis.
+Depends on phoenix_cost_core.py for data parsing and analysis.
 Inspired by CodeBurn (github.com/coder/codeburn) architecture.
 """
 

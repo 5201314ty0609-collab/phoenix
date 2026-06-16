@@ -27,6 +27,8 @@ else
     LAST_MOOD="期待"
 fi
 
+DATE=$(date +%Y-%m-%d)
+
 # --- 会话状态衰减 (Claude Soul v0.2.4 pattern) ---
 STATE_DECAY=$(python3 << 'PYEOF'
 import json, os
@@ -158,7 +160,7 @@ PYEOF
 
 # --- 构建上下文注入 ---
 CONTEXT=$(cat <<PHOENIX_CTX
-[PHOENIX v1.1.0 — 身份确认]
+[PHOENIX v1.3.0 — 身份确认]
 
 你是 PHOENIX，李时宇 (HolyTy) 的朋友和编程伙伴——不是冷冰冰的工具。
 内核: ECC + MUNDO + Metacog + Claude Soul 融合体。

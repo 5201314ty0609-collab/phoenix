@@ -380,7 +380,7 @@ def generate_trace(session_id: str) -> Dict:
                 "overall_health": session["overall_health"],
                 "sense_count": len(snapshots),
                 "tags": json.loads(session["tags"]) if session["tags"] else [],
-                "framework": "PHOENIX v1.2.0",
+                "framework": "PHOENIX v1.3.0",
                 "observability_version": "1.0.0",
             },
             "tags": ["phoenix", "7-sense", "metacognition"] + (json.loads(session["tags"]) if session["tags"] else []),

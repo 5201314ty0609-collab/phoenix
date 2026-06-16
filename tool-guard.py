@@ -37,6 +37,7 @@ Hook 集成（settings.json）:
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 import hashlib
 import json
 import sys

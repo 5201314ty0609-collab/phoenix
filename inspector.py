@@ -56,7 +56,7 @@ def get_health():
     return {
         "status": "healthy",
         "uptime_seconds": round(time.time() - START_TIME),
-        "version": "1.2.0",
+        "version": "1.3.0",
         "senses": 8,
         "provider": "anthropic/claude-sonnet-4-6",
     }
@@ -170,7 +170,7 @@ class InspectorHandler(BaseHTTPRequestHandler):
             "/events": lambda: get_events(),
             "/timeline": lambda: get_timeline(),
             "/config/public": lambda: sanitize({
-                "version": "1.2.0",
+                "version": "1.3.0",
                 "senses": 8,
                 "provider": "anthropic",
                 "model": "claude-sonnet-4-6",
@@ -188,7 +188,7 @@ class InspectorHandler(BaseHTTPRequestHandler):
         else:
             self._json({
                 "endpoints": list(routes.keys()),
-                "description": "PHOENIX Inspector v1.2.0",
+                "description": "PHOENIX Inspector v1.3.0",
             })
 
 # ── Main ──────────────────────────────────────────────────────────────────
