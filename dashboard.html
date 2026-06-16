@@ -98,7 +98,7 @@
   <div class="kpi"><div class="kpi-label">规则健康<span class="en"> / Rule Health</span></div><div class="kpi-value green">93%</div><div class="kpi-sub">13/14 规则健康 · 1 条待升级 / 13 healthy, 1 pending</div></div>
   <div class="kpi"><div class="kpi-label">成本健康<span class="en"> / Cost Health</span></div><div class="kpi-value amber">71 / 100</div><div class="kpi-sub">C 级 · 可进化至 80+ / Evolvable to 80+</div></div>
   <div class="kpi"><div class="kpi-label">活跃 Skill<span class="en"> / Skills Active</span></div><div class="kpi-value accent">37 / 67</div><div class="kpi-sub">30 个已禁用 / 30 disabled via skillOverrides</div></div>
-  <div class="kpi"><div class="kpi-label">工具调用<span class="en"> / Tool Calls</span></div><div class="kpi-value accent">1,330</div><div class="kpi-sub">Bash 644 · Edit 189 · Read 182</div></div>
+  <div class="kpi"><div class="kpi-label">工具调用<span class="en"> / Tool Calls</span></div><div class="kpi-value accent" id="kpi-tools">—</div><div class="kpi-sub" id="kpi-tools-detail">连接服务器获取实时数据...</div></div>
 </div>
 
 <section>
@@ -170,6 +170,31 @@
 <footer>
   <p>PHOENIX v1.3.0 · <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a> · holyty + PHOENIX · MIT License</p>
 </footer>
+
+<script>
+const SERVER = 'http://localhost:8765';
+async function fetchStats() {
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 3000);
+    const r = await fetch(SERVER + '/api/stats', { signal: ctrl.signal });
+    if (r.ok) {
+      const d = await r.json();
+      if (d.tool_calls) {
+        const el = document.getElementById('kpi-tools');
+        if (el) el.textContent = d.tool_calls.toLocaleString();
+      }
+      if (d.tool_usage) {
+        const top = Object.entries(d.tool_usage).slice(0, 3).map(([k, v]) => k + ' ' + v).join(' · ');
+        const el = document.getElementById('kpi-tools-detail');
+        if (el) el.textContent = top;
+      }
+    }
+  } catch (e) { /* server offline, keep static data */ }
+}
+fetchStats();
+setInterval(fetchStats, 30000);
+</script>
 
 </body>
 </html>
