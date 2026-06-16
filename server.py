@@ -546,6 +546,50 @@ def api_stats() -> dict:
     return result
 
 
+def api_activity() -> dict:
+    """最近活动 — 从 git log 获取"""
+    import subprocess
+    entries = []
+    try:
+        result = subprocess.run(
+            ["git", "log", "--since=7 days ago", "--format=%ai|%s", "--no-merges"],
+            capture_output=True, text=True, cwd=str(PHOENIX_HOME), timeout=5
+        )
+        if result.returncode == 0:
+            for line in result.stdout.strip().split("\n")[:20]:
+                if "|" in line:
+                    time_str, desc = line.split("|", 1)
+                    # Format time: "2026-06-17 04:22:16 +0800" → "2026-06-17 04:22"
+                    date_part = time_str[:16].strip()
+                    entries.append({"time": date_part, "type": "commit", "desc": desc.strip()})
+    except Exception:
+        pass
+
+    # Also include story.jsonl events
+    story_file = PHOENIX_HOME / "story.jsonl"
+    if story_file.exists():
+        try:
+            with open(story_file) as f:
+                for line in f:
+                    if line.strip():
+                        try:
+                            entry = json.loads(line)
+                            if entry.get("event") != "session_end":
+                                entries.append({
+                                    "time": entry.get("date", ""),
+                                    "type": entry.get("event", "event"),
+                                    "desc": entry.get("summary", "")[:80]
+                                })
+                        except json.JSONDecodeError:
+                            pass
+        except OSError:
+            pass
+
+    # Sort by time descending, limit to 15
+    entries.sort(key=lambda x: x.get("time", ""), reverse=True)
+    return {"entries": entries[:15]}
+
+
 # ── Action APIs (POST) ─────────────────────────────────────────────────────
 
 def api_evolve(params: dict = None) -> dict:
@@ -799,6 +843,7 @@ def _poll_sse_events():
 GET_ROUTES = {
     "/api/status": api_status,
     "/api/stats": api_stats,
+    "/api/activity": api_activity,
     "/api/modules": api_modules,
     "/api/timeline": api_timeline,
     "/api/persona": api_persona,

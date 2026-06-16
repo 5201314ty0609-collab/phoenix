@@ -155,13 +155,8 @@
 
 <section>
   <h2>最近活动 <span class="en">/ Recent Activity</span></h2>
-  <div class="activity">
-    <div class="activity-row"><span class="activity-time">2026-06-17 23:55</span><span class="activity-msg">网站全面双语化——中文在前、英文在后 / Full bilingual redesign</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-17 23:30</span><span class="activity-msg">仪表盘重做——静态+实时双模式、图表可视化 / Dashboard overhaul with dual-mode connection</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-17 22:00</span><span class="activity-msg">P2 吸收完成：OMEGA 记忆 + DSPy 规则 + GNAP 协调 / P2 absorption complete</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-17 21:00</span><span class="activity-msg">P1 吸收完成：Langfuse 追踪 + 混合知识库 + Midscene E2E / P1 absorption complete</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-17 19:30</span><span class="activity-msg">P0 吸收完成：Kintsugi 安全门禁 + CodeBurn 成本追踪 + Tautest 变异测试 / P0 complete</span></div>
-    <div class="activity-row"><span class="activity-time">2026-06-16 23:00</span><span class="activity-msg">第一轮完成：MUNDO 模块 + planning-with-files + UI UX Pro Max + context-mode / Round 1 complete</span></div>
+  <div class="activity" id="activity-list">
+    <div class="activity-row"><span class="activity-time">加载中...</span><span class="activity-msg">正在获取最近活动 / Loading...</span></div>
   </div>
 </section>
 
@@ -194,6 +189,25 @@ async function fetchStats() {
 }
 fetchStats();
 setInterval(fetchStats, 30000);
+
+async function fetchActivity() {
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 3000);
+    const r = await fetch(SERVER + '/api/activity', { signal: ctrl.signal });
+    if (r.ok) {
+      const d = await r.json();
+      const el = document.getElementById('activity-list');
+      if (el && d.entries && d.entries.length > 0) {
+        el.innerHTML = d.entries.slice(0, 10).map(e =>
+          `<div class="activity-row"><span class="activity-time">${e.time}</span><span class="activity-msg">${e.desc}</span></div>`
+        ).join('');
+      }
+    }
+  } catch (e) { /* server offline */ }
+}
+fetchActivity();
+setInterval(fetchActivity, 30000);
 </script>
 
 </body>

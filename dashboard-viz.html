@@ -341,7 +341,18 @@ async function init(){
       serverConnected=true;
     }else{ setConnStatus('err','离线 / offline'); }
   }catch(e){ setConnStatus('err','离线 / offline'); }
-  // Render with whatever data we have (API or FALLBACK)
+  // Fetch activity from API
+  try{
+    const ctrl2=new AbortController(); setTimeout(()=>ctrl2.abort(),3000);
+    const r2=await fetch(SERVER+'/api/activity',{signal:ctrl2.signal});
+    if(r2.ok){
+      const a=await r2.json();
+      if(a.entries && a.entries.length>0){
+        data.timeline=a.entries.slice(0,10).map(e=>({time:e.time,type:e.type,desc:e.desc}));
+      }
+    }
+  }catch(e){}
+  // Render with whatever data we have
   buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
   if(serverConnected) toast('已连接 PHOENIX 服务器 / Connected','ok');
   refreshTimer=setInterval(refresh, serverConnected?10000:30000);
@@ -361,8 +372,19 @@ async function refresh(){
     if(s.tool_usage) data.toolUsage=s.tool_usage;
     if(s.waste) data.wasteBreakdown=s.waste;
     if(s.module_list) data.moduleList=s.module_list;
+    // Fetch activity
+    try{
+      const ctrl2=new AbortController(); setTimeout(()=>ctrl2.abort(),3000);
+      const r2=await fetch(SERVER+'/api/activity',{signal:ctrl2.signal});
+      if(r2.ok){
+        const a=await r2.json();
+        if(a.entries && a.entries.length>0){
+          data.timeline=a.entries.slice(0,10).map(e=>({time:e.time,type:e.type,desc:e.desc}));
+        }
+      }
+    }catch(e2){}
     // Update DOM
-    buildKPIs(); buildModules(); buildAllCharts();
+    buildKPIs(); buildModules(); buildTimeline(); buildAllCharts();
     setConnStatus('ok','实时 / live @ :8765');
     document.getElementById('conn-time').textContent=new Date().toLocaleTimeString();
   }catch(e){
