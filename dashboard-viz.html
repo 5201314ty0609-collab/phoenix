@@ -339,13 +339,26 @@ async function init(){
 }
 async function refresh(){
   if(!serverConnected){ await tryConnect(); return; }
-  const live=await fetchLive();
-  if(!live){ setConnStatus('warn','重连中... / reconnecting');serverConnected=false;return; }
-  applyLiveData(live);
-  setConnStatus('ok','实时 / live @ :8765');
-  document.getElementById('conn-time').textContent=new Date().toLocaleTimeString();
-  // Rebuild charts with new data
-  buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
+  try{
+    const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),5000);
+    const r=await fetch(SERVER+'/api/stats',{signal:ctrl.signal});
+    if(!r.ok) throw new Error('not ok');
+    const s=await r.json();
+    // Direct DOM update — same pattern as dashboard.html
+    data.modules=s.modules||0; data.rules=s.rules||0; data.senses=s.senses||0;
+    data.toolCalls=s.tool_calls||0; data.blocked=s.blocked||0;
+    data.rule_health=s.rule_health||0; data.cost_health=s.cost_health||0; data.cost_grade=s.cost_grade||'F';
+    data.frameworks_active=s.frameworks_active||0; data.hooks=s.hooks||0;
+    if(s.tool_usage) data.toolUsage=s.tool_usage;
+    if(s.waste) data.wasteBreakdown=s.waste;
+    if(s.module_list) data.moduleList=s.module_list;
+    // Update DOM
+    buildKPIs(); buildModules(); buildAllCharts();
+    setConnStatus('ok','实时 / live @ :8765');
+    document.getElementById('conn-time').textContent=new Date().toLocaleTimeString();
+  }catch(e){
+    setConnStatus('warn','重连中... / reconnecting');serverConnected=false;
+  }
 }
 init();
 </script>
