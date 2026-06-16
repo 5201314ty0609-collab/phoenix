@@ -325,16 +325,26 @@ function toast(msg,ok){ const t=document.getElementById('toast');t.textContent=m
 async function init(){
   // First render with fallback data
   buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
-  // Then try to connect and get real data
-  const connected=await tryConnect();
-  if(connected){
-    const live=await fetchLive();
-    if(live){
-      applyLiveData(live);
+  // Then fetch real data directly (same as refresh)
+  try{
+    const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),3000);
+    const r=await fetch(SERVER+'/api/stats',{signal:ctrl.signal});
+    if(r.ok){
+      const s=await r.json();
+      data.modules=s.modules||0; data.rules=s.rules||0; data.senses=s.senses||0;
+      data.toolCalls=s.tool_calls||0; data.blocked=s.blocked||0;
+      data.rule_health=s.rule_health||0; data.cost_health=s.cost_health||0; data.cost_grade=s.cost_grade||'F';
+      data.frameworks_active=s.frameworks_active||0; data.hooks=s.hooks||0;
+      if(s.tool_usage) data.toolUsage=s.tool_usage;
+      if(s.waste) data.wasteBreakdown=s.waste;
+      if(s.module_list) data.moduleList=s.module_list;
       buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
+      setConnStatus('ok','live @ :8765');
+      document.getElementById('footer-mode').textContent='Live Server';
+      serverConnected=true;
       toast('已连接 PHOENIX 服务器 / Connected','ok');
-    }
-  }
+    }else{ setConnStatus('err','离线 / offline'); }
+  }catch(e){ setConnStatus('err','离线 / offline'); }
   refreshTimer=setInterval(refresh, serverConnected?10000:30000);
 }
 async function refresh(){
