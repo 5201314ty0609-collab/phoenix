@@ -1,10 +1,11 @@
 {
   "trace_event": "session_pacing",
   "status": "normal",
-  "last_updated": "2026-06-06T09:07:42.384676+00:00",
+  "last_updated": "2026-06-19T15:55:02.787131+00:00",
   "metrics": {
     "idle_seconds": 0,
-    "last_active_at": "unknown"
+    "session_duration_minutes": 30,
+    "active_turns": 10
   },
   "warnings": [],
   "recommendation": "continue"

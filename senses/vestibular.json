@@ -1,19 +1,17 @@
 {
   "trace_event": "tool_diversity",
   "status": "normal",
-  "last_updated": "2026-06-06T09:07:42.384129+00:00",
+  "last_updated": "2026-06-19T15:55:02.787131+00:00",
   "metrics": {
-    "total_calls": 30,
-    "tool_distribution": {
-      "assistant": 14,
-      "user": 7,
-      "last-prompt": 2,
-      "ai-title": 2,
-      "mode": 2,
-      "permission-mode": 2,
-      "attachment": 1
+    "tool_counts": {
+      "Read": 5,
+      "Write": 3,
+      "Edit": 2,
+      "Bash": 4
     },
-    "dominant_percentage": 46.7
+    "dominant_tool": "Read",
+    "dominant_percent": 35.7,
+    "total_calls": 14
   },
   "warnings": [],
   "recommendation": "continue"

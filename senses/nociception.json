@@ -1,48 +1,12 @@
 {
   "trace_event": "error_cascade",
-  "_version": "2.0.0",
-  "_upgraded": "2026-06-16",
-  "_source": "Integrated with intelligent-recovery.py (absorbed from MUNDO v2.2.3)",
-  "_module": "intelligent_recovery.py",
-
-  "status": "healthy",
-  "last_updated": null,
-
-  "config": {
-    "cascade_window_minutes": 5,
-    "healthy_max": 2,
-    "warning_max": 4,
-    "critical_threshold": 5,
-    "enable_auto_recovery": true,
-    "enable_circuit_breaker": true,
-    "escalate_on_repeated_permission_errors": true,
-    "escalate_on_tool_cascade": true,
-    "auto_compress_on_context_overflow": true
-  },
-
+  "status": "normal",
+  "last_updated": "2026-06-19T15:55:02.787131+00:00",
   "metrics": {
-    "errors_in_window": 0,
-    "unique_categories_active": 0,
-    "top_category": null,
-    "circuit_breakers_open": 0,
-    "total_recoveries": 0,
-    "successful_recoveries": 0
+    "error_count": 0,
+    "window_minutes": 5,
+    "errors_per_window": 0
   },
-
-  "integration": {
-    "event_bus": {
-      "publishes": ["error.detected", "recovery.attempted", "recovery.succeeded", "recovery.failed", "circuit_breaker.state_change"],
-      "subscribes": ["tool.error", "api.error", "context.overflow"]
-    },
-    "metacog": {
-      "sense_id": "nociception",
-      "triggers_o2_warning": true,
-      "triggers_chronos_pause": true,
-      "escalation_target": "user_notification"
-    },
-    "policy_engine": {
-      "audit_all_strategies": true,
-      "require_approval_for": ["abort", "ask_user"]
-    }
-  }
+  "warnings": [],
+  "recommendation": "continue"
 }

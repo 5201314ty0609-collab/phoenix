@@ -1,17 +1,11 @@
 {
   "trace_event": "pattern_recurrence",
   "status": "normal",
-  "last_updated": "2026-06-06T09:07:42.383994+00:00",
+  "last_updated": "2026-06-19T15:55:02.787131+00:00",
   "metrics": {
-    "unique_error_signatures": 11,
     "repeated_signatures": 0,
-    "tool_distribution": {
-      "assistant": 14,
-      "user": 7,
-      "last-prompt": 2,
-      "ai-title": 2,
-      "mode": 2
-    }
+    "unique_patterns": 14,
+    "pattern_diversity": 1.0
   },
   "warnings": [],
   "recommendation": "continue"
