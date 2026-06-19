@@ -91,12 +91,12 @@
 
 <header>
   <h1>系统监控 <span style="font-weight:400;color:var(--text-muted);font-size:0.7em">/ System Monitor</span></h1>
-  <p class="sub">PHOENIX v1.3.0 · 24 模块 · 15 规则 · 规则健康 93% · 成本健康 71/100 · 2026-06-17</p>
+  <p class="sub">PHOENIX v1.3.0 · 27 模块 · 15 规则 · 规则健康 93% · 成本健康 72/100 · 2026-06-19</p>
 </header>
 
 <div class="kpi-grid">
-  <div class="kpi"><div class="kpi-label">规则健康<span class="en"> / Rule Health</span></div><div class="kpi-value green">93%</div><div class="kpi-sub">13/14 规则健康 · 1 条待升级 / 13 healthy, 1 pending</div></div>
-  <div class="kpi"><div class="kpi-label">成本健康<span class="en"> / Cost Health</span></div><div class="kpi-value amber">71 / 100</div><div class="kpi-sub">C 级 · 可进化至 80+ / Evolvable to 80+</div></div>
+  <div class="kpi"><div class="kpi-label">规则健康<span class="en"> / Rule Health</span></div><div class="kpi-value green" id="kpi-rule-health">93%</div><div class="kpi-sub">13/14 规则健康 · 1 条待升级 / 13 healthy, 1 pending</div></div>
+  <div class="kpi"><div class="kpi-label">成本健康<span class="en"> / Cost Health</span></div><div class="kpi-value amber" id="kpi-cost-health">72 / 100</div><div class="kpi-sub">C 级 · 可进化至 80+ / Evolvable to 80+</div></div>
   <div class="kpi"><div class="kpi-label">活跃 Skill<span class="en"> / Skills Active</span></div><div class="kpi-value accent">37 / 67</div><div class="kpi-sub">30 个已禁用 / 30 disabled via skillOverrides</div></div>
   <div class="kpi"><div class="kpi-label">工具调用<span class="en"> / Tool Calls</span></div><div class="kpi-value accent" id="kpi-tools">—</div><div class="kpi-sub" id="kpi-tools-detail">连接服务器获取实时数据...</div></div>
 </div>
@@ -183,6 +183,14 @@ async function fetchStats() {
         const top = Object.entries(d.tool_usage).slice(0, 3).map(([k, v]) => k + ' ' + v).join(' · ');
         const el = document.getElementById('kpi-tools-detail');
         if (el) el.textContent = top;
+      }
+      if (d.rule_health) {
+        const el = document.getElementById('kpi-rule-health');
+        if (el) el.textContent = d.rule_health + '%';
+      }
+      if (d.cost_health) {
+        const el = document.getElementById('kpi-cost-health');
+        if (el) el.textContent = d.cost_health + ' / 100';
       }
     }
   } catch (e) { /* server offline, keep static data */ }

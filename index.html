@@ -117,16 +117,16 @@
   <div class="hero-meta">
     <span>纯 Python stdlib</span>
     <span>零外部依赖</span>
-    <span>24 引擎模块</span>
+    <span>27 引擎模块</span>
     <span>15 规则文件</span>
   </div>
 </header>
 
 <div class="container"><div class="stats">
-  <div><div class="stat-value">24</div><div class="stat-label">引擎模块<span class="en"> / Engine Modules</span></div></div>
-  <div><div class="stat-value">15</div><div class="stat-label">规则文件<span class="en"> / Rule Files</span></div></div>
-  <div><div class="stat-value">93%</div><div class="stat-label">规则健康<span class="en"> / Rule Health</span></div></div>
-  <div><div class="stat-value">71</div><div class="stat-label">成本健康<span class="en"> / Cost Health</span></div></div>
+  <div><div class="stat-value" id="stat-modules">27</div><div class="stat-label">引擎模块<span class="en"> / Engine Modules</span></div></div>
+  <div><div class="stat-value" id="stat-rules">15</div><div class="stat-label">规则文件<span class="en"> / Rule Files</span></div></div>
+  <div><div class="stat-value" id="stat-rule-health">93%</div><div class="stat-label">规则健康<span class="en"> / Rule Health</span></div></div>
+  <div><div class="stat-value" id="stat-cost-health">72</div><div class="stat-label">成本健康<span class="en"> / Cost Health</span></div></div>
 </div></div>
 
 <section class="container">
@@ -284,6 +284,26 @@
 <footer>
   <p>PHOENIX v1.3.0 · <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a> · holyty + PHOENIX · MIT License</p>
 </footer>
+
+<script>
+const SERVER = 'http://localhost:8765';
+async function updateStats() {
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 3000);
+    const r = await fetch(SERVER + '/api/stats', { signal: ctrl.signal });
+    if (r.ok) {
+      const d = await r.json();
+      if (d.modules) document.getElementById('stat-modules').textContent = d.modules;
+      if (d.rules) document.getElementById('stat-rules').textContent = d.rules;
+      if (d.rule_health) document.getElementById('stat-rule-health').textContent = d.rule_health + '%';
+      if (d.cost_health) document.getElementById('stat-cost-health').textContent = d.cost_health;
+    }
+  } catch (e) { /* server offline, keep static data */ }
+}
+updateStats();
+setInterval(updateStats, 30000);
+</script>
 
 </body>
 </html>
