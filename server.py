@@ -993,6 +993,19 @@ class PhoenixHandler(BaseHTTPRequestHandler):
             self._send_html("<h1>Test Dashboard</h1><p>File not found.</p>")
             return
 
+        # Generic HTML file serving
+        if path.endswith(".html"):
+            html_file = PHOENIX_HOME / path.lstrip("/")
+            if html_file.exists():
+                try:
+                    html = html_file.read_text()
+                    self._send_html(html)
+                    return
+                except OSError:
+                    pass
+            self._send_error(f"File not found: {path}", 404)
+            return
+
         # API routes
         try:
             result, is_sse = self._route_get(path, params)
