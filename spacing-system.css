@@ -1,0 +1,303 @@
+/* PHOENIX 间距系统
+ * 基于 4px 基准网格
+ * 原则：一致性、层次感、呼吸感
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════
+     基础间距 (Base Spacing)
+     基于 4px 基准网格
+     ═══════════════════════════════════════════════ */
+  --space-0: 0;           /* 0px - 无间距 */
+  --space-1: 0.25rem;     /* 4px - 最小间距 */
+  --space-2: 0.5rem;      /* 8px - 小间距 */
+  --space-3: 0.75rem;     /* 12px - 中小间距 */
+  --space-4: 1rem;        /* 16px - 中间距 */
+  --space-5: 1.25rem;     /* 20px - 中大间距 */
+  --space-6: 1.5rem;      /* 24px - 大间距 */
+  --space-8: 2rem;        /* 32px - 超大间距 */
+  --space-10: 2.5rem;     /* 40px - 特大间距 */
+  --space-12: 3rem;       /* 48px - 巨大间距 */
+  --space-16: 4rem;       /* 64px - 超大间距 */
+  --space-20: 5rem;       /* 80px - 巨大间距 */
+  --space-24: 6rem;       /* 96px - 超大间距 */
+
+  /* ═══════════════════════════════════════════════
+     响应式间距 (Responsive Spacing)
+     使用 clamp() 自动适配
+     ═══════════════════════════════════════════════ */
+  --space-section: clamp(2rem, 1rem + 3vw, 6rem);      /* 区域间距 */
+  --space-card: clamp(1rem, 0.5rem + 2vw, 2rem);       /* 卡片内边距 */
+  --space-button: clamp(0.5rem, 0.25rem + 1vw, 1rem);  /* 按钮内边距 */
+  --space-grid: clamp(1rem, 0.5rem + 1.5vw, 1.5rem);   /* 网格间隙 */
+  --space-form: clamp(1rem, 0.5rem + 1vw, 1.5rem);     /* 表单间距 */
+
+  /* ═══════════════════════════════════════════════
+     语义间距 (Semantic Spacing)
+     用于特定场景
+     ═══════════════════════════════════════════════ */
+  /* 页面布局 */
+  --space-page-x: clamp(1rem, 0.5rem + 2vw, 2rem);     /* 页面水平内边距 */
+  --space-page-y: clamp(1.5rem, 1rem + 2vw, 3rem);     /* 页面垂直内边距 */
+
+  /* 区域间距 */
+  --space-section-top: clamp(2rem, 1rem + 3vw, 4rem);   /* 区域顶部间距 */
+  --space-section-bottom: clamp(3rem, 2rem + 3vw, 6rem); /* 区域底部间距 */
+
+  /* 卡片间距 */
+  --space-card-padding: clamp(1rem, 0.5rem + 1.5vw, 2rem);     /* 卡片内边距 */
+  --space-card-gap: clamp(0.75rem, 0.5rem + 1vw, 1.5rem);      /* 卡片内元素间距 */
+  --space-card-margin: clamp(1rem, 0.5rem + 1.5vw, 1.5rem);    /* 卡片外边距 */
+
+  /* 按钮间距 */
+  --space-button-padding-x: clamp(0.75rem, 0.5rem + 1vw, 1.5rem);  /* 按钮水平内边距 */
+  --space-button-padding-y: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem); /* 按钮垂直内边距 */
+  --space-button-gap: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);    /* 按钮间距 */
+
+  /* 表单间距 */
+  --space-form-group: clamp(1rem, 0.5rem + 1vw, 1.5rem);     /* 表单组间距 */
+  --space-form-label: clamp(0.25rem, 0.125rem + 0.25vw, 0.5rem); /* 标签与输入框间距 */
+  --space-form-input: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);  /* 输入框内边距 */
+
+  /* 表格间距 */
+  --space-table-cell: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);  /* 单元格内边距 */
+  --space-table-header: clamp(0.75rem, 0.5rem + 0.5vw, 1rem);   /* 表头内边距 */
+
+  /* 列表间距 */
+  --space-list-item: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);  /* 列表项间距 */
+  --space-list-icon: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);  /* 图标与文字间距 */
+
+  /* ═══════════════════════════════════════════════
+     间距层次 (Spacing Hierarchy)
+     表达元素关系
+     ═══════════════════════════════════════════════ */
+  /* 一级间距：紧密相关 */
+  --space-tight: var(--space-1);      /* 4px */
+  --space-snug: var(--space-2);       /* 8px */
+
+  /* 二级间距：相关 */
+  --space-normal: var(--space-4);     /* 16px */
+  --space-relaxed: var(--space-6);    /* 24px */
+
+  /* 三级间距：不同区域 */
+  --space-loose: var(--space-8);      /* 32px */
+  --space-distant: var(--space-12);   /* 48px */
+  --space-far: var(--space-16);       /* 64px */
+}
+
+/* ═══════════════════════════════════════════════
+   间距组件 (Spacing Components)
+   ═══════════════════════════════════════════════ */
+
+/* 页面布局 */
+.page {
+  padding: var(--space-page-y) var(--space-page-x);
+}
+
+/* 区域 */
+.section {
+  padding-top: var(--space-section-top);
+  padding-bottom: var(--space-section-bottom);
+}
+
+/* 卡片 */
+.card {
+  padding: var(--space-card-padding);
+  margin-bottom: var(--space-card-margin);
+  gap: var(--space-card-gap);
+}
+
+/* 按钮 */
+.btn {
+  padding: var(--space-button-padding-y) var(--space-button-padding-x);
+  gap: var(--space-button-gap);
+}
+
+/* 表单 */
+.form-group {
+  margin-bottom: var(--space-form-group);
+}
+
+.form-group label {
+  margin-bottom: var(--space-form-label);
+}
+
+.form-group input,
+.form-group textarea {
+  padding: var(--space-form-input);
+}
+
+/* 表格 */
+th {
+  padding: var(--space-table-header);
+}
+
+td {
+  padding: var(--space-table-cell);
+}
+
+/* 列表 */
+.list-item {
+  padding: var(--space-list-item) 0;
+  gap: var(--space-list-icon);
+}
+
+/* 网格 */
+.grid {
+  gap: var(--space-grid);
+}
+
+/* Flex */
+.flex {
+  gap: var(--space-normal);
+}
+
+.flex-col {
+  gap: var(--space-normal);
+}
+
+/* ═══════════════════════════════════════════════
+   间距工具类 (Spacing Utilities)
+   ═══════════════════════════════════════════════ */
+
+/* 内边距 */
+.p-0 { padding: 0; }
+.p-1 { padding: var(--space-1); }
+.p-2 { padding: var(--space-2); }
+.p-3 { padding: var(--space-3); }
+.p-4 { padding: var(--space-4); }
+.p-5 { padding: var(--space-5); }
+.p-6 { padding: var(--space-6); }
+.p-8 { padding: var(--space-8); }
+
+.px-0 { padding-left: 0; padding-right: 0; }
+.px-1 { padding-left: var(--space-1); padding-right: var(--space-1); }
+.px-2 { padding-left: var(--space-2); padding-right: var(--space-2); }
+.px-3 { padding-left: var(--space-3); padding-right: var(--space-3); }
+.px-4 { padding-left: var(--space-4); padding-right: var(--space-4); }
+.px-5 { padding-left: var(--space-5); padding-right: var(--space-5); }
+.px-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
+
+.py-0 { padding-top: 0; padding-bottom: 0; }
+.py-1 { padding-top: var(--space-1); padding-bottom: var(--space-1); }
+.py-2 { padding-top: var(--space-2); padding-bottom: var(--space-2); }
+.py-3 { padding-top: var(--space-3); padding-bottom: var(--space-3); }
+.py-4 { padding-top: var(--space-4); padding-bottom: var(--space-4); }
+.py-5 { padding-top: var(--space-5); padding-bottom: var(--space-5); }
+.py-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+
+/* 外边距 */
+.m-0 { margin: 0; }
+.m-1 { margin: var(--space-1); }
+.m-2 { margin: var(--space-2); }
+.m-3 { margin: var(--space-3); }
+.m-4 { margin: var(--space-4); }
+.m-5 { margin: var(--space-5); }
+.m-6 { margin: var(--space-6); }
+.m-8 { margin: var(--space-8); }
+
+.mx-0 { margin-left: 0; margin-right: 0; }
+.mx-1 { margin-left: var(--space-1); margin-right: var(--space-1); }
+.mx-2 { margin-left: var(--space-2); margin-right: var(--space-2); }
+.mx-3 { margin-left: var(--space-3); margin-right: var(--space-3); }
+.mx-4 { margin-left: var(--space-4); margin-right: var(--space-4); }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+.my-0 { margin-top: 0; margin-bottom: 0; }
+.my-1 { margin-top: var(--space-1); margin-bottom: var(--space-1); }
+.my-2 { margin-top: var(--space-2); margin-bottom: var(--space-2); }
+.my-3 { margin-top: var(--space-3); margin-bottom: var(--space-3); }
+.my-4 { margin-top: var(--space-4); margin-bottom: var(--space-4); }
+.my-5 { margin-top: var(--space-5); margin-bottom: var(--space-5); }
+.my-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-5 { margin-top: var(--space-5); }
+.mt-6 { margin-top: var(--space-6); }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-3 { margin-bottom: var(--space-3); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-5 { margin-bottom: var(--space-5); }
+.mb-6 { margin-bottom: var(--space-6); }
+
+/* 间隙 */
+.gap-0 { gap: 0; }
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-5 { gap: var(--space-5); }
+.gap-6 { gap: var(--space-6); }
+.gap-8 { gap: var(--space-8); }
+
+/* ═══════════════════════════════════════════════
+   使用示例
+   ═══════════════════════════════════════════════ */
+/*
+<!-- 页面布局 -->
+<div class="page">
+  <section class="section">
+    <div class="card">
+      <h3>标题</h3>
+      <p>内容</p>
+      <button class="btn">按钮</button>
+    </div>
+  </section>
+</div>
+
+<!-- 网格布局 -->
+<div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+  <div class="card">卡片 1</div>
+  <div class="card">卡片 2</div>
+  <div class="card">卡片 3</div>
+</div>
+
+<!-- Flex 布局 -->
+<div class="flex">
+  <button class="btn">按钮 1</button>
+  <button class="btn">按钮 2</button>
+</div>
+
+<!-- 表单 -->
+<div class="form-group">
+  <label>用户名</label>
+  <input type="text" placeholder="请输入用户名">
+</div>
+
+<!-- 表格 -->
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>状态</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>项目 1</td>
+      <td>正常</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- 列表 -->
+<ul>
+  <li class="list-item">
+    <span class="icon">✓</span>
+    <span>列表项 1</span>
+  </li>
+</ul>
+
+<!-- 工具类 -->
+<div class="p-4 mb-4">
+  <p class="mb-2">段落 1</p>
+  <p class="mb-0">段落 2</p>
+</div>
+*/

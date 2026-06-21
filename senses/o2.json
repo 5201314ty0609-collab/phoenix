@@ -1,7 +1,7 @@
 {
   "trace_event": "token_pressure",
   "status": "normal",
-  "last_updated": "2026-06-20T16:13:17.772835+00:00",
+  "last_updated": "2026-06-21T14:35:46.370418+00:00",
   "metrics": {
     "estimated_tokens": 50000,
     "context_limit": 1000000,

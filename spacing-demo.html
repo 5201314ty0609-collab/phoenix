@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHOENIX 间距系统演示</title>
+<style>
+:root {
+  /* 基础间距 */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+
+  /* 响应式间距 */
+  --space-section: clamp(2rem, 1rem + 3vw, 6rem);
+  --space-card: clamp(1rem, 0.5rem + 2vw, 2rem);
+  --space-button: clamp(0.5rem, 0.25rem + 1vw, 1rem);
+  --space-grid: clamp(1rem, 0.5rem + 1.5vw, 1.5rem);
+
+  /* 颜色 */
+  --bg: #08080e;
+  --surface: #111119;
+  --text: #e4e0db;
+  --text-dim: #6b6560;
+  --accent: #f49e42;
+  --border: #222228;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'PingFang SC', 'SF Pro', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: var(--space-section);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 { font-size: 2.5rem; margin-bottom: var(--space-4); }
+h2 { font-size: 1.5rem; color: var(--accent); margin-bottom: var(--space-4); }
+h3 { font-size: 1.25rem; margin-bottom: var(--space-3); }
+
+p { margin-bottom: var(--space-4); }
+
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: var(--space-card);
+  margin-bottom: var(--space-section);
+}
+
+.section h2 {
+  border-bottom: 2px solid var(--border);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+/* 间距展示 */
+.spacing-demo {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.spacing-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.spacing-item .label {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: var(--accent);
+  min-width: 120px;
+}
+
+.spacing-item .bar {
+  height: 12px;
+  background: var(--accent);
+  border-radius: 6px;
+  opacity: 0.8;
+}
+
+.spacing-item .value {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+/* 卡片展示 */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-grid);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: var(--space-card);
+  transition: all 0.2s;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(244, 158, 66, 0.1);
+}
+
+.card h3 {
+  color: var(--accent);
+  margin-bottom: var(--space-3);
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin-bottom: var(--space-4);
+}
+
+.card .btn {
+  display: inline-block;
+  padding: var(--space-button) calc(var(--space-button) * 2);
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 158, 66, 0.3);
+}
+
+/* 按钮展示 */
+.btn-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.btn {
+  padding: var(--space-button) calc(var(--space-button) * 2);
+  border: 2px solid var(--accent);
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  color: var(--accent);
+}
+
+.btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+/* 表单展示 */
+.form-demo {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.form-group {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+
+.form-group input,
+.form-group textarea {
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-group .hint {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+/* 表格展示 */
+.table-demo {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: var(--surface);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* 列表展示 */
+.list-demo {
+  list-style: none;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item .icon {
+  width: 24px;
+  height: 24px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: var(--bg);
+  flex-shrink: 0;
+}
+
+.list-item .text {
+  flex: 1;
+}
+
+.list-item .meta {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+/* 响应式展示 */
+.responsive-demo {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.responsive-item {
+  background: var(--bg);
+  border: 2px dashed var(--border);
+  border-radius: 0.5rem;
+  padding: var(--space-card);
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.responsive-item .label {
+  font-size: 0.75rem;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.responsive-item .value {
+  font-family: monospace;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+footer {
+  text-align: center;
+  padding: var(--space-8) 0;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-section);
+}
+</style>
+</head>
+<body>
+
+<h1>PHOENIX 间距系统</h1>
+<p>基于 4px 基准网格 · 响应式 · 语义化 · 呼吸感</p>
+
+<!-- 基础间距 -->
+<div class="section">
+  <h2>📏 基础间距 (Base Spacing)</h2>
+  <div class="spacing-demo">
+    <div class="spacing-item">
+      <span class="label">--space-1</span>
+      <div class="bar" style="width: 4px;"></div>
+      <span class="value">4px (0.25rem)</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">--space-2</span>
+      <div class="bar" style="width: 8px;"></div>
+      <span class="value">8px (0.5rem)</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">--space-3</span>
+      <div class="bar" style="width: 12px;"></div>
+      <span class="value">12px (0.75rem)</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">--space-4</span>
+      <div class="bar" style="width: 16px;"></div>
+      <span class="value">16px (1rem)</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">--space-5</span>
+      <div class="bar" style="width: 20px;"></div>
+      <span class="value">20px (1.25rem)</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">--space-6</span>
+      <div class="bar" style="width: 24px;"></div>
+      <span class="value">24px (1.5rem)</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">--space-8</span>
+      <div class="bar" style="width: 32px;"></div>
+      <span class="value">32px (2rem)</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">--space-12</span>
+      <div class="bar" style="width: 48px;"></div>
+      <span class="value">48px (3rem)</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">--space-16</span>
+      <div class="bar" style="width: 64px;"></div>
+      <span class="value">64px (4rem)</span>
+    </div>
+  </div>
+</div>
+
+<!-- 间距层次 -->
+<div class="section">
+  <h2>🎯 间距层次 (Spacing Hierarchy)</h2>
+  <p>不同级别的间距表示不同的关系</p>
+  <div class="spacing-demo">
+    <div class="spacing-item">
+      <span class="label">一级间距</span>
+      <div class="bar" style="width: 8px;"></div>
+      <span class="value">4-8px · 紧密相关（图标与文字）</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">二级间距</span>
+      <div class="bar" style="width: 24px;"></div>
+      <span class="value">16-24px · 相关（卡片内元素）</span>
+    </div>
+    <div class="spacing-item">
+      <span class="label">三级间距</span>
+      <div class="bar" style="width: 48px;"></div>
+      <span class="value">48-64px · 不同区域（页面区块）</span>
+    </div>
+  </div>
+</div>
+
+<!-- 响应式间距 -->
+<div class="section">
+  <h2>📱 响应式间距 (Responsive Spacing)</h2>
+  <p>使用 clamp() 自动适配不同屏幕</p>
+  <div class="responsive-demo">
+    <div class="responsive-item">
+      <div class="label">--space-section</div>
+      <div class="value">clamp(2rem, 1rem + 3vw, 6rem)</div>
+      <div class="label" style="margin-top: 0.5rem;">区域间距 · 自动适配</div>
+    </div>
+    <div class="responsive-item">
+      <div class="label">--space-card</div>
+      <div class="value">clamp(1rem, 0.5rem + 2vw, 2rem)</div>
+      <div class="label" style="margin-top: 0.5rem;">卡片内边距 · 自动适配</div>
+    </div>
+    <div class="responsive-item">
+      <div class="label">--space-button</div>
+      <div class="value">clamp(0.5rem, 0.25rem + 1vw, 1rem)</div>
+      <div class="label" style="margin-top: 0.5rem;">按钮内边距 · 自动适配</div>
+    </div>
+  </div>
+</div>
+
+<!-- 卡片布局 -->
+<div class="section">
+  <h2>🃏 卡片布局 (Card Layout)</h2>
+  <div class="card-grid">
+    <div class="card">
+      <h3>卡片标题</h3>
+      <p>卡片内容，使用响应式内边距，自动适配不同屏幕。</p>
+      <button class="btn">操作按钮</button>
+    </div>
+    <div class="card">
+      <h3>卡片标题</h3>
+      <p>卡片内容，使用响应式内边距，自动适配不同屏幕。</p>
+      <button class="btn">操作按钮</button>
+    </div>
+    <div class="card">
+      <h3>卡片标题</h3>
+      <p>卡片内容，使用响应式内边距，自动适配不同屏幕。</p>
+      <button class="btn">操作按钮</button>
+    </div>
+  </div>
+</div>
+
+<!-- 按钮布局 -->
+<div class="section">
+  <h2>🔘 按钮布局 (Button Layout)</h2>
+  <div class="btn-grid">
+    <button class="btn">默认按钮</button>
+    <button class="btn btn-primary">主要按钮</button>
+    <button class="btn">次要按钮</button>
+    <button class="btn">幽灵按钮</button>
+  </div>
+</div>
+
+<!-- 表单布局 -->
+<div class="section">
+  <h2>📝 表单布局 (Form Layout)</h2>
+  <div class="form-demo">
+    <div class="form-group">
+      <label>用户名</label>
+      <input type="text" placeholder="请输入用户名">
+      <div class="hint">3-20 个字符，支持字母、数字、下划线</div>
+    </div>
+    <div class="form-group">
+      <label>邮箱</label>
+      <input type="email" placeholder="your@email.com">
+    </div>
+    <div class="form-group">
+      <label>简介</label>
+      <textarea rows="3" placeholder="介绍一下自己..."></textarea>
+    </div>
+    <button class="btn btn-primary">提交</button>
+  </div>
+</div>
+
+<!-- 表格布局 -->
+<div class="section">
+  <h2>📊 表格布局 (Table Layout)</h2>
+  <div class="table-demo">
+    <table>
+      <thead>
+        <tr>
+          <th>模块</th>
+          <th>状态</th>
+          <th>健康度</th>
+          <th>最后更新</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>phoenix-observability</td>
+          <td>✓ 运行中</td>
+          <td>98%</td>
+          <td>2 分钟前</td>
+        </tr>
+        <tr>
+          <td>phoenix-cost-tracker</td>
+          <td>✓ 运行中</td>
+          <td>71%</td>
+          <td>5 分钟前</td>
+        </tr>
+        <tr>
+          <td>phoenix-bash-guard</td>
+          <td>⚠ 警告</td>
+          <td>85%</td>
+          <td>10 分钟前</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 列表布局 -->
+<div class="section">
+  <h2>📋 列表布局 (List Layout)</h2>
+  <ul class="list-demo">
+    <li class="list-item">
+      <div class="icon">✓</div>
+      <div class="text">完成间距系统设计</div>
+      <div class="meta">2 分钟前</div>
+    </li>
+    <li class="list-item">
+      <div class="icon">✓</div>
+      <div class="text">创建演示页面</div>
+      <div class="meta">5 分钟前</div>
+    </li>
+    <li class="list-item">
+      <div class="icon">✓</div>
+      <div class="text">学习间距最佳实践</div>
+      <div class="meta">10 分钟前</div>
+    </li>
+  </ul>
+</div>
+
+<footer>
+  PHOENIX v1.3.0 · 间距系统 · 基于 4px 基准网格
+</footer>
+
+</body>
+</html>
