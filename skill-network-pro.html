@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHOENIX 技能网络 · 专业版</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a12;
+  --surface: #12121a;
+  --surface-alt: #1a1a25;
+  --border: #2a2a35;
+  --text: #e8e4df;
+  --text-dim: #7a7580;
+  --accent: #f49e42;
+  --accent2: #7aa2f7;
+  --red: #ff6b6b;
+  --green: #51cf66;
+  --yellow: #ffd43b;
+  --purple: #da77f2;
+  --cyan: #66d9e8;
+  --glow: rgba(244, 158, 66, 0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'SF Pro Display', 'PingFang SC', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* 主容器 */
+#app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* SVG 画布 */
+#graph {
+  width: 100%;
+  height: 100%;
+}
+
+/* 节点样式 */
+.node {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.node:hover {
+  filter: brightness(1.2);
+}
+
+.node-circle {
+  stroke-width: 2;
+  transition: all 0.3s ease;
+}
+
+.node-label {
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--text);
+  text-anchor: middle;
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.node-sublabel {
+  font-size: 9px;
+  fill: var(--text-dim);
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* 连接线 */
+.link {
+  stroke-opacity: 0.4;
+  transition: all 0.3s ease;
+}
+
+.link:hover {
+  stroke-opacity: 0.8;
+  stroke-width: 3;
+}
+
+.link-label {
+  font-size: 8px;
+  fill: var(--text-dim);
+  text-anchor: middle;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.link:hover + .link-label,
+.link-label.visible {
+  opacity: 1;
+}
+
+/* 粒子 */
+.particle {
+  pointer-events: none;
+}
+
+/* 控制面板 */
+.controls {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  width: 220px;
+}
+
+.controls h3 {
+  font-size: 0.95rem;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-group {
+  margin-bottom: 16px;
+}
+
+.control-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.control-group select {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.8rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.btn.active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-group .btn {
+  flex: 1;
+}
+
+/* 信息面板 */
+.info-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  width: 300px;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.info-panel.visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.info-panel .header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.info-panel .icon {
+  width: 48px;
+  height: 48px;
+  background: var(--surface-alt);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.info-panel .title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.info-panel .subtitle {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.info-panel .description {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-panel .stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.info-panel .stat {
+  background: var(--surface-alt);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+
+.info-panel .stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.info-panel .stat-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.info-panel .connections {
+  margin-top: 16px;
+}
+
+.info-panel .connections h4 {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.info-panel .connection-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: var(--surface-alt);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+}
+
+.info-panel .connection-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 图例 */
+.legend {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.legend h4 {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 统计栏 */
+.stats-bar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 24px;
+  display: flex;
+  gap: 24px;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.stats-bar .stat {
+  text-align: center;
+}
+
+.stats-bar .stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stats-bar .stat-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* 工具提示 */
+.tooltip {
+  position: fixed;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  color: var(--text);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 200;
+  backdrop-filter: blur(10px);
+}
+
+.tooltip.visible {
+  opacity: 1;
+}
+
+/* 搜索框 */
+.search-box {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+.search-box input {
+  width: 300px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 0.9rem;
+  outline: none;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.search-box input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+
+.search-box input::placeholder {
+  color: var(--text-dim);
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <svg id="graph"></svg>
+</div>
+
+<!-- 搜索框 -->
+<div class="search-box">
+  <input type="text" id="search" placeholder="🔍 搜索技能节点...">
+</div>
+
+<!-- 控制面板 -->
+<div class="controls">
+  <h3>🎛️ 控制面板</h3>
+
+  <div class="control-group">
+    <label>布局模式</label>
+    <select id="layout-select">
+      <option value="force">力导向布局</option>
+      <option value="radial">径向布局</option>
+      <option value="hierarchical">层次布局</option>
+      <option value="circular">环形布局</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label>节点大小: <span id="node-size-val">1</span></label>
+    <input type="range" id="node-size" min="0.5" max="2" step="0.1" value="1">
+  </div>
+
+  <div class="control-group">
+    <label>连接强度: <span id="link-strength-val">0.5</span></label>
+    <input type="range" id="link-strength" min="0" max="1" step="0.1" value="0.5">
+  </div>
+
+  <div class="control-group">
+    <label>粒子速度: <span id="particle-speed-val">1</span></label>
+    <input type="range" id="particle-speed" min="0" max="3" step="0.1" value="1">
+  </div>
+
+  <button class="btn" id="btn-particles" onclick="toggleParticles()">
+    ✨ 粒子效果
+  </button>
+
+  <button class="btn" id="btn-labels" onclick="toggleLabels()">
+    🏷️ 显示标签
+  </button>
+
+  <button class="btn" id="btn-auto" onclick="toggleAutoRotate()">
+    🔄 自动旋转
+  </button>
+
+  <button class="btn" onclick="resetView()">
+    🎯 重置视图
+  </button>
+
+  <button class="btn" onclick="randomizeLayout()">
+    🎲 随机布局
+  </button>
+</div>
+
+<!-- 信息面板 -->
+<div class="info-panel" id="info-panel">
+  <div class="header">
+    <div class="icon" id="info-icon">⚛️</div>
+    <div>
+      <div class="title" id="info-title">React</div>
+      <div class="subtitle" id="info-subtitle">核心技能</div>
+    </div>
+  </div>
+  <div class="description" id="info-description">
+    用于构建用户界面的 JavaScript 库
+  </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value" id="info-connections">5</div>
+      <div class="stat-label">连接数</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="info-strength">85%</div>
+      <div class="stat-label">掌握度</div>
+    </div>
+  </div>
+  <div class="connections">
+    <h4>🔗 关联技能</h4>
+    <div id="info-connections-list"></div>
+  </div>
+</div>
+
+<!-- 图例 -->
+<div class="legend">
+  <h4>📊 图例</h4>
+  <div class="legend-grid">
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--accent);"></div>
+      <span>核心技能</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--accent2);"></div>
+      <span>辅助技能</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--green);"></div>
+      <span>已掌握</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--yellow);"></div>
+      <span>学习中</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--red);"></div>
+      <span>待学习</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: var(--purple);"></div>
+      <span>AI 相关</span>
+    </div>
+  </div>
+</div>
+
+<!-- 统计栏 -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-value" id="total-nodes">0</div>
+    <div class="stat-label">技能节点</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="total-connections">0</div>
+    <div class="stat-label">连接数</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="mastery-level">0%</div>
+    <div class="stat-label">掌握度</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="learning-progress">0%</div>
+    <div class="stat-label">学习进度</div>
+  </div>
+</div>
+
+<!-- 工具提示 -->
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+// 数据定义
+// ═══════════════════════════════════════════════
+
+const nodes = [
+  // 核心技能
+  { id: 'react', name: 'React', type: 'core', category: 'frontend', icon: '⚛️', status: 'learning', strength: 65, description: '用于构建用户界面的 JavaScript 库' },
+  { id: 'typescript', name: 'TypeScript', type: 'core', category: 'language', icon: '📘', status: 'learning', strength: 55, description: 'JavaScript 的超集，添加了类型系统' },
+  { id: 'nodejs', name: 'Node.js', type: 'core', category: 'backend', icon: '🟢', status: 'learning', strength: 50, description: '基于 Chrome V8 引擎的 JavaScript 运行时' },
+  { id: 'python', name: 'Python', type: 'core', category: 'language', icon: '🐍', status: 'mastered', strength: 90, description: '通用编程语言，广泛用于 AI/ML' },
+  { id: 'ai', name: 'AI/ML', type: 'core', category: 'ai', icon: '🤖', status: 'learning', strength: 45, description: '人工智能和机器学习技术' },
+
+  // 设计技能
+  { id: 'design', name: '设计基础', type: 'auxiliary', category: 'design', icon: '🎨', status: 'mastered', strength: 85, description: '设计基础原则和方法论' },
+  { id: 'color', name: '颜色理论', type: 'auxiliary', category: 'design', icon: '🌈', status: 'mastered', strength: 80, description: '色彩理论和配色方案' },
+  { id: 'typography', name: '排版设计', type: 'auxiliary', category: 'design', icon: '📝', status: 'mastered', strength: 80, description: '字体选择和排版设计' },
+  { id: 'spacing', name: '间距系统', type: 'auxiliary', category: 'design', icon: '📏', status: 'mastered', strength: 80, description: '间距系统和布局网格' },
+
+  // 前端技能
+  { id: 'html', name: 'HTML', type: 'auxiliary', category: 'frontend', icon: '📄', status: 'mastered', strength: 95, description: '网页标记语言' },
+  { id: 'css', name: 'CSS', type: 'auxiliary', category: 'frontend', icon: '🎨', status: 'mastered', strength: 90, description: '样式表语言' },
+  { id: 'tailwind', name: 'Tailwind', type: 'auxiliary', category: 'frontend', icon: '💨', status: 'learning', strength: 60, description: '工具类 CSS 框架' },
+
+  // 后端技能
+  { id: 'api', name: 'API 设计', type: 'auxiliary', category: 'backend', icon: '🔌', status: 'learning', strength: 55, description: '应用程序接口设计' },
+  { id: 'database', name: '数据库', type: 'auxiliary', category: 'backend', icon: '🗄️', status: 'learning', strength: 50, description: '数据库设计和管理' },
+
+  // AI 技能
+  { id: 'langchain', name: 'LangChain', type: 'auxiliary', category: 'ai', icon: '🔗', status: 'learning', strength: 40, description: 'LLM 应用开发框架' },
+  { id: 'langgraph', name: 'LangGraph', type: 'auxiliary', category: 'ai', icon: '📊', status: 'learning', strength: 35, description: 'Agent 编排框架' },
+  { id: 'prompt', name: '提示词工程', type: 'auxiliary', category: 'ai', icon: '💬', status: 'learning', strength: 50, description: '提示词工程和优化' },
+
+  // 工具技能
+  { id: 'git', name: 'Git', type: 'auxiliary', category: 'tool', icon: '📦', status: 'mastered', strength: 85, description: '版本控制系统' },
+  { id: 'docker', name: 'Docker', type: 'auxiliary', category: 'tool', icon: '🐳', status: 'pending', strength: 20, description: '容器化平台' },
+  { id: 'cicd', name: 'CI/CD', type: 'auxiliary', category: 'tool', icon: '🔄', status: 'pending', strength: 15, description: '持续集成和持续部署' },
+];
+
+const links = [
+  // 核心连接
+  { source: 'react', target: 'typescript', label: '类型支持', strength: 0.9 },
+  { source: 'react', target: 'nodejs', label: '全栈', strength: 0.8 },
+  { source: 'react', target: 'ai', label: 'AI 集成', strength: 0.6 },
+  { source: 'typescript', target: 'nodejs', label: '后端', strength: 0.7 },
+  { source: 'python', target: 'ai', label: 'AI 开发', strength: 0.95 },
+
+  // 设计连接
+  { source: 'design', target: 'color', label: '颜色', strength: 0.9 },
+  { source: 'design', target: 'typography', label: '排版', strength: 0.9 },
+  { source: 'design', target: 'spacing', label: '间距', strength: 0.9 },
+  { source: 'design', target: 'css', label: '样式', strength: 0.8 },
+
+  // 前端连接
+  { source: 'html', target: 'css', label: '基础', strength: 0.95 },
+  { source: 'css', target: 'tailwind', label: '工具类', strength: 0.8 },
+  { source: 'react', target: 'html', label: 'JSX', strength: 0.85 },
+  { source: 'react', target: 'css', label: '样式', strength: 0.8 },
+  { source: 'react', target: 'tailwind', label: '集成', strength: 0.7 },
+
+  // 后端连接
+  { source: 'nodejs', target: 'api', label: 'API', strength: 0.85 },
+  { source: 'nodejs', target: 'database', label: '数据', strength: 0.8 },
+  { source: 'python', target: 'api', label: 'FastAPI', strength: 0.7 },
+
+  // AI 连接
+  { source: 'ai', target: 'langchain', label: '框架', strength: 0.9 },
+  { source: 'langchain', target: 'langgraph', label: '编排', strength: 0.85 },
+  { source: 'ai', target: 'prompt', label: '工程', strength: 0.8 },
+
+  // 工具连接
+  { source: 'git', target: 'cicd', label: '自动化', strength: 0.9 },
+  { source: 'docker', target: 'cicd', label: '部署', strength: 0.85 },
+  { source: 'nodejs', target: 'docker', label: '容器化', strength: 0.7 },
+];
+
+// ═══════════════════════════════════════════════
+// 状态管理
+// ═══════════════════════════════════════════════
+
+const state = {
+  selectedNode: null,
+  hoveredNode: null,
+  showParticles: true,
+  showLabels: true,
+  autoRotate: false,
+  nodeSize: 1,
+  linkStrength: 0.5,
+  particleSpeed: 1,
+  layout: 'force',
+  simulation: null,
+  transform: d3.zoomIdentity,
+};
+
+// ═══════════════════════════════════════════════
+// D3 初始化
+// ═══════════════════════════════════════════════
+
+const width = window.innerWidth;
+const height = window.innerHeight;
+
+const svg = d3.select('#graph')
+  .attr('width', width)
+  .attr('height', height);
+
+const g = svg.append('g');
+
+// 缩放
+const zoom = d3.zoom()
+  .scaleExtent([0.1, 4])
+  .on('zoom', (event) => {
+    state.transform = event.transform;
+    g.attr('transform', event.transform);
+  });
+
+svg.call(zoom);
+
+// 箭头定义
+svg.append('defs').selectAll('marker')
+  .data(['arrow'])
+  .enter().append('marker')
+  .attr('id', d => d)
+  .attr('viewBox', '0 -5 10 10')
+  .attr('refX', 20)
+  .attr('refY', 0)
+  .attr('markerWidth', 6)
+  .attr('markerHeight', 6)
+  .attr('orient', 'auto')
+  .append('path')
+  .attr('d', 'M0,-5L10,0L0,5')
+  .attr('fill', '#666');
+
+// ═══════════════════════════════════════════════
+// 力导向模拟
+// ═══════════════════════════════════════════════
+
+function initSimulation() {
+  state.simulation = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(links).id(d => d.id).distance(120).strength(d => d.strength * state.linkStrength))
+    .force('charge', d3.forceManyBody().strength(-300))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(40))
+    .on('tick', ticked);
+}
+
+// ═══════════════════════════════════════════════
+// 渲染函数
+// ═══════════════════════════════════════════════
+
+function render() {
+  // 清空
+  g.selectAll('*').remove();
+
+  // 渲染连接线
+  const link = g.append('g')
+    .attr('class', 'links')
+    .selectAll('line')
+    .data(links)
+    .enter().append('line')
+    .attr('class', 'link')
+    .attr('stroke', d => {
+      if (state.selectedNode && (d.source.id === state.selectedNode || d.target.id === state.selectedNode)) {
+        return 'var(--accent)';
+      }
+      return 'var(--border)';
+    })
+    .attr('stroke-width', d => {
+      if (state.selectedNode && (d.source.id === state.selectedNode || d.target.id === state.selectedNode)) {
+        return 3;
+      }
+      return 2;
+    })
+    .attr('marker-end', 'url(#arrow)');
+
+  // 连接标签
+  const linkLabel = g.append('g')
+    .attr('class', 'link-labels')
+    .selectAll('text')
+    .data(links)
+    .enter().append('text')
+    .attr('class', 'link-label')
+    .text(d => d.label)
+    .attr('opacity', state.showLabels ? 0.8 : 0);
+
+  // 渲染节点
+  const node = g.append('g')
+    .attr('class', 'nodes')
+    .selectAll('g')
+    .data(nodes)
+    .enter().append('g')
+    .attr('class', 'node')
+    .call(d3.drag()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended))
+    .on('click', (event, d) => selectNode(d))
+    .on('mouseover', (event, d) => showTooltip(event, d))
+    .on('mouseout', hideTooltip);
+
+  // 节点圆圈
+  node.append('circle')
+    .attr('class', 'node-circle')
+    .attr('r', d => (d.type === 'core' ? 25 : 20) * state.nodeSize)
+    .attr('fill', d => getNodeColor(d))
+    .attr('stroke', d => {
+      if (state.selectedNode === d.id) return 'var(--accent)';
+      if (state.hoveredNode === d.id) return 'var(--accent2)';
+      return 'var(--border)';
+    })
+    .attr('stroke-width', d => {
+      if (state.selectedNode === d.id) return 3;
+      if (state.hoveredNode === d.id) return 2;
+      return 1;
+    });
+
+  // 节点图标
+  node.append('text')
+    .attr('class', 'node-icon')
+    .attr('text-anchor', 'middle')
+    .attr('dy', '0.35em')
+    .attr('font-size', d => (d.type === 'core' ? 20 : 16) * state.nodeSize)
+    .text(d => d.icon);
+
+  // 节点标签
+  node.append('text')
+    .attr('class', 'node-label')
+    .attr('dy', d => (d.type === 'core' ? 35 : 30) * state.nodeSize)
+    .text(d => d.name);
+
+  // 节点子标签
+  node.append('text')
+    .attr('class', 'node-sublabel')
+    .attr('dy', d => (d.type === 'core' ? 48 : 42) * state.nodeSize)
+    .text(d => d.type === 'core' ? '核心' : '辅助');
+
+  // 粒子效果
+  if (state.showParticles) {
+    renderParticles(link);
+  }
+
+  // 更新统计
+  updateStats();
+}
+
+function renderParticles(link) {
+  const particles = g.append('g')
+    .attr('class', 'particles')
+    .selectAll('circle')
+    .data(links)
+    .enter().append('circle')
+    .attr('class', 'particle')
+    .attr('r', 3)
+    .attr('fill', 'var(--accent)')
+    .attr('opacity', 0.6);
+
+  function animateParticles() {
+    particles
+      .attr('cx', d => d.source.x)
+      .attr('cy', d => d.source.y)
+      .transition()
+      .duration(2000 / state.particleSpeed)
+      .ease(d3.easeLinear)
+      .attr('cx', d => d.target.x)
+      .attr('cy', d => d.target.y)
+      .transition()
+      .duration(0)
+      .attr('cx', d => d.source.x)
+      .attr('cy', d => d.source.y)
+      .on('end', animateParticles);
+  }
+
+  animateParticles();
+}
+
+function ticked() {
+  g.selectAll('.link')
+    .attr('x1', d => d.source.x)
+    .attr('y1', d => d.source.y)
+    .attr('x2', d => d.target.x)
+    .attr('y2', d => d.target.y);
+
+  g.selectAll('.link-label')
+    .attr('x', d => (d.source.x + d.target.x) / 2)
+    .attr('y', d => (d.source.y + d.target.y) / 2);
+
+  g.selectAll('.node')
+    .attr('transform', d => `translate(${d.x},${d.y})`);
+}
+
+// ═══════════════════════════════════════════════
+// 交互函数
+// ═══════════════════════════════════════════════
+
+function selectNode(node) {
+  state.selectedNode = node.id;
+  render();
+  showInfoPanel(node);
+}
+
+function showInfoPanel(node) {
+  const panel = document.getElementById('info-panel');
+  panel.classList.add('visible');
+
+  document.getElementById('info-icon').textContent = node.icon;
+  document.getElementById('info-title').textContent = node.name;
+  document.getElementById('info-subtitle').textContent = node.type === 'core' ? '核心技能' : '辅助技能';
+  document.getElementById('info-description').textContent = node.description;
+  document.getElementById('info-strength').textContent = `${node.strength}%`;
+
+  const connCount = links.filter(l => l.source.id === node.id || l.target.id === node.id).length;
+  document.getElementById('info-connections').textContent = connCount;
+
+  // 关联技能列表
+  const connList = document.getElementById('info-connections-list');
+  connList.innerHTML = '';
+
+  links.forEach(link => {
+    let target = null;
+    if (link.source.id === node.id) target = link.target;
+    if (link.target.id === node.id) target = link.source;
+
+    if (target) {
+      const item = document.createElement('div');
+      item.className = 'connection-item';
+      item.innerHTML = `
+        <div class="connection-dot" style="background: ${getNodeColor(target)}"></div>
+        <span>${target.icon} ${target.name}</span>
+        <span style="margin-left: auto; color: var(--text-dim)">${link.label}</span>
+      `;
+      connList.appendChild(item);
+    }
+  });
+}
+
+function hideInfoPanel() {
+  document.getElementById('info-panel').classList.remove('visible');
+}
+
+function showTooltip(event, node) {
+  const tooltip = document.getElementById('tooltip');
+  tooltip.textContent = `${node.icon} ${node.name} (${node.strength}%)`;
+  tooltip.style.left = `${event.clientX + 10}px`;
+  tooltip.style.top = `${event.clientY - 30}px`;
+  tooltip.classList.add('visible');
+
+  state.hoveredNode = node.id;
+  render();
+}
+
+function hideTooltip() {
+  document.getElementById('tooltip').classList.remove('visible');
+  state.hoveredNode = null;
+  render();
+}
+
+function getNodeColor(node) {
+  if (node.category === 'ai') return 'var(--purple)';
+  if (node.status === 'mastered') return 'var(--green)';
+  if (node.status === 'learning') return 'var(--yellow)';
+  if (node.status === 'pending') return 'var(--red)';
+  if (node.type === 'core') return 'var(--accent)';
+  return 'var(--accent2)';
+}
+
+function updateStats() {
+  document.getElementById('total-nodes').textContent = nodes.length;
+  document.getElementById('total-connections').textContent = links.length;
+
+  const mastered = nodes.filter(n => n.status === 'mastered').length;
+  const learning = nodes.filter(n => n.status === 'learning').length;
+  const mastery = Math.round((mastered / nodes.length) * 100);
+  const progress = Math.round(((mastered + learning) / nodes.length) * 100);
+
+  document.getElementById('mastery-level').textContent = `${mastery}%`;
+  document.getElementById('learning-progress').textContent = `${progress}%`;
+}
+
+// ═══════════════════════════════════════════════
+// 拖拽函数
+// ═══════════════════════════════════════════════
+
+function dragstarted(event, d) {
+  if (!event.active) state.simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(event, d) {
+  d.fx = event.x;
+  d.fy = event.y;
+}
+
+function dragended(event, d) {
+  if (!event.active) state.simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+// ═══════════════════════════════════════════════
+// 控制函数
+// ═══════════════════════════════════════════════
+
+function toggleParticles() {
+  state.showParticles = !state.showParticles;
+  document.getElementById('btn-particles').classList.toggle('active');
+  render();
+}
+
+function toggleLabels() {
+  state.showLabels = !state.showLabels;
+  document.getElementById('btn-labels').classList.toggle('active');
+  render();
+}
+
+function toggleAutoRotate() {
+  state.autoRotate = !state.autoRotate;
+  document.getElementById('btn-auto').classList.toggle('active');
+
+  if (state.autoRotate) {
+    autoRotate();
+  }
+}
+
+function autoRotate() {
+  if (!state.autoRotate) return;
+
+  const angle = 0.005;
+  nodes.forEach(node => {
+    const x = node.x - width / 2;
+    const y = node.y - height / 2;
+    node.x = width / 2 + x * Math.cos(angle) - y * Math.sin(angle);
+    node.y = height / 2 + x * Math.sin(angle) + y * Math.cos(angle);
+  });
+
+  state.simulation.alpha(0.1).restart();
+  requestAnimationFrame(autoRotate);
+}
+
+function resetView() {
+  state.selectedNode = null;
+  hideInfoPanel();
+  svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
+  render();
+}
+
+function randomizeLayout() {
+  nodes.forEach(node => {
+    node.x = width / 2 + (Math.random() - 0.5) * 400;
+    node.y = height / 2 + (Math.random() - 0.5) * 400;
+  });
+
+  state.simulation.alpha(1).restart();
+}
+
+// ═══════════════════════════════════════════════
+// 事件监听
+// ═══════════════════════════════════════════════
+
+// 点击空白取消选择
+svg.on('click', (event) => {
+  if (event.target === svg.node()) {
+    state.selectedNode = null;
+    hideInfoPanel();
+    render();
+  }
+});
+
+// 搜索
+document.getElementById('search').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase();
+  nodes.forEach(node => {
+    const match = node.name.toLowerCase().includes(query) ||
+                  node.description.toLowerCase().includes(query);
+    node.highlighted = match;
+  });
+  render();
+});
+
+// 控制面板
+document.getElementById('node-size').addEventListener('input', (e) => {
+  state.nodeSize = parseFloat(e.target.value);
+  document.getElementById('node-size-val').textContent = state.nodeSize;
+  render();
+});
+
+document.getElementById('link-strength').addEventListener('input', (e) => {
+  state.linkStrength = parseFloat(e.target.value);
+  document.getElementById('link-strength-val').textContent = state.linkStrength;
+  state.simulation.force('link').strength(d => d.strength * state.linkStrength);
+  state.simulation.alpha(0.3).restart();
+});
+
+document.getElementById('particle-speed').addEventListener('input', (e) => {
+  state.particleSpeed = parseFloat(e.target.value);
+  document.getElementById('particle-speed-val').textContent = state.particleSpeed;
+});
+
+document.getElementById('layout-select').addEventListener('change', (e) => {
+  state.layout = e.target.value;
+  applyLayout();
+});
+
+function applyLayout() {
+  switch (state.layout) {
+    case 'radial':
+      applyRadialLayout();
+      break;
+    case 'hierarchical':
+      applyHierarchicalLayout();
+      break;
+    case 'circular':
+      applyCircularLayout();
+      break;
+    default:
+      state.simulation.force('center', d3.forceCenter(width / 2, height / 2));
+      state.simulation.alpha(1).restart();
+  }
+}
+
+function applyRadialLayout() {
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = 200;
+
+  nodes.forEach((node, i) => {
+    const angle = (i / nodes.length) * Math.PI * 2;
+    node.x = centerX + Math.cos(angle) * radius;
+    node.y = centerY + Math.sin(angle) * radius;
+  });
+
+  state.simulation.alpha(0.3).restart();
+}
+
+function applyHierarchicalLayout() {
+  const levels = {
+    core: 0,
+    auxiliary: 1,
+  };
+
+  nodes.forEach(node => {
+    const level = levels[node.type] || 0;
+    node.y = 150 + level * 200;
+    node.x = width / 2 + (Math.random() - 0.5) * 400;
+  });
+
+  state.simulation.alpha(0.3).restart();
+}
+
+function applyCircularLayout() {
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const radius = 250;
+
+  nodes.forEach((node, i) => {
+    const angle = (i / nodes.length) * Math.PI * 2;
+    node.x = centerX + Math.cos(angle) * radius;
+    node.y = centerY + Math.sin(angle) * radius;
+  });
+
+  state.simulation.alpha(0.3).restart();
+}
+
+// ═══════════════════════════════════════════════
+// 初始化
+// ═══════════════════════════════════════════════
+
+initSimulation();
+render();
+
+// 窗口大小调整
+window.addEventListener('resize', () => {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  svg.attr('width', width).attr('height', height);
+  state.simulation.force('center', d3.forceCenter(width / 2, height / 2));
+  state.simulation.alpha(0.3).restart();
+});
+</script>
+
+</body>
+</html>

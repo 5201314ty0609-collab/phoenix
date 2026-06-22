@@ -1,0 +1,6 @@
+{
+  "parallel_execution": true,
+  "subgraph_support": true,
+  "visualization": true,
+  "history_tracking": true
+}

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHOENIX 技能网络</title>
+<style>
+:root {
+  --bg: #08080e;
+  --surface: #111119;
+  --surface-alt: #181824;
+  --border: #222228;
+  --text: #e4e0db;
+  --text-dim: #6b6560;
+  --accent: #f49e42;
+  --accent2: #7aa2f7;
+  --red: #e05555;
+  --green: #4caf50;
+  --yellow: #f0a040;
+  --purple: #bb9af7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'PingFang SC', 'SF Pro', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* 画布 */
+#canvas {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* 节点 */
+.node {
+  position: absolute;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: grab;
+  transition: all 0.2s;
+  min-width: 120px;
+  text-align: center;
+}
+
+.node:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(244, 158, 66, 0.3);
+  transform: scale(1.05);
+}
+
+.node.active {
+  border-color: var(--green);
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
+}
+
+.node .icon {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.node .name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.node .type {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* 连接线 */
+.connection {
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.connection line {
+  stroke: var(--border);
+  stroke-width: 2;
+  transition: all 0.2s;
+}
+
+.connection.active line {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.connection .label {
+  position: absolute;
+  background: var(--surface);
+  color: var(--text-dim);
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* 控制面板 */
+.controls {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  z-index: 100;
+}
+
+.controls h3 {
+  font-size: 0.9rem;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.controls button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.controls button:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.controls button.active {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* 信息面板 */
+.info-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  width: 280px;
+  z-index: 100;
+  display: none;
+}
+
+.info-panel.visible {
+  display: block;
+}
+
+.info-panel h3 {
+  font-size: 1rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.info-panel .description {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.info-panel .stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.info-panel .stat {
+  background: var(--surface-alt);
+  border-radius: 6px;
+  padding: 8px;
+  text-align: center;
+}
+
+.info-panel .stat .value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.info-panel .stat .label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* 图例 */
+.legend {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  z-index: 100;
+}
+
+.legend h4 {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* 统计 */
+.stats-bar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  gap: 20px;
+  z-index: 100;
+}
+
+.stats-bar .stat {
+  text-align: center;
+}
+
+.stats-bar .stat .value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stats-bar .stat .label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+</style>
+</head>
+<body>
+
+<div id="canvas"></div>
+
+<!-- 控制面板 -->
+<div class="controls">
+  <h3>🎛️ 控制面板</h3>
+  <button id="btn-reset" onclick="resetView()">重置视图</button>
+  <button id="btn-auto" onclick="toggleAutoLayout()">自动布局</button>
+  <button id="btn-connections" onclick="toggleConnections()">显示连接</button>
+  <button id="btn-labels" onclick="toggleLabels()">显示标签</button>
+  <button id="btn-physics" onclick="togglePhysics()">物理模拟</button>
+</div>
+
+<!-- 信息面板 -->
+<div class="info-panel" id="info-panel">
+  <h3 id="info-title">节点名称</h3>
+  <div class="description" id="info-description">节点描述</div>
+  <div class="stats">
+    <div class="stat">
+      <div class="value" id="info-connections">0</div>
+      <div class="label">连接数</div>
+    </div>
+    <div class="stat">
+      <div class="value" id="info-strength">0</div>
+      <div class="label">强度</div>
+    </div>
+  </div>
+</div>
+
+<!-- 图例 -->
+<div class="legend">
+  <h4>📊 图例</h4>
+  <div class="legend-item">
+    <div class="legend-dot" style="background: var(--accent);"></div>
+    <span>核心技能</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background: var(--accent2);"></div>
+    <span>辅助技能</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background: var(--green);"></div>
+    <span>已掌握</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background: var(--yellow);"></div>
+    <span>学习中</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background: var(--red);"></div>
+    <span>待学习</span>
+  </div>
+</div>
+
+<!-- 统计栏 -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="value" id="total-nodes">0</div>
+    <div class="label">技能节点</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="total-connections">0</div>
+    <div class="label">连接数</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="mastery-level">0%</div>
+    <div class="label">掌握度</div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// 数据定义
+// ═══════════════════════════════════════════════
+
+const skills = [
+  // 核心技能
+  { id: 'react', name: 'React', type: 'core', icon: '⚛️', status: 'learning', x: 400, y: 300 },
+  { id: 'typescript', name: 'TypeScript', type: 'core', icon: '📘', status: 'learning', x: 300, y: 200 },
+  { id: 'nodejs', name: 'Node.js', type: 'core', icon: '🟢', status: 'learning', x: 500, y: 200 },
+  { id: 'python', name: 'Python', type: 'core', icon: '🐍', status: 'mastered', x: 200, y: 300 },
+  { id: 'ai', name: 'AI/ML', type: 'core', icon: '🤖', status: 'learning', x: 600, y: 300 },
+
+  // 设计技能
+  { id: 'design', name: '设计基础', type: 'auxiliary', icon: '🎨', status: 'mastered', x: 150, y: 150 },
+  { id: 'color', name: '颜色理论', type: 'auxiliary', icon: '🌈', status: 'mastered', x: 100, y: 250 },
+  { id: 'typography', name: '排版设计', type: 'auxiliary', icon: '📝', status: 'mastered', x: 100, y: 350 },
+  { id: 'spacing', name: '间距系统', type: 'auxiliary', icon: '📏', status: 'mastered', x: 150, y: 450 },
+
+  // 前端技能
+  { id: 'html', name: 'HTML', type: 'auxiliary', icon: '📄', status: 'mastered', x: 250, y: 100 },
+  { id: 'css', name: 'CSS', type: 'auxiliary', icon: '🎨', status: 'mastered', x: 350, y: 100 },
+  { id: 'tailwind', name: 'Tailwind', type: 'auxiliary', icon: '💨', status: 'learning', x: 450, y: 100 },
+
+  // 后端技能
+  { id: 'api', name: 'API 设计', type: 'auxiliary', icon: '🔌', status: 'learning', x: 550, y: 100 },
+  { id: 'database', name: '数据库', type: 'auxiliary', icon: '🗄️', status: 'learning', x: 650, y: 200 },
+
+  // AI 技能
+  { id: 'langchain', name: 'LangChain', type: 'auxiliary', icon: '🔗', status: 'learning', x: 700, y: 350 },
+  { id: 'langgraph', name: 'LangGraph', type: 'auxiliary', icon: '📊', status: 'learning', x: 700, y: 450 },
+  { id: 'prompt', name: '提示词工程', type: 'auxiliary', icon: '💬', status: 'learning', x: 600, y: 450 },
+
+  // 工具技能
+  { id: 'git', name: 'Git', type: 'auxiliary', icon: '📦', status: 'mastered', x: 300, y: 450 },
+  { id: 'docker', name: 'Docker', type: 'auxiliary', icon: '🐳', status: 'pending', x: 400, y: 450 },
+  { id: 'ci-cd', name: 'CI/CD', type: 'auxiliary', icon: '🔄', status: 'pending', x: 500, y: 450 },
+];
+
+const connections = [
+  // 核心连接
+  { from: 'react', to: 'typescript', label: '类型支持' },
+  { from: 'react', to: 'nodejs', label: '全栈' },
+  { from: 'react', to: 'ai', label: 'AI 集成' },
+  { from: 'typescript', to: 'nodejs', label: '后端' },
+  { from: 'python', to: 'ai', label: 'AI 开发' },
+
+  // 设计连接
+  { from: 'design', to: 'color', label: '颜色' },
+  { from: 'design', to: 'typography', label: '排版' },
+  { from: 'design', to: 'spacing', label: '间距' },
+  { from: 'design', to: 'css', label: '样式' },
+
+  // 前端连接
+  { from: 'html', to: 'css', label: '基础' },
+  { from: 'css', to: 'tailwind', label: '工具类' },
+  { from: 'react', to: 'html', label: 'JSX' },
+  { from: 'react', to: 'css', label: '样式' },
+  { from: 'react', to: 'tailwind', label: '集成' },
+
+  // 后端连接
+  { from: 'nodejs', to: 'api', label: 'API' },
+  { from: 'nodejs', to: 'database', label: '数据' },
+  { from: 'python', to: 'api', label: 'FastAPI' },
+
+  // AI 连接
+  { from: 'ai', to: 'langchain', label: '框架' },
+  { from: 'langchain', to: 'langgraph', label: '编排' },
+  { from: 'ai', to: 'prompt', label: '工程' },
+
+  // 工具连接
+  { from: 'git', to: 'ci-cd', label: '自动化' },
+  { from: 'docker', to: 'ci-cd', label: '部署' },
+  { from: 'nodejs', to: 'docker', label: '容器化' },
+];
+
+// ═══════════════════════════════════════════════
+// 状态管理
+// ═══════════════════════════════════════════════
+
+let state = {
+  nodes: skills,
+  connections: connections,
+  selectedNode: null,
+  showConnections: true,
+  showLabels: true,
+  autoLayout: false,
+  physics: false,
+  dragging: null,
+  offset: { x: 0, y: 0 },
+};
+
+// ═══════════════════════════════════════════════
+// 渲染函数
+// ═══════════════════════════════════════════════
+
+function render() {
+  const canvas = document.getElementById('canvas');
+  canvas.innerHTML = '';
+
+  // 渲染连接线
+  if (state.showConnections) {
+    state.connections.forEach(conn => {
+      const fromNode = state.nodes.find(n => n.id === conn.from);
+      const toNode = state.nodes.find(n => n.id === conn.to);
+      if (fromNode && toNode) {
+        renderConnection(canvas, fromNode, toNode, conn);
+      }
+    });
+  }
+
+  // 渲染节点
+  state.nodes.forEach(node => {
+    renderNode(canvas, node);
+  });
+
+  // 更新统计
+  updateStats();
+}
+
+function renderNode(canvas, node) {
+  const el = document.createElement('div');
+  el.className = `node ${state.selectedNode === node.id ? 'active' : ''}`;
+  el.style.left = `${node.x}px`;
+  el.style.top = `${node.y}px`;
+  el.dataset.id = node.id;
+
+  // 状态颜色
+  let statusColor = 'var(--text-dim)';
+  if (node.status === 'mastered') statusColor = 'var(--green)';
+  else if (node.status === 'learning') statusColor = 'var(--yellow)';
+  else if (node.status === 'pending') statusColor = 'var(--red)';
+
+  el.innerHTML = `
+    <div class="icon">${node.icon}</div>
+    <div class="name" style="color: ${statusColor}">${node.name}</div>
+    <div class="type">${node.type === 'core' ? '核心' : '辅助'}</div>
+  `;
+
+  // 拖拽事件
+  el.addEventListener('mousedown', (e) => {
+    state.dragging = node.id;
+    state.offset = {
+      x: e.clientX - node.x,
+      y: e.clientY - node.y
+    };
+    selectNode(node.id);
+  });
+
+  canvas.appendChild(el);
+}
+
+function renderConnection(canvas, from, to, conn) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.style.position = 'absolute';
+  svg.style.left = '0';
+  svg.style.top = '0';
+  svg.style.width = '100%';
+  svg.style.height = '100%';
+  svg.style.pointerEvents = 'none';
+  svg.style.zIndex = '-1';
+
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', from.x + 60);
+  line.setAttribute('y1', from.y + 30);
+  line.setAttribute('x2', to.x + 60);
+  line.setAttribute('y2', to.y + 30);
+  line.setAttribute('stroke', 'var(--border)');
+  line.setAttribute('stroke-width', '2');
+
+  // 高亮选中节点的连接
+  if (state.selectedNode === from.id || state.selectedNode === to.id) {
+    line.setAttribute('stroke', 'var(--accent)');
+    line.setAttribute('stroke-width', '3');
+  }
+
+  svg.appendChild(line);
+  canvas.appendChild(svg);
+
+  // 连接标签
+  if (state.showLabels && conn.label) {
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.style.left = `${(from.x + to.x) / 2 + 60}px`;
+    label.style.top = `${(from.y + to.y) / 2 + 30}px`;
+    label.style.transform = 'translate(-50%, -50%)';
+    label.textContent = conn.label;
+    canvas.appendChild(label);
+  }
+}
+
+function updateStats() {
+  document.getElementById('total-nodes').textContent = state.nodes.length;
+  document.getElementById('total-connections').textContent = state.connections.length;
+
+  const mastered = state.nodes.filter(n => n.status === 'mastered').length;
+  const mastery = Math.round((mastered / state.nodes.length) * 100);
+  document.getElementById('mastery-level').textContent = `${mastery}%`;
+}
+
+// ═══════════════════════════════════════════════
+// 交互函数
+// ═══════════════════════════════════════════════
+
+function selectNode(id) {
+  state.selectedNode = id;
+  const node = state.nodes.find(n => n.id === id);
+
+  if (node) {
+    const panel = document.getElementById('info-panel');
+    panel.classList.add('visible');
+
+    document.getElementById('info-title').textContent = `${node.icon} ${node.name}`;
+    document.getElementById('info-description').textContent = getNodeDescription(node);
+
+    const connCount = state.connections.filter(c => c.from === id || c.to === id).length;
+    document.getElementById('info-connections').textContent = connCount;
+
+    const strength = getNodeStrength(node);
+    document.getElementById('info-strength').textContent = `${strength}%`;
+  }
+
+  render();
+}
+
+function getNodeDescription(node) {
+  const descriptions = {
+    'react': '用于构建用户界面的 JavaScript 库',
+    'typeScript': 'JavaScript 的超集，添加了类型系统',
+    'nodejs': '基于 Chrome V8 引擎的 JavaScript 运行时',
+    'python': '通用编程语言，广泛用于 AI/ML',
+    'ai': '人工智能和机器学习技术',
+    'design': '设计基础原则和方法论',
+    'color': '色彩理论和配色方案',
+    'typography': '字体选择和排版设计',
+    'spacing': '间距系统和布局网格',
+    'html': '网页标记语言',
+    'css': '样式表语言',
+    'tailwind': '工具类 CSS 框架',
+    'api': '应用程序接口设计',
+    'database': '数据库设计和管理',
+    'langchain': 'LLM 应用开发框架',
+    'langgraph': 'Agent 编排框架',
+    'prompt': '提示词工程和优化',
+    'git': '版本控制系统',
+    'docker': '容器化平台',
+    'ci-cd': '持续集成和持续部署',
+  };
+  return descriptions[node.id] || '暂无描述';
+}
+
+function getNodeStrength(node) {
+  if (node.status === 'mastered') return 90;
+  if (node.status === 'learning') return 50;
+  return 10;
+}
+
+function resetView() {
+  state.selectedNode = null;
+  document.getElementById('info-panel').classList.remove('visible');
+  render();
+}
+
+function toggleAutoLayout() {
+  state.autoLayout = !state.autoLayout;
+  document.getElementById('btn-auto').classList.toggle('active');
+
+  if (state.autoLayout) {
+    autoLayoutNodes();
+  }
+}
+
+function autoLayoutNodes() {
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+  const radius = 200;
+
+  state.nodes.forEach((node, i) => {
+    const angle = (i / state.nodes.length) * Math.PI * 2;
+    node.x = centerX + Math.cos(angle) * radius;
+    node.y = centerY + Math.sin(angle) * radius;
+  });
+
+  render();
+}
+
+function toggleConnections() {
+  state.showConnections = !state.showConnections;
+  document.getElementById('btn-connections').classList.toggle('active');
+  render();
+}
+
+function toggleLabels() {
+  state.showLabels = !state.showLabels;
+  document.getElementById('btn-labels').classList.toggle('active');
+  render();
+}
+
+function togglePhysics() {
+  state.physics = !state.physics;
+  document.getElementById('btn-physics').classList.toggle('active');
+
+  if (state.physics) {
+    startPhysics();
+  }
+}
+
+function startPhysics() {
+  // 简单的物理模拟
+  setInterval(() => {
+    if (!state.physics) return;
+
+    state.nodes.forEach(node => {
+      // 斥力
+      state.nodes.forEach(other => {
+        if (node.id === other.id) return;
+        const dx = node.x - other.x;
+        const dy = node.y - other.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          node.x += (dx / dist) * 2;
+          node.y += (dy / dist) * 2;
+        }
+      });
+
+      // 向心力
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      node.x += (centerX - node.x) * 0.01;
+      node.y += (centerY - node.y) * 0.01;
+    });
+
+    render();
+  }, 50);
+}
+
+// ═══════════════════════════════════════════════
+// 事件监听
+// ═══════════════════════════════════════════════
+
+document.addEventListener('mousemove', (e) => {
+  if (state.dragging) {
+    const node = state.nodes.find(n => n.id === state.dragging);
+    if (node) {
+      node.x = e.clientX - state.offset.x;
+      node.y = e.clientY - state.offset.y;
+      render();
+    }
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  state.dragging = null;
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.node') && !e.target.closest('.info-panel')) {
+    state.selectedNode = null;
+    document.getElementById('info-panel').classList.remove('visible');
+    render();
+  }
+});
+
+// ═══════════════════════════════════════════════
+// 初始化
+// ═══════════════════════════════════════════════
+
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "dynamic_loading": true,
+  "conflict_detection": true,
+  "priority_system": true,
+  "auto_migration": false
+}

@@ -1,0 +1,155 @@
+{
+  "version": "1.0.0",
+  "conditions": {
+    "tool_error": {
+      "description": "工具执行错误时触发",
+      "trigger": "ToolError",
+      "rules": [
+        {
+          "name": "error_cascade",
+          "condition": "error_count >= 3",
+          "description": "错误级联：3 次以上错误",
+          "priority": "high"
+        },
+        {
+          "name": "permission_error",
+          "condition": "error_type == 'permission'",
+          "description": "权限错误",
+          "priority": "medium"
+        },
+        {
+          "name": "timeout_error",
+          "condition": "error_type == 'timeout'",
+          "description": "超时错误",
+          "priority": "medium"
+        },
+        {
+          "name": "network_error",
+          "condition": "error_type == 'network'",
+          "description": "网络错误",
+          "priority": "medium"
+        }
+      ]
+    },
+    "context_pressure": {
+      "description": "上下文压力触发",
+      "trigger": "ContextCompaction",
+      "rules": [
+        {
+          "name": "high_usage",
+          "condition": "context_usage > 80",
+          "description": "上下文使用率超过 80%",
+          "priority": "high"
+        },
+        {
+          "name": "critical_usage",
+          "condition": "context_usage > 90",
+          "description": "上下文使用率超过 90%",
+          "priority": "critical"
+        },
+        {
+          "name": "message_overflow",
+          "condition": "message_count > 100",
+          "description": "消息数量超过 100",
+          "priority": "medium"
+        }
+      ]
+    },
+    "time_based": {
+      "description": "基于时间的触发",
+      "trigger": "varies",
+      "rules": [
+        {
+          "name": "idle_timeout",
+          "condition": "idle_seconds > 300",
+          "description": "空闲超过 5 分钟",
+          "priority": "low"
+        },
+        {
+          "name": "long_session",
+          "condition": "session_duration > 3600",
+          "description": "会话超过 1 小时",
+          "priority": "low"
+        },
+        {
+          "name": "heartbeat_stale",
+          "condition": "heartbeat_age > 120",
+          "description": "心跳超过 2 分钟未更新",
+          "priority": "high"
+        }
+      ]
+    },
+    "tool_patterns": {
+      "description": "工具使用模式触发",
+      "trigger": "PostToolUse",
+      "rules": [
+        {
+          "name": "repeated_calls",
+          "condition": "same_tool_count >= 5",
+          "description": "同一工具连续调用 5 次",
+          "priority": "medium"
+        },
+        {
+          "name": "no_progress",
+          "condition": "no_progress_count >= 3",
+          "description": "连续 3 次无进展",
+          "priority": "high"
+        },
+        {
+          "name": "tool_diversity_low",
+          "condition": "dominant_tool_percent > 80",
+          "description": "单一工具使用率超过 80%",
+          "priority": "medium"
+        }
+      ]
+    },
+    "agent_coordination": {
+      "description": "Agent 协调触发",
+      "trigger": "AgentSpawn/AgentComplete",
+      "rules": [
+        {
+          "name": "too_many_agents",
+          "condition": "active_agents > 5",
+          "description": "活跃 Agent 超过 5 个",
+          "priority": "high"
+        },
+        {
+          "name": "agent_timeout",
+          "condition": "agent_age > 7200",
+          "description": "Agent 运行超过 2 小时",
+          "priority": "high"
+        }
+      ]
+    },
+    "memory_management": {
+      "description": "内存管理触发",
+      "trigger": "MemoryFlush",
+      "rules": [
+        {
+          "name": "memory_pressure",
+          "condition": "memory_count > 1000",
+          "description": "记忆数量超过 1000",
+          "priority": "medium"
+        },
+        {
+          "name": "stale_memories",
+          "condition": "stale_memory_percent > 30",
+          "description": "过期记忆超过 30%",
+          "priority": "low"
+        }
+      ]
+    }
+  },
+  "global_settings": {
+    "evaluation_interval": 10,
+    "max_history_size": 1000,
+    "enable_debug": false,
+    "cooldown_seconds": 30,
+    "priority_weights": {
+      "low": 1,
+      "medium": 2,
+      "high": 3,
+      "critical": 4
+    }
+  }
+}

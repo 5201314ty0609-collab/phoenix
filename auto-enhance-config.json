@@ -1,0 +1,72 @@
+{
+  "version": "1.0.0",
+  "description": "PHOENIX Auto-Enhance 配置",
+  "auto_enhance": {
+    "skill_discovery": {
+      "enabled": true,
+      "min_pattern_frequency": 3,
+      "confidence_threshold": 0.5,
+      "max_suggestions": 10,
+      "scan_interval_hours": 24
+    },
+    "memory_compression": {
+      "enabled": true,
+      "value_threshold_delete": 0.2,
+      "value_threshold_archive": 0.4,
+      "max_compression_per_run": 50,
+      "auto_run_on_session_end": true,
+      "preserve_important_memories": true
+    },
+    "rule_optimization": {
+      "enabled": true,
+      "min_rule_score": 0.5,
+      "auto_apply_low_risk": false,
+      "notification_threshold": "medium",
+      "scan_interval_days": 7
+    },
+    "task_scheduling": {
+      "enabled": true,
+      "max_concurrent_tasks": 5,
+      "priority_weights": {
+        "critical": 1,
+        "high": 3,
+        "medium": 5,
+        "low": 7
+      },
+      "auto_schedule_on_idle": true
+    },
+    "error_recovery": {
+      "enabled": true,
+      "pattern_detection_window": 100,
+      "auto_recovery_threshold": 3,
+      "log_recovery_attempts": true,
+      "max_recovery_attempts": 3
+    }
+  },
+  "integration": {
+    "hooks": {
+      "session_start": true,
+      "session_end": true,
+      "post_tool_use": false,
+      "tool_error": true
+    },
+    "notifications": {
+      "skill_discovery": "low",
+      "memory_compression": "low",
+      "rule_optimization": "medium",
+      "task_scheduling": "low",
+      "error_recovery": "high"
+    },
+    "observability": {
+      "track_metrics": true,
+      "export_to_dashboard": true,
+      "log_all_actions": true
+    }
+  },
+  "schedules": {
+    "skill_discovery": "0 0 * * *",
+    "memory_compression": "0 */6 * * *",
+    "rule_optimization": "0 0 * * 0",
+    "error_analysis": "0 */12 * * *"
+  }
+}

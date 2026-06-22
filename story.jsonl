@@ -480,3 +480,41 @@
 {"event": "session_end", "timestamp": "2026-06-21T14:27:03Z", "date": "2026-06-21", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
 {"event": "session_end", "timestamp": "2026-06-21T14:31:25Z", "date": "2026-06-21", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
 {"event": "session_end", "timestamp": "2026-06-21T14:32:38Z", "date": "2026-06-21", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T07:45:03Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T07:45:55Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T07:49:47Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T07:54:44Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T08:04:02Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T08:05:17Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T08:13:11Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T08:28:47Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T08:46:21Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T08:50:39Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T08:59:34Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T09:00:45Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T09:04:53Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"timestamp": "2026-06-22T09:06:24.032976+00:00", "type": "event", "source": "test-integration", "event_type": "sense.o2", "severity": "warn", "payload": {"value": 72.5, "warning": 70, "critical": 85}}
+{"timestamp": "2026-06-22T09:06:24.032976+00:00", "type": "event", "source": "test-integration", "event_type": "sense.o2", "severity": "warn", "payload": {"value": 72.5, "warning": 70, "critical": 85}}
+{"timestamp": "2026-06-22T09:06:25.305809+00:00", "type": "event", "source": "phoenix", "event_type": "system.startup", "severity": "info", "payload": {"version": "1.3.0"}}
+{"timestamp": "2026-06-22T09:06:25.305809+00:00", "type": "event", "source": "phoenix", "event_type": "system.startup", "severity": "info", "payload": {"version": "1.3.0"}}
+{"timestamp": "2026-06-22T09:06:27.178001+00:00", "type": "event", "source": "knowledge-base", "event_type": "knowledge.add", "severity": "info", "payload": {"node": "test-node", "content": "test content"}}
+{"timestamp": "2026-06-22T09:06:27.178001+00:00", "type": "event", "source": "knowledge-base", "event_type": "knowledge.add", "severity": "info", "payload": {"node": "test-node", "content": "test content"}}
+{"timestamp": "2026-06-22T09:07:00.008275+00:00", "type": "event", "source": "event-integration", "event_type": "integration.handler.register", "severity": "info", "payload": {"handler_name": "test-custom", "pattern": "category:automation"}}
+{"timestamp": "2026-06-22T09:07:00.008275+00:00", "type": "event", "source": "event-integration", "event_type": "integration.handler.register", "severity": "info", "payload": {"handler_name": "test-custom", "pattern": "category:automation"}}
+{"timestamp": "2026-06-22T09:09:29.486354+00:00", "type": "event", "source": "test-fix", "event_type": "sense.o2", "severity": "warn", "payload": {"value": 75}}
+{"timestamp": "2026-06-22T09:09:29.486354+00:00", "type": "event", "source": "test-fix", "event_type": "sense.o2", "severity": "warn", "payload": {"value": 75}}
+{"timestamp": "2026-06-22T09:09:31.918488+00:00", "type": "event", "source": "test-system", "event_type": "alert.fire", "severity": "critical", "payload": {"msg": "test critical"}}
+{"timestamp": "2026-06-22T09:09:31.918488+00:00", "type": "event", "source": "test-system", "event_type": "alert.fire", "severity": "critical", "payload": {"msg": "test critical"}}
+{"timestamp": "2026-06-22T09:11:22.305539+00:00", "type": "event", "source": "verify-fix", "event_type": "sense.o2", "severity": "warn", "payload": {"value": 78}}
+{"timestamp": "2026-06-22T09:11:22.305539+00:00", "type": "event", "source": "verify-fix", "event_type": "sense.o2", "severity": "warn", "payload": {"value": 78}}
+{"timestamp": "2026-06-22T09:11:31.722336+00:00", "type": "event", "source": "test-cascade", "event_type": "sense.nociception", "severity": "critical", "payload": {"errors": 4}}
+{"timestamp": "2026-06-22T09:11:31.722336+00:00", "type": "event", "source": "test-cascade", "event_type": "sense.nociception", "severity": "critical", "payload": {"errors": 4}}
+{"timestamp": "2026-06-22T09:11:33.888380+00:00", "type": "event", "source": "phoenix", "event_type": "evolution.promote", "severity": "info", "payload": {"framework": "event-integration", "from": "observed", "to": "validated"}}
+{"timestamp": "2026-06-22T09:11:33.888380+00:00", "type": "event", "source": "phoenix", "event_type": "evolution.promote", "severity": "info", "payload": {"framework": "event-integration", "from": "observed", "to": "validated"}}
+{"timestamp": "2026-06-22T09:11:36.643176+00:00", "type": "event", "source": "phoenix", "event_type": "session.heartbeat", "severity": "info", "payload": {"status": "alive"}}
+{"timestamp": "2026-06-22T09:11:36.643176+00:00", "type": "event", "source": "phoenix", "event_type": "session.heartbeat", "severity": "info", "payload": {"status": "alive"}}
+{"timestamp": "2026-06-22T09:12:15.138138+00:00", "type": "event", "source": "verify-fix", "event_type": "sense.o2", "severity": "warn", "payload": {"value": 78}}
+{"timestamp": "2026-06-22T09:12:15.138138+00:00", "type": "event", "source": "verify-fix", "event_type": "sense.o2", "severity": "warn", "payload": {"value": 78}}
+{"event": "session_end", "timestamp": "2026-06-22T09:13:53Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T09:14:23Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}
+{"event": "session_end", "timestamp": "2026-06-22T09:21:59Z", "date": "2026-06-22", "summary": "PHOENIX 会话 — 详见日记", "mood": "正常"}

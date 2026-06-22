@@ -1,17 +1,20 @@
 {
   "trace_event": "tool_diversity",
   "status": "normal",
-  "last_updated": "2026-06-21T14:35:46.370418+00:00",
+  "last_updated": "2026-06-22T08:45:50.456733+00:00",
   "metrics": {
     "tool_counts": {
-      "Read": 5,
-      "Write": 3,
-      "Edit": 2,
-      "Bash": 4
+      "error_cascade": 1,
+      "file_churn": 1,
+      "focus_deviation": 1,
+      "pattern_recurrence": 1,
+      "session_pacing": 1,
+      "token_pressure": 1,
+      "tool_diversity": 1
     },
-    "dominant_tool": "Read",
-    "dominant_percent": 35.7,
-    "total_calls": 14
+    "dominant_tool": "error_cascade",
+    "dominant_percent": 14.3,
+    "total_calls": 7
   },
   "warnings": [],
   "recommendation": "continue"

@@ -1,0 +1,6 @@
+{
+  "metrics_collection": true,
+  "collection_interval": 30,
+  "dashboard_enabled": true,
+  "alerting_enabled": true
+}

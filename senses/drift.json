@@ -1,7 +1,7 @@
 {
   "trace_event": "focus_deviation",
   "status": "normal",
-  "last_updated": "2026-06-21T14:35:46.370418+00:00",
+  "last_updated": "2026-06-22T08:45:50.462083+00:00",
   "metrics": {
     "topic_coherence": 0.95,
     "deviation_percent": 5.0,

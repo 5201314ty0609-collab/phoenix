@@ -1,0 +1,2 @@
+[2026-06-22T09:06:24.035745+00:00] Observability sink error: table sense_snapshots has no column named sense_name
+[2026-06-22T09:09:29.491377+00:00] Observability sink error: table sense_snapshots has no column named sense_name

@@ -1,13 +1,15 @@
 {
   "trace_event": "token_pressure",
   "status": "normal",
-  "last_updated": "2026-06-21T14:35:46.370418+00:00",
+  "last_updated": "2026-06-22T08:45:50.443542+00:00",
   "metrics": {
-    "estimated_tokens": 50000,
+    "estimated_tokens": 16479,
     "context_limit": 1000000,
-    "usage_percent": 5.0,
-    "message_count": 15
+    "usage_percent": 1.6,
+    "message_count": 490
   },
   "warnings": [],
-  "recommendation": "continue"
+  "recommendation": "continue",
+  "trend": "may_improve",
+  "trend_updated": "2026-06-22T09:05:57.019998+00:00"
 }

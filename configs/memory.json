@@ -1,0 +1,6 @@
+{
+  "unified_search": true,
+  "auto_capture": true,
+  "consolidation": true,
+  "max_memories": 10000
+}

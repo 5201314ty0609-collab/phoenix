@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "cooldown_minutes": 5,
+  "max_per_hour": 20,
+  "thresholds": {
+    "o2": {
+      "warning": 70,
+      "critical": 85
+    },
+    "nociception": {
+      "warning": 3,
+      "critical": 5
+    },
+    "chronos": {
+      "warning": 300,
+      "critical": 600
+    }
+  }
+}

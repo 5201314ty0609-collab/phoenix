@@ -1,0 +1,117 @@
+{
+  "code-quality": {
+    "name": "code-quality",
+    "description": "Full code quality check: tidy -> verify -> complexity",
+    "steps": [
+      {
+        "skill": "code-tidy",
+        "args": [],
+        "optional": false,
+        "condition": ""
+      },
+      {
+        "skill": "verify-completion",
+        "args": [],
+        "optional": false,
+        "condition": "previous_passed"
+      },
+      {
+        "skill": "complexity-analyzer",
+        "args": [],
+        "optional": false,
+        "condition": "previous_passed"
+      }
+    ],
+    "created_at": ""
+  },
+  "security-review": {
+    "name": "security-review",
+    "description": "Security review: audit -> verify -> complexity check",
+    "steps": [
+      {
+        "skill": "security-audit",
+        "args": [],
+        "optional": false,
+        "condition": ""
+      },
+      {
+        "skill": "verify-completion",
+        "args": [],
+        "optional": false,
+        "condition": ""
+      },
+      {
+        "skill": "complexity-analyzer",
+        "args": [],
+        "optional": true,
+        "condition": ""
+      }
+    ],
+    "created_at": ""
+  },
+  "pre-commit": {
+    "name": "pre-commit",
+    "description": "Pre-commit checks: tidy -> security -> verify",
+    "steps": [
+      {
+        "skill": "code-tidy",
+        "args": [],
+        "optional": false,
+        "condition": ""
+      },
+      {
+        "skill": "security-audit",
+        "args": [],
+        "optional": false,
+        "condition": "previous_passed"
+      },
+      {
+        "skill": "verify-completion",
+        "args": [],
+        "optional": false,
+        "condition": "previous_passed"
+      }
+    ],
+    "created_at": ""
+  },
+  "full-review": {
+    "name": "full-review",
+    "description": "Complete review: tidy -> security -> verify -> complexity -> doc check",
+    "steps": [
+      {
+        "skill": "code-tidy",
+        "args": [],
+        "optional": false,
+        "condition": ""
+      },
+      {
+        "skill": "security-audit",
+        "args": [],
+        "optional": false,
+        "condition": ""
+      },
+      {
+        "skill": "verify-completion",
+        "args": [],
+        "optional": false,
+        "condition": ""
+      },
+      {
+        "skill": "complexity-analyzer",
+        "args": [],
+        "optional": true,
+        "condition": ""
+      },
+      {
+        "skill": "doc-gen",
+        "args": [
+          "docstrings",
+          "--check"
+        ],
+        "optional": true,
+        "condition": ""
+      }
+    ],
+    "created_at": ""
+  }
+}

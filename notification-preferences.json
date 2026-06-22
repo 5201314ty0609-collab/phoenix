@@ -1,0 +1,78 @@
+{
+  "enabled_types": [
+    "error_recovery",
+    "performance_warning",
+    "evolution_update",
+    "memory_sync",
+    "agent_coordination",
+    "context_pressure",
+    "security_alert",
+    "system_status"
+  ],
+  "min_priority": "low",
+  "max_notifications": 100,
+  "auto_dismiss_after_hours": 24,
+  "sound_enabled": false,
+  "desktop_enabled": false,
+  "quiet_hours": {
+    "enabled": false,
+    "start": "22:00",
+    "end": "08:00"
+  },
+  "priority_settings": {
+    "critical": {
+      "auto_dismiss": false,
+      "sound": true,
+      "desktop": true
+    },
+    "high": {
+      "auto_dismiss": false,
+      "sound": false,
+      "desktop": true
+    },
+    "medium": {
+      "auto_dismiss": true,
+      "sound": false,
+      "desktop": false
+    },
+    "low": {
+      "auto_dismiss": true,
+      "sound": false,
+      "desktop": false
+    }
+  },
+  "type_settings": {
+    "error_recovery": {
+      "enabled": true,
+      "min_priority": "medium"
+    },
+    "performance_warning": {
+      "enabled": true,
+      "min_priority": "medium"
+    },
+    "evolution_update": {
+      "enabled": true,
+      "min_priority": "low"
+    },
+    "memory_sync": {
+      "enabled": true,
+      "min_priority": "low"
+    },
+    "agent_coordination": {
+      "enabled": true,
+      "min_priority": "low"
+    },
+    "context_pressure": {
+      "enabled": true,
+      "min_priority": "medium"
+    },
+    "security_alert": {
+      "enabled": true,
+      "min_priority": "high"
+    },
+    "system_status": {
+      "enabled": true,
+      "min_priority": "low"
+    }
+  }
+}

@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>PHOENIX Skill Network</title>
+<style>
+:root {
+  --bg: #07070d;
+  --surface: rgba(12,12,20,0.92);
+  --border: rgba(80,100,180,0.18);
+  --text: #e8e4df;
+  --text-dim: #7a7580;
+  --accent: #f49e42;
+  --accent2: #7aa2f7;
+  --red: #ff6b6b;
+  --green: #51cf66;
+  --yellow: #ffd43b;
+  --purple: #da77f2;
+  --cyan: #66d9e8;
+  --glow: rgba(244,158,66,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); font-family:'SF Pro Display','PingFang SC',-apple-system,system-ui,sans-serif; color:var(--text); }
+
+canvas { display:block; position:absolute; top:0; left:0; touch-action:none; }
+
+/* Overlay层 */
+#ui-overlay { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10; }
+
+/* 搜索框 */
+.search-box {
+  position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:100; pointer-events:auto;
+}
+.search-box input {
+  width:300px; padding:10px 16px 10px 38px;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  color:var(--text); font-size:0.9rem; outline:none;
+  backdrop-filter:blur(20px); box-shadow:0 4px 16px rgba(0,0,0,0.3);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-box input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--glow); }
+.search-box input::placeholder { color:var(--text-dim); }
+.search-box .search-icon {
+  position:absolute; left:12px; top:50%; transform:translateY(-50%);
+  color:var(--text-dim); font-size:16px; pointer-events:none;
+}
+.search-results {
+  position:absolute; top:100%; left:0; right:0; margin-top:4px;
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  max-height:240px; overflow-y:auto; display:none;
+  backdrop-filter:blur(20px); box-shadow:0 8px 32px rgba(0,0,0,0.5);
+}
+.search-results.visible { display:block; }
+.search-result-item {
+  padding:10px 14px; cursor:pointer; display:flex; align-items:center; gap:10px;
+  font-size:0.85rem; transition:background 0.15s;
+}
+.search-result-item:hover { background:rgba(100,120,200,0.15); }
+.search-result-item .sr-icon { font-size:18px; }
+.search-result-item .sr-name { flex:1; }
+.search-result-item .sr-cat { font-size:0.7rem; color:var(--text-dim); }
+
+/* 控制面板 */
+.controls {
+  position:fixed; top:20px; left:20px; z-index:100; pointer-events:auto;
+  background:var(--surface); border:1px solid var(--border); border-radius:16px;
+  padding:18px; width:210px; backdrop-filter:blur(20px); box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.controls h3 { font-size:0.9rem; color:var(--accent); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.control-group { margin-bottom:14px; }
+.control-group label { display:block; font-size:0.72rem; color:var(--text-dim); margin-bottom:5px; }
+.control-group input[type="range"] {
+  width:100%; height:4px; background:var(--border); border-radius:2px; outline:none; -webkit-appearance:none;
+}
+.control-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance:none; width:14px; height:14px; background:var(--accent); border-radius:50%; cursor:pointer;
+}
+.control-group select {
+  width:100%; padding:6px 10px; background:rgba(20,20,35,0.9); border:1px solid var(--border);
+  border-radius:6px; color:var(--text); font-size:0.78rem; outline:none;
+}
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  padding:7px 11px; background:rgba(20,20,35,0.9); border:1px solid var(--border);
+  border-radius:8px; color:var(--text); font-size:0.78rem; cursor:pointer;
+  transition:all 0.2s; width:100%; margin-bottom:5px;
+}
+.btn:hover { background:rgba(60,60,120,0.5); border-color:rgba(100,120,200,0.4); }
+.btn.active { background:rgba(244,158,66,0.2); border-color:var(--accent); color:var(--accent); }
+
+/* 过滤按钮 */
+.filter-bar {
+  position:fixed; top:20px; right:20px; z-index:100; pointer-events:auto;
+  display:flex; flex-direction:column; gap:4px;
+}
+.filter-btn {
+  padding:7px 12px; background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; color:var(--text-dim); font-size:0.72rem; cursor:pointer;
+  transition:all 0.2s; text-align:left; backdrop-filter:blur(10px);
+}
+.filter-btn:hover { background:rgba(30,30,50,0.9); color:var(--text); }
+.filter-btn.active { background:rgba(100,120,200,0.2); border-color:var(--accent2); color:var(--accent2); }
+.filter-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+
+/* 信息面板 */
+.info-panel {
+  position:fixed; top:20px; right:20px; z-index:110; pointer-events:auto;
+  background:var(--surface); border:1px solid var(--border); border-radius:16px;
+  padding:20px; width:280px; backdrop-filter:blur(20px); box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  opacity:0; transform:translateX(20px); transition:all 0.3s ease; pointer-events:none;
+}
+.info-panel.visible { opacity:1; transform:translateX(0); pointer-events:auto; }
+.info-panel .ip-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.info-panel .ip-icon { width:44px; height:44px; background:rgba(20,20,35,0.9); border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+.info-panel .ip-title { font-size:1.05rem; font-weight:700; }
+.info-panel .ip-subtitle { font-size:0.75rem; color:var(--text-dim); }
+.info-panel .ip-desc { font-size:0.82rem; color:var(--text-dim); line-height:1.6; margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+.info-panel .ip-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.info-panel .ip-stat { background:rgba(20,20,35,0.9); border-radius:10px; padding:10px; text-align:center; }
+.info-panel .ip-stat-val { font-size:1.3rem; font-weight:700; color:var(--accent); }
+.info-panel .ip-stat-lbl { font-size:0.68rem; color:var(--text-dim); margin-top:2px; }
+.info-panel .ip-conn h4 { font-size:0.82rem; color:var(--accent); margin-bottom:8px; }
+.info-panel .ip-conn-item { display:flex; align-items:center; gap:8px; padding:7px; background:rgba(20,20,35,0.9); border-radius:8px; margin-bottom:5px; font-size:0.78rem; }
+.info-panel .ip-conn-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.info-panel .ip-close { position:absolute; top:12px; right:14px; background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:18px; }
+
+/* 图例 */
+.legend {
+  position:fixed; bottom:20px; left:20px; z-index:100; pointer-events:auto;
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:14px 16px; backdrop-filter:blur(20px); box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.legend h4 { font-size:0.78rem; color:var(--accent); margin-bottom:10px; }
+.legend-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 14px; }
+.legend-item { display:flex; align-items:center; gap:7px; font-size:0.7rem; color:var(--text-dim); }
+.legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+/* 统计栏 */
+.stats-bar {
+  position:fixed; bottom:20px; right:20px; z-index:100; pointer-events:auto;
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:12px 20px; display:flex; gap:20px;
+  backdrop-filter:blur(20px); box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+.stats-bar .stat { text-align:center; }
+.stats-bar .stat-val { font-size:1.3rem; font-weight:700; color:var(--accent); }
+.stats-bar .stat-lbl { font-size:0.65rem; color:var(--text-dim); margin-top:2px; }
+
+/* 工具提示 */
+.tooltip {
+  position:fixed; z-index:200; pointer-events:none;
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:10px 14px; backdrop-filter:blur(16px); box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  opacity:0; transform:translateY(6px); transition:opacity 0.15s, transform 0.15s;
+  max-width:240px;
+}
+.tooltip.visible { opacity:1; transform:translateY(0); }
+.tooltip .tt-name { font-size:0.88rem; font-weight:600; margin-bottom:3px; }
+.tooltip .tt-cat { font-size:0.7rem; color:var(--text-dim); margin-bottom:5px; }
+.tooltip .tt-stats { display:flex; gap:10px; font-size:0.72rem; }
+.tooltip .tt-stat-lbl { color:var(--text-dim); }
+.tooltip .tt-stat-val { color:var(--accent); font-weight:600; }
+
+/* 操作提示 */
+.controls-hint {
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:100;
+  font-size:0.65rem; color:rgba(160,180,255,0.35); pointer-events:none; text-align:center; line-height:1.6;
+}
+
+/* 加载画面 */
+.loading-overlay {
+  position:fixed; inset:0; z-index:1000; background:var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  transition:opacity 0.6s ease;
+}
+.loading-overlay.hidden { opacity:0; pointer-events:none; }
+.loading-spinner {
+  width:36px; height:36px; border:2px solid rgba(80,100,180,0.2);
+  border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite;
+}
+.loading-text { margin-top:14px; font-size:0.78rem; color:var(--text-dim); letter-spacing:0.05em; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* 滚动条 */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(100,120,200,0.3); border-radius:2px; }
+</style>
+</head>
+<body>
+
+<!-- 加载画面 -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Initializing Skill Network...</div>
+</div>
+
+<!-- Three.js 画布 -->
+<canvas id="canvas"></canvas>
+
+<!-- 搜索框 -->
+<div class="search-box">
+  <span class="search-icon">&#9906;</span>
+  <input type="text" id="search" placeholder="搜索技能节点..." autocomplete="off">
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<!-- 控制面板 -->
+<div class="controls">
+  <h3>&#9881; 控制面板</h3>
+
+  <div class="control-group">
+    <label>粒子数量: <span id="particle-count-val">1500</span></label>
+    <input type="range" id="particle-count" min="0" max="3000" step="100" value="1500">
+  </div>
+
+  <div class="control-group">
+    <label>发光强度: <span id="bloom-val">0.7</span></label>
+    <input type="range" id="bloom-strength" min="0" max="2" step="0.1" value="0.7">
+  </div>
+
+  <div class="control-group">
+    <label>节点大小: <span id="node-size-val">1.0</span></label>
+    <input type="range" id="node-size" min="0.5" max="2" step="0.1" value="1">
+  </div>
+
+  <button class="btn active" id="btn-particles" onclick="toggleParticles()">&#10024; 粒子效果</button>
+  <button class="btn active" id="btn-labels" onclick="toggleLabels()">&#127991; 显示标签</button>
+  <button class="btn" id="btn-auto" onclick="toggleAutoRotate()">&#128260; 自动旋转</button>
+  <button class="btn" onclick="resetView()">&#127919; 重置视图</button>
+</div>
+
+<!-- 分类过滤 -->
+<div class="filter-bar" id="filterBar"></div>
+
+<!-- 信息面板 -->
+<div class="info-panel" id="infoPanel">
+  <button class="ip-close" onclick="hideInfoPanel()">&times;</button>
+  <div class="ip-header">
+    <div class="ip-icon" id="ip-icon"></div>
+    <div>
+      <div class="ip-title" id="ip-title"></div>
+      <div class="ip-subtitle" id="ip-subtitle"></div>
+    </div>
+  </div>
+  <div class="ip-desc" id="ip-desc"></div>
+  <div class="ip-stats">
+    <div class="ip-stat"><div class="ip-stat-val" id="ip-strength">0%</div><div class="ip-stat-lbl">掌握度</div></div>
+    <div class="ip-stat"><div class="ip-stat-val" id="ip-conn">0</div><div class="ip-stat-lbl">连接数</div></div>
+    <div class="ip-stat"><div class="ip-stat-val" id="ip-status">-</div><div class="ip-stat-lbl">状态</div></div>
+    <div class="ip-stat"><div class="ip-stat-val" id="ip-type">-</div><div class="ip-stat-lbl">类型</div></div>
+  </div>
+  <div class="ip-conn">
+    <h4>&#128279; 关联节点</h4>
+    <div id="ip-conn-list"></div>
+  </div>
+</div>
+
+<!-- 图例 -->
+<div class="legend">
+  <h4>&#128202; 节点类型</h4>
+  <div class="legend-grid" id="legendGrid"></div>
+</div>
+
+<!-- 统计栏 -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-val" id="s-nodes">0</div><div class="stat-lbl">节点</div></div>
+  <div class="stat"><div class="stat-val" id="s-edges">0</div><div class="stat-lbl">连接</div></div>
+  <div class="stat"><div class="stat-val" id="s-particles">0</div><div class="stat-lbl">粒子</div></div>
+  <div class="stat"><div class="stat-val" id="s-fps">0</div><div class="stat-lbl">FPS</div></div>
+</div>
+
+<!-- 工具提示 -->
+<div class="tooltip" id="tooltip">
+  <div class="tt-name" id="tt-name"></div>
+  <div class="tt-cat" id="tt-cat"></div>
+  <div class="tt-stats">
+    <div><span class="tt-stat-lbl">Strength </span><span class="tt-stat-val" id="tt-strength"></span></div>
+    <div><span class="tt-stat-lbl">Links </span><span class="tt-stat-val" id="tt-links"></span></div>
+  </div>
+</div>
+
+<!-- 操作提示 -->
+<div class="controls-hint">
+  拖拽旋转 | 滚轮缩放 | 拖拽节点移动 | 点击查看详情 | 双击重置
+</div>
+
+<!-- Three.js -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+// ============================================================
+// 数据定义 — 融合所有版本的完整技能网络
+// ============================================================
+
+const CATEGORIES = {
+  core:     { color: new THREE.Color(0.35,0.55,1.0),  label:'核心系统',  hex:'#5a8cff' },
+  engine:   { color: new THREE.Color(1.0,0.85,0.2),    label:'引擎',      hex:'#ffd933' },
+  agent:    { color: new THREE.Color(0.2,0.85,0.55),    label:'Agent',     hex:'#33d98c' },
+  language: { color: new THREE.Color(0.2,0.8,1.0),      label:'语言',      hex:'#33ccff' },
+  framework:{ color: new THREE.Color(0.75,0.4,1.0),     label:'框架',      hex:'#bf66ff' },
+  tool:     { color: new THREE.Color(1.0,0.65,0.2),     label:'工具',      hex:'#ffa633' },
+  design:   { color: new THREE.Color(1.0,0.35,0.55),    label:'设计',      hex:'#ff598c' },
+  testing:  { color: new THREE.Color(0.5,1.0,0.7),      label:'测试',      hex:'#80ffb3' },
+  security: { color: new THREE.Color(1.0,0.85,0.2),     label:'安全',      hex:'#ffd933' },
+  infra:    { color: new THREE.Color(0.6,0.6,0.8),      label:'基础设施',  hex:'#9999cc' },
+  sense:    { color: new THREE.Color(0.85,0.6,1.0),     label:'感知',      hex:'#d999ff' },
+};
+
+const nodesData = [
+  // 核心系统
+  {id:'phoenix',name:'PHOENIX Core',type:'system',category:'core',icon:'🔥',strength:1.0,description:'PHOENIX 自进化代理核心系统'},
+  {id:'evolve',name:'Evolution Engine',type:'engine',category:'engine',icon:'🧬',strength:0.95,description:'框架发现、晋升、自我修正引擎'},
+  {id:'knowledge',name:'Knowledge Base',type:'engine',category:'engine',icon:'🧠',strength:0.9,description:'SQLite+FTS5 混合检索知识库'},
+  {id:'metacog',name:'Metacognition',type:'engine',category:'engine',icon:'👁',strength:0.85,description:'7-Sense 元认知监控系统'},
+  {id:'reflect',name:'Reflection Engine',type:'engine',category:'engine',icon:'🔄',strength:0.82,description:'任务完成自动反思引擎'},
+  {id:'automem',name:'Auto Memory',type:'engine',category:'engine',icon:'🧠',strength:0.78,description:'艾宾浩斯衰减自动记忆系统'},
+  {id:'observ',name:'Observability',type:'engine',category:'engine',icon:'📊',strength:0.82,description:'7-Sense 可观测性追踪'},
+  {id:'hooks',name:'Hooks System',type:'engine',category:'core',icon:'⚡',strength:0.8,description:'PreToolUse/PostToolUse 钩子系统'},
+  {id:'plan',name:'Planning System',type:'tool',category:'tool',icon:'📋',strength:0.85,description:'三文件任务规划系统'},
+  {id:'bash',name:'Bash Guard',type:'tool',category:'security',icon:'🛡',strength:0.78,description:'AST 级 Bash 安全门控'},
+
+  // Agent
+  {id:'planner',name:'Planner',type:'agent',category:'agent',icon:'📋',strength:0.88,description:'实现规划 Agent'},
+  {id:'architect',name:'Architect',type:'agent',category:'agent',icon:'🏗',strength:0.82,description:'系统架构 Agent'},
+  {id:'reviewer',name:'Code Reviewer',type:'agent',category:'agent',icon:'🔍',strength:0.9,description:'代码审查 Agent'},
+  {id:'security-r',name:'Security Reviewer',type:'agent',category:'security',icon:'🛡',strength:0.87,description:'安全审查 Agent'},
+  {id:'tdd',name:'TDD Guide',type:'agent',category:'testing',icon:'🧪',strength:0.85,description:'测试驱动开发 Agent'},
+  {id:'build',name:'Build Resolver',type:'agent',category:'tool',icon:'🔧',strength:0.72,description:'构建错误修复 Agent'},
+  {id:'docup',name:'Doc Updater',type:'agent',category:'tool',icon:'📝',strength:0.65,description:'文档更新 Agent'},
+  {id:'research',name:'Deep Research',type:'agent',category:'agent',icon:'🔬',strength:0.72,description:'深度研究 Agent'},
+
+  // 框架
+  {id:'ecc',name:'ECC v2.0.0',type:'framework',category:'framework',icon:'📦',strength:0.92,description:'Everything Claude Code 标准'},
+  {id:'mundo',name:'MUNDO Agent',type:'framework',category:'framework',icon:'🌍',strength:0.88,description:'MUNDO 多 Agent 框架'},
+  {id:'gnap',name:'GNAP Protocol',type:'framework',category:'framework',icon:'🔗',strength:0.65,description:'Agent 协调协议'},
+  {id:'taste',name:'Taste-Skill',type:'framework',category:'design',icon:'🎨',strength:0.72,description:'UI/UX 设计质量框架'},
+  {id:'dspy',name:'DSPy Rules',type:'framework',category:'framework',icon:'🧩',strength:0.68,description:'规则优化框架'},
+
+  // 语言
+  {id:'ts',name:'TypeScript',type:'language',category:'language',icon:'📘',strength:0.92,description:'类型安全的 JavaScript 超集'},
+  {id:'py',name:'Python',type:'language',category:'language',icon:'🐍',strength:0.88,description:'通用编程语言，AI/ML 首选'},
+  {id:'go',name:'Go',type:'language',category:'language',icon:'🏑',strength:0.7,description:'高性能并发语言'},
+  {id:'rust',name:'Rust',type:'language',category:'language',icon:'⚙',strength:0.6,description:'系统级安全语言'},
+  {id:'swift',name:'Swift',type:'language',category:'language',icon:'🍎',strength:0.5,description:'Apple 平台开发语言'},
+
+  // 框架/库
+  {id:'react',name:'React',type:'framework',category:'framework',icon:'⚛',strength:0.85,description:'声明式 UI 库'},
+  {id:'vue',name:'Vue',type:'framework',category:'framework',icon:'💚',strength:0.78,description:'渐进式前端框架'},
+  {id:'nextjs',name:'Next.js',type:'framework',category:'framework',icon:'⚡',strength:0.8,description:'React 全栈框架'},
+  {id:'tailwind',name:'Tailwind CSS',type:'framework',category:'framework',icon:'💨',strength:0.75,description:'工具类 CSS 框架'},
+  {id:'three',name:'Three.js',type:'framework',category:'framework',icon:'🔗',strength:0.7,description:'WebGL 3D 库'},
+
+  // 工具
+  {id:'git',name:'Git',type:'tool',category:'infra',icon:'📦',strength:0.9,description:'版本控制系统'},
+  {id:'docker',name:'Docker',type:'tool',category:'infra',icon:'🐳',strength:0.72,description:'容器化平台'},
+  {id:'cicd',name:'CI/CD',type:'tool',category:'infra',icon:'🔄',strength:0.75,description:'持续集成/部署'},
+  {id:'sqlite',name:'SQLite',type:'tool',category:'infra',icon:'🗄',strength:0.65,description:'嵌入式数据库'},
+  {id:'vite',name:'Vite',type:'tool',category:'infra',icon:'⚡',strength:0.75,description:'下一代前端构建工具'},
+
+  // 质量/设计
+  {id:'perf',name:'Performance',type:'skill',category:'design',icon:'⚡',strength:0.88,description:'Core Web Vitals 性能优化'},
+  {id:'a11y',name:'Accessibility',type:'skill',category:'design',icon:'♿',strength:0.82,description:'WCAG 2.1 AA 无障碍'},
+  {id:'motion',name:'Animation',type:'skill',category:'design',icon:'🎨',strength:0.7,description:'交互动画设计'},
+  {id:'designsys',name:'Design Systems',type:'skill',category:'design',icon:'🖌',strength:0.75,description:'组件化设计系统'},
+
+  // 测试
+  {id:'mutation',name:'Mutation Gate',type:'tool',category:'testing',icon:'🧬',strength:0.75,description:'TDD 变体验证门控'},
+  {id:'playwright',name:'Playwright',type:'tool',category:'testing',icon:'🎭',strength:0.7,description:'E2E 测试框架'},
+
+  // 7 Senses
+  {id:'o2',name:'O2 Vitality',type:'sense',category:'sense',icon:'💨',strength:0.9,description:'Token/上下文压力监测'},
+  {id:'noci',name:'Nociception',type:'sense',category:'sense',icon:'😭',strength:0.85,description:'错误级联检测'},
+  {id:'chronos',name:'Chronos',type:'sense',category:'sense',icon:'⏰',strength:0.8,description:'会话节奏控制'},
+  {id:'spatial',name:'Spatial',type:'sense',category:'sense',icon:'📍',strength:0.75,description:'文件变动监控'},
+  {id:'vestib',name:'Vestibular',type:'sense',category:'sense',icon:'⚖',strength:0.7,description:'工具多样性监控'},
+  {id:'echo',name:'Echo',type:'sense',category:'sense',icon:'🔔',strength:0.72,description:'重复模式检测'},
+  {id:'drift',name:'Drift',type:'sense',category:'sense',icon:'🎯',strength:0.68,description:'焦点偏离检测'},
+];
+
+const edgesData = [
+  // 核心连接
+  {source:'phoenix',target:'evolve',label:'进化',strength:0.95},
+  {source:'phoenix',target:'knowledge',label:'存储',strength:0.9},
+  {source:'phoenix',target:'metacog',label:'监控',strength:0.88},
+  {source:'phoenix',target:'hooks',label:'触发',strength:0.85},
+  {source:'phoenix',target:'reflect',label:'反思',strength:0.82},
+  {source:'phoenix',target:'observ',label:'追踪',strength:0.8},
+  {source:'evolve',target:'knowledge',label:'学习',strength:0.85},
+  {source:'evolve',target:'reflect',label:'分析',strength:0.8},
+  {source:'knowledge',target:'automem',label:'记忆',strength:0.75},
+  {source:'metacog',target:'observ',label:'报告',strength:0.82},
+
+  // 核心到 Agent
+  {source:'phoenix',target:'planner',label:'规划',strength:0.88},
+  {source:'phoenix',target:'architect',label:'设计',strength:0.82},
+  {source:'phoenix',target:'reviewer',label:'审查',strength:0.9},
+  {source:'phoenix',target:'bash',label:'守护',strength:0.78},
+  {source:'phoenix',target:'plan',label:'计划',strength:0.85},
+
+  // Agent 协作
+  {source:'planner',target:'reviewer',label:'委派',strength:0.85},
+  {source:'planner',target:'tdd',label:'委派',strength:0.8},
+  {source:'planner',target:'architect',label:'咨询',strength:0.8},
+  {source:'reviewer',target:'security-r',label:'升级',strength:0.8},
+  {source:'tdd',target:'mutation',label:'验证',strength:0.8},
+  {source:'tdd',target:'playwright',label:'E2E',strength:0.75},
+  {source:'security-r',target:'bash',label:'防护',strength:0.75},
+
+  // 框架到核心
+  {source:'ecc',target:'phoenix',label:'治理',strength:0.92},
+  {source:'mundo',target:'phoenix',label:'增强',strength:0.88},
+  {source:'gnap',target:'plan',label:'协调',strength:0.65},
+  {source:'taste',target:'phoenix',label:'设计',strength:0.72},
+  {source:'dspy',target:'evolve',label:'优化',strength:0.68},
+
+  // 语言连接
+  {source:'ts',target:'react',label:'支持',strength:0.9},
+  {source:'ts',target:'vue',label:'支持',strength:0.75},
+  {source:'ts',target:'nextjs',label:'驱动',strength:0.85},
+  {source:'py',target:'tdd',label:'测试',strength:0.65},
+  {source:'py',target:'knowledge',label:'分析',strength:0.7},
+
+  // 框架连接
+  {source:'react',target:'nextjs',label:'框架',strength:0.9},
+  {source:'react',target:'tailwind',label:'配对',strength:0.75},
+  {source:'react',target:'perf',label:'优化',strength:0.7},
+  {source:'vue',target:'perf',label:'优化',strength:0.65},
+  {source:'designsys',target:'tailwind',label:'实现',strength:0.75},
+  {source:'designsys',target:'taste',label:'遵循',strength:0.8},
+  {source:'a11y',target:'reviewer',label:'检查',strength:0.7},
+  {source:'a11y',target:'perf',label:'平衡',strength:0.65},
+  {source:'motion',target:'three',label:'使用',strength:0.7},
+  {source:'motion',target:'react',label:'动画',strength:0.65},
+
+  // 工具连接
+  {source:'git',target:'cicd',label:'触发',strength:0.85},
+  {source:'docker',target:'cicd',label:'部署',strength:0.8},
+  {source:'nextjs',target:'vite',label:'构建',strength:0.65},
+  {source:'knowledge',target:'sqlite',label:'存储',strength:0.8},
+  {source:'build',target:'cicd',label:'修复',strength:0.7},
+
+  // 7 Senses 到 Metacog
+  {source:'o2',target:'metacog',label:'活力',strength:0.9},
+  {source:'noci',target:'metacog',label:'痛觉',strength:0.85},
+  {source:'chronos',target:'metacog',label:'时间',strength:0.8},
+  {source:'spatial',target:'metacog',label:'空间',strength:0.75},
+  {source:'vestib',target:'metacog',label:'平衡',strength:0.7},
+  {source:'echo',target:'metacog',label:'回声',strength:0.72},
+  {source:'drift',target:'metacog',label:'漂移',strength:0.68},
+
+  // Senses 交叉连接
+  {source:'o2',target:'observ',label:'报告',strength:0.75},
+  {source:'noci',target:'bash',label:'升级',strength:0.7},
+  {source:'echo',target:'evolve',label:'检测',strength:0.65},
+  {source:'drift',target:'plan',label:'锚定',strength:0.6},
+];
+
+// ============================================================
+// 全局状态
+// ============================================================
+
+const state = {
+  showParticles: true,
+  showLabels: true,
+  autoRotate: false,
+  particleCount: 1500,
+  bloomStrength: 0.7,
+  nodeScale: 1.0,
+  activeCategory: null,
+  searchQuery: '',
+  selectedNode: null,
+  hoveredNode: null,
+};
+
+// ============================================================
+// Three.js 场景初始化
+// ============================================================
+
+const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x07070d, 0.0006);
+
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 1, 3000);
+camera.position.set(0, 0, 450);
+
+// 后处理 (Bloom)
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  state.bloomStrength, 0.4, 0.85
+);
+composer.addPass(bloomPass);
+
+// ============================================================
+// 轨道控制 (手动实现，无需外部依赖)
+// ============================================================
+
+const orbit = {
+  theta:0, phi:0, radius:450,
+  targetTheta:0, targetPhi:0, targetRadius:450,
+  isDragging:false, lastX:0, lastY:0,
+  autoRotateSpeed:0.0003,
+};
+
+function updateCamera() {
+  orbit.theta += (orbit.targetTheta - orbit.theta) * 0.08;
+  orbit.phi += (orbit.targetPhi - orbit.phi) * 0.08;
+  orbit.radius += (orbit.targetRadius - orbit.radius) * 0.08;
+  orbit.phi = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, orbit.phi));
+
+  camera.position.x = orbit.radius * Math.sin(orbit.theta) * Math.cos(orbit.phi);
+  camera.position.y = orbit.radius * Math.sin(orbit.phi);
+  camera.position.z = orbit.radius * Math.cos(orbit.theta) * Math.cos(orbit.phi);
+  camera.lookAt(0, 0, 0);
+}
+
+// ============================================================
+// 力导向图布局 (3D)
+// ============================================================
+
+class ForceGraph3D {
+  constructor() {
+    this.nodes = new Map();
+    this.edges = [];
+    this.alpha = 1.0;
+    this.alphaDecay = 0.0005;
+    this.alphaMin = 0.001;
+    this.velocityDecay = 0.6;
+    this.centerStrength = 0.01;
+    this.repulsionStrength = 800;
+    this.springLength = 80;
+    this.springStrength = 0.06;
+    this.clusterStrength = 0.015;
+  }
+
+  addNode(id, data) {
+    const angle = Math.random() * Math.PI * 2;
+    const r = 80 + Math.random() * 160;
+    this.nodes.set(id, {
+      ...data,
+      x: Math.cos(angle)*r, y: Math.sin(angle)*r, z:(Math.random()-0.5)*60,
+      vx:0, vy:0, vz:0, fx:null, fy:null, fz:null,
+    });
+  }
+
+  addEdge(source, target, data) {
+    this.edges.push({ source, target, ...data });
+  }
+
+  tick() {
+    if (this.alpha < this.alphaMin) return;
+    this.alpha += (0 - this.alpha) * this.alphaDecay;
+
+    const arr = [...this.nodes.values()];
+    const n = arr.length;
+
+    // 斥力
+    for (let i=0; i<n; i++) {
+      for (let j=i+1; j<n; j++) {
+        const a=arr[i], b=arr[j];
+        const dx=b.x-a.x, dy=b.y-a.y, dz=b.z-a.z;
+        const d2=dx*dx+dy*dy+dz*dz+1;
+        const d=Math.sqrt(d2);
+        const f=(this.repulsionStrength*this.alpha)/d2;
+        const fx=(dx/d)*f, fy=(dy/d)*f, fz=(dz/d)*f;
+        a.vx-=fx; a.vy-=fy; a.vz-=fz;
+        b.vx+=fx; b.vy+=fy; b.vz+=fz;
+      }
+    }
+
+    // 弹簧引力
+    for (const e of this.edges) {
+      const s=this.nodes.get(e.source), t=this.nodes.get(e.target);
+      if (!s||!t) continue;
+      const dx=t.x-s.x, dy=t.y-s.y, dz=t.z-s.z;
+      const d=Math.sqrt(dx*dx+dy*dy+dz*dz)+0.1;
+      const f=(d-this.springLength)*this.springStrength*(e.strength||0.5)*this.alpha;
+      const fx=(dx/d)*f, fy=(dy/d)*f, fz=(dz/d)*f;
+      s.vx+=fx; s.vy+=fy; s.vz+=fz;
+      t.vx-=fx; t.vy-=fy; t.vz-=fz;
+    }
+
+    // 类别聚类
+    const centroids = {};
+    for (const node of arr) {
+      if (!centroids[node.category]) centroids[node.category]={x:0,y:0,z:0,count:0};
+      centroids[node.category].x+=node.x;
+      centroids[node.category].y+=node.y;
+      centroids[node.category].z+=node.z;
+      centroids[node.category].count++;
+    }
+    for (const cat in centroids) {
+      centroids[cat].x/=centroids[cat].count;
+      centroids[cat].y/=centroids[cat].count;
+      centroids[cat].z/=centroids[cat].count;
+    }
+    for (const node of arr) {
+      const c=centroids[node.category];
+      node.vx+=(c.x-node.x)*this.clusterStrength*this.alpha;
+      node.vy+=(c.y-node.y)*this.clusterStrength*this.alpha;
+      node.vz+=(c.z-node.z)*this.clusterStrength*this.alpha;
+    }
+
+    // 中心引力
+    for (const node of arr) {
+      node.vx-=node.x*this.centerStrength*this.alpha;
+      node.vy-=node.y*this.centerStrength*this.alpha;
+      node.vz-=node.z*this.centerStrength*this.alpha;
+    }
+
+    // 应用速度
+    for (const node of arr) {
+      if (node.fx!==null) { node.x=node.fx; node.vx=0; }
+      else { node.vx*=this.velocityDecay; node.x+=node.vx; }
+      if (node.fy!==null) { node.y=node.fy; node.vy=0; }
+      else { node.vy*=this.velocityDecay; node.y+=node.vy; }
+      if (node.fz!==null) { node.z=node.fz; node.vz=0; }
+      else { node.vz*=this.velocityDecay; node.z+=node.vz; }
+    }
+  }
+
+  reheat() { this.alpha = 1; }
+}
+
+const graph = new ForceGraph3D();
+nodesData.forEach(n => graph.addNode(n.id, n));
+edgesData.forEach(e => graph.addEdge(e.source, e.target, e));
+
+// ============================================================
+// 节点渲染 (Instanced + Sprites)
+// ============================================================
+
+const NODE_BASE = 5;
+const nodeGroup = new THREE.Group();
+scene.add(nodeGroup);
+
+function createCircleTexture(size, color) {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  const ctr = size/2;
+
+  // 外发光
+  const glow = ctx.createRadialGradient(ctr,ctr,0,ctr,ctr,ctr);
+  glow.addColorStop(0, `rgba(${color.r*255|0},${color.g*255|0},${color.b*255|0},1)`);
+  glow.addColorStop(0.3, `rgba(${color.r*255|0},${color.g*255|0},${color.b*255|0},0.8)`);
+  glow.addColorStop(0.6, `rgba(${color.r*255|0},${color.g*255|0},${color.b*255|0},0.2)`);
+  glow.addColorStop(1, `rgba(${color.r*255|0},${color.g*255|0},${color.b*255|0},0)`);
+  ctx.fillStyle = glow;
+  ctx.fillRect(0,0,size,size);
+
+  // 核心
+  const core = ctx.createRadialGradient(ctr,ctr,0,ctr,ctr,ctr*0.35);
+  core.addColorStop(0, '#ffffff');
+  core.addColorStop(1, `rgba(${color.r*255|0},${color.g*255|0},${color.b*255|0},0.9)`);
+  ctx.fillStyle = core;
+  ctx.beginPath();
+  ctx.arc(ctr,ctr,ctr*0.35,0,Math.PI*2);
+  ctx.fill();
+
+  return new THREE.CanvasTexture(c);
+}
+
+const nodeMeshes = [];
+const nodeMeshMap = new Map();
+const nodeGeo = new THREE.PlaneGeometry(1,1);
+
+for (const node of graph.nodes.values()) {
+  const catColor = CATEGORIES[node.category]?.color || new THREE.Color(0.5,0.5,0.5);
+  const tex = createCircleTexture(128, catColor);
+  const mat = new THREE.MeshBasicMaterial({ map:tex, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending });
+  const mesh = new THREE.Mesh(nodeGeo, mat);
+  const scale = NODE_BASE + node.strength * 8;
+  mesh.scale.set(scale, scale, 1);
+  mesh.userData = { nodeId:node.id, baseScale:scale };
+  nodeGroup.add(mesh);
+  nodeMeshes.push(mesh);
+  nodeMeshMap.set(node.id, mesh);
+}
+
+// 标签
+const labelSprites = [];
+function createLabelTexture(text, color) {
+  const c = document.createElement('canvas');
+  const ctx = c.getContext('2d');
+  const fs = 26;
+  ctx.font = `600 ${fs}px -apple-system,SF Pro Display,system-ui,sans-serif`;
+  const m = ctx.measureText(text);
+  const w = Math.ceil(m.width)+20, h = fs+16;
+  c.width = w; c.height = h;
+  ctx.font = `600 ${fs}px -apple-system,SF Pro Display,system-ui,sans-serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = color;
+  ctx.fillText(text, w/2, h/2);
+  return { texture:new THREE.CanvasTexture(c), width:w/h };
+}
+
+for (const node of graph.nodes.values()) {
+  const catColor = CATEGORIES[node.category]?.color || new THREE.Color(0.5,0.5,0.5);
+  const hex = '#'+catColor.getHexString();
+  const { texture, width:aspect } = createLabelTexture(node.name, hex);
+  const mat = new THREE.SpriteMaterial({ map:texture, transparent:true, opacity:0.75, depthWrite:false });
+  const sprite = new THREE.Sprite(mat);
+  sprite.scale.set(14*aspect, 14, 1);
+  sprite.userData = { nodeId:node.id };
+  nodeGroup.add(sprite);
+  labelSprites.push(sprite);
+}
+
+// ============================================================
+// 边渲染
+// ============================================================
+
+const edgePos = new Float32Array(edgesData.length*6);
+const edgeCol = new Float32Array(edgesData.length*6);
+const edgeGeo = new THREE.BufferGeometry();
+edgeGeo.setAttribute('position', new THREE.BufferAttribute(edgePos, 3));
+edgeGeo.setAttribute('color', new THREE.BufferAttribute(edgeCol, 3));
+const edgeMat = new THREE.LineBasicMaterial({
+  vertexColors:true, transparent:true, opacity:0.3,
+  blending:THREE.AdditiveBlending, depthWrite:false,
+});
+const edgeLines = new THREE.LineSegments(edgeGeo, edgeMat);
+scene.add(edgeLines);
+
+// ============================================================
+// 粒子系统 (GPU 加速)
+// ============================================================
+
+const MAX_PARTICLES = 3000;
+const pPos = new Float32Array(MAX_PARTICLES*3);
+const pCol = new Float32Array(MAX_PARTICLES*3);
+const pSizes = new Float32Array(MAX_PARTICLES);
+
+const particleState = [];
+for (let i=0; i<MAX_PARTICLES; i++) {
+  particleState.push({
+    edgeIdx: Math.floor(Math.random()*edgesData.length),
+    t: Math.random(),
+    speed: 0.001+Math.random()*0.003,
+    size: 1.5+Math.random()*2.5,
+  });
+}
+
+const particleTex = (() => {
+  const s=64, c=document.createElement('canvas');
+  c.width=c.height=s;
+  const ctx=c.getContext('2d');
+  const ctr=s/2;
+  const g=ctx.createRadialGradient(ctr,ctr,0,ctr,ctr,ctr);
+  g.addColorStop(0,'rgba(255,255,255,1)');
+  g.addColorStop(0.3,'rgba(255,255,255,0.6)');
+  g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,s,s);
+  return new THREE.CanvasTexture(c);
+})();
+
+const particleGeo = new THREE.BufferGeometry();
+particleGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+particleGeo.setAttribute('color', new THREE.BufferAttribute(pCol, 3));
+particleGeo.setAttribute('size', new THREE.BufferAttribute(pSizes, 1));
+
+const particleMat = new THREE.ShaderMaterial({
+  uniforms: { uTexture:{value:particleTex}, uPixelRatio:{value:renderer.getPixelRatio()} },
+  vertexShader: `
+    attribute float size;
+    attribute vec3 color;
+    varying vec3 vColor;
+    uniform float uPixelRatio;
+    void main() {
+      vColor = color;
+      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      gl_PointSize = size * uPixelRatio * (200.0 / -mv.z);
+      gl_Position = projectionMatrix * mv;
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D uTexture;
+    varying vec3 vColor;
+    void main() {
+      vec4 tex = texture2D(uTexture, gl_PointCoord);
+      gl_FragColor = vec4(vColor, tex.a * 0.85);
+    }
+  `,
+  transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+});
+
+const particleSystem = new THREE.Points(particleGeo, particleMat);
+scene.add(particleSystem);
+
+// ============================================================
+// 星空背景
+// ============================================================
+
+const STAR_COUNT=2000;
+const starPos=new Float32Array(STAR_COUNT*3);
+const starCol=new Float32Array(STAR_COUNT*3);
+for (let i=0; i<STAR_COUNT; i++) {
+  starPos[i*3]=(Math.random()-0.5)*2000;
+  starPos[i*3+1]=(Math.random()-0.5)*2000;
+  starPos[i*3+2]=(Math.random()-0.5)*2000;
+  const b=0.2+Math.random()*0.5, t=Math.random();
+  starCol[i*3]=b*(0.7+t*0.3);
+  starCol[i*3+1]=b*(0.7+(1-t)*0.3);
+  starCol[i*3+2]=b;
+}
+const starGeo=new THREE.BufferGeometry();
+starGeo.setAttribute('position',new THREE.BufferAttribute(starPos,3));
+starGeo.setAttribute('color',new THREE.BufferAttribute(starCol,3));
+scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({
+  size:1.5, vertexColors:true, transparent:true, opacity:0.6,
+  blending:THREE.AdditiveBlending, depthWrite:false,
+})));
+
+// 环境粒子
+const AMBIENT=300;
+const ambPos=new Float32Array(AMBIENT*3);
+const ambVel=[];
+for (let i=0; i<AMBIENT; i++) {
+  ambPos[i*3]=(Math.random()-0.5)*500;
+  ambPos[i*3+1]=(Math.random()-0.5)*500;
+  ambPos[i*3+2]=(Math.random()-0.5)*200;
+  ambVel.push({ vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, vz:(Math.random()-0.5)*0.1 });
+}
+const ambGeo=new THREE.BufferGeometry();
+ambGeo.setAttribute('position',new THREE.BufferAttribute(ambPos,3));
+scene.add(new THREE.Points(ambGeo, new THREE.PointsMaterial({
+  size:2, color:0x4466aa, transparent:true, opacity:0.3,
+  blending:THREE.AdditiveBlending, depthWrite:false,
+})));
+
+// ============================================================
+// 交互系统
+// ============================================================
+
+const canvas = renderer.domElement;
+let draggedNode = null;
+let isPointerDown = false;
+
+function getNodeAtPointer(cx, cy) {
+  let closest=null, closestDist=Infinity;
+  for (const [id, node] of graph.nodes) {
+    const sp = new THREE.Vector3(node.x,node.y,node.z).project(camera);
+    const sx=(sp.x+1)/2*window.innerWidth;
+    const sy=-(sp.y-1)/2*window.innerHeight;
+    const dx=cx-sx, dy=cy-sy;
+    const d=Math.sqrt(dx*dx+dy*dy);
+    if (d<30 && d<closestDist) { closestDist=d; closest=id; }
+  }
+  return closest;
+}
+
+// 鼠标/触摸事件
+canvas.addEventListener('pointerdown', (e) => {
+  isPointerDown = true;
+  orbit.lastX = e.clientX;
+  orbit.lastY = e.clientY;
+
+  const nodeId = getNodeAtPointer(e.clientX, e.clientY);
+  if (nodeId) {
+    draggedNode = nodeId;
+    const node = graph.nodes.get(nodeId);
+    node.fx=node.x; node.fy=node.y; node.fz=node.z;
+    canvas.style.cursor = 'grabbing';
+  }
+});
+
+canvas.addEventListener('pointermove', (e) => {
+  if (draggedNode && isPointerDown) {
+    const node = graph.nodes.get(draggedNode);
+    const ndcX=(e.clientX/window.innerWidth)*2-1;
+    const ndcY=-(e.clientY/window.innerHeight)*2+1;
+    const dir=new THREE.Vector3(ndcX,ndcY,0.5).unproject(camera).sub(camera.position).normalize();
+    const dist=camera.position.distanceTo(new THREE.Vector3(node.x,node.y,node.z));
+    const np=camera.position.clone().add(dir.multiplyScalar(dist));
+    node.fx=np.x; node.fy=np.y; node.fz=np.z;
+    node.x=np.x; node.y=np.y; node.z=np.z;
+    graph.reheat();
+    return;
+  }
+
+  if (isPointerDown && !draggedNode) {
+    const dx=e.clientX-orbit.lastX, dy=e.clientY-orbit.lastY;
+    orbit.targetTheta -= dx*0.005;
+    orbit.targetPhi += dy*0.005;
+    orbit.lastX=e.clientX; orbit.lastY=e.clientY;
+    return;
+  }
+
+  // 悬停检测
+  const nodeId = getNodeAtPointer(e.clientX, e.clientY);
+  if (nodeId !== state.hoveredNode) {
+    state.hoveredNode = nodeId;
+    if (nodeId) {
+      showTooltip(nodeId, e.clientX, e.clientY);
+      canvas.style.cursor = 'grab';
+    } else {
+      hideTooltip();
+      canvas.style.cursor = 'default';
+    }
+  } else if (nodeId) {
+    showTooltip(nodeId, e.clientX, e.clientY);
+  }
+});
+
+canvas.addEventListener('pointerup', () => {
+  if (draggedNode) {
+    const node = graph.nodes.get(draggedNode);
+    node.fx=null; node.fy=null; node.fz=null;
+  }
+  isPointerDown = false;
+  draggedNode = null;
+  canvas.style.cursor = state.hoveredNode ? 'grab' : 'default';
+});
+
+canvas.addEventListener('click', (e) => {
+  const nodeId = getNodeAtPointer(e.clientX, e.clientY);
+  if (nodeId) {
+    state.selectedNode = nodeId;
+    showInfoPanel(nodeId);
+  } else {
+    state.selectedNode = null;
+    hideInfoPanel();
+  }
+});
+
+canvas.addEventListener('dblclick', () => { resetView(); });
+
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  orbit.targetRadius += e.deltaY * 0.5;
+  orbit.targetRadius = Math.max(100, Math.min(1000, orbit.targetRadius));
+}, { passive:false });
+
+// 触摸支持
+let touchStartDist=0, touchStartRadius=0;
+canvas.addEventListener('touchstart', (e) => {
+  if (e.touches.length===2) {
+    const dx=e.touches[0].clientX-e.touches[1].clientX;
+    const dy=e.touches[0].clientY-e.touches[1].clientY;
+    touchStartDist=Math.sqrt(dx*dx+dy*dy);
+    touchStartRadius=orbit.targetRadius;
+  }
+}, { passive:true });
+
+canvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  if (e.touches.length===2) {
+    const dx=e.touches[0].clientX-e.touches[1].clientX;
+    const dy=e.touches[0].clientY-e.touches[1].clientY;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    orbit.targetRadius = touchStartRadius*(touchStartDist/dist);
+    orbit.targetRadius = Math.max(100, Math.min(1000, orbit.targetRadius));
+  }
+}, { passive:false });
+
+// ============================================================
+// UI: 工具提示
+// ============================================================
+
+function showTooltip(nodeId, cx, cy) {
+  const node = graph.nodes.get(nodeId);
+  if (!node) return;
+  const tt = document.getElementById('tooltip');
+  document.getElementById('tt-name').textContent = node.icon+' '+node.name;
+  document.getElementById('tt-cat').textContent = (CATEGORIES[node.category]?.label||node.category)+' / '+node.type;
+  document.getElementById('tt-strength').textContent = (node.strength*100).toFixed(0)+'%';
+  document.getElementById('tt-links').textContent = graph.edges.filter(e=>e.source===nodeId||e.target===nodeId).length;
+
+  const catColor = CATEGORIES[node.category]?.color;
+  if (catColor) tt.style.borderColor = `rgba(${catColor.r*255|0},${catColor.g*255|0},${catColor.b*255|0},0.5)`;
+
+  let tx=cx+16, ty=cy-10;
+  if (tx+240>window.innerWidth) tx=cx-256;
+  if (ty+80>window.innerHeight) ty=cy-80;
+  tt.style.left=tx+'px'; tt.style.top=ty+'px';
+  tt.classList.add('visible');
+}
+
+function hideTooltip() { document.getElementById('tooltip').classList.remove('visible'); }
+
+// ============================================================
+// UI: 信息面板
+// ============================================================
+
+function showInfoPanel(nodeId) {
+  const node = graph.nodes.get(nodeId);
+  if (!node) return;
+  const panel = document.getElementById('infoPanel');
+  panel.classList.add('visible');
+
+  document.getElementById('ip-icon').textContent = node.icon;
+  document.getElementById('ip-title').textContent = node.name;
+  document.getElementById('ip-subtitle').textContent = (CATEGORIES[node.category]?.label||node.category)+' / '+node.type;
+  document.getElementById('ip-desc').textContent = node.description||'';
+  document.getElementById('ip-strength').textContent = (node.strength*100).toFixed(0)+'%';
+  document.getElementById('ip-status').textContent = node.status||'active';
+  document.getElementById('ip-type').textContent = node.type;
+
+  const conns = graph.edges.filter(e=>e.source===nodeId||e.target===nodeId);
+  document.getElementById('ip-conn').textContent = conns.length;
+
+  const list = document.getElementById('ip-conn-list');
+  list.innerHTML = '';
+  conns.forEach(edge => {
+    const targetId = edge.source===nodeId ? edge.target : edge.source;
+    const target = graph.nodes.get(targetId);
+    if (!target) return;
+    const catColor = CATEGORIES[target.category]?.hex || '#888';
+    const item = document.createElement('div');
+    item.className = 'ip-conn-item';
+    item.innerHTML = `<div class="ip-conn-dot" style="background:${catColor}"></div><span>${target.icon} ${target.name}</span><span style="margin-left:auto;color:var(--text-dim)">${edge.label}</span>`;
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', () => {
+      state.selectedNode = targetId;
+      showInfoPanel(targetId);
+    });
+    list.appendChild(item);
+  });
+
+  // 切换过滤栏可见性
+  document.getElementById('filterBar').style.display = 'none';
+}
+
+window.hideInfoPanel = function() {
+  document.getElementById('infoPanel').classList.remove('visible');
+  document.getElementById('filterBar').style.display = '';
+};
+
+// ============================================================
+// UI: 搜索
+// ============================================================
+
+const searchInput = document.getElementById('search');
+const searchResults = document.getElementById('searchResults');
+
+searchInput.addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  state.searchQuery = q;
+
+  if (!q) {
+    searchResults.classList.remove('visible');
+    return;
+  }
+
+  const matches = nodesData.filter(n =>
+    n.name.toLowerCase().includes(q) ||
+    n.category.toLowerCase().includes(q) ||
+    n.type.toLowerCase().includes(q) ||
+    (n.description||'').toLowerCase().includes(q)
+  );
+
+  if (matches.length === 0) {
+    searchResults.classList.remove('visible');
+    return;
+  }
+
+  searchResults.innerHTML = '';
+  matches.forEach(node => {
+    const item = document.createElement('div');
+    item.className = 'search-result-item';
+    item.innerHTML = `<span class="sr-icon">${node.icon}</span><span class="sr-name">${node.name}</span><span class="sr-cat">${CATEGORIES[node.category]?.label||node.category}</span>`;
+    item.addEventListener('click', () => {
+      state.selectedNode = node.id;
+      showInfoPanel(node.id);
+      searchResults.classList.remove('visible');
+      searchInput.value = '';
+      state.searchQuery = '';
+      // 聚焦到节点
+      const gn = graph.nodes.get(node.id);
+      if (gn) {
+        orbit.targetRadius = 200;
+      }
+    });
+    searchResults.appendChild(item);
+  });
+  searchResults.classList.add('visible');
+});
+
+searchInput.addEventListener('focus', () => {
+  if (state.searchQuery) searchResults.classList.add('visible');
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-box')) searchResults.classList.remove('visible');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key==='/' && document.activeElement!==searchInput) {
+    e.preventDefault();
+    searchInput.focus();
+  }
+  if (e.key==='Escape') {
+    searchInput.blur();
+    searchResults.classList.remove('visible');
+    state.selectedNode = null;
+    hideInfoPanel();
+  }
+});
+
+// ============================================================
+// UI: 过滤栏
+// ============================================================
+
+function buildFilterBar() {
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML = '';
+
+  const allBtn = document.createElement('button');
+  allBtn.className = 'filter-btn active';
+  allBtn.textContent = '全部';
+  allBtn.addEventListener('click', () => {
+    state.activeCategory = null;
+    bar.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    allBtn.classList.add('active');
+  });
+  bar.appendChild(allBtn);
+
+  for (const [key, cat] of Object.entries(CATEGORIES)) {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.innerHTML = `<span class="filter-dot" style="background:${cat.hex}"></span>${cat.label}`;
+    btn.addEventListener('click', () => {
+      if (state.activeCategory === key) {
+        state.activeCategory = null;
+        bar.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        allBtn.classList.add('active');
+      } else {
+        state.activeCategory = key;
+        bar.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+    });
+    bar.appendChild(btn);
+  }
+}
+
+// ============================================================
+// UI: 图例
+// ============================================================
+
+function buildLegend() {
+  const grid = document.getElementById('legendGrid');
+  for (const [key, cat] of Object.entries(CATEGORIES)) {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `<div class="legend-dot" style="background:${cat.hex}"></div>${cat.label}`;
+    grid.appendChild(item);
+  }
+}
+
+// ============================================================
+// UI: 控制面板
+// ============================================================
+
+document.getElementById('particle-count').addEventListener('input', (e) => {
+  state.particleCount = parseInt(e.target.value);
+  document.getElementById('particle-count-val').textContent = state.particleCount;
+});
+
+document.getElementById('bloom-strength').addEventListener('input', (e) => {
+  state.bloomStrength = parseFloat(e.target.value);
+  document.getElementById('bloom-val').textContent = state.bloomStrength;
+  bloomPass.strength = state.bloomStrength;
+});
+
+document.getElementById('node-size').addEventListener('input', (e) => {
+  state.nodeScale = parseFloat(e.target.value);
+  document.getElementById('node-size-val').textContent = state.nodeScale;
+});
+
+window.toggleParticles = function() {
+  state.showParticles = !state.showParticles;
+  document.getElementById('btn-particles').classList.toggle('active');
+};
+
+window.toggleLabels = function() {
+  state.showLabels = !state.showLabels;
+  document.getElementById('btn-labels').classList.toggle('active');
+};
+
+window.toggleAutoRotate = function() {
+  state.autoRotate = !state.autoRotate;
+  document.getElementById('btn-auto').classList.toggle('active');
+};
+
+window.resetView = function() {
+  orbit.targetTheta = 0;
+  orbit.targetPhi = 0;
+  orbit.targetRadius = 450;
+  state.selectedNode = null;
+  hideInfoPanel();
+};
+
+// ============================================================
+// 主渲染循环
+// ============================================================
+
+let frameCount=0, lastFpsTime=performance.now(), fps=60;
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const time = clock.getElapsedTime();
+
+  // FPS
+  frameCount++;
+  const now = performance.now();
+  if (now - lastFpsTime > 1000) {
+    fps = frameCount;
+    frameCount = 0;
+    lastFpsTime = now;
+    document.getElementById('s-fps').textContent = fps;
+  }
+
+  // 自动旋转
+  if (state.autoRotate && !isPointerDown && !draggedNode) {
+    orbit.targetTheta += orbit.autoRotateSpeed;
+  }
+
+  updateCamera();
+  graph.tick();
+
+  // 更新节点
+  for (const mesh of nodeMeshes) {
+    const node = graph.nodes.get(mesh.userData.nodeId);
+    if (!node) continue;
+    mesh.position.set(node.x, node.y, node.z);
+
+    // 可见性 (过滤+搜索)
+    let visible = true;
+    if (state.activeCategory && node.category !== state.activeCategory) visible = false;
+    if (state.searchQuery && !node.name.toLowerCase().includes(state.searchQuery)) visible = false;
+    mesh.visible = visible;
+
+    // 悬停脉冲
+    const pulse = state.hoveredNode===node.id ? 1+Math.sin(time*4)*0.15 : 1;
+    const s = mesh.userData.baseScale * pulse * state.nodeScale;
+    mesh.scale.set(s, s, 1);
+  }
+
+  // 更新标签
+  for (const sprite of labelSprites) {
+    const node = graph.nodes.get(sprite.userData.nodeId);
+    if (!node) continue;
+    sprite.position.set(node.x, node.y-12, node.z);
+    sprite.visible = state.showLabels;
+
+    let visible = true;
+    if (state.activeCategory && node.category !== state.activeCategory) visible = false;
+    if (state.searchQuery && !node.name.toLowerCase().includes(state.searchQuery)) visible = false;
+    sprite.visible = state.showLabels && visible;
+
+    const dist = camera.position.distanceTo(sprite.position);
+    sprite.material.opacity = Math.max(0, Math.min(0.85, 1-dist/600));
+  }
+
+  // 更新边
+  let edgeIdx=0;
+  for (const edge of edgesData) {
+    const s=graph.nodes.get(edge.source), t=graph.nodes.get(edge.target);
+    if (!s||!t) continue;
+    const i=edgeIdx*6;
+    edgePos[i]=s.x; edgePos[i+1]=s.y; edgePos[i+2]=s.z;
+    edgePos[i+3]=t.x; edgePos[i+4]=t.y; edgePos[i+5]=t.z;
+
+    // 过滤边
+    let edgeVisible = true;
+    if (state.activeCategory) {
+      if (s.category!==state.activeCategory && t.category!==state.activeCategory) edgeVisible = false;
+    }
+
+    const alpha = edgeVisible ? (0.15+edge.strength*0.3) : 0.03;
+    const sColor = CATEGORIES[s.category]?.color || new THREE.Color(0.5,0.5,0.5);
+    const tColor = CATEGORIES[t.category]?.color || new THREE.Color(0.5,0.5,0.5);
+    edgeCol[i]=sColor.r*alpha; edgeCol[i+1]=sColor.g*alpha; edgeCol[i+2]=sColor.b*alpha;
+    edgeCol[i+3]=tColor.r*alpha; edgeCol[i+4]=tColor.g*alpha; edgeCol[i+5]=tColor.b*alpha;
+
+    // 选中节点高亮边
+    if (state.selectedNode && (edge.source===state.selectedNode || edge.target===state.selectedNode)) {
+      const pulse = 0.6+0.4*Math.sin(time*2+edgeIdx*0.5);
+      edgeCol[i]*=pulse*2; edgeCol[i+1]*=pulse*2; edgeCol[i+2]*=pulse*2;
+      edgeCol[i+3]*=pulse*2; edgeCol[i+4]*=pulse*2; edgeCol[i+5]*=pulse*2;
+    }
+
+    edgeIdx++;
+  }
+  edgeGeo.attributes.position.needsUpdate = true;
+  edgeGeo.attributes.color.needsUpdate = true;
+
+  // 更新粒子
+  if (state.showParticles) {
+    for (let i=0; i<MAX_PARTICLES; i++) {
+      const p = particleState[i];
+      const edge = edgesData[p.edgeIdx];
+      const s=graph.nodes.get(edge.source), t=graph.nodes.get(edge.target);
+      if (!s||!t) continue;
+
+      // 可见性
+      let visible = i < state.particleCount;
+      if (state.activeCategory) {
+        if (s.category!==state.activeCategory && t.category!==state.activeCategory) visible = false;
+      }
+
+      if (!visible) {
+        pSizes[i] = 0;
+        continue;
+      }
+
+      p.t += p.speed;
+      if (p.t > 1) {
+        p.t -= 1;
+        p.edgeIdx = Math.floor(Math.random()*edgesData.length);
+      }
+
+      const et = p.t*p.t*(3-2*p.t);
+      pPos[i*3]=s.x+(t.x-s.x)*et;
+      pPos[i*3+1]=s.y+(t.y-s.y)*et;
+      pPos[i*3+2]=s.z+(t.z-s.z)*et;
+
+      const sColor = CATEGORIES[s.category]?.color || new THREE.Color(0.5,0.5,0.5);
+      const tColor = CATEGORIES[t.category]?.color || new THREE.Color(0.5,0.5,0.5);
+      const fadeIn=Math.min(p.t*5,1), fadeOut=Math.min((1-p.t)*5,1), fade=fadeIn*fadeOut;
+
+      pCol[i*3]=(sColor.r+(tColor.r-sColor.r)*et)*fade;
+      pCol[i*3+1]=(sColor.g+(tColor.g-sColor.g)*et)*fade;
+      pCol[i*3+2]=(sColor.b+(tColor.b-sColor.b)*et)*fade;
+      pSizes[i]=p.size*fade;
+    }
+    particleGeo.attributes.position.needsUpdate = true;
+    particleGeo.attributes.color.needsUpdate = true;
+    particleGeo.attributes.size.needsUpdate = true;
+  } else {
+    for (let i=0; i<MAX_PARTICLES; i++) pSizes[i]=0;
+    particleGeo.attributes.size.needsUpdate = true;
+  }
+
+  // 更新环境粒子
+  for (let i=0; i<AMBIENT; i++) {
+    const v=ambVel[i];
+    ambPos[i*3]+=v.vx; ambPos[i*3+1]+=v.vy; ambPos[i*3+2]+=v.vz;
+    if (Math.abs(ambPos[i*3])>250) v.vx*=-1;
+    if (Math.abs(ambPos[i*3+1])>250) v.vy*=-1;
+    if (Math.abs(ambPos[i*3+2])>100) v.vz*=-1;
+  }
+  ambGeo.attributes.position.needsUpdate = true;
+
+  // Bloom 脉冲
+  bloomPass.strength = state.bloomStrength + Math.sin(time*0.5)*0.1;
+
+  // 更新统计
+  document.getElementById('s-particles').textContent = state.showParticles ? state.particleCount : 0;
+
+  composer.render();
+}
+
+// ============================================================
+// 初始化
+// ============================================================
+
+buildFilterBar();
+buildLegend();
+
+document.getElementById('s-nodes').textContent = nodesData.length;
+document.getElementById('s-edges').textContent = edgesData.length;
+
+// 窗口大小调整
+window.addEventListener('resize', () => {
+  const w=window.innerWidth, h=window.innerHeight;
+  camera.aspect=w/h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w,h);
+  composer.setSize(w,h);
+  bloomPass.resolution.set(w,h);
+});
+
+// 隐藏加载画面
+setTimeout(() => { document.getElementById('loading').classList.add('hidden'); }, 600);
+
+// 启动渲染
+animate();
+
+</script>
+</body>
+</html>

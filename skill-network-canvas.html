@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHOENIX Skill Network</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+            color: #e0e0e0;
+        }
+
+        #canvas {
+            display: block;
+            cursor: grab;
+        }
+
+        #canvas.dragging {
+            cursor: grabbing;
+        }
+
+        /* 控制面板 */
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 280px;
+            padding: 12px 16px 12px 40px;
+            background: rgba(20, 20, 35, 0.9);
+            border: 1px solid rgba(100, 100, 255, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: rgba(100, 100, 255, 0.5);
+            box-shadow: 0 0 20px rgba(100, 100, 255, 0.15);
+        }
+
+        .search-box::before {
+            content: '⌕';
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 14px;
+            background: rgba(20, 20, 35, 0.8);
+            border: 1px solid rgba(100, 100, 255, 0.15);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover {
+            background: rgba(40, 40, 80, 0.8);
+            border-color: rgba(100, 100, 255, 0.4);
+        }
+
+        .filter-btn.active {
+            background: rgba(60, 60, 150, 0.5);
+            border-color: rgba(100, 100, 255, 0.6);
+            color: #fff;
+        }
+
+        /* 信息面板 */
+        .info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 16px 20px;
+            background: rgba(15, 15, 30, 0.9);
+            border: 1px solid rgba(100, 100, 255, 0.15);
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            font-size: 13px;
+            line-height: 1.6;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .info-panel.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .info-panel h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .info-panel .meta {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+
+        /* 图例 */
+        .legend {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px;
+            background: rgba(15, 15, 30, 0.9);
+            border: 1px solid rgba(100, 100, 255, 0.15);
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+        }
+
+        .legend h4 {
+            font-size: 13px;
+            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* 统计 */
+        .stats {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 16px;
+            background: rgba(15, 15, 30, 0.9);
+            border: 1px solid rgba(100, 100, 255, 0.15);
+            border-radius: 10px;
+            backdrop-filter: blur(20px);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="controls">
+        <div class="search-box">
+            <input type="text" id="search" placeholder="搜索技能节点...">
+        </div>
+        <div class="filter-buttons" id="filters"></div>
+    </div>
+
+    <div class="legend" id="legend"></div>
+
+    <div class="info-panel" id="infoPanel"></div>
+
+    <div class="stats" id="stats"></div>
+
+    <script>
+        // ============================================================
+        // 配置与数据
+        // ============================================================
+        const CONFIG = {
+            physics: {
+                repulsion: 5000,
+                attraction: 0.005,
+                damping: 0.85,
+                centerForce: 0.01,
+                maxVelocity: 8
+            },
+            render: {
+                nodeMinRadius: 20,
+                nodeMaxRadius: 45,
+                glowIntensity: 0.6,
+                particleCount: 80,
+                particleSpeed: 0.8
+            },
+            interaction: {
+                zoomSpeed: 0.1,
+                minZoom: 0.3,
+                maxZoom: 3
+            }
+        };
+
+        // 示例数据 - 技能网络
+        const SKILL_DATA = {
+            nodes: [
+                { id: 'core', name: 'PHOENIX Core', type: 'system', category: '核心', icon: '🔥', status: 'active', strength: 1.0 },
+                { id: 'evolve', name: 'Evolution Engine', type: 'engine', category: '核心', icon: '🧬', status: 'active', strength: 0.95 },
+                { id: 'memory', name: 'Knowledge Base', type: 'engine', category: '核心', icon: '🧠', status: 'active', strength: 0.9 },
+                { id: 'observe', name: 'Observability', type: 'engine', category: '核心', icon: '👁', status: 'active', strength: 0.85 },
+
+                { id: 'planner', name: 'Planner', type: 'agent', category: 'Agent', icon: '📋', status: 'active', strength: 0.88 },
+                { id: 'architect', name: 'Architect', type: 'agent', category: 'Agent', icon: '🏗', status: 'active', strength: 0.82 },
+                { id: 'reviewer', name: 'Code Reviewer', type: 'agent', category: 'Agent', icon: '🔍', status: 'active', strength: 0.9 },
+                { id: 'security', name: 'Security Reviewer', type: 'agent', category: 'Agent', icon: '🛡', status: 'active', strength: 0.87 },
+                { id: 'tdd', name: 'TDD Guide', type: 'agent', category: 'Agent', icon: '🧪', status: 'active', strength: 0.85 },
+                { id: 'build', name: 'Build Resolver', type: 'agent', category: 'Agent', icon: '🔧', status: 'idle', strength: 0.7 },
+
+                { id: 'ts', name: 'TypeScript', type: 'skill', category: '语言', icon: '📘', status: 'active', strength: 0.92 },
+                { id: 'python', name: 'Python', type: 'skill', category: '语言', icon: '🐍', status: 'active', strength: 0.88 },
+                { id: 'react', name: 'React', type: 'skill', category: '框架', icon: '⚛️', status: 'active', strength: 0.85 },
+                { id: 'vue', name: 'Vue', type: 'skill', category: '框架', icon: '💚', status: 'active', strength: 0.78 },
+                { id: 'node', name: 'Node.js', type: 'skill', category: '运行时', icon: '🟢', status: 'active', strength: 0.82 },
+
+                { id: 'canvas', name: 'Canvas API', type: 'skill', category: 'Web API', icon: '🎨', status: 'active', strength: 0.75 },
+                { id: 'webgl', name: 'WebGL', type: 'skill', category: 'Web API', icon: '📐', status: 'learning', strength: 0.5 },
+                { id: 'perf', name: 'Performance', type: 'skill', category: '优化', icon: '⚡', status: 'active', strength: 0.88 },
+                { id: 'a11y', name: 'Accessibility', type: 'skill', category: '质量', icon: '♿', status: 'active', strength: 0.82 },
+                { id: 'test', name: 'Testing', type: 'skill', category: '质量', icon: '✅', status: 'active', strength: 0.85 },
+
+                { id: 'git', name: 'Git', type: 'tool', category: '工具', icon: '📦', status: 'active', strength: 0.9 },
+                { id: 'docker', name: 'Docker', type: 'tool', category: '工具', icon: '🐳', status: 'active', strength: 0.72 },
+                { id: 'ci', name: 'CI/CD', type: 'tool', category: '工具', icon: '🔄', status: 'active', strength: 0.75 },
+            ],
+            edges: [
+                { source: 'core', target: 'evolve', label: '包含', strength: 0.95 },
+                { source: 'core', target: 'memory', label: '包含', strength: 0.9 },
+                { source: 'core', target: 'observe', label: '包含', strength: 0.85 },
+
+                { source: 'planner', target: 'core', label: '依赖', strength: 0.8 },
+                { source: 'architect', target: 'core', label: '依赖', strength: 0.75 },
+                { source: 'reviewer', target: 'core', label: '依赖', strength: 0.85 },
+                { source: 'security', target: 'reviewer', label: '协同', strength: 0.7 },
+                { source: 'tdd', target: 'reviewer', label: '协同', strength: 0.65 },
+                { source: 'build', target: 'ci', label: '使用', strength: 0.6 },
+
+                { source: 'ts', target: 'react', label: '支持', strength: 0.85 },
+                { source: 'ts', target: 'vue', label: '支持', strength: 0.75 },
+                { source: 'ts', target: 'node', label: '支持', strength: 0.9 },
+                { source: 'python', target: 'tdd', label: '用于', strength: 0.6 },
+
+                { source: 'react', target: 'canvas', label: '可用', strength: 0.5 },
+                { source: 'react', target: 'perf', label: '优化', strength: 0.7 },
+                { source: 'vue', target: 'perf', label: '优化', strength: 0.65 },
+                { source: 'canvas', target: 'webgl', label: '进阶', strength: 0.8 },
+                { source: 'perf', target: 'webgl', label: '涉及', strength: 0.6 },
+
+                { source: 'test', target: 'tdd', label: '实践', strength: 0.85 },
+                { source: 'a11y', target: 'reviewer', label: '检查', strength: 0.7 },
+
+                { source: 'git', target: 'ci', label: '触发', strength: 0.8 },
+                { source: 'docker', target: 'ci', label: '部署', strength: 0.75 },
+                { source: 'node', target: 'build', label: '构建', strength: 0.7 },
+            ]
+        };
+
+        // 颜色方案
+        const COLORS = {
+            system: { main: '#ff6b6b', glow: 'rgba(255, 107, 107, 0.4)' },
+            engine: { main: '#ffd93d', glow: 'rgba(255, 217, 61, 0.4)' },
+            agent: { main: '#6bcb77', glow: 'rgba(107, 203, 119, 0.4)' },
+            skill: { main: '#4d96ff', glow: 'rgba(77, 150, 255, 0.4)' },
+            tool: { main: '#9b59b6', glow: 'rgba(155, 89, 182, 0.4)' }
+        };
+
+        // ============================================================
+        // Canvas 初始化
+        // ============================================================
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width * window.devicePixelRatio;
+            canvas.height = height * window.devicePixelRatio;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // ============================================================
+        // 视图状态
+        // ============================================================
+        const view = {
+            x: 0,
+            y: 0,
+            zoom: 1,
+            targetZoom: 1,
+            isDragging: false,
+            dragStart: { x: 0, y: 0 },
+            lastMouse: { x: 0, y: 0 }
+        };
+
+        // ============================================================
+        // 物理引擎
+        // ============================================================
+        class PhysicsEngine {
+            constructor(nodes, edges) {
+                this.nodes = nodes.map(n => ({
+                    ...n,
+                    x: width / 2 + (Math.random() - 0.5) * 400,
+                    y: height / 2 + (Math.random() - 0.5) * 400,
+                    vx: 0,
+                    vy: 0,
+                    radius: this.calculateRadius(n),
+                    targetX: null,
+                    targetY: null,
+                    pinned: false
+                }));
+                this.edges = edges;
+                this.nodeMap = new Map(this.nodes.map(n => [n.id, n]));
+            }
+
+            calculateRadius(node) {
+                const min = CONFIG.render.nodeMinRadius;
+                const max = CONFIG.render.nodeMaxRadius;
+                return min + (max - min) * node.strength;
+            }
+
+            update() {
+                const { repulsion, attraction, damping, centerForce, maxVelocity } = CONFIG.physics;
+
+                // 斥力（节点间）
+                for (let i = 0; i < this.nodes.length; i++) {
+                    for (let j = i + 1; j < this.nodes.length; j++) {
+                        const a = this.nodes[i];
+                        const b = this.nodes[j];
+                        const dx = b.x - a.x;
+                        const dy = b.y - a.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                        const force = repulsion / (dist * dist);
+
+                        const fx = (dx / dist) * force;
+                        const fy = (dy / dist) * force;
+
+                        if (!a.pinned) { a.vx -= fx; a.vy -= fy; }
+                        if (!b.pinned) { b.vx += fx; b.vy += fy; }
+                    }
+                }
+
+                // 引力（边）
+                for (const edge of this.edges) {
+                    const source = this.nodeMap.get(edge.source);
+                    const target = this.nodeMap.get(edge.target);
+                    if (!source || !target) continue;
+
+                    const dx = target.x - source.x;
+                    const dy = target.y - source.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+                    const force = dist * attraction * edge.strength;
+                    const fx = (dx / dist) * force;
+                    const fy = (dy / dist) * force;
+
+                    if (!source.pinned) { source.vx += fx; source.vy += fy; }
+                    if (!target.pinned) { target.vx -= fx; target.vy -= fy; }
+                }
+
+                // 中心引力
+                const cx = width / 2;
+                const cy = height / 2;
+                for (const node of this.nodes) {
+                    if (node.pinned) continue;
+                    node.vx += (cx - node.x) * centerForce;
+                    node.vy += (cy - node.y) * centerForce;
+                }
+
+                // 应用速度
+                for (const node of this.nodes) {
+                    if (node.pinned) continue;
+
+                    node.vx *= damping;
+                    node.vy *= damping;
+
+                    // 限制速度
+                    const speed = Math.sqrt(node.vx * node.vx + node.vy * node.vy);
+                    if (speed > maxVelocity) {
+                        node.vx = (node.vx / speed) * maxVelocity;
+                        node.vy = (node.vy / speed) * maxVelocity;
+                    }
+
+                    node.x += node.vx;
+                    node.y += node.vy;
+                }
+            }
+
+            getNodeAt(x, y) {
+                // 转换屏幕坐标到世界坐标
+                const wx = (x - view.x) / view.zoom;
+                const wy = (y - view.y) / view.zoom;
+
+                for (let i = this.nodes.length - 1; i >= 0; i--) {
+                    const node = this.nodes[i];
+                    const dx = node.x - wx;
+                    const dy = node.y - wy;
+                    if (dx * dx + dy * dy < node.radius * node.radius) {
+                        return node;
+                    }
+                }
+                return null;
+            }
+        }
+
+        // ============================================================
+        // 粒子系统
+        // ============================================================
+        class ParticleSystem {
+            constructor() {
+                this.particles = [];
+                this.init();
+            }
+
+            init() {
+                for (let i = 0; i < CONFIG.render.particleCount; i++) {
+                    this.particles.push(this.createParticle());
+                }
+            }
+
+            createParticle() {
+                const edge = physics.edges[Math.floor(Math.random() * physics.edges.length)];
+                return {
+                    edge,
+                    t: Math.random(),
+                    speed: (0.3 + Math.random() * 0.7) * CONFIG.render.particleSpeed,
+                    size: 1.5 + Math.random() * 2,
+                    alpha: 0.3 + Math.random() * 0.5
+                };
+            }
+
+            update() {
+                for (const p of this.particles) {
+                    p.t += p.speed * 0.005;
+                    if (p.t > 1) {
+                        Object.assign(p, this.createParticle());
+                    }
+                }
+            }
+
+            draw(ctx) {
+                for (const p of this.particles) {
+                    const source = physics.nodeMap.get(p.edge.source);
+                    const target = physics.nodeMap.get(p.edge.target);
+                    if (!source || !target) continue;
+
+                    const x = source.x + (target.x - source.x) * p.t;
+                    const y = source.y + (target.y - source.y) * p.t;
+
+                    const color = COLORS[source.type]?.main || '#4d96ff';
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = color;
+                    ctx.globalAlpha = p.alpha * (1 - Math.abs(p.t - 0.5) * 2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                }
+            }
+        }
+
+        // ============================================================
+        // 渲染器
+        // ============================================================
+        class Renderer {
+            constructor() {
+                this.time = 0;
+                this.hoveredNode = null;
+                this.selectedNode = null;
+                this.searchResults = new Set();
+                this.activeFilter = null;
+            }
+
+            drawBackground() {
+                // 深色渐变背景
+                const gradient = ctx.createRadialGradient(
+                    width / 2, height / 2, 0,
+                    width / 2, height / 2, Math.max(width, height)
+                );
+                gradient.addColorStop(0, '#0f0f1a');
+                gradient.addColorStop(1, '#050510');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+
+                // 网格
+                this.drawGrid();
+            }
+
+            drawGrid() {
+                const gridSize = 50 * view.zoom;
+                const offsetX = view.x % gridSize;
+                const offsetY = view.y % gridSize;
+
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+                ctx.lineWidth = 1;
+
+                for (let x = offsetX; x < width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, height);
+                    ctx.stroke();
+                }
+
+                for (let y = offsetY; y < height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(width, y);
+                    ctx.stroke();
+                }
+            }
+
+            drawEdges() {
+                for (const edge of physics.edges) {
+                    const source = physics.nodeMap.get(edge.source);
+                    const target = physics.nodeMap.get(edge.target);
+                    if (!source || !target) continue;
+
+                    const sx = source.x * view.zoom + view.x;
+                    const sy = source.y * view.zoom + view.y;
+                    const tx = target.x * view.zoom + view.x;
+                    const ty = target.y * view.zoom + view.y;
+
+                    // 检查是否在视口内
+                    if (!this.isInViewport(sx, sy, 100) && !this.isInViewport(tx, ty, 100)) continue;
+
+                    const isHighlighted = this.selectedNode &&
+                        (edge.source === this.selectedNode.id || edge.target === this.selectedNode.id);
+
+                    // 连接线
+                    ctx.beginPath();
+                    ctx.moveTo(sx, sy);
+                    ctx.lineTo(tx, ty);
+                    ctx.strokeStyle = isHighlighted
+                        ? 'rgba(255, 255, 255, 0.6)'
+                        : `rgba(255, 255, 255, ${0.08 + edge.strength * 0.12})`;
+                    ctx.lineWidth = isHighlighted ? 2 : 1;
+                    ctx.stroke();
+
+                    // 连接线动画（脉冲效果）
+                    if (isHighlighted) {
+                        const pulse = Math.sin(this.time * 3) * 0.5 + 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(sx, sy);
+                        ctx.lineTo(tx, ty);
+                        ctx.strokeStyle = COLORS[source.type]?.main || '#4d96ff';
+                        ctx.globalAlpha = pulse * 0.3;
+                        ctx.lineWidth = 3;
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                        ctx.lineWidth = 1;
+                    }
+                }
+            }
+
+            drawNodes() {
+                for (const node of physics.nodes) {
+                    const x = node.x * view.zoom + view.x;
+                    const y = node.y * view.zoom + view.y;
+                    const r = node.radius * view.zoom;
+
+                    // 视口裁剪
+                    if (!this.isInViewport(x, y, r + 50)) continue;
+
+                    const isHovered = node === this.hoveredNode;
+                    const isSelected = node === this.selectedNode;
+                    const isFiltered = this.activeFilter && node.category !== this.activeFilter;
+                    const isSearchResult = this.searchResults.has(node.id);
+                    const isDimmed = (this.activeFilter && isFiltered) ||
+                        (this.searchResults.size > 0 && !isSearchResult);
+
+                    const color = COLORS[node.type] || COLORS.skill;
+                    const alpha = isDimmed ? 0.2 : 1;
+
+                    ctx.globalAlpha = alpha;
+
+                    // 外发光
+                    if (!isDimmed) {
+                        const glowRadius = r * (isHovered || isSelected ? 2.5 : 1.8);
+                        const glow = ctx.createRadialGradient(x, y, r * 0.5, x, y, glowRadius);
+                        glow.addColorStop(0, color.glow);
+                        glow.addColorStop(1, 'transparent');
+                        ctx.fillStyle = glow;
+                        ctx.fillRect(x - glowRadius, y - glowRadius, glowRadius * 2, glowRadius * 2);
+                    }
+
+                    // 阴影
+                    ctx.shadowColor = color.main;
+                    ctx.shadowBlur = isHovered ? 30 : 15;
+
+                    // 节点主体
+                    ctx.beginPath();
+                    ctx.arc(x, y, r, 0, Math.PI * 2);
+                    const gradient = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, 0, x, y, r);
+                    gradient.addColorStop(0, this.lightenColor(color.main, 30));
+                    gradient.addColorStop(1, color.main);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+
+                    // 边框
+                    ctx.strokeStyle = isHovered || isSelected ? '#fff' : 'rgba(255,255,255,0.3)';
+                    ctx.lineWidth = isHovered || isSelected ? 2 : 1;
+                    ctx.stroke();
+
+                    // 重置阴影
+                    ctx.shadowColor = 'transparent';
+                    ctx.shadowBlur = 0;
+
+                    // 图标
+                    ctx.font = `${r * 0.8}px sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#fff';
+                    ctx.fillText(node.icon, x, y);
+
+                    // 名称标签
+                    if (view.zoom > 0.6 || isHovered || isSelected) {
+                        ctx.font = `${Math.max(10, 12 * view.zoom)}px -apple-system, sans-serif`;
+                        ctx.fillStyle = isDimmed ? 'rgba(255,255,255,0.3)' : '#fff';
+                        ctx.fillText(node.name, x, y + r + 16 * view.zoom);
+                    }
+
+                    // 状态指示器
+                    if (node.status === 'learning') {
+                        const pulse = Math.sin(this.time * 4) * 0.5 + 0.5;
+                        ctx.beginPath();
+                        ctx.arc(x + r * 0.7, y - r * 0.7, 4 * view.zoom, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 200, 0, ${pulse})`;
+                        ctx.fill();
+                    }
+
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            isInViewport(x, y, margin = 0) {
+                return x >= -margin && x <= width + margin &&
+                       y >= -margin && y <= height + margin;
+            }
+
+            lightenColor(hex, percent) {
+                const num = parseInt(hex.replace('#', ''), 16);
+                const r = Math.min(255, (num >> 16) + percent);
+                const g = Math.min(255, ((num >> 8) & 0x00FF) + percent);
+                const b = Math.min(255, (num & 0x0000FF) + percent);
+                return `rgb(${r}, ${g}, ${b})`;
+            }
+
+            update() {
+                this.time += 0.016;
+            }
+        }
+
+        // ============================================================
+        // UI 控制
+        // ============================================================
+        class UIController {
+            constructor() {
+                this.setupFilters();
+                this.setupLegend();
+                this.setupSearch();
+                this.setupInteraction();
+            }
+
+            setupFilters() {
+                const categories = [...new Set(SKILL_DATA.nodes.map(n => n.category))];
+                const container = document.getElementById('filters');
+
+                const allBtn = document.createElement('button');
+                allBtn.className = 'filter-btn active';
+                allBtn.textContent = '全部';
+                allBtn.onclick = () => this.setFilter(null, allBtn);
+                container.appendChild(allBtn);
+
+                categories.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-btn';
+                    btn.textContent = cat;
+                    btn.onclick = () => this.setFilter(cat, btn);
+                    container.appendChild(btn);
+                });
+            }
+
+            setupLegend() {
+                const container = document.getElementById('legend');
+                container.innerHTML = '<h4>节点类型</h4>';
+
+                Object.entries(COLORS).forEach(([type, colors]) => {
+                    const item = document.createElement('div');
+                    item.className = 'legend-item';
+                    item.innerHTML = `
+                        <div class="legend-dot" style="background: ${colors.main}"></div>
+                        <span>${type === 'system' ? '系统' : type === 'engine' ? '引擎' : type === 'agent' ? '代理' : type === 'skill' ? '技能' : '工具'}</span>
+                    `;
+                    container.appendChild(item);
+                });
+            }
+
+            setupSearch() {
+                const input = document.getElementById('search');
+                input.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase();
+                    renderer.searchResults.clear();
+
+                    if (query) {
+                        SKILL_DATA.nodes.forEach(node => {
+                            if (node.name.toLowerCase().includes(query) ||
+                                node.category.toLowerCase().includes(query)) {
+                                renderer.searchResults.add(node.id);
+                            }
+                        });
+                    }
+
+                    this.updateStats();
+                });
+            }
+
+            setFilter(category, btn) {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderer.activeFilter = category;
+                this.updateStats();
+            }
+
+            setupInteraction() {
+                let dragNode = null;
+
+                // 鼠标按下
+                canvas.addEventListener('mousedown', (e) => {
+                    const node = physics.getNodeAt(e.clientX, e.clientY);
+                    if (node) {
+                        dragNode = node;
+                        node.pinned = true;
+                        canvas.classList.add('dragging');
+                    } else {
+                        view.isDragging = true;
+                        view.dragStart.x = e.clientX - view.x;
+                        view.dragStart.y = e.clientY - view.y;
+                        canvas.classList.add('dragging');
+                    }
+                });
+
+                // 鼠标移动
+                canvas.addEventListener('mousemove', (e) => {
+                    view.lastMouse.x = e.clientX;
+                    view.lastMouse.y = e.clientY;
+
+                    if (dragNode) {
+                        dragNode.x = (e.clientX - view.x) / view.zoom;
+                        dragNode.y = (e.clientY - view.y) / view.zoom;
+                        dragNode.vx = 0;
+                        dragNode.vy = 0;
+                    } else if (view.isDragging) {
+                        view.x = e.clientX - view.dragStart.x;
+                        view.y = e.clientY - view.dragStart.y;
+                    } else {
+                        const node = physics.getNodeAt(e.clientX, e.clientY);
+                        renderer.hoveredNode = node;
+                        canvas.style.cursor = node ? 'pointer' : 'grab';
+                        this.showNodeInfo(node);
+                    }
+                });
+
+                // 鼠标释放
+                canvas.addEventListener('mouseup', () => {
+                    if (dragNode) {
+                        dragNode.pinned = false;
+                        dragNode = null;
+                    }
+                    view.isDragging = false;
+                    canvas.classList.remove('dragging');
+                });
+
+                // 点击选择
+                canvas.addEventListener('click', (e) => {
+                    if (dragNode) return;
+                    const node = physics.getNodeAt(e.clientX, e.clientY);
+                    renderer.selectedNode = node;
+                });
+
+                // 滚轮缩放
+                canvas.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? -1 : 1;
+                    const newZoom = Math.max(
+                        CONFIG.interaction.minZoom,
+                        Math.min(CONFIG.interaction.maxZoom, view.zoom + delta * CONFIG.interaction.zoomSpeed)
+                    );
+
+                    // 以鼠标位置为中心缩放
+                    const mouseX = e.clientX;
+                    const mouseY = e.clientY;
+                    view.x = mouseX - (mouseX - view.x) * (newZoom / view.zoom);
+                    view.y = mouseY - (mouseY - view.y) * (newZoom / view.zoom);
+                    view.zoom = newZoom;
+                }, { passive: false });
+
+                // 触摸支持
+                let lastTouchDist = 0;
+                let lastTouchCenter = { x: 0, y: 0 };
+
+                canvas.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 1) {
+                        const touch = e.touches[0];
+                        const node = physics.getNodeAt(touch.clientX, touch.clientY);
+                        if (node) {
+                            dragNode = node;
+                            node.pinned = true;
+                        } else {
+                            view.isDragging = true;
+                            view.dragStart.x = touch.clientX - view.x;
+                            view.dragStart.y = touch.clientY - view.y;
+                        }
+                    } else if (e.touches.length === 2) {
+                        const dx = e.touches[0].clientX - e.touches[1].clientX;
+                        const dy = e.touches[0].clientY - e.touches[1].clientY;
+                        lastTouchDist = Math.sqrt(dx * dx + dy * dy);
+                        lastTouchCenter = {
+                            x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+                            y: (e.touches[0].clientY + e.touches[1].clientY) / 2
+                        };
+                    }
+                });
+
+                canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    if (e.touches.length === 1) {
+                        const touch = e.touches[0];
+                        if (dragNode) {
+                            dragNode.x = (touch.clientX - view.x) / view.zoom;
+                            dragNode.y = (touch.clientY - view.y) / view.zoom;
+                        } else if (view.isDragging) {
+                            view.x = touch.clientX - view.dragStart.x;
+                            view.y = touch.clientY - view.dragStart.y;
+                        }
+                    } else if (e.touches.length === 2) {
+                        const dx = e.touches[0].clientX - e.touches[1].clientX;
+                        const dy = e.touches[0].clientY - e.touches[1].clientY;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const scale = dist / lastTouchDist;
+
+                        const newZoom = Math.max(
+                            CONFIG.interaction.minZoom,
+                            Math.min(CONFIG.interaction.maxZoom, view.zoom * scale)
+                        );
+
+                        const center = {
+                            x: (e.touches[0].clientX + e.touches[1].clientX) / 2,
+                            y: (e.touches[0].clientY + e.touches[1].clientY) / 2
+                        };
+
+                        view.x = center.x - (center.x - view.x) * (newZoom / view.zoom);
+                        view.y = center.y - (center.y - view.y) * (newZoom / view.zoom);
+                        view.zoom = newZoom;
+
+                        lastTouchDist = dist;
+                        lastTouchCenter = center;
+                    }
+                }, { passive: false });
+
+                canvas.addEventListener('touchend', () => {
+                    if (dragNode) {
+                        dragNode.pinned = false;
+                        dragNode = null;
+                    }
+                    view.isDragging = false;
+                });
+
+                // 双击重置视图
+                canvas.addEventListener('dblclick', () => {
+                    view.x = 0;
+                    view.y = 0;
+                    view.zoom = 1;
+                });
+
+                // 键盘快捷键
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        renderer.selectedNode = null;
+                        renderer.searchResults.clear();
+                        document.getElementById('search').value = '';
+                    }
+                    if (e.key === '/' && document.activeElement !== document.getElementById('search')) {
+                        e.preventDefault();
+                        document.getElementById('search').focus();
+                    }
+                });
+            }
+
+            showNodeInfo(node) {
+                const panel = document.getElementById('infoPanel');
+                if (node) {
+                    panel.innerHTML = `
+                        <h3>${node.icon} ${node.name}</h3>
+                        <div class="meta">
+                            <div>类型: ${node.type} | 分类: ${node.category}</div>
+                            <div>状态: ${node.status} | 强度: ${(node.strength * 100).toFixed(0)}%</div>
+                            <div>连接: ${physics.edges.filter(e => e.source === node.id || e.target === node.id).length}</div>
+                        </div>
+                    `;
+                    panel.classList.add('visible');
+                } else {
+                    panel.classList.remove('visible');
+                }
+            }
+
+            updateStats() {
+                const stats = document.getElementById('stats');
+                const visibleNodes = physics.nodes.filter(n => {
+                    if (renderer.activeFilter && n.category !== renderer.activeFilter) return false;
+                    if (renderer.searchResults.size > 0 && !renderer.searchResults.has(n.id)) return false;
+                    return true;
+                }).length;
+
+                stats.textContent = `节点: ${visibleNodes}/${physics.nodes.length} | 边: ${physics.edges.length} | 缩放: ${(view.zoom * 100).toFixed(0)}%`;
+            }
+        }
+
+        // ============================================================
+        // 初始化与主循环
+        // ============================================================
+        let physics, particles, renderer, ui;
+
+        function init() {
+            physics = new PhysicsEngine(SKILL_DATA.nodes, SKILL_DATA.edges);
+            particles = new ParticleSystem();
+            renderer = new Renderer();
+            ui = new UIController();
+
+            // 初始布局稳定化
+            for (let i = 0; i < 100; i++) {
+                physics.update();
+            }
+
+            // 将节点居中
+            let cx = 0, cy = 0;
+            physics.nodes.forEach(n => { cx += n.x; cy += n.y; });
+            cx /= physics.nodes.length;
+            cy /= physics.nodes.length;
+            const offsetX = width / 2 - cx;
+            const offsetY = height / 2 - cy;
+            physics.nodes.forEach(n => { n.x += offsetX; n.y += offsetY; });
+
+            requestAnimationFrame(animate);
+        }
+
+        function animate() {
+            // 物理更新
+            physics.update();
+            particles.update();
+            renderer.update();
+
+            // 清空画布
+            ctx.save();
+            ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+
+            // 绘制
+            renderer.drawBackground();
+            renderer.drawEdges();
+            particles.draw(ctx);
+            renderer.drawNodes();
+
+            ctx.restore();
+
+            // 更新统计
+            ui.updateStats();
+
+            requestAnimationFrame(animate);
+        }
+
+        // 启动
+        init();
+    </script>
+</body>
+</html>
