@@ -1,95 +1,693 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>PHOENIX · Live Monitor</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="color-system.css">
+<link rel="stylesheet" href="typography-system.css">
+<link rel="stylesheet" href="spacing-system.css">
 <style>
-:root{
-  --bg:#08080e;--surface:#111119;--surface-alt:#181824;--border:#222228;
-  --text:#e4e0db;--text-dim:#6b6560;--accent:#f49e42;--accent-glow:rgba(244,158,66,0.2);
-  --accent2:#7aa2f7;--red:#e05555;--green:#4caf50;--yellow:#f0a040;--purple:#bb9af7;
-  --radius:10px;--radius-lg:14px;--gap:12px;
-  --font:system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-  --mono:'SF Mono','Cascadia Code','Fira Code',monospace;
+/* ═══════════════════════════════════════════════
+   基础样式
+   ═══════════════════════════════════════════════ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--font);background:var(--bg);color:var(--text);padding:14px 16px;line-height:1.5}
-.header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface);border-radius:var(--radius);margin-bottom:14px;border:1px solid var(--border)}
-.header h1{font-size:1.1rem;font-weight:700}
-.header .conn{display:flex;align-items:center;gap:8px;font-size:0.76rem}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
-.dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
-.dot.warn{background:var(--yellow);animation:pulse 2s infinite}
-.dot.err{background:var(--red)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);margin-bottom:14px}
-.stat-card{background:var(--surface);border-radius:var(--radius);padding:14px 16px;text-align:center;border:1px solid var(--border)}
-.stat-card .num{font-size:1.8rem;font-weight:800;line-height:1.1}
-.stat-card .num.c-accent{color:var(--accent)}.stat-card .num.c-green{color:var(--green)}.stat-card .num.c-red{color:var(--red)}.stat-card .num.c-yellow{color:var(--yellow)}.stat-card .num.c-purple{color:var(--purple)}
-.stat-card .label{font-size:0.7rem;color:var(--text-dim);margin-top:4px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap);margin-bottom:14px}
-.grid-3{grid-template-columns:repeat(3,1fr)}
-.card{background:var(--surface);border-radius:var(--radius);padding:14px 16px;border:1px solid var(--border);transition:border-color .15s}
-.card:hover{border-color:rgba(244,158,66,.2)}
-.card h3{font-size:0.75rem;color:var(--accent);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-.card h3 .badge{font-size:0.62rem;padding:2px 8px;border-radius:8px;background:rgba(122,162,247,.12);color:var(--accent2)}
-.chart-wrap{position:relative;width:100%;height:220px}.chart-wrap.sm{height:170px}
-.sense-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.sense-item{background:var(--surface-alt);border-radius:8px;padding:10px;text-align:center}
-.sense-item .icon{font-size:1.3rem;margin-bottom:3px}
-.sense-item .name{font-size:0.65rem;color:var(--text-dim)}
-.sense-item .bar{margin-top:6px;height:3px;border-radius:3px;background:var(--border);overflow:hidden}
-.sense-item .bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
-.sense-item .val{font-size:0.68rem;font-weight:600;margin-top:4px}
-.fill-g{background:var(--green)}.fill-y{background:var(--yellow)}.fill-r{background:var(--red)}.fill-a{background:var(--accent)}
-.tbl{overflow-x:auto;max-height:240px;overflow-y:auto}
-table{width:100%;border-collapse:collapse;font-size:0.75rem}
-th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--border)}
-th{color:var(--accent);font-weight:600;font-size:0.68rem;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0;background:var(--surface)}
-tr:hover{background:rgba(255,255,255,.015)}
-.module-list{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:0.72rem}
-.module-item{display:flex;align-items:center;gap:6px;padding:4px 8px;background:var(--surface-alt);border-radius:5px}
-.module-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:var(--green)}
-footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem;padding:8px}
-.toast{position:fixed;bottom:16px;right:16px;padding:8px 16px;border-radius:var(--radius);font-size:0.72rem;z-index:200;font-weight:600;animation:slideUp .3s ease}
-@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.toast.ok{background:var(--green);color:var(--bg)}.toast.err{background:var(--red);color:var(--bg)}
-@media(max-width:1024px){.grid,.grid-3{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.sense-grid{grid-template-columns:repeat(2,1fr)}.module-list{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:640px){.stats{grid-template-columns:1fr}.module-list{grid-template-columns:1fr}}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  padding: var(--space-card-padding);
+  line-height: var(--leading-normal);
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════
+   头部样式
+   ═══════════════════════════════════════════════ */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-card-padding);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-card-margin);
+  border: 1px solid var(--border);
+  animation: fadeInDown var(--duration-normal) var(--ease-out);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.header:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.header h1 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.header h1 .version {
+  font-size: var(--text-xs);
+  font-weight: var(--font-normal);
+  color: var(--text-muted);
+  background: var(--surface-alt);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+}
+
+.header .nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.header .nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  transition: color var(--duration-fast) var(--ease-out);
+  position: relative;
+}
+
+.header .nav-links a:hover {
+  color: var(--accent-500);
+}
+
+.header .nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-500);
+  transition: width var(--duration-normal) var(--ease-out);
+}
+
+.header .nav-links a:hover::after {
+  width: 100%;
+}
+
+.conn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+}
+
+/* ═══════════════════════════════════════════════
+   状态指示器
+   ═══════════════════════════════════════════════ */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  flex-shrink: 0;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.dot.ok {
+  background: var(--success-500);
+  box-shadow: var(--shadow-glow-success);
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+.dot.warn {
+  background: var(--warning-500);
+  animation: pulse 1.5s var(--ease-in-out) infinite;
+}
+
+.dot.err {
+  background: var(--error-500);
+  box-shadow: var(--shadow-glow-error);
+}
+
+/* ═══════════════════════════════════════════════
+   KPI 卡片
+   ═══════════════════════════════════════════════ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-grid);
+  margin-bottom: var(--space-card-margin);
+}
+
+.stat-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-card-padding);
+  text-align: center;
+  border: 1px solid var(--border);
+  transition: all var(--duration-normal) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+
+.stat-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.stat-card:hover::before {
+  opacity: 1;
+}
+
+.stat-card .num {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-extrabold);
+  line-height: var(--leading-none);
+  font-family: var(--font-mono);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.stat-card:hover .num {
+  transform: scale(1.05);
+}
+
+.stat-card .num.c-accent { color: var(--accent-500); }
+.stat-card .num.c-green { color: var(--success-500); }
+.stat-card .num.c-red { color: var(--error-500); }
+.stat-card .num.c-yellow { color: var(--warning-500); }
+.stat-card .num.c-purple { color: var(--info-500); }
+
+.stat-card .label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+/* ═══════════════════════════════════════════════
+   卡片和网格
+   ═══════════════════════════════════════════════ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-grid);
+  margin-bottom: var(--space-card-margin);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-card-padding);
+  border: 1px solid var(--border);
+  transition: all var(--duration-normal) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--interactive-hover) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+  pointer-events: none;
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+.card h3 {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--accent-500);
+  margin-bottom: var(--space-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card h3 .badge {
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--interactive-hover);
+  color: var(--info-500);
+  font-weight: var(--font-medium);
+}
+
+/* ═══════════════════════════════════════════════
+   图表容器
+   ═══════════════════════════════════════════════ */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 220px;
+}
+
+.chart-wrap.sm {
+  height: 170px;
+}
+
+/* ═══════════════════════════════════════════════
+   感知网格
+   ═══════════════════════════════════════════════ */
+.sense-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.sense-item {
+  background: var(--surface-alt);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  text-align: center;
+  transition: all var(--duration-normal) var(--ease-out);
+  border: 1px solid transparent;
+}
+
+.sense-item:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
+  transform: translateY(-2px);
+}
+
+.sense-item .icon {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-1);
+  transition: transform var(--duration-normal) var(--ease-bounce);
+}
+
+.sense-item:hover .icon {
+  transform: scale(1.1);
+}
+
+.sense-item .name {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.sense-item .bar {
+  margin-top: var(--space-2);
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--border);
+  overflow: hidden;
+}
+
+.sense-item .bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--duration-slow) var(--ease-out);
+  position: relative;
+}
+
+.sense-item .bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+  animation: shimmer 2s infinite;
+}
+
+.sense-item .val {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+}
+
+.fill-g { background: var(--success-500); }
+.fill-y { background: var(--warning-500); }
+.fill-r { background: var(--error-500); }
+.fill-a { background: var(--accent-500); }
+
+/* ═══════════════════════════════════════════════
+   模块列表
+   ═══════════════════════════════════════════════ */
+.module-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.module-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-alt);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-fast) var(--ease-out);
+  border: 1px solid transparent;
+}
+
+.module-item:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
+  transform: translateX(4px);
+}
+
+.module-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  background: var(--success-500);
+  box-shadow: 0 0 6px var(--success-500);
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+/* ═══════════════════════════════════════════════
+   表格
+   ═══════════════════════════════════════════════ */
+.tbl {
+  overflow-x: auto;
+  max-height: 240px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.tbl::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.tbl::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tbl::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+
+.tbl::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+th, td {
+  padding: var(--space-table-cell) var(--space-table-header);
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+th {
+  color: var(--accent-500);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+
+tr {
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+tr:hover {
+  background: var(--interactive-hover);
+}
+
+/* ═══════════════════════════════════════════════
+   页脚
+   ═══════════════════════════════════════════════ */
+footer {
+  text-align: center;
+  margin-top: var(--space-8);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  padding: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ═══════════════════════════════════════════════
+   Toast 通知
+   ═══════════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  z-index: var(--z-toast);
+  animation: slideInRight var(--duration-normal) var(--ease-out);
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(8px);
+}
+
+.toast.ok {
+  background: var(--success-500);
+  color: white;
+}
+
+.toast.err {
+  background: var(--error-500);
+  color: white;
+}
+
+/* ═══════════════════════════════════════════════
+   主题切换按钮
+   ═══════════════════════════════════════════════ */
+.theme-toggle {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+}
+
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  transform: rotate(15deg);
+}
+
+/* ═══════════════════════════════════════════════
+   响应式设计
+   ═══════════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .grid, .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sense-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .module-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .module-list {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: var(--space-3);
+    text-align: center;
+  }
+
+  .header .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   动画增强
+   ═══════════════════════════════════════════════ */
+.animate-stagger > * {
+  animation: fadeInUp var(--duration-normal) var(--ease-out) both;
+}
+
+.animate-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.animate-stagger > *:nth-child(2) { animation-delay: 50ms; }
+.animate-stagger > *:nth-child(3) { animation-delay: 100ms; }
+.animate-stagger > *:nth-child(4) { animation-delay: 150ms; }
+.animate-stagger > *:nth-child(5) { animation-delay: 200ms; }
+.animate-stagger > *:nth-child(6) { animation-delay: 250ms; }
+.animate-stagger > *:nth-child(7) { animation-delay: 300ms; }
+.animate-stagger > *:nth-child(8) { animation-delay: 350ms; }
+
+/* 加载骨架 */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-alt) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* 涟漪效果 */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s, opacity 0.6s;
+  opacity: 0;
+}
+
+.ripple:active::after {
+  width: 200%;
+  height: 200%;
+  opacity: 1;
+  transition: 0s;
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>PHOENIX 实时监控 <span style="font-weight:400;color:var(--text-dim);font-size:0.65em">/ Live Monitor</span></h1>
-  <div style="display:flex;align-items:center;gap:20px">
-    <a href="index.html" style="color:var(--text-dim);text-decoration:none;font-size:0.78rem">首页</a>
-    <a href="dashboard.html" style="color:var(--text-dim);text-decoration:none;font-size:0.78rem">仪表盘</a>
+  <h1>
+    PHOENIX 实时监控
+    <span class="version">v1.3.0</span>
+  </h1>
+  <div style="display:flex;align-items:center;gap:var(--space-4)">
+    <div class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="dashboard.html">仪表盘</a>
+    </div>
     <div class="conn">
-    <span class="dot warn" id="conn-dot"></span>
-    <span id="conn-text" style="font-family:var(--mono);font-size:0.72rem">detecting...</span>
-    <span style="color:var(--text-dim);font-size:0.68rem" id="conn-time"></span>
-  </div></div>
+      <span class="dot warn" id="conn-dot"></span>
+      <span id="conn-text" style="font-family:var(--font-mono);font-size:var(--text-xs)">detecting...</span>
+      <span style="color:var(--text-muted);font-size:var(--text-xs)" id="conn-time"></span>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="切换主题">
+      <span id="theme-icon">🌙</span>
+    </button>
+  </div>
 </div>
 
 <!-- KPI Row 1 -->
-<div class="stats">
-  <div class="stat-card"><div class="num c-accent" id="kpi-modules">...</div><div class="label">引擎模块 / Engine Modules</div></div>
-  <div class="stat-card"><div class="num c-green" id="kpi-rules">...</div><div class="label">规则文件 / Rule Files</div></div>
-  <div class="stat-card"><div class="num c-purple" id="kpi-rule-health">...</div><div class="label">规则健康 / Rule Health</div></div>
-  <div class="stat-card"><div class="num c-yellow" id="kpi-cost-health">...</div><div class="label">成本健康 / Cost Health</div></div>
+<div class="stats animate-stagger">
+  <div class="stat-card">
+    <div class="num c-accent" id="kpi-modules">...</div>
+    <div class="label">引擎模块 / Engine Modules</div>
+  </div>
+  <div class="stat-card">
+    <div class="num c-green" id="kpi-rules">...</div>
+    <div class="label">规则文件 / Rule Files</div>
+  </div>
+  <div class="stat-card">
+    <div class="num c-purple" id="kpi-rule-health">...</div>
+    <div class="label">规则健康 / Rule Health</div>
+  </div>
+  <div class="stat-card">
+    <div class="num c-yellow" id="kpi-cost-health">...</div>
+    <div class="label">成本健康 / Cost Health</div>
+  </div>
 </div>
 
 <!-- KPI Row 2 -->
-<div class="stats">
-  <div class="stat-card"><div class="num c-accent" id="kpi-tools">...</div><div class="label">工具调用 / Tool Calls</div></div>
-  <div class="stat-card"><div class="num c-green" id="kpi-frameworks">...</div><div class="label">活跃框架 / Active Frameworks</div></div>
-  <div class="stat-card"><div class="num c-red" id="kpi-blocked">...</div><div class="label">阻断次数 / Blocked</div></div>
-  <div class="stat-card"><div class="num c-yellow" id="kpi-hooks">...</div><div class="label">Hook 脚本 / Hooks</div></div>
+<div class="stats animate-stagger">
+  <div class="stat-card">
+    <div class="num c-accent" id="kpi-tools">...</div>
+    <div class="label">工具调用 / Tool Calls</div>
+  </div>
+  <div class="stat-card">
+    <div class="num c-green" id="kpi-frameworks">...</div>
+    <div class="label">活跃框架 / Active Frameworks</div>
+  </div>
+  <div class="stat-card">
+    <div class="num c-red" id="kpi-blocked">...</div>
+    <div class="label">阻断次数 / Blocked</div>
+  </div>
+  <div class="stat-card">
+    <div class="num c-yellow" id="kpi-hooks">...</div>
+    <div class="label">Hook 脚本 / Hooks</div>
+  </div>
 </div>
 
 <!-- Charts Row 1 -->
@@ -136,20 +734,59 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 <div class="grid">
   <div class="card">
     <h3>CTM 思维引擎 / Thinking Engine <span class="badge" id="badge-ctm">idle</span></h3>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
-      <div class="sense-item"><div class="icon" style="font-size:1.1rem">🧠</div><div class="name">活跃流 / Active</div><div class="val" id="ctm-active" style="color:var(--accent);font-size:1.1rem;font-weight:700">0</div></div>
-      <div class="sense-item"><div class="icon" style="font-size:1.1rem">📊</div><div class="name">总创建 / Created</div><div class="val" id="ctm-total" style="color:var(--accent2);font-size:1.1rem;font-weight:700">0</div></div>
-      <div class="sense-item"><div class="icon" style="font-size:1.1rem">🔗</div><div class="name">相位一致 / Coherence</div><div class="val" id="ctm-coherence" style="color:var(--green);font-size:1.1rem;font-weight:700">1.00</div></div>
-      <div class="sense-item"><div class="icon" style="font-size:1.1rem">⚡</div><div class="name">效率 / Efficiency</div><div class="val" id="ctm-efficiency" style="color:var(--purple);font-size:1.1rem;font-weight:700">-</div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-2);margin-bottom:var(--space-4)">
+      <div class="sense-item">
+        <div class="icon" style="font-size:var(--text-xl)">🧠</div>
+        <div class="name">活跃流 / Active</div>
+        <div class="val" id="ctm-active" style="color:var(--accent-500);font-size:var(--text-xl);font-weight:var(--font-bold)">0</div>
+      </div>
+      <div class="sense-item">
+        <div class="icon" style="font-size:var(--text-xl)">📊</div>
+        <div class="name">总创建 / Created</div>
+        <div class="val" id="ctm-total" style="color:var(--info-500);font-size:var(--text-xl);font-weight:var(--font-bold)">0</div>
+      </div>
+      <div class="sense-item">
+        <div class="icon" style="font-size:var(--text-xl)">🔗</div>
+        <div class="name">相位一致 / Coherence</div>
+        <div class="val" id="ctm-coherence" style="color:var(--success-500);font-size:var(--text-xl);font-weight:var(--font-bold)">1.00</div>
+      </div>
+      <div class="sense-item">
+        <div class="icon" style="font-size:var(--text-xl)">⚡</div>
+        <div class="name">效率 / Efficiency</div>
+        <div class="val" id="ctm-efficiency" style="color:var(--info-500);font-size:var(--text-xl);font-weight:var(--font-bold)">-</div>
+      </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
-      <div class="sense-item"><div class="icon" style="font-size:1rem">⚙️</div><div class="name">计算策略 / Strategy</div><div class="val" id="ctm-strategy" style="color:var(--accent2);font-size:0.85rem;font-weight:600">standard</div></div>
-      <div class="sense-item"><div class="icon" style="font-size:1rem">🔄</div><div class="name">振荡模块 / Oscillators</div><div class="val" id="ctm-oscillators" style="color:var(--accent);font-size:0.85rem;font-weight:600">8</div></div>
-      <div class="sense-item"><div class="icon" style="font-size:1rem">📈</div><div class="name">复杂度均值 / Avg Complexity</div><div class="val" id="ctm-complexity" style="color:var(--green);font-size:0.85rem;font-weight:600">-</div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);margin-bottom:var(--space-4)">
+      <div class="sense-item">
+        <div class="icon" style="font-size:var(--text-base)">⚙️</div>
+        <div class="name">计算策略 / Strategy</div>
+        <div class="val" id="ctm-strategy" style="color:var(--info-500);font-size:var(--text-sm);font-weight:var(--font-semibold)">standard</div>
+      </div>
+      <div class="sense-item">
+        <div class="icon" style="font-size:var(--text-base)">🔄</div>
+        <div class="name">振荡模块 / Oscillators</div>
+        <div class="val" id="ctm-oscillators" style="color:var(--accent-500);font-size:var(--text-sm);font-weight:var(--font-semibold)">8</div>
+      </div>
+      <div class="sense-item">
+        <div class="icon" style="font-size:var(--text-base)">📈</div>
+        <div class="name">复杂度均值 / Avg Complexity</div>
+        <div class="val" id="ctm-complexity" style="color:var(--success-500);font-size:var(--text-sm);font-weight:var(--font-semibold)">-</div>
+      </div>
     </div>
     <div class="tbl" style="max-height:140px">
-      <table><thead><tr><th>流 ID</th><th>状态</th><th>深度</th><th>节点</th><th>Token</th><th>耗时</th></tr></thead>
-      <tbody id="ctm-streams-body"></tbody></table>
+      <table>
+        <thead>
+          <tr>
+            <th>流 ID</th>
+            <th>状态</th>
+            <th>深度</th>
+            <th>节点</th>
+            <th>Token</th>
+            <th>耗时</th>
+          </tr>
+        </thead>
+        <tbody id="ctm-streams-body"></tbody>
+      </table>
     </div>
   </div>
   <div class="card">
@@ -159,46 +796,112 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 </div>
 
 <!-- Timeline -->
-<div class="card" style="margin-bottom:14px">
+<div class="card" style="margin-bottom:var(--space-card-margin)">
   <h3>最近活动 / Recent Activity <span class="badge" id="badge-timeline">7 条 / events</span></h3>
   <div class="tbl">
-    <table><thead><tr><th>时间 / Time</th><th>类型 / Type</th><th>描述 / Description</th></tr></thead>
-    <tbody id="timeline-body"></tbody></table>
+    <table>
+      <thead>
+        <tr>
+          <th>时间 / Time</th>
+          <th>类型 / Type</th>
+          <th>描述 / Description</th>
+        </tr>
+      </thead>
+      <tbody id="timeline-body"></tbody>
+    </table>
   </div>
 </div>
 
-<footer>PHOENIX v1.3.0 · CTM Engine · <span id="footer-mode">GitHub Pages</span> · 自动刷新 / Auto-refresh: <span id="footer-refresh">30s</span></footer>
+<footer>
+  PHOENIX v1.3.0 · CTM Engine · <span id="footer-mode">GitHub Pages</span> · 自动刷新 / Auto-refresh: <span id="footer-refresh">30s</span>
+</footer>
+
 <div id="toast" style="display:none"></div>
 
 <script>
 // ═══════════════════════════════════════════════
+// 主题切换
+// ═══════════════════════════════════════════════
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+let currentTheme = localStorage.getItem('phoenix-theme') || 'dark';
+
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('phoenix-theme', theme);
+  themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+  currentTheme = theme;
+
+  // 更新图表颜色
+  if (charts && Object.keys(charts).length > 0) {
+    buildAllCharts();
+  }
+}
+
+themeToggle.addEventListener('click', () => {
+  setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+});
+
+// 初始化主题
+setTheme(currentTheme);
+
+// ═══════════════════════════════════════════════
 // FALLBACK — only used when server is unreachable
 // ═══════════════════════════════════════════════
 const FALLBACK = {
-  modules:41, rules:15, senses:8, rule_health:93, cost_health:72, cost_grade:'C',
-  toolCalls:2804, blocked:33,
-  frameworks_active:26, hooks:21,
-  wasteBreakdown:{ghost_skills:62,repeated_context:0,tool_imbalance:0,blocked_attempts:33,other:14},
-  ctm:{active:0,total_created:0,coherence:1.0,efficiency:0,compute_strategy:'standard',streams:[],depth_dist:{d0:0,d1:0,d2:0,d3:0,d4p:0},oscillator_stats:{modules:8,coherence:1.0},complexity_avg:0},
-  senseStates:[
-    {id:'o2',name:'O2 生命力/Vitality',icon:'🫁',val:12,status:'healthy',color:'green'},
-    {id:'nociception',name:'痛觉/Nociception',icon:'💢',val:8,status:'healthy',color:'green'},
-    {id:'chronos',name:'时间/Chronos',icon:'⏱️',val:5,status:'healthy',color:'green'},
-    {id:'spatial',name:'空间/Spatial',icon:'📍',val:15,status:'healthy',color:'green'},
-    {id:'vestibular',name:'平衡/Vestibular',icon:'⚖️',val:22,status:'healthy',color:'green'},
-    {id:'echo',name:'回响/Echo',icon:'🔁',val:3,status:'healthy',color:'green'},
-    {id:'drift',name:'漂移/Drift',icon:'🧭',val:6,status:'healthy',color:'green'},
-    {id:'metacog',name:'元认知/Metacog',icon:'🧠',val:18,status:'healthy',color:'green'}
+  modules: 41,
+  rules: 15,
+  senses: 8,
+  rule_health: 93,
+  cost_health: 72,
+  cost_grade: 'C',
+  toolCalls: 2941,
+  blocked: 33,
+  frameworks_active: 26,
+  hooks: 21,
+  wasteBreakdown: {
+    ghost_skills: 62,
+    repeated_context: 0,
+    tool_imbalance: 0,
+    blocked_attempts: 33,
+    other: 14
+  },
+  ctm: {
+    active: 0,
+    total_created: 0,
+    coherence: 1.0,
+    efficiency: 0,
+    compute_strategy: 'standard',
+    streams: [],
+    depth_dist: { d0: 0, d1: 0, d2: 0, d3: 0, d4p: 0 },
+    oscillator_stats: { modules: 41, coherence: 1.0 },
+    complexity_avg: 0
+  },
+  senseStates: [
+    { id: 'o2', name: 'O2 生命力/Vitality', icon: '🫁', val: 12, status: 'healthy', color: 'green' },
+    { id: 'nociception', name: '痛觉/Nociception', icon: '💢', val: 8, status: 'healthy', color: 'green' },
+    { id: 'chronos', name: '时间/Chronos', icon: '⏱️', val: 5, status: 'healthy', color: 'green' },
+    { id: 'spatial', name: '空间/Spatial', icon: '📍', val: 15, status: 'healthy', color: 'green' },
+    { id: 'vestibular', name: '平衡/Vestibular', icon: '⚖️', val: 22, status: 'healthy', color: 'green' },
+    { id: 'echo', name: '回响/Echo', icon: '🔁', val: 3, status: 'healthy', color: 'green' },
+    { id: 'drift', name: '漂移/Drift', icon: '🧭', val: 6, status: 'healthy', color: 'green' },
+    { id: 'metacog', name: '元认知/Metacog', icon: '🧠', val: 18, status: 'healthy', color: 'green' }
   ],
-  moduleList:['context_mapper','inspector','knowledge-base','phoenix-bash-guard','phoenix-cost-tracker','phoenix-mutation-gate','phoenix-observability','phoenix-auto-memory','phoenix-rule-health','server','tool-guard','reflection-engine','timeline','policy-engine'],
-  timeline:[
-    {time:'2026-06-19',type:'ctm',desc:'CTM 引擎集成 — 思维流 + 自适应计算 + 振荡同步'},
-    {time:'2026-06-17',type:'audit',desc:'v1.3 全面审计修复（10 项）'},
-    {time:'2026-06-17',type:'check',desc:'每日基础检查 + ECC 安全评估'}
+  moduleList: [
+    'context_mapper', 'inspector', 'knowledge-base', 'phoenix-bash-guard',
+    'phoenix-cost-tracker', 'phoenix-mutation-gate', 'phoenix-observability',
+    'phoenix-auto-memory', 'phoenix-rule-health', 'server', 'tool-guard',
+    'reflection-engine', 'timeline', 'policy-engine'
   ],
-  sessionsByDay:{'06-15':4,'06-16':7,'06-17':3,'06-18':5,'06-19':2},
-  errorByDay:{'06-15':2,'06-16':5,'06-17':1,'06-18':3,'06-19':0}
+  timeline: [
+    { time: '2026-06-19', type: 'ctm', desc: 'CTM 引擎集成 — 思维流 + 自适应计算 + 振荡同步' },
+    { time: '2026-06-17', type: 'audit', desc: 'v1.3 全面审计修复（10 项）' },
+    { time: '2026-06-17', type: 'check', desc: '每日基础检查 + ECC 安全评估' }
+  ],
+  sessionsByDay: { '06-15': 4, '06-16': 7, '06-17': 3, '06-18': 5, '06-19': 2 },
+  errorByDay: { '06-15': 2, '06-16': 5, '06-17': 1, '06-18': 3, '06-19': 0 }
 };
+
 let data = JSON.parse(JSON.stringify(FALLBACK));
 let serverConnected = false;
 let charts = {};
@@ -208,56 +911,64 @@ const SERVER = 'http://localhost:8765';
 // ═══════════════════════════════════════════════
 // CONNECTION DETECTION
 // ═══════════════════════════════════════════════
-function setConnStatus(state, text){
-  const dot=document.getElementById('conn-dot'), txt=document.getElementById('conn-text');
-  dot.className='dot '+state; txt.textContent=text;
+function setConnStatus(state, text) {
+  const dot = document.getElementById('conn-dot');
+  const txt = document.getElementById('conn-text');
+  dot.className = 'dot ' + state;
+  txt.textContent = text;
   serverConnected = (state === 'ok');
   document.getElementById('footer-refresh').textContent = serverConnected ? '10s (实时/live)' : '静态/static';
 }
-async function tryConnect(){
-  setConnStatus('warn','连接中... / connecting');
-  try{
-    const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),3000);
-    const r=await fetch(SERVER+'/api/stats',{signal:ctrl.signal});
-    if(r.ok){ setConnStatus('ok','live @ :8765');
-      document.getElementById('conn-time').textContent=new Date().toLocaleTimeString();
-      document.getElementById('footer-mode').textContent='Live Server'; return true; }
-  }catch(e){}
-  setConnStatus('err','离线 / offline — 请启动 server.py'); document.getElementById('footer-mode').textContent='GitHub Pages';
+
+async function tryConnect() {
+  setConnStatus('warn', '连接中... / connecting');
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 3000);
+    const r = await fetch(SERVER + '/api/stats', { signal: ctrl.signal });
+    if (r.ok) {
+      setConnStatus('ok', 'live @ :8765');
+      document.getElementById('conn-time').textContent = new Date().toLocaleTimeString();
+      document.getElementById('footer-mode').textContent = 'Live Server';
+      return true;
+    }
+  } catch (e) {}
+  setConnStatus('err', '离线 / offline — 请启动 server.py');
+  document.getElementById('footer-mode').textContent = 'GitHub Pages';
   return false;
 }
-async function fetchLive(){
-  if(!serverConnected) return null;
-  try{
-    const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),5000);
-    const[stats,status,timeline,ctm]=await Promise.all([
-      fetch(SERVER+'/api/stats',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(SERVER+'/api/status',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(SERVER+'/api/timeline?limit=20',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(SERVER+'/api/ctm',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null)
+
+async function fetchLive() {
+  if (!serverConnected) return null;
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 5000);
+    const [stats, status, timeline, ctm] = await Promise.all([
+      fetch(SERVER + '/api/stats', { signal: ctrl }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(SERVER + '/api/status', { signal: ctrl }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(SERVER + '/api/timeline?limit=20', { signal: ctrl }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(SERVER + '/api/ctm', { signal: ctrl }).then(r => r.ok ? r.json() : null).catch(() => null)
     ]);
-    return {stats,status,timeline,ctm};
-  }catch(e){}
+    return { stats, status, timeline, ctm };
+  } catch (e) {}
   return null;
 }
 
 // ═══════════════════════════════════════════════
 // APPLY LIVE DATA → data object + DOM
 // ═══════════════════════════════════════════════
-function applyLiveData(live){
-  if(!live) return;
+function applyLiveData(live) {
+  if (!live) return;
   const s = live.stats;
   const st = live.status;
   const tl = live.timeline;
   const ctmResp = live.ctm;
 
-  // CTM data from dedicated endpoint
-  if(ctmResp){
-    data.ctm=ctmResp;
+  if (ctmResp) {
+    data.ctm = ctmResp;
   }
 
-  // KPIs from /api/stats
-  if(s){
+  if (s) {
     data.modules = s.modules || 0;
     data.rules = s.rules || 0;
     data.senses = s.senses || 0;
@@ -269,29 +980,26 @@ function applyLiveData(live){
     data.moduleList = s.module_list || [];
     data.frameworks_active = s.frameworks_active || 0;
     data.hooks = s.hooks || 0;
-    if(s.tool_usage && Object.keys(s.tool_usage).length > 0){
+    if (s.tool_usage && Object.keys(s.tool_usage).length > 0) {
       data.toolUsage = s.tool_usage;
     }
-    if(s.waste && Object.keys(s.waste).length > 0){
+    if (s.waste && Object.keys(s.waste).length > 0) {
       data.wasteBreakdown = s.waste;
     }
   }
 
-  // CTM from /api/status
-  if(st?.ctm){
-    data.ctm=st.ctm;
+  if (st?.ctm) {
+    data.ctm = st.ctm;
   }
 
-  // Senses from /api/status
-  if(st?.senses){
+  if (st?.senses) {
     data.senseStates = data.senseStates.map(sx => ({
       ...sx,
       status: st.senses[sx.id]?.state || sx.status
     }));
   }
 
-  // Timeline from /api/timeline
-  if(tl?.entries?.length){
+  if (tl?.entries?.length) {
     data.timeline = tl.entries.slice(-10).map(e => ({
       time: e.timestamp || e.time || '',
       type: e.type || 'event',
@@ -303,177 +1011,448 @@ function applyLiveData(live){
 // ═══════════════════════════════════════════════
 // CHARTS
 // ═══════════════════════════════════════════════
-function destroyCharts(){ Object.values(charts).forEach(c=>c.destroy()); charts={}; }
-function buildAllCharts(){
+function destroyCharts() {
+  Object.values(charts).forEach(c => c.destroy());
+  charts = {};
+}
+
+function getChartColors() {
+  const style = getComputedStyle(document.documentElement);
+  return [
+    style.getPropertyValue('--chart-1').trim() || '#f49e42',
+    style.getPropertyValue('--chart-2').trim() || '#7aa2f7',
+    style.getPropertyValue('--chart-3').trim() || '#4caf50',
+    style.getPropertyValue('--chart-4').trim() || '#e05555',
+    style.getPropertyValue('--chart-5').trim() || '#bb9af7',
+    style.getPropertyValue('--chart-6').trim() || '#7dcfff',
+    style.getPropertyValue('--chart-7').trim() || '#f0a040',
+    style.getPropertyValue('--chart-8').trim() || '#9ece6a',
+    '#c0caf5',
+    '#565f89'
+  ];
+}
+
+function getGridColor() {
+  const style = getComputedStyle(document.documentElement);
+  return style.getPropertyValue('--grid-line').trim() || 'rgba(255,255,255,0.06)';
+}
+
+function getTextColor() {
+  const style = getComputedStyle(document.documentElement);
+  return style.getPropertyValue('--text-muted').trim() || '#6b6560';
+}
+
+function buildAllCharts() {
   destroyCharts();
-  const opts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};
-  const colors=['#f49e42','#7aa2f7','#4caf50','#e05555','#bb9af7','#7dcfff','#f0a040','#9ece6a','#c0caf5','#565f89'];
+  const colors = getChartColors();
+  const gridColor = getGridColor();
+  const textColor = getTextColor();
+
+  const opts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }
+    },
+    animation: {
+      duration: 800,
+      easing: 'easeOutQuart'
+    }
+  };
+
+  const scaleOpts = {
+    grid: { color: gridColor },
+    ticks: {
+      color: textColor,
+      font: { size: 10, family: 'var(--font-mono)' }
+    }
+  };
 
   // Tool Usage
-  const toolData=data.toolUsage;
-  charts.tool=new Chart(document.getElementById('toolChart'),{type:'bar',data:{labels:Object.keys(toolData),datasets:[{data:Object.values(toolData),backgroundColor:colors,borderRadius:4}]},options:{...opts,indexAxis:'y',scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6b6560',font:{size:10}}}}}});
+  const toolData = data.toolUsage;
+  charts.tool = new Chart(document.getElementById('toolChart'), {
+    type: 'bar',
+    data: {
+      labels: Object.keys(toolData),
+      datasets: [{
+        data: Object.values(toolData),
+        backgroundColor: colors,
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      ...opts,
+      indexAxis: 'y',
+      scales: {
+        x: scaleOpts
+      }
+    }
+  });
 
   // Radar
-  const senseData=data.senseStates;
-  charts.radar=new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:senseData.map(s=>s.name),datasets:[{data:senseData.map(s=>s.val),backgroundColor:'rgba(244,158,66,0.15)',borderColor:'#f49e42',borderWidth:1.5,pointBackgroundColor:'#f49e42',pointRadius:3}]},options:{...opts,scales:{r:{grid:{color:'rgba(255,255,255,0.08)'},ticks:{display:false},suggestedMin:0,suggestedMax:30}}}});
+  const senseData = data.senseStates;
+  charts.radar = new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: senseData.map(s => s.name),
+      datasets: [{
+        data: senseData.map(s => s.val),
+        backgroundColor: 'rgba(244, 158, 66, 0.15)',
+        borderColor: colors[0],
+        borderWidth: 2,
+        pointBackgroundColor: colors[0],
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      ...opts,
+      scales: {
+        r: {
+          grid: { color: gridColor },
+          ticks: { display: false },
+          suggestedMin: 0,
+          suggestedMax: 30,
+          pointLabels: {
+            color: textColor,
+            font: { size: 10 }
+          }
+        }
+      }
+    }
+  });
 
   // Session Activity
-  const days=Object.keys(data.sessionsByDay);
-  charts.session=new Chart(document.getElementById('sessionChart'),{type:'line',data:{labels:days,datasets:[{data:Object.values(data.sessionsByDay),borderColor:'#f49e42',backgroundColor:'rgba(244,158,66,0.1)',fill:true,tension:.4,pointRadius:4}]},options:{...opts,scales:{y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6b6560',font:{size:10}}},x:{ticks:{color:'#6b6560',font:{size:10}}}}}});
+  const days = Object.keys(data.sessionsByDay);
+  charts.session = new Chart(document.getElementById('sessionChart'), {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [{
+        data: Object.values(data.sessionsByDay),
+        borderColor: colors[0],
+        backgroundColor: 'rgba(244, 158, 66, 0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: colors[0],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      ...opts,
+      scales: {
+        y: scaleOpts,
+        x: scaleOpts
+      }
+    }
+  });
 
   // Error Rate
-  charts.error=new Chart(document.getElementById('errorChart'),{type:'line',data:{labels:Object.keys(data.errorByDay),datasets:[{data:Object.values(data.errorByDay),borderColor:'#e05555',backgroundColor:'rgba(224,85,85,0.1)',fill:true,tension:.4,pointRadius:4}]},options:{...opts,scales:{y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6b6560',font:{size:10}}},x:{ticks:{color:'#6b6560',font:{size:10}}}}}});
+  charts.error = new Chart(document.getElementById('errorChart'), {
+    type: 'line',
+    data: {
+      labels: Object.keys(data.errorByDay),
+      datasets: [{
+        data: Object.values(data.errorByDay),
+        borderColor: colors[3],
+        backgroundColor: 'rgba(224, 85, 85, 0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        pointBackgroundColor: colors[3],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      ...opts,
+      scales: {
+        y: scaleOpts,
+        x: scaleOpts
+      }
+    }
+  });
 
   // Waste Breakdown
-  const waste=data.wasteBreakdown;
-  charts.waste=new Chart(document.getElementById('wasteChart'),{type:'doughnut',data:{labels:Object.keys(waste),datasets:[{data:Object.values(waste),backgroundColor:['#e05555','#f0a040','#7aa2f7','#bb9af7','#565f89'],borderWidth:0}]},options:{...opts,plugins:{legend:{position:'right',labels:{color:'#8a8580',font:{size:10},padding:12}}}}});
+  const waste = data.wasteBreakdown;
+  charts.waste = new Chart(document.getElementById('wasteChart'), {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(waste),
+      datasets: [{
+        data: Object.values(waste),
+        backgroundColor: [colors[3], colors[6], colors[1], colors[4], '#565f89'],
+        borderWidth: 0,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      ...opts,
+      cutout: '65%',
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            color: textColor,
+            font: { size: 10 },
+            padding: 12,
+            usePointStyle: true,
+            pointStyleWidth: 8
+          }
+        }
+      }
+    }
+  });
 
   // CTM Depth Distribution
-  const ctmDist=data.ctm.depth_dist||{d0:0,d1:0,d2:0,d3:0,d4p:0};
-  charts.ctmDepth=new Chart(document.getElementById('ctmDepthChart'),{type:'bar',data:{labels:['Depth 0','Depth 1','Depth 2','Depth 3','Depth 4+'],datasets:[{data:[ctmDist.d0,ctmDist.d1,ctmDist.d2,ctmDist.d3,ctmDist.d4p],backgroundColor:['#7aa2f7','#4caf50','#f49e42','#bb9af7','#e05555'],borderRadius:4}]},options:{...opts,scales:{y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6b6560',font:{size:10}}},x:{ticks:{color:'#6b6560',font:{size:10}}}}}});
+  const ctmDist = data.ctm.depth_dist || { d0: 0, d1: 0, d2: 0, d3: 0, d4p: 0 };
+  charts.ctmDepth = new Chart(document.getElementById('ctmDepthChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Depth 0', 'Depth 1', 'Depth 2', 'Depth 3', 'Depth 4+'],
+      datasets: [{
+        data: [ctmDist.d0, ctmDist.d1, ctmDist.d2, ctmDist.d3, ctmDist.d4p],
+        backgroundColor: [colors[1], colors[2], colors[0], colors[4], colors[3]],
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      ...opts,
+      scales: {
+        y: scaleOpts,
+        x: scaleOpts
+      }
+    }
+  });
 }
 
 // ═══════════════════════════════════════════════
 // UI BUILDERS
 // ═══════════════════════════════════════════════
-function buildSenses(){
-  const grid=document.getElementById('sense-grid');
-  grid.innerHTML=data.senseStates.map(s=>{
-    const c=s.color==='green'?'g':s.color==='yellow'?'y':'r';
-    return `<div class="sense-item"><div class="icon">${s.icon}</div><div class="name">${s.name}</div><div class="bar"><div class="bar-fill fill-${c}" style="width:${s.val}%"></div></div><div class="val" style="color:var(--${s.color==='green'?'green':'yellow'})">${s.status}</div></div>`;
+function buildSenses() {
+  const grid = document.getElementById('sense-grid');
+  grid.innerHTML = data.senseStates.map(s => {
+    const c = s.color === 'green' ? 'g' : s.color === 'yellow' ? 'y' : 'r';
+    const statusColor = s.color === 'green' ? 'var(--success-500)' : s.color === 'yellow' ? 'var(--warning-500)' : 'var(--error-500)';
+    return `
+      <div class="sense-item">
+        <div class="icon">${s.icon}</div>
+        <div class="name">${s.name}</div>
+        <div class="bar">
+          <div class="bar-fill fill-${c}" style="width:${s.val}%"></div>
+        </div>
+        <div class="val" style="color:${statusColor}">${s.status}</div>
+      </div>
+    `;
   }).join('');
 }
-function buildModules(){
-  document.getElementById('module-list').innerHTML=data.moduleList.map(m=>`<div class="module-item"><span class="module-dot"></span>${m}.py</div>`).join('');
-  document.getElementById('badge-modules').textContent=data.moduleList.length+' 个 / total';
+
+function buildModules() {
+  document.getElementById('module-list').innerHTML = data.moduleList.map(m => `
+    <div class="module-item">
+      <span class="module-dot"></span>
+      <span>${m}.py</span>
+    </div>
+  `).join('');
+  document.getElementById('badge-modules').textContent = data.moduleList.length + ' 个 / total';
 }
-function buildTimeline(){
-  document.getElementById('timeline-body').innerHTML=data.timeline.map(t=>`<tr><td style="font-family:var(--mono);font-size:0.7rem;color:var(--text-dim)">${t.time.slice(-8)}</td><td style="font-size:0.68rem">${t.type}</td><td>${t.desc}</td></tr>`).join('');
-  document.getElementById('badge-timeline').textContent=data.timeline.length+' events';
+
+function buildTimeline() {
+  document.getElementById('timeline-body').innerHTML = data.timeline.map(t => `
+    <tr>
+      <td style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted)">${t.time.slice(-8)}</td>
+      <td style="font-size:var(--text-xs)">${t.type}</td>
+      <td>${t.desc}</td>
+    </tr>
+  `).join('');
+  document.getElementById('badge-timeline').textContent = data.timeline.length + ' events';
 }
-function buildCTM(){
-  const ctm=data.ctm;
-  document.getElementById('ctm-active').textContent=ctm.active;
-  document.getElementById('ctm-total').textContent=ctm.total_created;
-  document.getElementById('ctm-coherence').textContent=ctm.coherence.toFixed(2);
-  document.getElementById('ctm-efficiency').textContent=ctm.efficiency>0?ctm.efficiency.toFixed(3):'-';
-  document.getElementById('badge-ctm').textContent=ctm.active>0?ctm.active+' active':'idle';
 
-  // New CTM fields
-  document.getElementById('ctm-strategy').textContent=ctm.compute_strategy||'standard';
-  document.getElementById('ctm-oscillators').textContent=ctm.oscillator_stats?.modules||8;
-  document.getElementById('ctm-complexity').textContent=ctm.complexity_avg>0?ctm.complexity_avg.toFixed(2):'-';
+function buildCTM() {
+  const ctm = data.ctm;
+  document.getElementById('ctm-active').textContent = ctm.active;
+  document.getElementById('ctm-total').textContent = ctm.total_created;
+  document.getElementById('ctm-coherence').textContent = ctm.coherence.toFixed(2);
+  document.getElementById('ctm-efficiency').textContent = ctm.efficiency > 0 ? ctm.efficiency.toFixed(3) : '-';
+  document.getElementById('badge-ctm').textContent = ctm.active > 0 ? ctm.active + ' active' : 'idle';
 
-  // Coherence color
-  const cohEl=document.getElementById('ctm-coherence');
-  cohEl.style.color=ctm.coherence>=0.7?'var(--green)':ctm.coherence>=0.3?'var(--yellow)':'var(--red)';
+  document.getElementById('ctm-strategy').textContent = ctm.compute_strategy || 'standard';
+  document.getElementById('ctm-oscillators').textContent = ctm.oscillator_stats?.modules || 8;
+  document.getElementById('ctm-complexity').textContent = ctm.complexity_avg > 0 ? ctm.complexity_avg.toFixed(2) : '-';
 
-  // Streams table
-  const tbody=document.getElementById('ctm-streams-body');
-  if(ctm.streams&&ctm.streams.length>0){
-    tbody.innerHTML=ctm.streams.slice(-5).map(s=>
-      `<tr><td style="font-family:var(--mono);font-size:0.68rem">${(s.stream_id||'').slice(-8)}</td><td style="font-size:0.68rem">${s.state||'?'}</td><td>${s.max_depth||0}</td><td>${s.nodes_count||0}</td><td>${s.total_tokens||0}</td><td>${s.elapsed? s.elapsed.toFixed(1)+'s' : '-'}</td></tr>`
+  const cohEl = document.getElementById('ctm-coherence');
+  cohEl.style.color = ctm.coherence >= 0.7 ? 'var(--success-500)' : ctm.coherence >= 0.3 ? 'var(--warning-500)' : 'var(--error-500)';
+
+  const tbody = document.getElementById('ctm-streams-body');
+  if (ctm.streams && ctm.streams.length > 0) {
+    tbody.innerHTML = ctm.streams.slice(-5).map(s =>
+      `<tr>
+        <td style="font-family:var(--font-mono);font-size:var(--text-xs)">${(s.stream_id || '').slice(-8)}</td>
+        <td style="font-size:var(--text-xs)">${s.state || '?'}</td>
+        <td>${s.max_depth || 0}</td>
+        <td>${s.nodes_count || 0}</td>
+        <td>${s.total_tokens || 0}</td>
+        <td>${s.elapsed ? s.elapsed.toFixed(1) + 's' : '-'}</td>
+      </tr>`
     ).join('');
-  }else{
-    tbody.innerHTML='<tr><td colspan="6" style="color:var(--text-dim);text-align:center;font-size:0.72rem">无思维流 / No streams</td></tr>';
+  } else {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" style="color:var(--text-muted);text-align:center;font-size:var(--text-sm)">
+          无思维流 / No streams
+        </td>
+      </tr>
+    `;
   }
 }
-function buildKPIs(){
-  document.getElementById('kpi-modules').textContent=data.modules;
-  document.getElementById('kpi-rules').textContent=data.rules;
-  document.getElementById('kpi-rule-health').textContent=data.rule_health+'%';
-  document.getElementById('kpi-cost-health').textContent=data.cost_health+' ('+data.cost_grade+'级)';
-  document.getElementById('kpi-tools').textContent=data.toolCalls.toLocaleString();
-  document.getElementById('kpi-blocked').textContent=data.blocked;
-  if(data.frameworks_active !== undefined) document.getElementById('kpi-frameworks').textContent=data.frameworks_active;
-  if(data.hooks !== undefined) document.getElementById('kpi-hooks').textContent=data.hooks;
+
+function buildKPIs() {
+  document.getElementById('kpi-modules').textContent = data.modules;
+  document.getElementById('kpi-rules').textContent = data.rules;
+  document.getElementById('kpi-rule-health').textContent = data.rule_health + '%';
+  document.getElementById('kpi-cost-health').textContent = data.cost_health + ' (' + data.cost_grade + '级)';
+  document.getElementById('kpi-tools').textContent = data.toolCalls.toLocaleString();
+  document.getElementById('kpi-blocked').textContent = data.blocked;
+  if (data.frameworks_active !== undefined) document.getElementById('kpi-frameworks').textContent = data.frameworks_active;
+  if (data.hooks !== undefined) document.getElementById('kpi-hooks').textContent = data.hooks;
 }
-function toast(msg,ok){ const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(ok?'ok':'err');t.style.display='block';setTimeout(()=>t.style.display='none',2500); }
+
+function toast(msg, ok) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (ok ? 'ok' : 'err');
+  t.style.display = 'block';
+  setTimeout(() => {
+    t.style.animation = 'fadeIn var(--duration-normal) var(--ease-out) reverse';
+    setTimeout(() => {
+      t.style.display = 'none';
+      t.style.animation = '';
+    }, 300);
+  }, 2500);
+}
 
 // ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
-async function init(){
-  // Fetch real data FIRST, then render
-  try{
-    const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),3000);
-    const[statsResp,ctmResp,activityResp]=await Promise.all([
-      fetch(SERVER+'/api/stats',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(SERVER+'/api/ctm',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(SERVER+'/api/activity',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null)
+async function init() {
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 3000);
+    const [statsResp, ctmResp, activityResp] = await Promise.all([
+      fetch(SERVER + '/api/stats', { signal: ctrl.signal }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(SERVER + '/api/ctm', { signal: ctrl.signal }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(SERVER + '/api/activity', { signal: ctrl.signal }).then(r => r.ok ? r.json() : null).catch(() => null)
     ]);
 
-    // Apply stats
-    if(statsResp){
-      const s=statsResp;
-      data.modules=s.modules||0; data.rules=s.rules||0; data.senses=s.senses||0;
-      data.toolCalls=s.tool_calls||0; data.blocked=s.blocked||0;
-      data.rule_health=s.rule_health||0; data.cost_health=s.cost_health||0; data.cost_grade=s.cost_grade||'F';
-      data.frameworks_active=s.frameworks_active||0; data.hooks=s.hooks||0;
-      if(s.tool_usage) data.toolUsage=s.tool_usage;
-      if(s.waste) data.wasteBreakdown=s.waste;
-      if(s.module_list) data.moduleList=s.module_list;
-      setConnStatus('ok','live @ :8765');
-      document.getElementById('footer-mode').textContent='Live Server';
-      serverConnected=true;
-    }else{ setConnStatus('err','离线 / offline'); }
-
-    // Apply CTM data
-    if(ctmResp){
-      data.ctm=ctmResp;
+    if (statsResp) {
+      const s = statsResp;
+      data.modules = s.modules || 0;
+      data.rules = s.rules || 0;
+      data.senses = s.senses || 0;
+      data.toolCalls = s.tool_calls || 0;
+      data.blocked = s.blocked || 0;
+      data.rule_health = s.rule_health || 0;
+      data.cost_health = s.cost_health || 0;
+      data.cost_grade = s.cost_grade || 'F';
+      data.frameworks_active = s.frameworks_active || 0;
+      data.hooks = s.hooks || 0;
+      if (s.tool_usage) data.toolUsage = s.tool_usage;
+      if (s.waste) data.wasteBreakdown = s.waste;
+      if (s.module_list) data.moduleList = s.module_list;
+      setConnStatus('ok', 'live @ :8765');
+      document.getElementById('footer-mode').textContent = 'Live Server';
+      serverConnected = true;
+    } else {
+      setConnStatus('err', '离线 / offline');
     }
 
-    // Apply activity
-    if(activityResp?.entries?.length){
-      data.timeline=activityResp.entries.slice(0,10).map(e=>({time:e.time,type:e.type,desc:e.desc}));
+    if (ctmResp) {
+      data.ctm = ctmResp;
     }
-  }catch(e){ setConnStatus('err','离线 / offline'); }
 
-  // Render with whatever data we have
-  buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildCTM(); buildAllCharts();
-  if(serverConnected) toast('已连接 PHOENIX 服务器 / Connected','ok');
-  refreshTimer=setInterval(refresh, serverConnected?10000:30000);
+    if (activityResp?.entries?.length) {
+      data.timeline = activityResp.entries.slice(0, 10).map(e => ({
+        time: e.time,
+        type: e.type,
+        desc: e.desc
+      }));
+    }
+  } catch (e) {
+    setConnStatus('err', '离线 / offline');
+  }
+
+  buildSenses();
+  buildModules();
+  buildTimeline();
+  buildKPIs();
+  buildCTM();
+  buildAllCharts();
+
+  if (serverConnected) toast('已连接 PHOENIX 服务器 / Connected', 'ok');
+  refreshTimer = setInterval(refresh, serverConnected ? 10000 : 30000);
 }
-async function refresh(){
-  if(!serverConnected){ await tryConnect(); return; }
-  try{
-    const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),5000);
-    const[statsResp,ctmResp,activityResp]=await Promise.all([
-      fetch(SERVER+'/api/stats',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(SERVER+'/api/ctm',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(SERVER+'/api/activity',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null)
+
+async function refresh() {
+  if (!serverConnected) {
+    await tryConnect();
+    return;
+  }
+
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 5000);
+    const [statsResp, ctmResp, activityResp] = await Promise.all([
+      fetch(SERVER + '/api/stats', { signal: ctrl.signal }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(SERVER + '/api/ctm', { signal: ctrl.signal }).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(SERVER + '/api/activity', { signal: ctrl.signal }).then(r => r.ok ? r.json() : null).catch(() => null)
     ]);
 
-    // Apply stats
-    if(statsResp){
-      const s=statsResp;
-      data.modules=s.modules||0; data.rules=s.rules||0; data.senses=s.senses||0;
-      data.toolCalls=s.tool_calls||0; data.blocked=s.blocked||0;
-      data.rule_health=s.rule_health||0; data.cost_health=s.cost_health||0; data.cost_grade=s.cost_grade||'F';
-      data.frameworks_active=s.frameworks_active||0; data.hooks=s.hooks||0;
-      if(s.tool_usage) data.toolUsage=s.tool_usage;
-      if(s.waste) data.wasteBreakdown=s.waste;
-      if(s.module_list) data.moduleList=s.module_list;
+    if (statsResp) {
+      const s = statsResp;
+      data.modules = s.modules || 0;
+      data.rules = s.rules || 0;
+      data.senses = s.senses || 0;
+      data.toolCalls = s.tool_calls || 0;
+      data.blocked = s.blocked || 0;
+      data.rule_health = s.rule_health || 0;
+      data.cost_health = s.cost_health || 0;
+      data.cost_grade = s.cost_grade || 'F';
+      data.frameworks_active = s.frameworks_active || 0;
+      data.hooks = s.hooks || 0;
+      if (s.tool_usage) data.toolUsage = s.tool_usage;
+      if (s.waste) data.wasteBreakdown = s.waste;
+      if (s.module_list) data.moduleList = s.module_list;
     }
 
-    // Apply CTM data
-    if(ctmResp){
-      data.ctm=ctmResp;
+    if (ctmResp) {
+      data.ctm = ctmResp;
     }
 
-    // Apply activity
-    if(activityResp?.entries?.length){
-      data.timeline=activityResp.entries.slice(0,10).map(e=>({time:e.time,type:e.type,desc:e.desc}));
+    if (activityResp?.entries?.length) {
+      data.timeline = activityResp.entries.slice(0, 10).map(e => ({
+        time: e.time,
+        type: e.type,
+        desc: e.desc
+      }));
     }
 
-    // Update DOM
-    buildKPIs(); buildModules(); buildTimeline(); buildCTM(); buildAllCharts();
-    setConnStatus('ok','实时 / live @ :8765');
-    document.getElementById('conn-time').textContent=new Date().toLocaleTimeString();
-  }catch(e){
-    setConnStatus('warn','重连中... / reconnecting');serverConnected=false;
+    buildKPIs();
+    buildModules();
+    buildTimeline();
+    buildCTM();
+    buildAllCharts();
+    setConnStatus('ok', '实时 / live @ :8765');
+    document.getElementById('conn-time').textContent = new Date().toLocaleTimeString();
+  } catch (e) {
+    setConnStatus('warn', '重连中... / reconnecting');
+    serverConnected = false;
   }
 }
+
 init();
 </script>
 </body>

@@ -1,6 +1,7 @@
-/* PHOENIX 间距系统
+/* PHOENIX 间距系统 v2
  * 基于 4px 基准网格
  * 原则：一致性、层次感、呼吸感
+ * 更新：增强语义间距、添加更多组件、优化响应式
  */
 
 :root {
@@ -9,18 +10,31 @@
      基于 4px 基准网格
      ═══════════════════════════════════════════════ */
   --space-0: 0;           /* 0px - 无间距 */
+  --space-px: 1px;        /* 1px - 边框 */
+  --space-0-5: 0.125rem;  /* 2px - 最小间距 */
   --space-1: 0.25rem;     /* 4px - 最小间距 */
+  --space-1-5: 0.375rem;  /* 6px - 小间距 */
   --space-2: 0.5rem;      /* 8px - 小间距 */
+  --space-2-5: 0.625rem;  /* 10px - 中小间距 */
   --space-3: 0.75rem;     /* 12px - 中小间距 */
+  --space-3-5: 0.875rem;  /* 14px - 中间距 */
   --space-4: 1rem;        /* 16px - 中间距 */
   --space-5: 1.25rem;     /* 20px - 中大间距 */
   --space-6: 1.5rem;      /* 24px - 大间距 */
+  --space-7: 1.75rem;     /* 28px - 大间距 */
   --space-8: 2rem;        /* 32px - 超大间距 */
+  --space-9: 2.25rem;     /* 36px - 超大间距 */
   --space-10: 2.5rem;     /* 40px - 特大间距 */
+  --space-11: 2.75rem;    /* 44px - 特大间距 */
   --space-12: 3rem;       /* 48px - 巨大间距 */
+  --space-14: 3.5rem;     /* 56px - 巨大间距 */
   --space-16: 4rem;       /* 64px - 超大间距 */
   --space-20: 5rem;       /* 80px - 巨大间距 */
   --space-24: 6rem;       /* 96px - 超大间距 */
+  --space-28: 7rem;       /* 112px */
+  --space-32: 8rem;       /* 128px */
+  --space-36: 9rem;       /* 144px */
+  --space-40: 10rem;      /* 160px */
 
   /* ═══════════════════════════════════════════════
      响应式间距 (Responsive Spacing)
@@ -43,6 +57,7 @@
   /* 区域间距 */
   --space-section-top: clamp(2rem, 1rem + 3vw, 4rem);   /* 区域顶部间距 */
   --space-section-bottom: clamp(3rem, 2rem + 3vw, 6rem); /* 区域底部间距 */
+  --space-section-gap: clamp(1.5rem, 1rem + 2vw, 3rem); /* 区域内部间距 */
 
   /* 卡片间距 */
   --space-card-padding: clamp(1rem, 0.5rem + 1.5vw, 2rem);     /* 卡片内边距 */
@@ -58,6 +73,7 @@
   --space-form-group: clamp(1rem, 0.5rem + 1vw, 1.5rem);     /* 表单组间距 */
   --space-form-label: clamp(0.25rem, 0.125rem + 0.25vw, 0.5rem); /* 标签与输入框间距 */
   --space-form-input: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);  /* 输入框内边距 */
+  --space-form-error: clamp(0.25rem, 0.125rem + 0.25vw, 0.375rem); /* 错误提示间距 */
 
   /* 表格间距 */
   --space-table-cell: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);  /* 单元格内边距 */
@@ -66,6 +82,14 @@
   /* 列表间距 */
   --space-list-item: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);  /* 列表项间距 */
   --space-list-icon: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);  /* 图标与文字间距 */
+
+  /* 导航间距 */
+  --space-nav-item: clamp(0.5rem, 0.25rem + 0.5vw, 1rem);      /* 导航项间距 */
+  --space-nav-padding: clamp(0.75rem, 0.5rem + 1vw, 1.5rem);   /* 导航内边距 */
+
+  /* 弹窗间距 */
+  --space-modal-padding: clamp(1.5rem, 1rem + 2vw, 3rem);      /* 弹窗内边距 */
+  --space-modal-gap: clamp(1rem, 0.5rem + 1vw, 1.5rem);        /* 弹窗内容间距 */
 
   /* ═══════════════════════════════════════════════
      间距层次 (Spacing Hierarchy)
@@ -83,6 +107,22 @@
   --space-loose: var(--space-8);      /* 32px */
   --space-distant: var(--space-12);   /* 48px */
   --space-far: var(--space-16);       /* 64px */
+
+  /* ═══════════════════════════════════════════════
+     容器宽度 (Container Widths)
+     ═══════════════════════════════════════════════ */
+  --container-xs: 20rem;      /* 320px */
+  --container-sm: 24rem;      /* 384px */
+  --container-md: 28rem;      /* 448px */
+  --container-lg: 32rem;      /* 512px */
+  --container-xl: 36rem;      /* 576px */
+  --container-2xl: 42rem;     /* 672px */
+  --container-3xl: 48rem;     /* 768px */
+  --container-4xl: 56rem;     /* 896px */
+  --container-5xl: 64rem;     /* 1024px */
+  --container-6xl: 72rem;     /* 1152px */
+  --container-7xl: 80rem;     /* 1280px */
+  --container-full: 100%;
 }
 
 /* ═══════════════════════════════════════════════
@@ -92,6 +132,8 @@
 /* 页面布局 */
 .page {
   padding: var(--space-page-y) var(--space-page-x);
+  max-width: var(--container-7xl);
+  margin: 0 auto;
 }
 
 /* 区域 */
@@ -105,12 +147,34 @@
   padding: var(--space-card-padding);
   margin-bottom: var(--space-card-margin);
   gap: var(--space-card-gap);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 /* 按钮 */
 .btn {
   padding: var(--space-button-padding-y) var(--space-button-padding-x);
   gap: var(--space-button-gap);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-semibold);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.98);
 }
 
 /* 表单 */
@@ -119,27 +183,72 @@
 }
 
 .form-group label {
+  display: block;
   margin-bottom: var(--space-form-label);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
+  width: 100%;
   padding: var(--space-form-input);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--interactive-focus);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.form-group .error-message {
+  margin-top: var(--space-form-error);
+  font-size: var(--text-sm);
+  color: var(--error-500);
 }
 
 /* 表格 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
 th {
   padding: var(--space-table-header);
+  text-align: left;
+  border-bottom: 2px solid var(--border);
 }
 
 td {
   padding: var(--space-table-cell);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+tr:hover {
+  background: var(--interactive-hover);
 }
 
 /* 列表 */
 .list-item {
   padding: var(--space-list-item) 0;
   gap: var(--space-list-icon);
+  display: flex;
+  align-items: center;
 }
 
 /* 网格 */
@@ -156,19 +265,58 @@ td {
   gap: var(--space-normal);
 }
 
+/* 导航 */
+.nav {
+  gap: var(--space-nav-item);
+  padding: var(--space-nav-padding);
+}
+
+/* 弹窗 */
+.modal {
+  padding: var(--space-modal-padding);
+  gap: var(--space-modal-gap);
+}
+
+/* 分隔符 */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: var(--space-normal) 0;
+}
+
+.divider-vertical {
+  width: 1px;
+  height: 100%;
+  background: var(--border);
+  margin: 0 var(--space-normal);
+}
+
 /* ═══════════════════════════════════════════════
    间距工具类 (Spacing Utilities)
    ═══════════════════════════════════════════════ */
 
 /* 内边距 */
 .p-0 { padding: 0; }
+.p-px { padding: 1px; }
+.p-0-5 { padding: var(--space-0-5); }
 .p-1 { padding: var(--space-1); }
+.p-1-5 { padding: var(--space-1-5); }
 .p-2 { padding: var(--space-2); }
+.p-2-5 { padding: var(--space-2-5); }
 .p-3 { padding: var(--space-3); }
+.p-3-5 { padding: var(--space-3-5); }
 .p-4 { padding: var(--space-4); }
 .p-5 { padding: var(--space-5); }
 .p-6 { padding: var(--space-6); }
+.p-7 { padding: var(--space-7); }
 .p-8 { padding: var(--space-8); }
+.p-9 { padding: var(--space-9); }
+.p-10 { padding: var(--space-10); }
+.p-12 { padding: var(--space-12); }
+.p-14 { padding: var(--space-14); }
+.p-16 { padding: var(--space-16); }
+.p-20 { padding: var(--space-20); }
+.p-24 { padding: var(--space-24); }
 
 .px-0 { padding-left: 0; padding-right: 0; }
 .px-1 { padding-left: var(--space-1); padding-right: var(--space-1); }
@@ -177,6 +325,8 @@ td {
 .px-4 { padding-left: var(--space-4); padding-right: var(--space-4); }
 .px-5 { padding-left: var(--space-5); padding-right: var(--space-5); }
 .px-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
+.px-8 { padding-left: var(--space-8); padding-right: var(--space-8); }
+.px-10 { padding-left: var(--space-10); padding-right: var(--space-10); }
 
 .py-0 { padding-top: 0; padding-bottom: 0; }
 .py-1 { padding-top: var(--space-1); padding-bottom: var(--space-1); }
@@ -185,9 +335,13 @@ td {
 .py-4 { padding-top: var(--space-4); padding-bottom: var(--space-4); }
 .py-5 { padding-top: var(--space-5); padding-bottom: var(--space-5); }
 .py-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+.py-8 { padding-top: var(--space-8); padding-bottom: var(--space-8); }
+.py-10 { padding-top: var(--space-10); padding-bottom: var(--space-10); }
+.py-12 { padding-top: var(--space-12); padding-bottom: var(--space-12); }
 
 /* 外边距 */
 .m-0 { margin: 0; }
+.m-auto { margin: auto; }
 .m-1 { margin: var(--space-1); }
 .m-2 { margin: var(--space-2); }
 .m-3 { margin: var(--space-3); }
@@ -210,6 +364,8 @@ td {
 .my-4 { margin-top: var(--space-4); margin-bottom: var(--space-4); }
 .my-5 { margin-top: var(--space-5); margin-bottom: var(--space-5); }
 .my-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
+.my-8 { margin-top: var(--space-8); margin-bottom: var(--space-8); }
+.my-10 { margin-top: var(--space-10); margin-bottom: var(--space-10); }
 
 .mt-0 { margin-top: 0; }
 .mt-1 { margin-top: var(--space-1); }
@@ -218,6 +374,11 @@ td {
 .mt-4 { margin-top: var(--space-4); }
 .mt-5 { margin-top: var(--space-5); }
 .mt-6 { margin-top: var(--space-6); }
+.mt-8 { margin-top: var(--space-8); }
+.mt-10 { margin-top: var(--space-10); }
+.mt-12 { margin-top: var(--space-12); }
+.mt-16 { margin-top: var(--space-16); }
+.mt-20 { margin-top: var(--space-20); }
 
 .mb-0 { margin-bottom: 0; }
 .mb-1 { margin-bottom: var(--space-1); }
@@ -226,16 +387,64 @@ td {
 .mb-4 { margin-bottom: var(--space-4); }
 .mb-5 { margin-bottom: var(--space-5); }
 .mb-6 { margin-bottom: var(--space-6); }
+.mb-8 { margin-bottom: var(--space-8); }
+.mb-10 { margin-bottom: var(--space-10); }
+.mb-12 { margin-bottom: var(--space-12); }
+.mb-16 { margin-bottom: var(--space-16); }
+
+.ml-0 { margin-left: 0; }
+.ml-1 { margin-left: var(--space-1); }
+.ml-2 { margin-left: var(--space-2); }
+.ml-3 { margin-left: var(--space-3); }
+.ml-4 { margin-left: var(--space-4); }
+.ml-6 { margin-left: var(--space-6); }
+.ml-8 { margin-left: var(--space-8); }
+.ml-auto { margin-left: auto; }
+
+.mr-0 { margin-right: 0; }
+.mr-1 { margin-right: var(--space-1); }
+.mr-2 { margin-right: var(--space-2); }
+.mr-3 { margin-right: var(--space-3); }
+.mr-4 { margin-right: var(--space-4); }
+.mr-6 { margin-right: var(--space-6); }
+.mr-8 { margin-right: var(--space-8); }
+.mr-auto { margin-right: auto; }
 
 /* 间隙 */
 .gap-0 { gap: 0; }
+.gap-px { gap: 1px; }
+.gap-0-5 { gap: var(--space-0-5); }
 .gap-1 { gap: var(--space-1); }
+.gap-1-5 { gap: var(--space-1-5); }
 .gap-2 { gap: var(--space-2); }
+.gap-2-5 { gap: var(--space-2-5); }
 .gap-3 { gap: var(--space-3); }
+.gap-3-5 { gap: var(--space-3-5); }
 .gap-4 { gap: var(--space-4); }
 .gap-5 { gap: var(--space-5); }
 .gap-6 { gap: var(--space-6); }
+.gap-7 { gap: var(--space-7); }
 .gap-8 { gap: var(--space-8); }
+.gap-10 { gap: var(--space-10); }
+.gap-12 { gap: var(--space-12); }
+.gap-16 { gap: var(--space-16); }
+
+/* 空间占用 */
+.space-y-0 > * + * { margin-top: 0; }
+.space-y-1 > * + * { margin-top: var(--space-1); }
+.space-y-2 > * + * { margin-top: var(--space-2); }
+.space-y-3 > * + * { margin-top: var(--space-3); }
+.space-y-4 > * + * { margin-top: var(--space-4); }
+.space-y-6 > * + * { margin-top: var(--space-6); }
+.space-y-8 > * + * { margin-top: var(--space-8); }
+
+.space-x-0 > * + * { margin-left: 0; }
+.space-x-1 > * + * { margin-left: var(--space-1); }
+.space-x-2 > * + * { margin-left: var(--space-2); }
+.space-x-3 > * + * { margin-left: var(--space-3); }
+.space-x-4 > * + * { margin-left: var(--space-4); }
+.space-x-6 > * + * { margin-left: var(--space-6); }
+.space-x-8 > * + * { margin-left: var(--space-8); }
 
 /* ═══════════════════════════════════════════════
    使用示例
@@ -269,6 +478,7 @@ td {
 <div class="form-group">
   <label>用户名</label>
   <input type="text" placeholder="请输入用户名">
+  <span class="error-message">用户名不能为空</span>
 </div>
 
 <!-- 表格 -->
@@ -295,9 +505,19 @@ td {
   </li>
 </ul>
 
+<!-- 分隔符 -->
+<div class="divider"></div>
+
 <!-- 工具类 -->
 <div class="p-4 mb-4">
   <p class="mb-2">段落 1</p>
   <p class="mb-0">段落 2</p>
+</div>
+
+<!-- 垂直间距 -->
+<div class="space-y-4">
+  <div>项目 1</div>
+  <div>项目 2</div>
+  <div>项目 3</div>
 </div>
 */

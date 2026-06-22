@@ -1,6 +1,7 @@
-/* PHOENIX 配色系统 v2
+/* PHOENIX 配色系统 v3
  * 基于颜色理论设计
  * 原则：信任 + 创新 + 活力
+ * 更新：统一设计令牌、增强暗色主题、优化视觉层次
  */
 
 :root {
@@ -82,8 +83,11 @@
   --gradient-primary: linear-gradient(135deg, var(--primary-600), var(--primary-400));
   --gradient-accent: linear-gradient(135deg, var(--accent-500), var(--accent-300));
   --gradient-hero: linear-gradient(135deg, var(--primary-900), var(--primary-700));
+  --gradient-surface: linear-gradient(180deg, var(--surface), var(--surface-alt));
   --glow-accent: 0 0 20px rgba(244, 158, 66, 0.3);
   --glow-primary: 0 0 20px rgba(59, 130, 246, 0.3);
+  --glow-success: 0 0 20px rgba(76, 175, 80, 0.3);
+  --glow-error: 0 0 20px rgba(224, 85, 85, 0.3);
 
   /* ═══════════════════════════════════════════════
      字体系统 (Typography)
@@ -109,6 +113,7 @@
   /* ═══════════════════════════════════════════════
      圆角系统 (Border Radius)
      ═══════════════════════════════════════════════ */
+  --radius-xs: 0.125rem; /* 2px */
   --radius-sm: 0.25rem;  /* 4px */
   --radius-md: 0.5rem;   /* 8px */
   --radius-lg: 0.75rem;  /* 12px */
@@ -117,36 +122,148 @@
   --radius-full: 9999px;
 
   /* ═══════════════════════════════════════════════
-     阴影系统 (Shadows)
+     阴影系统 (Shadows) - 增强版
      ═══════════════════════════════════════════════ */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.3);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.35);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.4);
+  --shadow-2xl: 0 24px 48px rgba(0, 0, 0, 0.45);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-glow-accent: 0 0 20px rgba(244, 158, 66, 0.3), 0 0 40px rgba(244, 158, 66, 0.1);
+  --shadow-glow-primary: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(59, 130, 246, 0.1);
+  --shadow-glow-success: 0 0 20px rgba(76, 175, 80, 0.3), 0 0 40px rgba(76, 175, 80, 0.1);
+  --shadow-glow-error: 0 0 20px rgba(224, 85, 85, 0.3), 0 0 40px rgba(224, 85, 85, 0.1);
+
+  /* ═══════════════════════════════════════════════
+     动画系统 (Animation)
+     ═══════════════════════════════════════════════ */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* ═══════════════════════════════════════════════
+     Z-Index 系统
+     ═══════════════════════════════════════════════ */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-tooltip: 600;
+  --z-toast: 700;
 }
 
 /* ═══════════════════════════════════════════════
-   暗色主题 (Dark Theme) - 默认
+   暗色主题 (Dark Theme) - 默认 - 增强版
    ═══════════════════════════════════════════════ */
 [data-theme="dark"] {
+  /* 背景层次 */
   --bg: var(--primary-900);
+  --bg-subtle: hsl(220, 100%, 6%);
   --surface: var(--primary-800);
   --surface-alt: var(--primary-700);
+  --surface-hover: hsl(220, 75%, 18%);
+  --surface-active: hsl(220, 70%, 22%);
+
+  /* 边框 */
   --border: var(--gray-700);
+  --border-subtle: hsl(220, 8%, 25%);
+  --border-strong: var(--gray-600);
+
+  /* 文字 */
   --text: var(--gray-100);
+  --text-secondary: var(--gray-300);
   --text-dim: var(--gray-400);
+  --text-muted: var(--gray-500);
+  --text-inverse: var(--gray-900);
+
+  /* 交互状态 */
+  --interactive-hover: rgba(255, 255, 255, 0.05);
+  --interactive-active: rgba(255, 255, 255, 0.1);
+  --interactive-focus: rgba(59, 130, 246, 0.3);
+
+  /* 覆盖层 */
+  --overlay: rgba(0, 0, 0, 0.6);
+  --overlay-heavy: rgba(0, 0, 0, 0.8);
+
+  /* 图表颜色 */
+  --chart-1: #f49e42;
+  --chart-2: #7aa2f7;
+  --chart-3: #4caf50;
+  --chart-4: #e05555;
+  --chart-5: #bb9af7;
+  --chart-6: #7dcfff;
+  --chart-7: #f0a040;
+  --chart-8: #9ece6a;
+
+  /* 网格线 */
+  --grid-line: rgba(255, 255, 255, 0.06);
+  --grid-line-strong: rgba(255, 255, 255, 0.1);
 }
 
 /* ═══════════════════════════════════════════════
-   亮色主题 (Light Theme)
+   亮色主题 (Light Theme) - 增强版
    ═══════════════════════════════════════════════ */
 [data-theme="light"] {
+  /* 背景层次 */
   --bg: var(--gray-50);
+  --bg-subtle: white;
   --surface: white;
   --surface-alt: var(--gray-100);
+  --surface-hover: var(--gray-200);
+  --surface-active: var(--gray-300);
+
+  /* 边框 */
   --border: var(--gray-200);
+  --border-subtle: var(--gray-100);
+  --border-strong: var(--gray-300);
+
+  /* 文字 */
   --text: var(--gray-900);
+  --text-secondary: var(--gray-700);
   --text-dim: var(--gray-600);
+  --text-muted: var(--gray-500);
+  --text-inverse: white;
+
+  /* 交互状态 */
+  --interactive-hover: rgba(0, 0, 0, 0.03);
+  --interactive-active: rgba(0, 0, 0, 0.06);
+  --interactive-focus: rgba(59, 130, 246, 0.2);
+
+  /* 覆盖层 */
+  --overlay: rgba(0, 0, 0, 0.3);
+  --overlay-heavy: rgba(0, 0, 0, 0.5);
+
+  /* 图表颜色 */
+  --chart-1: #d97706;
+  --chart-2: #2563eb;
+  --chart-3: #16a34a;
+  --chart-4: #dc2626;
+  --chart-5: #7c3aed;
+  --chart-6: #0891b2;
+  --chart-7: #ea580c;
+  --chart-8: #65a30d;
+
+  /* 网格线 */
+  --grid-line: rgba(0, 0, 0, 0.06);
+  --grid-line-strong: rgba(0, 0, 0, 0.1);
+
+  /* 阴影调整 */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.15);
+  --shadow-2xl: 0 24px 48px rgba(0, 0, 0, 0.18);
 }
 
 /* ═══════════════════════════════════════════════
@@ -167,6 +284,166 @@
 }
 
 /* ═══════════════════════════════════════════════
+   动画关键帧 (Keyframes)
+   ═══════════════════════════════════════════════ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: var(--glow-accent); }
+  50% { box-shadow: 0 0 30px rgba(244, 158, 66, 0.5), 0 0 60px rgba(244, 158, 66, 0.2); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   动画工具类
+   ═══════════════════════════════════════════════ */
+.animate-fade-in {
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp var(--duration-normal) var(--ease-out);
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--duration-normal) var(--ease-out);
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--duration-normal) var(--ease-out);
+}
+
+.animate-pulse {
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-alt) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.animate-glow {
+  animation: glow 2s var(--ease-in-out) infinite;
+}
+
+.animate-float {
+  animation: float 3s var(--ease-in-out) infinite;
+}
+
+/* 延迟动画 */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* ═══════════════════════════════════════════════
    使用示例
    ═══════════════════════════════════════════════ */
 /*
@@ -175,4 +452,9 @@
 <div class="card">卡片内容</div>
 <span class="badge-success">成功</span>
 <span class="badge-error">错误</span>
+
+<!-- 动画示例 -->
+<div class="animate-fade-in-up delay-200">延迟淡入</div>
+<div class="animate-shimmer">加载骨架</div>
+<div class="animate-glow">发光效果</div>
 */

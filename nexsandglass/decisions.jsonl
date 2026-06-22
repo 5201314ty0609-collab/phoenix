@@ -4,3 +4,4 @@
 {"type": "explicit_en", "text": "use it", "position": 1231, "session_id": "3312d783-7ebd-49bc-988d-d3c3833b381a", "timestamp": "2026-06-22T11:12:03.849956+00:00"}
 {"type": "command_en", "text": "change \"7-Sense\"", "position": 607, "session_id": "3312d783-7ebd-49bc-988d-d3c3833b381a", "timestamp": "2026-06-22T11:30:57.602910+00:00"}
 {"type": "explicit_en", "text": "use `Promise.all()`", "position": 2318, "session_id": "3312d783-7ebd-49bc-988d-d3c3833b381a", "timestamp": "2026-06-22T11:30:57.602141+00:00"}
+{"type": "preference", "text": "偏好", "position": 1518, "session_id": "3312d783-7ebd-49bc-988d-d3c3833b381a", "timestamp": "2026-06-22T12:15:39.201035+00:00"}
