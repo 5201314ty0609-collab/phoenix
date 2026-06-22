@@ -1,0 +1,45 @@
+/**
+ * PHOENIX AIOS 全局样式入口
+ *
+ * 导入顺序：
+ * 1. 令牌 (tokens)     -- CSS 自定义属性
+ * 2. 基础 (base)       -- reset, 排版基础
+ * 3. 组件 (components) -- 按钮、卡片、表单、徽章
+ * 4. 工具 (utilities)  -- 视觉效果、布局
+ *
+ * 使用方式：
+ *   @import './styles/globals.css';
+ *
+ * 或在 Tailwind 入口中：
+ *   @tailwind base;
+ *   @tailwind components;
+ *   @tailwind utilities;
+ *   @import './styles/tokens/*.css';
+ */
+
+/* ═══════════════════════════════════════════════
+   1. 设计令牌
+   ═══════════════════════════════════════════════ */
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+
+/* ═══════════════════════════════════════════════
+   2. 基础样式
+   ═══════════════════════════════════════════════ */
+@import './base/reset.css';
+@import './base/typography-base.css';
+
+/* ═══════════════════════════════════════════════
+   3. 组件样式
+   ═══════════════════════════════════════════════ */
+@import './components/buttons.css';
+@import './components/cards.css';
+@import './components/forms.css';
+@import './components/badges.css';
+
+/* ═══════════════════════════════════════════════
+   4. 工具类
+   ═══════════════════════════════════════════════ */
+@import './utilities/effects.css';
+@import './utilities/layout.css';

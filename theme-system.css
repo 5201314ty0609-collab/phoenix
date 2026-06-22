@@ -1,0 +1,493 @@
+/* PHOENIX AIOS 主题系统 v1.0
+ * 暗色主题优先，支持亮色主题切换
+ * 基于 WCAG 2.1 AA 对比度标准
+ * 设计原则：专业、现代、护眼
+ */
+
+/* ════════════════════════════════════════════════════════════════
+   主题变量层 - 使用 CSS 自定义属性实现主题切换
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ═══════════════════════════════════════════════
+     颜色系统 - 基于 OKLCH 色彩空间
+     优势：感知均匀、跨设备一致、支持广色域
+     ═══════════════════════════════════════════════ */
+
+  /* 品牌主色 - 深海蓝 (信任、专业、稳定) */
+  --color-brand-900: oklch(25% 0.08 250);   /* 最深 - 背景 */
+  --color-brand-800: oklch(32% 0.10 248);   /* 深 */
+  --color-brand-700: oklch(40% 0.12 246);   /* 中深 */
+  --color-brand-600: oklch(48% 0.14 244);   /* 中 */
+  --color-brand-500: oklch(55% 0.16 242);   /* 标准 */
+  --color-brand-400: oklch(63% 0.14 240);   /* 中浅 */
+  --color-brand-300: oklch(72% 0.10 238);   /* 浅 */
+  --color-brand-200: oklch(82% 0.06 236);   /* 更浅 */
+  --color-brand-100: oklch(92% 0.03 234);   /* 最浅 */
+  --color-brand-50:  oklch(97% 0.01 232);   /* 几乎白 */
+
+  /* 强调色 - 琥珀橙 (活力、创新、能量) */
+  --color-accent-900: oklch(30% 0.12 65);   /* 最深 */
+  --color-accent-800: oklch(38% 0.14 63);   /* 深 */
+  --color-accent-700: oklch(46% 0.16 61);   /* 中深 */
+  --color-accent-600: oklch(54% 0.18 59);   /* 中 */
+  --color-accent-500: oklch(62% 0.20 57);   /* 标准 - CTA */
+  --color-accent-400: oklch(70% 0.18 55);   /* 中浅 */
+  --color-accent-300: oklch(78% 0.14 53);   /* 浅 */
+  --color-accent-200: oklch(86% 0.08 51);   /* 更浅 */
+  --color-accent-100: oklch(94% 0.04 49);   /* 最浅 */
+
+  /* 中性色 - 冷灰 (平衡、中立) */
+  --color-neutral-950: oklch(13% 0.015 250); /* 最深 */
+  --color-neutral-900: oklch(18% 0.015 250); /* 深 */
+  --color-neutral-800: oklch(25% 0.015 250); /* 中深 */
+  --color-neutral-700: oklch(33% 0.012 250); /* 中 */
+  --color-neutral-600: oklch(42% 0.010 250); /* 中 */
+  --color-neutral-500: oklch(52% 0.008 250); /* 标准 */
+  --color-neutral-400: oklch(62% 0.006 250); /* 中浅 */
+  --color-neutral-300: oklch(72% 0.005 250); /* 浅 */
+  --color-neutral-200: oklch(82% 0.004 250); /* 更浅 */
+  --color-neutral-100: oklch(90% 0.003 250); /* 浅 */
+  --color-neutral-50:  oklch(96% 0.002 250); /* 几乎白 */
+
+  /* 语义色 - 状态反馈 */
+  --color-success-900: oklch(25% 0.12 155);  /* 最深 */
+  --color-success-700: oklch(35% 0.14 152);  /* 深 */
+  --color-success-500: oklch(50% 0.16 148);  /* 标准 */
+  --color-success-300: oklch(65% 0.14 145);  /* 浅 */
+  --color-success-100: oklch(90% 0.06 142);  /* 最浅 */
+
+  --color-warning-900: oklch(30% 0.14 75);   /* 最深 */
+  --color-warning-700: oklch(40% 0.16 72);   /* 深 */
+  --color-warning-500: oklch(55% 0.18 68);   /* 标准 */
+  --color-warning-300: oklch(70% 0.16 65);   /* 浅 */
+  --color-warning-100: oklch(92% 0.06 62);   /* 最浅 */
+
+  --color-error-900: oklch(28% 0.14 25);     /* 最深 */
+  --color-error-700: oklch(38% 0.16 22);     /* 深 */
+  --color-error-500: oklch(50% 0.18 18);     /* 标准 */
+  --color-error-300: oklch(65% 0.16 15);     /* 浅 */
+  --color-error-100: oklch(92% 0.06 12);     /* 最浅 */
+
+  --color-info-900: oklch(28% 0.10 240);     /* 最深 */
+  --color-info-700: oklch(38% 0.12 238);     /* 深 */
+  --color-info-500: oklch(50% 0.14 236);     /* 标准 */
+  --color-info-300: oklch(65% 0.12 234);     /* 浅 */
+  --color-info-100: oklch(92% 0.04 232);     /* 最浅 */
+
+  /* ═══════════════════════════════════════════════
+     间距系统 - 4px 基准网格
+     ═══════════════════════════════════════════════ */
+  --space-0: 0;
+  --space-px: 1px;
+  --space-0-5: 0.125rem; /* 2px */
+  --space-1: 0.25rem;    /* 4px */
+  --space-1-5: 0.375rem; /* 6px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-2-5: 0.625rem; /* 10px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-3-5: 0.875rem; /* 14px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-7: 1.75rem;    /* 28px */
+  --space-8: 2rem;       /* 32px */
+  --space-9: 2.25rem;    /* 36px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-11: 2.75rem;   /* 44px */
+  --space-12: 3rem;      /* 48px */
+  --space-14: 3.5rem;    /* 56px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+  --space-28: 7rem;      /* 112px */
+  --space-32: 8rem;      /* 128px */
+
+  /* ═══════════════════════════════════════════════
+     圆角系统
+     ═══════════════════════════════════════════════ */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.375rem;  /* 6px */
+  --radius-lg: 0.5rem;    /* 8px */
+  --radius-xl: 0.75rem;   /* 12px */
+  --radius-2xl: 1rem;     /* 16px */
+  --radius-3xl: 1.5rem;   /* 24px */
+  --radius-full: 9999px;
+
+  /* ═══════════════════════════════════════════════
+     排版系统
+     ═══════════════════════════════════════════════ */
+  --font-sans: 'SF Pro Display', 'PingFang SC', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+  --font-display: 'SF Pro Display', 'Inter', sans-serif;
+
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  --text-5xl: 3rem;       /* 48px */
+  --text-6xl: 3.75rem;    /* 60px */
+
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+
+  /* ═══════════════════════════════════════════════
+     阴影系统 - 暗色主题优化
+     ═══════════════════════════════════════════════ */
+  --shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.2);
+  --shadow-sm: 0 2px 4px oklch(0% 0 0 / 0.25);
+  --shadow-md: 0 4px 8px oklch(0% 0 0 / 0.3);
+  --shadow-lg: 0 8px 16px oklch(0% 0 0 / 0.35);
+  --shadow-xl: 0 16px 32px oklch(0% 0 0 / 0.4);
+  --shadow-2xl: 0 24px 48px oklch(0% 0 0 / 0.45);
+  --shadow-inner: inset 0 2px 4px oklch(0% 0 0 / 0.2);
+
+  /* 发光阴影 - 用于强调元素 */
+  --shadow-glow-brand: 0 0 20px oklch(55% 0.16 242 / 0.3), 0 0 40px oklch(55% 0.16 242 / 0.1);
+  --shadow-glow-accent: 0 0 20px oklch(62% 0.20 57 / 0.3), 0 0 40px oklch(62% 0.20 57 / 0.1);
+  --shadow-glow-success: 0 0 20px oklch(50% 0.16 148 / 0.3), 0 0 40px oklch(50% 0.16 148 / 0.1);
+  --shadow-glow-warning: 0 0 20px oklch(55% 0.18 68 / 0.3), 0 0 40px oklch(55% 0.18 68 / 0.1);
+  --shadow-glow-error: 0 0 20px oklch(50% 0.18 18 / 0.3), 0 0 40px oklch(50% 0.18 18 / 0.1);
+
+  /* ═══════════════════════════════════════════════
+     动画系统
+     ═══════════════════════════════════════════════ */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 700ms;
+
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ═══════════════════════════════════════════════
+     Z-Index 层级系统
+     ═══════════════════════════════════════════════ */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-tooltip: 600;
+  --z-toast: 700;
+  --z-max: 9999;
+
+  /* ═══════════════════════════════════════════════
+     断点系统 (用于媒体查询)
+     ═══════════════════════════════════════════════ */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   暗色主题 (默认主题)
+   ════════════════════════════════════════════════════════════════ */
+
+[data-theme="dark"], :root {
+  /* 背景层次 - 从深到浅 */
+  --bg-base: oklch(14% 0.02 250);          /* 最深背景 */
+  --bg-subtle: oklch(17% 0.02 248);        /* 微妙差异 */
+  --bg-surface: oklch(20% 0.025 246);      /* 卡片/面板 */
+  --bg-surface-alt: oklch(24% 0.025 244);  /* 交替表面 */
+  --bg-surface-hover: oklch(27% 0.03 242); /* 悬停状态 */
+  --bg-surface-active: oklch(30% 0.03 240);/* 激活状态 */
+
+  /* 文字层次 - 对比度递减 */
+  --text-primary: oklch(95% 0.005 250);    /* 主要文字 - 对比度 15:1 */
+  --text-secondary: oklch(78% 0.008 248);  /* 次要文字 - 对比度 7:1 */
+  --text-tertiary: oklch(62% 0.008 246);   /* 三级文字 - 对比度 4.5:1 */
+  --text-muted: oklch(50% 0.006 244);      /* 弱化文字 - 对比度 3:1 */
+  --text-disabled: oklch(38% 0.005 242);   /* 禁用文字 - 对比度 2:1 */
+  --text-inverse: oklch(14% 0.02 250);     /* 反色文字 */
+
+  /* 边框层次 */
+  --border-subtle: oklch(25% 0.015 250);   /* 微妙边框 */
+  --border-default: oklch(30% 0.015 248);  /* 默认边框 */
+  --border-strong: oklch(38% 0.015 246);   /* 强调边框 */
+  --border-brand: var(--color-brand-500);   /* 品牌边框 */
+
+  /* 交互状态 */
+  --interactive-hover: oklch(100% 0 0 / 0.05); /* 悬停叠加 */
+  --interactive-active: oklch(100% 0 0 / 0.08);/* 激活叠加 */
+  --interactive-focus: oklch(55% 0.16 242 / 0.3);/* 焦点环 */
+
+  /* 覆盖层 */
+  --overlay-light: oklch(0% 0 0 / 0.3);
+  --overlay-medium: oklch(0% 0 0 / 0.5);
+  --overlay-heavy: oklch(0% 0 0 / 0.7);
+  --overlay-ultra: oklch(0% 0 0 / 0.85);
+
+  /* 渐变 - 暗色主题专用 */
+  --gradient-brand: linear-gradient(135deg, var(--color-brand-600), var(--color-brand-400));
+  --gradient-accent: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-300));
+  --gradient-surface: linear-gradient(180deg, var(--bg-surface), var(--bg-surface-alt));
+  --gradient-hero: linear-gradient(135deg, var(--color-brand-900), var(--color-brand-700));
+  --gradient-mesh: radial-gradient(at 40% 20%, var(--color-brand-900) 0px, transparent 50%),
+                   radial-gradient(at 80% 0%, var(--color-brand-800) 0px, transparent 50%),
+                   radial-gradient(at 0% 50%, var(--color-brand-700) 0px, transparent 50%);
+  --gradient-glow: radial-gradient(circle at center, var(--color-brand-500) 0%, transparent 70%);
+
+  /* 图表面板颜色 - 高对比度、色盲友好 */
+  --chart-1: oklch(70% 0.18 57);   /* 琥珀 */
+  --chart-2: oklch(65% 0.16 242);  /* 蓝 */
+  --chart-3: oklch(60% 0.16 148);  /* 绿 */
+  --chart-4: oklch(60% 0.18 18);   /* 红 */
+  --chart-5: oklch(65% 0.14 300);  /* 紫 */
+  --chart-6: oklch(65% 0.12 200);  /* 青 */
+  --chart-7: oklch(70% 0.16 80);   /* 黄 */
+  --chart-8: oklch(55% 0.14 170);  /* 薄荷 */
+
+  /* 网格线 */
+  --grid-line: oklch(100% 0 0 / 0.06);
+  --grid-line-strong: oklch(100% 0 0 / 0.1);
+
+  /* 玻璃态效果参数 */
+  --glass-bg: oklch(20% 0.025 246 / 0.8);
+  --glass-border: oklch(100% 0 0 / 0.1);
+  --glass-blur: 12px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   亮色主题
+   ════════════════════════════════════════════════════════════════ */
+
+[data-theme="light"] {
+  /* 背景层次 - 从浅到深 */
+  --bg-base: oklch(98% 0.003 250);          /* 最浅背景 */
+  --bg-subtle: oklch(96% 0.005 248);        /* 微妙差异 */
+  --bg-surface: oklch(100% 0 0);            /* 卡片/面板 */
+  --bg-surface-alt: oklch(95% 0.005 246);   /* 交替表面 */
+  --bg-surface-hover: oklch(93% 0.008 244); /* 悬停状态 */
+  --bg-surface-active: oklch(90% 0.01 242); /* 激活状态 */
+
+  /* 文字层次 */
+  --text-primary: oklch(15% 0.015 250);     /* 主要文字 */
+  --text-secondary: oklch(30% 0.012 248);   /* 次要文字 */
+  --text-tertiary: oklch(45% 0.010 246);    /* 三级文字 */
+  --text-muted: oklch(55% 0.008 244);       /* 弱化文字 */
+  --text-disabled: oklch(70% 0.005 242);    /* 禁用文字 */
+  --text-inverse: oklch(98% 0.003 250);     /* 反色文字 */
+
+  /* 边框层次 */
+  --border-subtle: oklch(90% 0.008 250);    /* 微妙边框 */
+  --border-default: oklch(85% 0.010 248);   /* 默认边框 */
+  --border-strong: oklch(75% 0.012 246);    /* 强调边框 */
+  --border-brand: var(--color-brand-500);    /* 品牌边框 */
+
+  /* 交互状态 */
+  --interactive-hover: oklch(0% 0 0 / 0.03);
+  --interactive-active: oklch(0% 0 0 / 0.06);
+  --interactive-focus: oklch(55% 0.16 242 / 0.2);
+
+  /* 覆盖层 */
+  --overlay-light: oklch(0% 0 0 / 0.1);
+  --overlay-medium: oklch(0% 0 0 / 0.3);
+  --overlay-heavy: oklch(0% 0 0 / 0.5);
+  --overlay-ultra: oklch(0% 0 0 / 0.7);
+
+  /* 渐变 - 亮色主题专用 */
+  --gradient-brand: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-300));
+  --gradient-accent: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-200));
+  --gradient-surface: linear-gradient(180deg, var(--bg-surface), var(--bg-surface-alt));
+  --gradient-hero: linear-gradient(135deg, var(--color-brand-100), var(--color-brand-50));
+  --gradient-mesh: radial-gradient(at 40% 20%, var(--color-brand-100) 0px, transparent 50%),
+                   radial-gradient(at 80% 0%, var(--color-brand-50) 0px, transparent 50%),
+                   radial-gradient(at 0% 50%, var(--color-brand-200) 0px, transparent 50%);
+  --gradient-glow: radial-gradient(circle at center, var(--color-brand-300) 0%, transparent 70%);
+
+  /* 图表面板颜色 */
+  --chart-1: oklch(55% 0.18 57);
+  --chart-2: oklch(45% 0.16 242);
+  --chart-3: oklch(42% 0.16 148);
+  --chart-4: oklch(45% 0.18 18);
+  --chart-5: oklch(45% 0.14 300);
+  --chart-6: oklch(45% 0.12 200);
+  --chart-7: oklch(55% 0.16 80);
+  --chart-8: oklch(40% 0.14 170);
+
+  /* 网格线 */
+  --grid-line: oklch(0% 0 0 / 0.06);
+  --grid-line-strong: oklch(0% 0 0 / 0.1);
+
+  /* 阴影调整 - 亮色主题需要更轻的阴影 */
+  --shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.05);
+  --shadow-sm: 0 2px 4px oklch(0% 0 0 / 0.08);
+  --shadow-md: 0 4px 8px oklch(0% 0 0 / 0.1);
+  --shadow-lg: 0 8px 16px oklch(0% 0 0 / 0.12);
+  --shadow-xl: 0 16px 32px oklch(0% 0 0 / 0.15);
+  --shadow-2xl: 0 24px 48px oklch(0% 0 0 / 0.18);
+
+  /* 玻璃态效果参数 */
+  --glass-bg: oklch(100% 0 0 / 0.8);
+  --glass-border: oklch(0% 0 0 / 0.08);
+  --glass-blur: 12px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   自动主题 (根据系统偏好)
+   ════════════════════════════════════════════════════════════════ */
+
+@media (prefers-color-scheme: light) {
+  [data-theme="auto"], :root:not([data-theme]) {
+    /* 继承亮色主题的所有变量 */
+    --bg-base: oklch(98% 0.003 250);
+    --bg-subtle: oklch(96% 0.005 248);
+    --bg-surface: oklch(100% 0 0);
+    --bg-surface-alt: oklch(95% 0.005 246);
+    --bg-surface-hover: oklch(93% 0.008 244);
+    --bg-surface-active: oklch(90% 0.01 242);
+
+    --text-primary: oklch(15% 0.015 250);
+    --text-secondary: oklch(30% 0.012 248);
+    --text-tertiary: oklch(45% 0.010 246);
+    --text-muted: oklch(55% 0.008 244);
+    --text-disabled: oklch(70% 0.005 242);
+    --text-inverse: oklch(98% 0.003 250);
+
+    --border-subtle: oklch(90% 0.008 250);
+    --border-default: oklch(85% 0.010 248);
+    --border-strong: oklch(75% 0.012 246);
+
+    --interactive-hover: oklch(0% 0 0 / 0.03);
+    --interactive-active: oklch(0% 0 0 / 0.06);
+    --interactive-focus: oklch(55% 0.16 242 / 0.2);
+
+    --overlay-light: oklch(0% 0 0 / 0.1);
+    --overlay-medium: oklch(0% 0 0 / 0.3);
+    --overlay-heavy: oklch(0% 0 0 / 0.5);
+    --overlay-ultra: oklch(0% 0 0 / 0.7);
+
+    --shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.05);
+    --shadow-sm: 0 2px 4px oklch(0% 0 0 / 0.08);
+    --shadow-md: 0 4px 8px oklch(0% 0 0 / 0.1);
+    --shadow-lg: 0 8px 16px oklch(0% 0 0 / 0.12);
+    --shadow-xl: 0 16px 32px oklch(0% 0 0 / 0.15);
+    --shadow-2xl: 0 24px 48px oklch(0% 0 0 / 0.18);
+
+    --glass-bg: oklch(100% 0 0 / 0.8);
+    --glass-border: oklch(0% 0 0 / 0.08);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   对比度增强模式 (高对比度)
+   ════════════════════════════════════════════════════════════════ */
+
+[data-theme="dark"][data-contrast="high"],
+:root[data-contrast="high"] {
+  --text-primary: oklch(100% 0 0);          /* 纯白 */
+  --text-secondary: oklch(90% 0 0);         /* 更亮 */
+  --text-tertiary: oklch(78% 0 0);          /* 更亮 */
+  --text-muted: oklch(65% 0 0);             /* 更亮 */
+
+  --border-default: oklch(40% 0 0);         /* 更亮 */
+  --border-strong: oklch(50% 0 0);          /* 更亮 */
+
+  --shadow-glow-brand: 0 0 25px oklch(55% 0.16 242 / 0.4), 0 0 50px oklch(55% 0.16 242 / 0.2);
+  --shadow-glow-accent: 0 0 25px oklch(62% 0.20 57 / 0.4), 0 0 50px oklch(62% 0.20 57 / 0.2);
+}
+
+[data-theme="light"][data-contrast="high"] {
+  --text-primary: oklch(0% 0 0);            /* 纯黑 */
+  --text-secondary: oklch(15% 0 0);         /* 更深 */
+  --text-tertiary: oklch(25% 0 0);          /* 更深 */
+  --text-muted: oklch(35% 0 0);             /* 更深 */
+
+  --border-default: oklch(70% 0 0);         /* 更深 */
+  --border-strong: oklch(60% 0 0);          /* 更深 */
+}
+
+/* ════════════════════════════════════════════════════════════════
+   减少动画模式
+   ════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+[data-reduce-motion="true"] * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   主题切换过渡动画
+   ════════════════════════════════════════════════════════════════ */
+
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   暗色主题设计原则文档 (注释形式)
+   ════════════════════════════════════════════════════════════════
+
+   1. 背景层次原则
+      - 使用 3-4 层背景深度，避免纯黑 (#000)
+      - 每层差异 3-5% 亮度，创造微妙层次
+      - 推荐基础色：oklch(14-18% 0.02 250)
+
+   2. 文字对比度原则 (WCAG 2.1 AA)
+      - 主要文字：对比度 ≥ 7:1 (理想 15:1)
+      - 次要文字：对比度 ≥ 4.5:1
+      - 三级文字：对比度 ≥ 3:1
+      - 禁用文字：对比度 ≥ 2:1
+
+   3. 色彩饱和度原则
+      - 暗色主题降低饱和度 10-20%
+      - 避免高饱和色在大面积使用
+      - 强调色小面积点缀
+
+   4. 阴影处理原则
+      - 暗色主题使用更深的阴影
+      - 阴影透明度提高到 0.3-0.45
+      - 使用发光效果替代传统阴影
+
+   5. 渐变使用原则
+      - 使用微妙渐变增加深度
+      - 避免过于强烈的渐变
+      - 径向渐变创造焦点
+
+   6. 玻璃态效果
+      - 背景模糊 + 半透明
+      - 用于浮动面板、模态框
+      - 保持足够对比度
+
+   ════════════════════════════════════════════════════════════════ */

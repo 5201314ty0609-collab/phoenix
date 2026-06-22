@@ -1,0 +1,245 @@
+/**
+ * PHOENIX AIOS 按钮系统
+ *
+ * 使用方式：
+ *   <button class="btn btn-primary">主要</button>
+ *   <button class="btn btn-accent btn-lg">大号强调</button>
+ *   <button class="btn btn-ghost btn-sm">小号幽灵</button>
+ */
+
+/* 基础按钮 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-btn-gap);
+  padding: var(--space-btn-y) var(--space-btn-x);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  line-height: 1;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  transition: all 150ms cubic-bezier(0, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-height: 44px; /* 触摸目标最小高度 */
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--interactive-focus);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ═══════════════════════════════════════════════
+   按钮变体
+   ═══════════════════════════════════════════════ */
+
+/* 主要 */
+.btn-primary {
+  background: var(--primary-500);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-400);
+}
+
+.btn-primary:active {
+  background: var(--primary-600);
+}
+
+/* 强调 */
+.btn-accent {
+  background: var(--accent-500);
+  color: #ffffff;
+}
+
+.btn-accent:hover {
+  background: var(--accent-400);
+}
+
+.btn-accent:active {
+  background: var(--accent-600);
+}
+
+/* 成功 */
+.btn-success {
+  background: var(--success-500);
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  background: var(--success-300);
+}
+
+/* 危险 */
+.btn-error {
+  background: var(--error-500);
+  color: #ffffff;
+}
+
+.btn-error:hover {
+  background: var(--error-300);
+}
+
+/* 幽灵 */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  background: var(--interactive-hover);
+  color: var(--text);
+}
+
+/* 轮廓 */
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-outline:hover {
+  border-color: var(--border-strong);
+  background: var(--interactive-hover);
+}
+
+/* 主要轮廓 */
+.btn-outline-primary {
+  background: transparent;
+  color: var(--primary-500);
+  border: 1px solid var(--primary-500);
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary-500);
+  color: #ffffff;
+}
+
+/* 链接 */
+.btn-link {
+  background: transparent;
+  color: var(--accent-500);
+  padding: 0;
+  min-height: auto;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.btn-link:hover {
+  color: var(--accent-400);
+  text-decoration: underline;
+}
+
+/* ═══════════════════════════════════════════════
+   按钮尺寸
+   ═══════════════════════════════════════════════ */
+
+.btn-xs {
+  padding: 0.125rem 0.375rem;
+  font-size: var(--text-xs);
+  min-height: 28px;
+  border-radius: var(--radius-sm);
+}
+
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: var(--text-xs);
+  min-height: 36px;
+}
+
+.btn-lg {
+  padding: 0.75rem 2rem;
+  font-size: var(--text-base);
+  min-height: 48px;
+  border-radius: var(--radius-lg);
+}
+
+.btn-xl {
+  padding: 1rem 2.5rem;
+  font-size: var(--text-lg);
+  min-height: 56px;
+  border-radius: var(--radius-xl);
+}
+
+/* ═══════════════════════════════════════════════
+   按钮状态
+   ═══════════════════════════════════════════════ */
+
+/* 加载中 */
+.btn-loading {
+  pointer-events: none;
+  position: relative;
+  color: transparent;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid currentColor;
+  border-color: #ffffff transparent #ffffff transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* 图标按钮 */
+.btn-icon {
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+}
+
+.btn-icon-sm {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}
+
+.btn-icon-lg {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+}
+
+/* 按钮组 */
+.btn-group {
+  display: inline-flex;
+}
+
+.btn-group .btn {
+  border-radius: 0;
+}
+
+.btn-group .btn:first-child {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.btn-group .btn:last-child {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.btn-group .btn + .btn {
+  margin-left: -1px;
+}

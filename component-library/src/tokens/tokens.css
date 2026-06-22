@@ -1,0 +1,269 @@
+/**
+ * PHOENIX AIOS Component Library — Design Tokens CSS
+ *
+ * CSS 自定义属性定义
+ * 支持亮色/暗色模式自动切换
+ */
+
+/* ============================================================
+   亮色模式（默认）
+   ============================================================ */
+
+:root {
+  /* ── 背景 ── */
+  --phoenix-bg-base: oklch(100% 0 0);
+  --phoenix-bg-mantle: oklch(98% 0.001 286);
+  --phoenix-bg-crust: oklch(96% 0.001 286);
+  --phoenix-bg-elevated: oklch(100% 0 0);
+  --phoenix-bg-overlay: oklch(0% 0 0 / 0.5);
+
+  /* ── 文本 ── */
+  --phoenix-text-primary: oklch(20% 0.005 286);
+  --phoenix-text-secondary: oklch(45% 0.005 286);
+  --phoenix-text-tertiary: oklch(55% 0.005 286);
+  --phoenix-text-disabled: oklch(71% 0.005 286);
+  --phoenix-text-inverse: oklch(100% 0 0);
+  --phoenix-text-link: oklch(55% 0.15 265);
+  --phoenix-text-link-hover: oklch(45% 0.18 265);
+
+  /* ── 交互状态 ── */
+  --phoenix-interactive-primary: oklch(55% 0.2 265);
+  --phoenix-interactive-primary-hover: oklch(50% 0.22 265);
+  --phoenix-interactive-primary-active: oklch(45% 0.2 265);
+  --phoenix-interactive-secondary: oklch(92% 0.002 286);
+  --phoenix-interactive-secondary-hover: oklch(87% 0.003 286);
+  --phoenix-interactive-secondary-active: oklch(82% 0.004 286);
+  --phoenix-interactive-ghost: transparent;
+  --phoenix-interactive-ghost-hover: oklch(96% 0.001 286);
+  --phoenix-interactive-ghost-active: oklch(92% 0.002 286);
+  --phoenix-interactive-danger: oklch(60% 0.2 20);
+  --phoenix-interactive-danger-hover: oklch(55% 0.22 20);
+  --phoenix-interactive-danger-active: oklch(50% 0.2 20);
+
+  /* ── 边框 ── */
+  --phoenix-border-default: oklch(90% 0.002 286);
+  --phoenix-border-hover: oklch(80% 0.003 286);
+  --phoenix-border-focus: oklch(55% 0.2 265);
+  --phoenix-border-danger: oklch(60% 0.2 20);
+  --phoenix-border-success: oklch(65% 0.18 150);
+
+  /* ── 状态颜色 ── */
+  --phoenix-status-success: oklch(65% 0.18 150);
+  --phoenix-status-success-bg: oklch(95% 0.05 150);
+  --phoenix-status-warning: oklch(75% 0.15 85);
+  --phoenix-status-warning-bg: oklch(95% 0.05 85);
+  --phoenix-status-danger: oklch(60% 0.2 20);
+  --phoenix-status-danger-bg: oklch(95% 0.05 20);
+  --phoenix-status-info: oklch(70% 0.12 230);
+  --phoenix-status-info-bg: oklch(95% 0.05 230);
+
+  /* ── 间距 ── */
+  --phoenix-space-1: 0.25rem;
+  --phoenix-space-2: 0.5rem;
+  --phoenix-space-3: 0.75rem;
+  --phoenix-space-4: 1rem;
+  --phoenix-space-6: 1.5rem;
+  --phoenix-space-8: 2rem;
+  --phoenix-space-12: 3rem;
+  --phoenix-space-16: 4rem;
+
+  /* ── 圆角 ── */
+  --phoenix-radius-sm: 0.25rem;
+  --phoenix-radius-md: 0.5rem;
+  --phoenix-radius-lg: 1rem;
+  --phoenix-radius-xl: 1.5rem;
+  --phoenix-radius-full: 9999px;
+
+  /* ── 阴影 ── */
+  --phoenix-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --phoenix-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --phoenix-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --phoenix-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --phoenix-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --phoenix-shadow-ring: 0 0 0 3px rgb(59 130 246 / 0.5);
+
+  /* ── 字体 ── */
+  --phoenix-font-sans: Geist, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --phoenix-font-mono: Geist Mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ── 字体大小 ── */
+  --phoenix-text-xs: 0.75rem;
+  --phoenix-text-sm: 0.875rem;
+  --phoenix-text-base: 1rem;
+  --phoenix-text-lg: 1.125rem;
+  --phoenix-text-xl: 1.25rem;
+  --phoenix-text-2xl: 1.5rem;
+  --phoenix-text-3xl: 1.875rem;
+  --phoenix-text-4xl: 2.25rem;
+
+  /* ── 动画 ── */
+  --phoenix-duration-instant: 75ms;
+  --phoenix-duration-fast: 150ms;
+  --phoenix-duration-normal: 300ms;
+  --phoenix-duration-slow: 500ms;
+  --phoenix-easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --phoenix-easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --phoenix-easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --phoenix-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --phoenix-easing-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── 组件尺寸 ── */
+  --phoenix-touch-min: 2.75rem;
+  --phoenix-component-xs: 1.5rem;
+  --phoenix-component-sm: 2rem;
+  --phoenix-component-md: 2.5rem;
+  --phoenix-component-lg: 3rem;
+  --phoenix-component-xl: 3.5rem;
+
+  /* ── 层级 ── */
+  --phoenix-z-dropdown: 1000;
+  --phoenix-z-sticky: 1100;
+  --phoenix-z-overlay: 1300;
+  --phoenix-z-modal: 1400;
+  --phoenix-z-popover: 1500;
+  --phoenix-z-tooltip: 1600;
+  --phoenix-z-toast: 1700;
+}
+
+/* ============================================================
+   暗色模式
+   ============================================================ */
+
+[data-theme="dark"],
+.dark {
+  /* ── 背景 ── */
+  --phoenix-bg-base: oklch(18% 0.005 286);
+  --phoenix-bg-mantle: oklch(16% 0.005 286);
+  --phoenix-bg-crust: oklch(14% 0.005 286);
+  --phoenix-bg-elevated: oklch(22% 0.005 286);
+  --phoenix-bg-overlay: oklch(0% 0 0 / 0.7);
+
+  /* ── 文本 ── */
+  --phoenix-text-primary: oklch(90% 0.002 286);
+  --phoenix-text-secondary: oklch(71% 0.005 286);
+  --phoenix-text-tertiary: oklch(55% 0.005 286);
+  --phoenix-text-disabled: oklch(45% 0.005 286);
+  --phoenix-text-inverse: oklch(20% 0.005 286);
+  --phoenix-text-link: oklch(75% 0.12 265);
+  --phoenix-text-link-hover: oklch(80% 0.1 265);
+
+  /* ── 交互状态 ── */
+  --phoenix-interactive-primary: oklch(70% 0.15 265);
+  --phoenix-interactive-primary-hover: oklch(75% 0.12 265);
+  --phoenix-interactive-primary-active: oklch(65% 0.18 265);
+  --phoenix-interactive-secondary: oklch(27% 0.005 286);
+  --phoenix-interactive-secondary-hover: oklch(32% 0.005 286);
+  --phoenix-interactive-secondary-active: oklch(37% 0.005 286);
+  --phoenix-interactive-ghost: transparent;
+  --phoenix-interactive-ghost-hover: oklch(27% 0.005 286);
+  --phoenix-interactive-ghost-active: oklch(32% 0.005 286);
+  --phoenix-interactive-danger: oklch(70% 0.15 20);
+  --phoenix-interactive-danger-hover: oklch(75% 0.12 20);
+  --phoenix-interactive-danger-active: oklch(65% 0.18 20);
+
+  /* ── 边框 ── */
+  --phoenix-border-default: oklch(27% 0.005 286);
+  --phoenix-border-hover: oklch(37% 0.005 286);
+  --phoenix-border-focus: oklch(70% 0.15 265);
+  --phoenix-border-danger: oklch(70% 0.15 20);
+  --phoenix-border-success: oklch(70% 0.18 150);
+
+  /* ── 状态颜色 ── */
+  --phoenix-status-success: oklch(70% 0.18 150);
+  --phoenix-status-success-bg: oklch(25% 0.05 150);
+  --phoenix-status-warning: oklch(80% 0.12 85);
+  --phoenix-status-warning-bg: oklch(25% 0.05 85);
+  --phoenix-status-danger: oklch(70% 0.15 20);
+  --phoenix-status-danger-bg: oklch(25% 0.05 20);
+  --phoenix-status-info: oklch(75% 0.1 230);
+  --phoenix-status-info-bg: oklch(25% 0.05 230);
+
+  /* ── 阴影 ── */
+  --phoenix-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --phoenix-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --phoenix-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --phoenix-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --phoenix-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  --phoenix-shadow-ring: 0 0 0 3px rgb(147 197 253 / 0.5);
+}
+
+/* ============================================================
+   媒体查询：减少动画
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   媒体查询：暗色模式偏好
+   ============================================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not(.light) {
+    /* 继承暗色模式变量 */
+    --phoenix-bg-base: oklch(18% 0.005 286);
+    --phoenix-bg-mantle: oklch(16% 0.005 286);
+    --phoenix-bg-crust: oklch(14% 0.005 286);
+    --phoenix-bg-elevated: oklch(22% 0.005 286);
+    --phoenix-bg-overlay: oklch(0% 0 0 / 0.7);
+    --phoenix-text-primary: oklch(90% 0.002 286);
+    --phoenix-text-secondary: oklch(71% 0.005 286);
+    --phoenix-text-tertiary: oklch(55% 0.005 286);
+    --phoenix-text-disabled: oklch(45% 0.005 286);
+    --phoenix-text-inverse: oklch(20% 0.005 286);
+    --phoenix-text-link: oklch(75% 0.12 265);
+    --phoenix-text-link-hover: oklch(80% 0.1 265);
+    --phoenix-interactive-primary: oklch(70% 0.15 265);
+    --phoenix-interactive-primary-hover: oklch(75% 0.12 265);
+    --phoenix-interactive-primary-active: oklch(65% 0.18 265);
+    --phoenix-interactive-secondary: oklch(27% 0.005 286);
+    --phoenix-interactive-secondary-hover: oklch(32% 0.005 286);
+    --phoenix-interactive-secondary-active: oklch(37% 0.005 286);
+    --phoenix-interactive-ghost: transparent;
+    --phoenix-interactive-ghost-hover: oklch(27% 0.005 286);
+    --phoenix-interactive-ghost-active: oklch(32% 0.005 286);
+    --phoenix-interactive-danger: oklch(70% 0.15 20);
+    --phoenix-interactive-danger-hover: oklch(75% 0.12 20);
+    --phoenix-interactive-danger-active: oklch(65% 0.18 20);
+    --phoenix-border-default: oklch(27% 0.005 286);
+    --phoenix-border-hover: oklch(37% 0.005 286);
+    --phoenix-border-focus: oklch(70% 0.15 265);
+    --phoenix-border-danger: oklch(70% 0.15 20);
+    --phoenix-border-success: oklch(70% 0.18 150);
+    --phoenix-status-success: oklch(70% 0.18 150);
+    --phoenix-status-success-bg: oklch(25% 0.05 150);
+    --phoenix-status-warning: oklch(80% 0.12 85);
+    --phoenix-status-warning-bg: oklch(25% 0.05 85);
+    --phoenix-status-danger: oklch(70% 0.15 20);
+    --phoenix-status-danger-bg: oklch(25% 0.05 20);
+    --phoenix-status-info: oklch(75% 0.1 230);
+    --phoenix-status-info-bg: oklch(25% 0.05 230);
+    --phoenix-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+    --phoenix-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+    --phoenix-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --phoenix-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --phoenix-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+    --phoenix-shadow-ring: 0 0 0 3px rgb(147 197 253 / 0.5);
+  }
+}
+
+/* ============================================================
+   高对比度模式
+   ============================================================ */
+
+@media (forced-colors: active) {
+  :root {
+    --phoenix-border-default: ButtonBorder;
+    --phoenix-border-focus: Highlight;
+    --phoenix-interactive-primary: ButtonFace;
+    --phoenix-text-primary: ButtonText;
+  }
+}

@@ -1,0 +1,156 @@
+/**
+ * PHOENIX AIOS 徽章系统
+ *
+ * 使用方式：
+ *   <span class="badge badge-success">成功</span>
+ *   <span class="badge badge-primary badge-lg">大号</span>
+ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  line-height: 1.5;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* 颜色变体 */
+.badge-primary {
+  background: hsl(220, 30%, 90%);
+  color: hsl(220, 60%, 35%);
+}
+
+.badge-accent {
+  background: hsl(25, 75%, 90%);
+  color: hsl(25, 90%, 30%);
+}
+
+.badge-success {
+  background: hsl(150, 50%, 90%);
+  color: hsl(150, 80%, 25%);
+}
+
+.badge-warning {
+  background: hsl(40, 85%, 90%);
+  color: hsl(40, 95%, 30%);
+}
+
+.badge-error {
+  background: hsl(0, 75%, 90%);
+  color: hsl(0, 85%, 30%);
+}
+
+.badge-info {
+  background: hsl(210, 75%, 90%);
+  color: hsl(210, 85%, 30%);
+}
+
+.badge-neutral {
+  background: var(--surface-alt);
+  color: var(--text-secondary);
+}
+
+/* 暗色主题下的深色徽章 */
+[data-theme="dark"] .badge-primary {
+  background: hsl(220, 60%, 20%);
+  color: hsl(220, 45%, 70%);
+}
+
+[data-theme="dark"] .badge-accent {
+  background: hsl(25, 80%, 20%);
+  color: hsl(25, 85%, 70%);
+}
+
+[data-theme="dark"] .badge-success {
+  background: hsl(150, 60%, 15%);
+  color: hsl(150, 60%, 60%);
+}
+
+[data-theme="dark"] .badge-warning {
+  background: hsl(40, 80%, 15%);
+  color: hsl(40, 85%, 65%);
+}
+
+[data-theme="dark"] .badge-error {
+  background: hsl(0, 60%, 15%);
+  color: hsl(0, 70%, 65%);
+}
+
+[data-theme="dark"] .badge-info {
+  background: hsl(210, 60%, 15%);
+  color: hsl(210, 70%, 65%);
+}
+
+/* 尺寸变体 */
+.badge-sm {
+  padding: 0 0.375rem;
+  font-size: 0.625rem;
+}
+
+.badge-lg {
+  padding: 0.25rem 0.75rem;
+  font-size: var(--text-sm);
+}
+
+/* 带点徽章 */
+.badge-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* 可关闭徽章 */
+.badge-closable {
+  padding-right: 0.25rem;
+  cursor: pointer;
+}
+
+.badge-closable .badge-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 10px;
+  margin-left: 0.25rem;
+  transition: background 150ms;
+}
+
+.badge-closable .badge-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* 轮廓徽章 */
+.badge-outline {
+  background: transparent;
+  border: 1px solid currentColor;
+}
+
+.badge-outline.badge-primary {
+  color: var(--primary-500);
+  border-color: var(--primary-500);
+}
+
+.badge-outline.badge-accent {
+  color: var(--accent-500);
+  border-color: var(--accent-500);
+}
+
+.badge-outline.badge-success {
+  color: var(--success-500);
+  border-color: var(--success-500);
+}
+
+.badge-outline.badge-error {
+  color: var(--error-500);
+  border-color: var(--error-500);
+}

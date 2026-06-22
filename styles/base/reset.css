@@ -1,0 +1,140 @@
+/**
+ * PHOENIX AIOS 基础重置
+ *
+ * 现代 CSS Reset — 轻量级
+ * 配合 Tailwind 的 preflight 使用
+ */
+
+/* 盒模型 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 文档 */
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  tab-size: 4;
+  scroll-behavior: smooth;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 文档背景和文字 */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-chinese);
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* 媒体 */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 表单 */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* 链接 */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 列表 */
+ul,
+ol {
+  list-style: none;
+}
+
+/* 表格 */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 滚动条 (Webkit) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-600);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
+
+/* 滚动条 (Firefox) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-600) transparent;
+}
+
+/* 选中文字 */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: var(--text);
+}
+
+/* 焦点可见 */
+:focus-visible {
+  outline: 2px solid var(--interactive-focus);
+  outline-offset: 2px;
+}
+
+/* 焦点不可见 */
+:focus:not(:focus-visible) {
+  outline: none;
+}

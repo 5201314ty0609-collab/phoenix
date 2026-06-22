@@ -1,0 +1,177 @@
+/**
+ * PHOENIX AIOS 颜色令牌
+ *
+ * 三层结构：
+ * 1. 基础色板 (palette)  -- 不直接使用
+ * 2. 语义令牌 (semantic) -- 按用途命名
+ * 3. 组件令牌 (component)-- 特定组件
+ *
+ * 使用方式：
+ * - Tailwind: bg-surface, text-text, border-border
+ * - CSS:      var(--surface), var(--text), var(--border)
+ * - JS:       getComputedStyle(el).getPropertyValue('--surface')
+ */
+
+/* ═══════════════════════════════════════════════
+   基础色板 (Base Palette)
+   仅在语义令牌中引用，不在组件中直接使用
+   ═══════════════════════════════════════════════ */
+:root {
+  /* 主色色阶 */
+  --blue-50:  hsl(220, 30%, 95%);
+  --blue-100: hsl(220, 30%, 90%);
+  --blue-200: hsl(220, 35%, 85%);
+  --blue-300: hsl(220, 40%, 75%);
+  --blue-400: hsl(220, 45%, 65%);
+  --blue-500: hsl(220, 50%, 50%);
+  --blue-600: hsl(220, 60%, 35%);
+  --blue-700: hsl(220, 70%, 25%);
+  --blue-800: hsl(220, 80%, 15%);
+  --blue-900: hsl(220, 100%, 8%);
+  --blue-950: hsl(220, 100%, 4%);
+
+  /* 辅助色色阶 */
+  --orange-50:  hsl(25, 75%, 95%);
+  --orange-100: hsl(25, 75%, 90%);
+  --orange-200: hsl(25, 80%, 85%);
+  --orange-300: hsl(25, 85%, 75%);
+  --orange-400: hsl(25, 90%, 65%);
+  --orange-500: hsl(25, 95%, 55%);
+  --orange-600: hsl(25, 85%, 45%);
+  --orange-700: hsl(25, 90%, 35%);
+  --orange-800: hsl(25, 95%, 25%);
+  --orange-900: hsl(25, 100%, 15%);
+
+  /* 灰阶 */
+  --gray-50:  hsl(220, 1%, 95%);
+  --gray-100: hsl(220, 2%, 90%);
+  --gray-200: hsl(220, 2%, 80%);
+  --gray-300: hsl(220, 3%, 70%);
+  --gray-400: hsl(220, 3%, 60%);
+  --gray-500: hsl(220, 4%, 50%);
+  --gray-600: hsl(220, 5%, 40%);
+  --gray-700: hsl(220, 6%, 30%);
+  --gray-800: hsl(220, 8%, 20%);
+  --gray-900: hsl(220, 10%, 10%);
+  --gray-950: hsl(220, 12%, 5%);
+}
+
+/* ═══════════════════════════════════════════════
+   暗色主题 (Dark Theme) — 默认
+   ═══════════════════════════════════════════════ */
+:root,
+[data-theme="dark"] {
+  /* 表面层次 */
+  --bg:          var(--blue-900);
+  --bg-subtle:   var(--blue-950);
+  --surface:     var(--blue-800);
+  --surface-alt: var(--blue-700);
+  --surface-hover: hsl(220, 75%, 18%);
+  --surface-active: hsl(220, 70%, 22%);
+
+  /* 边框 */
+  --border:        var(--gray-700);
+  --border-subtle: hsl(220, 8%, 25%);
+  --border-strong: var(--gray-600);
+
+  /* 文字 */
+  --text:          var(--gray-100);
+  --text-secondary: var(--gray-300);
+  --text-dim:      var(--gray-400);
+  --text-muted:    var(--gray-500);
+  --text-inverse:  var(--gray-900);
+
+  /* 交互状态 */
+  --interactive-hover: rgba(255, 255, 255, 0.05);
+  --interactive-active: rgba(255, 255, 255, 0.1);
+  --interactive-focus:  rgba(59, 130, 246, 0.3);
+
+  /* 覆盖层 */
+  --overlay:       rgba(0, 0, 0, 0.6);
+  --overlay-heavy: rgba(0, 0, 0, 0.8);
+
+  /* 图表色 */
+  --chart-1: #f49e42;
+  --chart-2: #7aa2f7;
+  --chart-3: #4caf50;
+  --chart-4: #e05555;
+  --chart-5: #bb9af7;
+  --chart-6: #7dcfff;
+  --chart-7: #f0a040;
+  --chart-8: #9ece6a;
+
+  /* 网格线 */
+  --grid-line:        rgba(255, 255, 255, 0.06);
+  --grid-line-strong: rgba(255, 255, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════════════
+   亮色主题 (Light Theme)
+   ═══════════════════════════════════════════════ */
+[data-theme="light"] {
+  --bg:          var(--gray-50);
+  --bg-subtle:   #ffffff;
+  --surface:     #ffffff;
+  --surface-alt: var(--gray-100);
+  --surface-hover: var(--gray-200);
+  --surface-active: var(--gray-300);
+
+  --border:        var(--gray-200);
+  --border-subtle: var(--gray-100);
+  --border-strong: var(--gray-300);
+
+  --text:          var(--gray-900);
+  --text-secondary: var(--gray-700);
+  --text-dim:      var(--gray-600);
+  --text-muted:    var(--gray-500);
+  --text-inverse:  #ffffff;
+
+  --interactive-hover: rgba(0, 0, 0, 0.03);
+  --interactive-active: rgba(0, 0, 0, 0.06);
+  --interactive-focus:  rgba(59, 130, 246, 0.2);
+
+  --overlay:       rgba(0, 0, 0, 0.3);
+  --overlay-heavy: rgba(0, 0, 0, 0.5);
+
+  --chart-1: #d97706;
+  --chart-2: #2563eb;
+  --chart-3: #16a34a;
+  --chart-4: #dc2626;
+  --chart-5: #7c3aed;
+  --chart-6: #0891b2;
+  --chart-7: #ea580c;
+  --chart-8: #65a30d;
+
+  --grid-line:        rgba(0, 0, 0, 0.06);
+  --grid-line-strong: rgba(0, 0, 0, 0.1);
+
+  /* 亮色阴影更柔和 */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* ═══════════════════════════════════════════════
+   自动主题 (Auto Theme)
+   跟随系统偏好
+   ═══════════════════════════════════════════════ */
+@media (prefers-color-scheme: light) {
+  [data-theme="auto"] {
+    --bg:          var(--gray-50);
+    --bg-subtle:   #ffffff;
+    --surface:     #ffffff;
+    --surface-alt: var(--gray-100);
+    --surface-hover: var(--gray-200);
+    --surface-active: var(--gray-300);
+    --border:        var(--gray-200);
+    --border-subtle: var(--gray-100);
+    --border-strong: var(--gray-300);
+    --text:          var(--gray-900);
+    --text-secondary: var(--gray-700);
+    --text-dim:      var(--gray-600);
+    --text-muted:    var(--gray-500);
+    --text-inverse:  #ffffff;
+  }
+}
