@@ -24,3 +24,7 @@
 {"id": "evt-9b9ee7f16ffe", "timestamp": "2026-06-22T09:11:33.888380+00:00", "source": "phoenix", "type": "evolution.promote", "severity": "info", "payload": {"framework": "event-integration", "from": "observed", "to": "validated"}, "correlation_id": ""}
 {"id": "evt-cc65a3a2079e", "timestamp": "2026-06-22T09:11:36.643176+00:00", "source": "phoenix", "type": "session.heartbeat", "severity": "info", "payload": {"status": "alive"}, "correlation_id": ""}
 {"id": "evt-5d142e85a1e3", "timestamp": "2026-06-22T09:12:15.138138+00:00", "source": "verify-fix", "type": "sense.o2", "severity": "warn", "payload": {"value": 78}, "correlation_id": ""}
+{"id": "evt-e6c4e25702", "timestamp": "2026-06-22T11:10:23.787651+00:00", "source": "test", "type": "ctm.thinking.start", "severity": "info", "payload": {"stream_id": "test-1"}, "correlation_id": ""}
+{"id": "evt-66b828a307", "timestamp": "2026-06-22T11:14:21.928237+00:00", "source": "test", "type": "session.start", "severity": "info", "payload": {"key": "value"}, "correlation_id": ""}
+{"id": "evt-047dd817f2", "timestamp": "2026-06-22T11:14:21.928434+00:00", "source": "phoenix", "type": "heal.observe", "severity": "info", "payload": {"issue": "test"}, "correlation_id": ""}
+{"id": "evt-198668d4b4", "timestamp": "2026-06-22T11:15:19.682232+00:00", "source": "phoenix", "type": "test.verify", "severity": "info", "payload": {}, "correlation_id": ""}

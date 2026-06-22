@@ -51,6 +51,7 @@ class ChunkType(IntEnum):
     TOOL_RESULT = 5
     SUMMARY = 6
     INJECTED = 7
+    THINKING = 8          # CTM 思维节点
 
 
 class EvictionPriority(IntEnum):
@@ -226,6 +227,34 @@ class ContextMapper:
         return self.add(content, ChunkType.INJECTED, priority,
                         metadata={"source": source})
 
+    def add_thinking_node(self, content: str, stream_id: str = "",
+                          depth: int = 0, confidence: float = 0.5,
+                          thinking_state: str = "flowing",
+                          turn_id: str = "") -> Chunk:
+        """添加 CTM 思维节点到上下文
+
+        Args:
+            content: 思维内容
+            stream_id: CTM 思维流 ID
+            depth: 思维深度 (0=表层, >3=深层)
+            confidence: 置信度 (0-1)
+            thinking_state: 思维状态 (init/flowing/deepening/converging/completed)
+            turn_id: 关联的对话轮次
+        """
+        # 深层思维优先级更高（不容易被淘汰）
+        if depth >= 3:
+            priority = EvictionPriority.KEEP_HIGH
+        elif confidence >= 0.8:
+            priority = EvictionPriority.KEEP_RECENT
+        else:
+            priority = EvictionPriority.COMPRESS_FIRST
+
+        return self.add(content, ChunkType.THINKING, priority, turn_id,
+                        metadata={"stream_id": stream_id, "depth": depth,
+                                  "confidence": confidence,
+                                  "thinking_state": thinking_state,
+                                  "source": "ctm"})
+
     # ── 压缩策略 ──
 
     def compress(self, target_ratio: float = 0.5) -> tuple[int, int]:
@@ -282,6 +311,9 @@ class ContextMapper:
             for c in old:
                 if c.chunk_type in (ChunkType.USER, ChunkType.ASSISTANT):
                     parts.append(f"[{c.chunk_type.name}] {c.content[:80]}")
+                elif c.chunk_type == ChunkType.THINKING:
+                    depth = c.metadata.get("depth", 0)
+                    parts.append(f"[THINKING d={depth}] {c.content[:60]}")
             if parts:
                 summary = " | ".join(parts[-10:])
                 summary_chunk = Chunk(
@@ -319,6 +351,7 @@ class ContextMapper:
             ChunkType.TOOL_CALL: "assistant",
             ChunkType.SUMMARY: "system",
             ChunkType.INJECTED: "system",
+            ChunkType.THINKING: "assistant",
         }
         return [
             {"role": role_map.get(c.chunk_type, "system"), "content": c.content}

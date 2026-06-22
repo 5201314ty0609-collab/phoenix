@@ -28,6 +28,7 @@ import uuid
 PHOENIX_HOME = Path.home() / ".claude/phoenix"
 REFLECTIONS_FILE = PHOENIX_HOME / "reflections.jsonl"
 ACTIVE_TASKS_FILE = PHOENIX_HOME / "active-tasks.json"
+CTM_REFLECTIONS_FILE = PHOENIX_HOME / "ctm-reflections.jsonl"
 
 # ── 数据类 ───────────────────────────────────────────────────────────────
 
@@ -52,6 +53,26 @@ class TaskReflection:
     lessons: List[str] = field(default_factory=list)
     next_actions: List[str] = field(default_factory=list)
     metrics: Dict = field(default_factory=dict)
+
+
+@dataclass
+class CTMReflection:
+    """CTM 思维后反思记录"""
+    stream_id: str
+    query: str
+    started_at: str
+    finished_at: str
+    thinking_state: str       # completed/interrupted/diverging
+    nodes_count: int
+    max_depth: int
+    total_tokens: int
+    duration_seconds: float
+    branch_count: int
+    final_confidence: float
+    summary: str = ""
+    depth_analysis: Dict = field(default_factory=dict)
+    efficiency_score: float = 0.0
+    insights: List[str] = field(default_factory=list)
 
 
 # ── 持久化 ───────────────────────────────────────────────────────────────
@@ -226,6 +247,122 @@ def generate_reflection(task: TaskReflection) -> str:
     return "\n".join(lines)
 
 
+def reflect_on_thinking(stream_id: str = None) -> Optional[CTMReflection]:
+    """CTM 思维后反思 — 分析思维流质量和效率
+
+    Args:
+        stream_id: 指定思维流 ID，None 则反思最新完成的思维流
+
+    Returns:
+        CTMReflection 或 None
+    """
+    try:
+        import sys
+        ctm_dir = str(PHOENIX_HOME / "ctm")
+        if ctm_dir not in sys.path:
+            sys.path.insert(0, str(PHOENIX_HOME.parent))
+        from phoenix.ctm.ctm_core import get_ctm_core
+        ctm = get_ctm_core()
+
+        if stream_id:
+            state = ctm.get_thinking_state(stream_id)
+        else:
+            # 找最新完成的思维流
+            streams = ctm.get_all_streams()
+            completed = [s for s in streams if s["state"] == "completed"]
+            if not completed:
+                print("No completed thinking streams found.")
+                return None
+            state = completed[-1]
+            stream_id = state["stream_id"]
+
+        if not state:
+            print(f"Thinking stream not found: {stream_id}")
+            return None
+
+        # 分析思维效率
+        nodes_count = state.get("nodes_count", 0)
+        max_depth = state.get("max_depth", 0)
+        total_tokens = state.get("total_tokens", 0)
+        duration = state.get("duration_seconds", 0)
+        branch_count = state.get("branch_count", 0)
+
+        # 效率分数: 深度/节点比 × 置信度 × 时间效率
+        depth_ratio = max_depth / max(nodes_count, 1)
+        time_efficiency = min(1.0, 30.0 / max(duration, 1))  # 30s 内完成为高效
+        efficiency = depth_ratio * 0.5 + time_efficiency * 0.3 + (1.0 if nodes_count > 0 else 0) * 0.2
+
+        # 深度分析
+        depth_analysis = {
+            "shallow_nodes": sum(1 for _ in range(min(max_depth, 2))),
+            "deep_nodes": max(0, max_depth - 2),
+            "avg_depth": max_depth / max(nodes_count, 1),
+            "branch_ratio": branch_count / max(nodes_count, 1),
+        }
+
+        # 生成洞察
+        insights = []
+        if max_depth >= 4:
+            insights.append("Deep thinking achieved (depth >= 4)")
+        if branch_count > 2:
+            insights.append(f"Multiple thinking branches explored ({branch_count})")
+        if duration < 10:
+            insights.append("Fast convergence - under 10 seconds")
+        elif duration > 120:
+            insights.append("Extended thinking session - consider timeboxing")
+        if efficiency > 0.7:
+            insights.append("High efficiency thinking pattern")
+        elif efficiency < 0.3:
+            insights.append("Low efficiency - consider structured prompts")
+
+        now = datetime.now(timezone.utc).isoformat()
+        reflection = CTMReflection(
+            stream_id=stream_id,
+            query=state.get("query", ""),
+            started_at=now,
+            finished_at=now,
+            thinking_state=state.get("state", "unknown"),
+            nodes_count=nodes_count,
+            max_depth=max_depth,
+            total_tokens=total_tokens,
+            duration_seconds=duration,
+            branch_count=branch_count,
+            final_confidence=0.0,
+            depth_analysis=depth_analysis,
+            efficiency_score=round(efficiency, 3),
+            insights=insights,
+        )
+
+        # 保存到 CTM 反思日志
+        try:
+            with open(CTM_REFLECTIONS_FILE, "a", encoding="utf-8") as f:
+                f.write(json.dumps(asdict(reflection), ensure_ascii=False) + "\n")
+        except Exception:
+            pass
+
+        # 输出反思
+        print(f"\n{'=' * 60}")
+        print(f"CTM Thinking Reflection: {stream_id}")
+        print(f"{'=' * 60}")
+        print(f"Query: {reflection.query[:80]}")
+        print(f"State: {reflection.thinking_state}")
+        print(f"Nodes: {reflection.nodes_count} | Depth: {reflection.max_depth} | Branches: {reflection.branch_count}")
+        print(f"Tokens: {reflection.total_tokens} | Duration: {reflection.duration_seconds:.1f}s")
+        print(f"Efficiency: {reflection.efficiency_score:.3f}")
+        print()
+        if insights:
+            print("Insights:")
+            for insight in insights:
+                print(f"  - {insight}")
+        print(f"{'=' * 60}")
+
+        return reflection
+
+    except Exception as e:
+        print(f"CTM reflection failed: {e}")
+        return None
+
+
 def list_tasks(limit: int = 10):
     """列出最近任务"""
     if not REFLECTIONS_FILE.exists():
@@ -330,6 +467,10 @@ def main():
             print("Usage: reflection-engine.py reflect <task_id>")
             return
         reflect_on_task(sys.argv[2])
+
+    elif cmd == "reflect-thinking":
+        stream_id = sys.argv[2] if len(sys.argv) > 2 else None
+        reflect_on_thinking(stream_id)
 
     else:
         print(f"Unknown command: {cmd}")

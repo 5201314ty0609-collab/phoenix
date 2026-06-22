@@ -132,6 +132,27 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
   </div>
 </div>
 
+<!-- CTM Thinking Engine -->
+<div class="grid">
+  <div class="card">
+    <h3>CTM 思维引擎 / Thinking Engine <span class="badge" id="badge-ctm">idle</span></h3>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+      <div class="sense-item"><div class="icon" style="font-size:1.1rem">🧠</div><div class="name">活跃流 / Active</div><div class="val" id="ctm-active" style="color:var(--accent);font-size:1.1rem;font-weight:700">0</div></div>
+      <div class="sense-item"><div class="icon" style="font-size:1.1rem">📊</div><div class="name">总创建 / Created</div><div class="val" id="ctm-total" style="color:var(--accent2);font-size:1.1rem;font-weight:700">0</div></div>
+      <div class="sense-item"><div class="icon" style="font-size:1.1rem">🔗</div><div class="name">相位一致 / Coherence</div><div class="val" id="ctm-coherence" style="color:var(--green);font-size:1.1rem;font-weight:700">1.00</div></div>
+      <div class="sense-item"><div class="icon" style="font-size:1.1rem">⚡</div><div class="name">效率 / Efficiency</div><div class="val" id="ctm-efficiency" style="color:var(--purple);font-size:1.1rem;font-weight:700">-</div></div>
+    </div>
+    <div class="tbl" style="max-height:140px">
+      <table><thead><tr><th>流 ID</th><th>状态</th><th>深度</th><th>节点</th><th>Token</th></tr></thead>
+      <tbody id="ctm-streams-body"></tbody></table>
+    </div>
+  </div>
+  <div class="card">
+    <h3>CTM 思维深度分布 / Depth Distribution</h3>
+    <div class="chart-wrap"><canvas id="ctmDepthChart"></canvas></div>
+  </div>
+</div>
+
 <!-- Timeline -->
 <div class="card" style="margin-bottom:14px">
   <h3>最近活动 / Recent Activity <span class="badge" id="badge-timeline">7 条 / events</span></h3>
@@ -149,10 +170,11 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 // FALLBACK — only used when server is unreachable
 // ═══════════════════════════════════════════════
 const FALLBACK = {
-  modules:27, rules:15, senses:7, rule_health:93, cost_health:72, cost_grade:'C',
+  modules:27, rules:15, senses:8, rule_health:93, cost_health:72, cost_grade:'C',
   toolCalls:2140, blocked:33,
   frameworks_active:26, hooks:9,
   wasteBreakdown:{ghost_skills:62,repeated_context:0,tool_imbalance:0,blocked_attempts:33,other:14},
+  ctm:{active:0,total_created:0,coherence:1.0,efficiency:0,streams:[],depth_dist:{d0:0,d1:0,d2:0,d3:0,d4p:0}},
   senseStates:[
     {id:'o2',name:'O2 生命力/Vitality',icon:'🫁',val:12,status:'healthy',color:'green'},
     {id:'nociception',name:'痛觉/Nociception',icon:'💢',val:8,status:'healthy',color:'green'},
@@ -201,12 +223,13 @@ async function fetchLive(){
   if(!serverConnected) return null;
   try{
     const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),5000);
-    const[stats,status,timeline]=await Promise.all([
+    const[stats,status,timeline,ctm]=await Promise.all([
       fetch(SERVER+'/api/stats',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null),
       fetch(SERVER+'/api/status',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null),
-      fetch(SERVER+'/api/timeline?limit=20',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null)
+      fetch(SERVER+'/api/timeline?limit=20',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null),
+      fetch(SERVER+'/api/ctm',{signal:ctrl}).then(r=>r.ok?r.json():null).catch(()=>null)
     ]);
-    return {stats,status,timeline};
+    return {stats,status,timeline,ctm};
   }catch(e){}
   return null;
 }
@@ -219,6 +242,12 @@ function applyLiveData(live){
   const s = live.stats;
   const st = live.status;
   const tl = live.timeline;
+  const ctmResp = live.ctm;
+
+  // CTM data from dedicated endpoint
+  if(ctmResp){
+    data.ctm=ctmResp;
+  }
 
   // KPIs from /api/stats
   if(s){
@@ -239,6 +268,11 @@ function applyLiveData(live){
     if(s.waste && Object.keys(s.waste).length > 0){
       data.wasteBreakdown = s.waste;
     }
+  }
+
+  // CTM from /api/status
+  if(st?.ctm){
+    data.ctm=st.ctm;
   }
 
   // Senses from /api/status
@@ -286,6 +320,10 @@ function buildAllCharts(){
   // Waste Breakdown
   const waste=data.wasteBreakdown;
   charts.waste=new Chart(document.getElementById('wasteChart'),{type:'doughnut',data:{labels:Object.keys(waste),datasets:[{data:Object.values(waste),backgroundColor:['#e05555','#f0a040','#7aa2f7','#bb9af7','#565f89'],borderWidth:0}]},options:{...opts,plugins:{legend:{position:'right',labels:{color:'#8a8580',font:{size:10},padding:12}}}}});
+
+  // CTM Depth Distribution
+  const ctmDist=data.ctm.depth_dist||{d0:0,d1:0,d2:0,d3:0,d4p:0};
+  charts.ctmDepth=new Chart(document.getElementById('ctmDepthChart'),{type:'bar',data:{labels:['Depth 0','Depth 1','Depth 2','Depth 3','Depth 4+'],datasets:[{data:[ctmDist.d0,ctmDist.d1,ctmDist.d2,ctmDist.d3,ctmDist.d4p],backgroundColor:['#7aa2f7','#4caf50','#f49e42','#bb9af7','#e05555'],borderRadius:4}]},options:{...opts,scales:{y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#6b6560',font:{size:10}}},x:{ticks:{color:'#6b6560',font:{size:10}}}}}});
 }
 
 // ═══════════════════════════════════════════════
@@ -305,6 +343,28 @@ function buildModules(){
 function buildTimeline(){
   document.getElementById('timeline-body').innerHTML=data.timeline.map(t=>`<tr><td style="font-family:var(--mono);font-size:0.7rem;color:var(--text-dim)">${t.time.slice(-8)}</td><td style="font-size:0.68rem">${t.type}</td><td>${t.desc}</td></tr>`).join('');
   document.getElementById('badge-timeline').textContent=data.timeline.length+' events';
+}
+function buildCTM(){
+  const ctm=data.ctm;
+  document.getElementById('ctm-active').textContent=ctm.active;
+  document.getElementById('ctm-total').textContent=ctm.total_created;
+  document.getElementById('ctm-coherence').textContent=ctm.coherence.toFixed(2);
+  document.getElementById('ctm-efficiency').textContent=ctm.efficiency>0?ctm.efficiency.toFixed(3):'-';
+  document.getElementById('badge-ctm').textContent=ctm.active>0?ctm.active+' active':'idle';
+
+  // Coherence color
+  const cohEl=document.getElementById('ctm-coherence');
+  cohEl.style.color=ctm.coherence>=0.7?'var(--green)':ctm.coherence>=0.3?'var(--yellow)':'var(--red)';
+
+  // Streams table
+  const tbody=document.getElementById('ctm-streams-body');
+  if(ctm.streams&&ctm.streams.length>0){
+    tbody.innerHTML=ctm.streams.slice(-5).map(s=>
+      `<tr><td style="font-family:var(--mono);font-size:0.68rem">${(s.stream_id||'').slice(-8)}</td><td style="font-size:0.68rem">${s.state||'?'}</td><td>${s.max_depth||0}</td><td>${s.nodes_count||0}</td><td>${s.total_tokens||0}</td></tr>`
+    ).join('');
+  }else{
+    tbody.innerHTML='<tr><td colspan="5" style="color:var(--text-dim);text-align:center;font-size:0.72rem">无思维流 / No streams</td></tr>';
+  }
 }
 function buildKPIs(){
   document.getElementById('kpi-modules').textContent=data.modules;
@@ -352,7 +412,7 @@ async function init(){
     }
   }catch(e){}
   // Render with whatever data we have
-  buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildAllCharts();
+  buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildCTM(); buildAllCharts();
   if(serverConnected) toast('已连接 PHOENIX 服务器 / Connected','ok');
   refreshTimer=setInterval(refresh, serverConnected?10000:30000);
 }
@@ -383,7 +443,7 @@ async function refresh(){
       }
     }catch(e2){}
     // Update DOM
-    buildKPIs(); buildModules(); buildTimeline(); buildAllCharts();
+    buildKPIs(); buildModules(); buildTimeline(); buildCTM(); buildAllCharts();
     setConnStatus('ok','实时 / live @ :8765');
     document.getElementById('conn-time').textContent=new Date().toLocaleTimeString();
   }catch(e){

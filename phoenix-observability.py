@@ -23,13 +23,16 @@ Sense → Trace Event Mapping:
   Vestibular (Balance)→ tool_diversity
   Echo (Repetition)   → pattern_recurrence
   Drift (Focus)       → focus_deviation
+  CTM (Thinking)      → thinking_coherence
 """
 
 from __future__ import annotations
 
+import atexit
 import json
 import sqlite3
 import sys
+import threading
 import uuid
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -40,6 +43,55 @@ PHOENIX_HOME = Path.home() / ".claude/phoenix"
 SENSES_DIR = PHOENIX_HOME / "senses"
 DB_PATH = PHOENIX_HOME / "observability.db"
 TRACES_DIR = PHOENIX_HOME / "traces"
+
+# ── Connection Pool ──────────────────────────────────────────────────────────
+# Reuses a single SQLite connection per thread instead of open/init/close on
+# every call.  SQLite connections are not thread-safe, so we use
+# threading.local() to give each thread its own connection.  Schema
+# initialization runs exactly once per connection via the _schema_initialized
+# flag.
+
+_db_local = threading.local()
+
+
+def _get_db() -> sqlite3.Connection:
+    """Return a per-thread SQLite connection with WAL mode and schema ready.
+
+    The connection is cached in thread-local storage and reused across calls
+    in the same thread.  Schema is initialized only on the first call per
+    connection.
+    """
+    conn = getattr(_db_local, "connection", None)
+    needs_init = not getattr(_db_local, "schema_initialized", False)
+
+    if conn is None:
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        conn = sqlite3.connect(str(DB_PATH))
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA foreign_keys=ON")
+        _db_local.connection = conn
+
+    if needs_init:
+        _init_schema(conn)
+        _db_local.schema_initialized = True
+
+    return conn
+
+
+def _close_db() -> None:
+    """Close the per-thread connection (called at process exit)."""
+    conn = getattr(_db_local, "connection", None)
+    if conn is not None:
+        try:
+            conn.close()
+        except Exception:
+            pass
+        _db_local.connection = None
+        _db_local.schema_initialized = False
+
+
+atexit.register(_close_db)
 
 # ── 7-Sense Definitions ──────────────────────────────────────────────────────
 
@@ -107,6 +159,15 @@ SENSE_META = {
         "critical_threshold": 30,
         "lower_is_better": True,
     },
+    "ctm": {
+        "name": "CTM (Thinking)",
+        "trace_event": "thinking_coherence",
+        "description": "CTM thinking stream coherence and health",
+        "unit": "coherence_ratio",
+        "warning_threshold": 0.3,
+        "critical_threshold": 0.1,
+        "lower_is_better": False,  # Higher coherence is better
+    },
 }
 
 
@@ -134,7 +195,7 @@ class SessionScore:
         values = []
         thresholds_warning = []
         thresholds_critical = []
-        for sid in ["o2", "nociception", "chronos", "spatial", "vestibular", "echo", "drift"]:
+        for sid in ["o2", "nociception", "chronos", "spatial", "vestibular", "echo", "drift", "ctm"]:
             meta = SENSE_META[sid]
             labels.append(meta["name"])
             if sid in self.senses:
@@ -243,8 +304,63 @@ def ingest_sense_file(filepath: str, session_id: Optional[str] = None) -> Sessio
     conn.commit()
 
     score = SenseScore(sense_id=sense_id, value=value, status=status, raw_metrics=metrics)
-    conn.close()
     return SessionScore(session_id=session_id, timestamp=now, senses={sense_id: score})
+
+
+def ingest_ctm_state(session_id: Optional[str] = None) -> SessionScore:
+    """Ingest CTM state directly from the CTM core engine."""
+    if session_id is None:
+        session_id = f"sess-{datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')}"
+
+    try:
+        import sys
+        ctm_dir = str(PHOENIX_HOME / "ctm")
+        if ctm_dir not in sys.path:
+            sys.path.insert(0, str(PHOENIX_HOME.parent))
+        from phoenix.ctm.ctm_core import get_ctm_core
+        ctm = get_ctm_core()
+        state = ctm.get_ctm_state()
+
+        # Compute coherence as primary metric (0-1, higher is better)
+        coherence = state.current_coherence
+        metrics = {
+            "coherence": coherence,
+            "active_streams": state.active_streams,
+            "total_streams": state.total_streams_created,
+            "compute_stats": state.compute_stats,
+            "oscillator_stats": state.oscillator_stats,
+        }
+    except Exception:
+        # Fallback if CTM not available
+        coherence = 1.0
+        metrics = {"coherence": coherence, "active_streams": 0, "total_streams": 0}
+
+    meta = SENSE_META["ctm"]
+    status = _compute_status("ctm", coherence)
+
+    conn = _get_db()
+    now = datetime.now(timezone.utc).isoformat()
+
+    conn.execute(
+        "INSERT OR REPLACE INTO sessions(session_id, timestamp) VALUES (?, ?)",
+        (session_id, now),
+    )
+    conn.execute(
+        """INSERT INTO sense_snapshots(session_id, sense_id, value, status, raw_metrics, captured_at)
+           VALUES (?, ?, ?, ?, ?, ?)""",
+        (session_id, "ctm", coherence, status, json.dumps(metrics), now),
+    )
+    level = "WARNING" if status == "warning" else "ERROR" if status == "critical" else "DEFAULT"
+    conn.execute(
+        """INSERT INTO trace_events(session_id, trace_event, level, metadata, start_time)
+           VALUES (?, ?, ?, ?, ?)""",
+        (session_id, meta["trace_event"], level,
+         json.dumps({"value": coherence, "status": status, "active_streams": metrics.get("active_streams", 0)}), now),
+    )
+    conn.commit()
+
+    score = SenseScore(sense_id="ctm", value=coherence, status=status, raw_metrics=metrics)
+    return SessionScore(session_id=session_id, timestamp=now, senses={"ctm": score})
 
 
 def ingest_all_senses(session_id: Optional[str] = None) -> SessionScore:
@@ -254,16 +370,23 @@ def ingest_all_senses(session_id: Optional[str] = None) -> SessionScore:
 
     scores: Dict[str, SenseScore] = {}
     for sense_id in SENSE_META:
-        sense_file = SENSES_DIR / f"{sense_id}.json"
-        if sense_file.exists():
-            result = ingest_sense_file(str(sense_file), session_id)
-            scores.update(result.senses)
+        if sense_id == "ctm":
+            # CTM pulls from engine directly
+            try:
+                result = ingest_ctm_state(session_id)
+                scores.update(result.senses)
+            except Exception:
+                pass
+        else:
+            sense_file = SENSES_DIR / f"{sense_id}.json"
+            if sense_file.exists():
+                result = ingest_sense_file(str(sense_file), session_id)
+                scores.update(result.senses)
 
     overall = _compute_overall(scores)
     conn = _get_db()
     conn.execute("UPDATE sessions SET overall_health = ? WHERE session_id = ?", (overall, session_id))
     conn.commit()
-    conn.close()
 
     return SessionScore(
         session_id=session_id,
@@ -292,32 +415,48 @@ def _extract_value(sense_id: str, data: Dict) -> float:
         return float(metrics.get("repeated_signatures", 0))
     elif sense_id == "drift":
         return float(metrics.get("deviation_percent", 0))
+    elif sense_id == "ctm":
+        return float(metrics.get("coherence", 0))
     return 0.0
 
 
 def _compute_status(sense_id: str, value: float) -> str:
     """Determine status from value against thresholds."""
     meta = SENSE_META[sense_id]
-    if value >= meta["critical_threshold"]:
-        return "critical"
-    elif value >= meta["warning_threshold"]:
-        return "warning"
-    return "normal"
+    if meta.get("lower_is_better", True):
+        # Normal: higher value = worse (e.g. error count, pressure)
+        if value >= meta["critical_threshold"]:
+            return "critical"
+        elif value >= meta["warning_threshold"]:
+            return "warning"
+        return "normal"
+    else:
+        # Reversed: lower value = worse (e.g. coherence, health)
+        if value <= meta["critical_threshold"]:
+            return "critical"
+        elif value <= meta["warning_threshold"]:
+            return "warning"
+        return "normal"
 
 
 def _compute_overall(scores: Dict[str, SenseScore]) -> float:
-    """Compute overall session health from 7 sense scores (0-100)."""
+    """Compute overall session health from sense scores (0-100)."""
     if not scores:
         return 100.0
     penalties = 0.0
     for sid, score in scores.items():
         meta = SENSE_META[sid]
-        ratio = score.value / meta["critical_threshold"] if meta["critical_threshold"] > 0 else 0
-        # Warning zone: 0.3 penalty max, Critical zone: 0.6 penalty max
+        if meta.get("lower_is_better", True):
+            # Normal: higher = worse (ratio against critical)
+            ratio = score.value / meta["critical_threshold"] if meta["critical_threshold"] > 0 else 0
+        else:
+            # Reversed (CTM): lower = worse (inverse ratio)
+            ratio = (1.0 - score.value) / (1.0 - meta["critical_threshold"]) if meta["critical_threshold"] < 1.0 else 0
+        # Warning zone: 0.4 penalty, Critical zone: 0.8 penalty
         if score.status == "critical":
-            penalties += min(ratio, 1.0) * (100 / len(SENSE_META)) * 0.8
+            penalties += min(max(ratio, 0), 1.0) * (100 / len(SENSE_META)) * 0.8
         elif score.status == "warning":
-            penalties += min(ratio, 1.0) * (100 / len(SENSE_META)) * 0.4
+            penalties += min(max(ratio, 0), 1.0) * (100 / len(SENSE_META)) * 0.4
     return max(0.0, 100.0 - penalties)
 
 
@@ -329,7 +468,6 @@ def generate_trace(session_id: str) -> Dict:
 
     session = conn.execute("SELECT * FROM sessions WHERE session_id = ?", (session_id,)).fetchone()
     if not session:
-        conn.close()
         raise ValueError(f"Session not found: {session_id}")
 
     snapshots = conn.execute(
@@ -341,7 +479,6 @@ def generate_trace(session_id: str) -> Dict:
         "SELECT * FROM trace_events WHERE session_id = ? ORDER BY start_time",
         (session_id,),
     ).fetchall()
-    conn.close()
 
     first_ts = snapshots[0]["captured_at"] if snapshots else session["timestamp"]
     last_ts = snapshots[-1]["captured_at"] if snapshots else session["timestamp"]
@@ -424,7 +561,6 @@ def score_command(session_id: str) -> Dict:
     snapshots = conn.execute(
         "SELECT * FROM sense_snapshots WHERE session_id = ?", (session_id,)
     ).fetchall()
-    conn.close()
 
     senses = {}
     for snap in snapshots:
@@ -452,14 +588,12 @@ def dashboard_command() -> str:
     ).fetchone()
 
     if not latest:
-        conn.close()
         return "No session data found. Run 'ingest' first."
 
     snapshots = conn.execute(
         "SELECT sense_id, value, status FROM sense_snapshots WHERE session_id = ?",
         (latest["session_id"],),
     ).fetchall()
-    conn.close()
 
     scores = {s["sense_id"]: SenseScore(sense_id=s["sense_id"], value=s["value"], status=s["status"])
               for s in snapshots}
@@ -483,7 +617,7 @@ def dashboard_command() -> str:
     ]
 
     status_icons = {"normal": "O", "warning": "!", "critical": "X", "unknown": "?"}
-    for sid in ["o2", "nociception", "chronos", "spatial", "vestibular", "echo", "drift"]:
+    for sid in ["o2", "nociception", "chronos", "spatial", "vestibular", "echo", "drift", "ctm"]:
         meta = SENSE_META[sid]
         score = scores.get(sid)
         if score:
@@ -508,7 +642,6 @@ def export_command(output_format: str = "json") -> str:
     """Export all traces to files."""
     conn = _get_db()
     sessions = conn.execute("SELECT session_id FROM sessions ORDER BY timestamp DESC").fetchall()
-    conn.close()
 
     TRACES_DIR.mkdir(parents=True, exist_ok=True)
     exported = []
@@ -564,6 +697,11 @@ def main():
                 result = ingest_sense_file(target, sid)
                 print(f"Ingested {target} → session {result.session_id}")
 
+    elif cmd == "ingest-ctm":
+        result = ingest_ctm_state()
+        print(f"Ingested CTM state → session {result.session_id}")
+        print(f"Coherence: {result.senses['ctm'].value:.4f} ({result.senses['ctm'].status})")
+
     elif cmd == "score":
         if len(sys.argv) < 3:
             print("Usage: phoenix-observability.py score <session-id>")
@@ -583,12 +721,11 @@ def main():
         session_count = conn.execute("SELECT COUNT(*) FROM sessions").fetchone()[0]
         event_count = conn.execute("SELECT COUNT(*) FROM trace_events").fetchone()[0]
         snapshot_count = conn.execute("SELECT COUNT(*) FROM sense_snapshots").fetchone()[0]
-        conn.close()
         print(f"Sessions: {session_count}  |  Snapshots: {snapshot_count}  |  Trace Events: {event_count}")
 
     else:
         print(f"Unknown command: {cmd}")
-        print("Available: trace, dashboard, ingest, score, export, stats")
+        print("Available: trace, dashboard, ingest, ingest-ctm, score, export, stats")
         sys.exit(1)
 
 

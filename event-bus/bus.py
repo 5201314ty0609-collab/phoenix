@@ -13,12 +13,14 @@ Usage:
   bus.py bridge --hermes|--mundo    Run bridge adapter
 """
 
+from datetime import datetime, timezone
 from pathlib import Path
 import hashlib
 import json
 import os
 import re
 import sys
+import threading
 import time
 
 # ── Paths ────────────────────────────────────────────────────────────────
@@ -27,6 +29,79 @@ EVENTS_FILE = BUS_DIR / "events.jsonl"
 SUBSCRIBERS_FILE = BUS_DIR / "subscribers.json"
 BRIDGES_DIR = BUS_DIR / "bridges"
 STATE_FILE = BUS_DIR / "bus-state.json"
+
+# ── Precompiled Regex Cache ──────────────────────────────────────────────
+# Cache compiled regex patterns to avoid recompilation on every match call.
+# Key: glob pattern string (e.g. "heal.*"), Value: compiled re.Pattern
+_regex_cache: dict[str, re.Pattern] = {}
+_regex_cache_lock = threading.Lock()
+
+
+def _get_compiled_regex(glob_pattern: str) -> re.Pattern:
+    """Return a precompiled regex for a glob-style pattern. Thread-safe cache."""
+    if glob_pattern not in _regex_cache:
+        with _regex_cache_lock:
+            # Double-check after acquiring lock
+            if glob_pattern not in _regex_cache:
+                regex_str = glob_pattern.replace("*", ".*")
+                _regex_cache[glob_pattern] = re.compile(regex_str)
+    return _regex_cache[glob_pattern]
+
+
+# ── Buffered Writer ──────────────────────────────────────────────────────
+# Batches JSONL writes to reduce open/write/close syscall overhead.
+# Flushes automatically when buffer reaches capacity or after a time interval.
+
+
+class BufferedWriter:
+    """Thread-safe buffered writer for append-only JSONL files.
+
+    Reduces I/O overhead by batching multiple writes into a single
+    file open/write/close cycle. Flushes when buffer is full (capacity)
+    or after a time interval (flush_interval_s). Also supports manual
+    flush and graceful shutdown via atexit.
+    """
+
+    def __init__(self, filepath: Path, capacity: int = 64,
+                 flush_interval_s: float = 2.0):
+        self._filepath = filepath
+        self._capacity = capacity
+        self._flush_interval_s = flush_interval_s
+        self._buffer: list[str] = []
+        self._lock = threading.Lock()
+        self._last_flush = time.monotonic()
+
+        # Register atexit to flush remaining buffer on process exit
+        import atexit
+        atexit.register(self.flush)
+
+    def write(self, line: str) -> None:
+        """Append a line to the buffer. Auto-flushes when full."""
+        with self._lock:
+            self._buffer.append(line)
+            if len(self._buffer) >= self._capacity:
+                self._flush_locked()
+            elif time.monotonic() - self._last_flush >= self._flush_interval_s:
+                self._flush_locked()
+
+    def flush(self) -> None:
+        """Flush all buffered lines to disk. Safe to call from any thread."""
+        with self._lock:
+            self._flush_locked()
+
+    def _flush_locked(self) -> None:
+        """Internal flush. Caller must hold self._lock."""
+        if not self._buffer:
+            return
+        self._filepath.parent.mkdir(parents=True, exist_ok=True)
+        with open(self._filepath, "a") as f:
+            f.write("".join(self._buffer))
+        self._buffer.clear()
+        self._last_flush = time.monotonic()
+
+
+# Module-level buffered writer instance (shared across EventBus instances)
+_event_writer = BufferedWriter(EVENTS_FILE, capacity=64, flush_interval_s=2.0)
 
 # ── Event Types ──────────────────────────────────────────────────────────
 # Modeled after MUNDO v2.0.9 Event Bus (25 types) + PHOENIX-specific
@@ -70,6 +145,12 @@ EVENT_TYPES = {
     "evolution.promote":    {"severity": "info",    "desc": "Framework promoted"},
     "evolution.demote":     {"severity": "warn",    "desc": "Framework demoted"},
 
+    # CTM (Continuous Thought Machine)
+    "ctm.thinking.start":    {"severity": "info",    "desc": "Thinking stream started"},
+    "ctm.thinking.advance":  {"severity": "info",    "desc": "Thinking stream advanced"},
+    "ctm.thinking.complete": {"severity": "info",    "desc": "Thinking stream completed"},
+    "ctm.thinking.interrupt":{"severity": "warn",    "desc": "Thinking stream interrupted"},
+
     # System
     "system.startup":       {"severity": "info",    "desc": "PHOENIX startup"},
     "system.shutdown":      {"severity": "info",    "desc": "PHOENIX shutdown"},
@@ -110,8 +191,7 @@ class EventBus:
             "correlation_id": correlation_id or "",
         }
 
-        with open(EVENTS_FILE, "a") as f:
-            f.write(json.dumps(event, ensure_ascii=False) + "\n")
+        _event_writer.write(json.dumps(event, ensure_ascii=False) + "\n")
 
         # Notify matching subscribers
         self._notify(event)
@@ -127,7 +207,10 @@ class EventBus:
                 self._deliver(sub, event)
 
     def _match(self, event, pattern):
-        """Pattern matching: source:phoenix type:heal.* severity:warn"""
+        """Pattern matching: source:phoenix type:heal.* severity:warn
+
+        Uses precompiled regex from module-level cache for glob patterns.
+        """
         if not pattern:
             return True
         conditions = pattern.split()
@@ -137,8 +220,9 @@ class EventBus:
             field, value = cond.split(":", 1)
             evt_value = event.get(field, "")
             if field == "type":
-                # Support glob patterns: heal.* matches heal.observe
-                if not re.match(value.replace("*", ".*"), evt_value):
+                # Use precompiled regex from cache (avoids recompilation)
+                compiled = _get_compiled_regex(value)
+                if not compiled.match(evt_value):
                     return False
             elif evt_value != value:
                 return False
@@ -177,9 +261,15 @@ class EventBus:
 
     def tail(self, source: str = None, event_type: str = None,
              since: str = None, limit: int = 50, follow: bool = False):
-        """Read events from the bus."""
+        """Read events from the bus. Flushes buffered writes first."""
+        # Ensure all buffered events are on disk before reading
+        _event_writer.flush()
+
         if not EVENTS_FILE.exists():
             return []
+
+        # Precompile the type filter regex once if provided
+        type_regex = _get_compiled_regex(event_type) if event_type else None
 
         events = []
         with open(EVENTS_FILE) as f:
@@ -190,9 +280,7 @@ class EventBus:
                     evt = json.loads(line)
                     if source and evt["source"] != source:
                         continue
-                    if event_type and not re.match(
-                        event_type.replace("*", ".*"), evt["type"]
-                    ):
+                    if type_regex and not type_regex.match(evt["type"]):
                         continue
                     if since and evt["timestamp"] < since:
                         continue
@@ -203,7 +291,8 @@ class EventBus:
         return events[-limit:]
 
     def stats(self):
-        """Compute event statistics."""
+        """Compute event statistics. Flushes buffered writes first."""
+        _event_writer.flush()
         if not EVENTS_FILE.exists():
             return {"total": 0, "by_source": {}, "by_type": {}, "by_severity": {}}
 
