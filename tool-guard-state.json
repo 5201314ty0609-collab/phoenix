@@ -5,62 +5,6 @@
   "last_idempotent_results": {},
   "recent_calls": [
     {
-      "tool": "Edit",
-      "args_hash": "bf1e292e1b044805",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-22T11:26:08.270305+00:00"
-    },
-    {
-      "tool": "Read",
-      "args_hash": "1b67c36404f26177",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-22T11:26:09.212527+00:00"
-    },
-    {
-      "tool": "Read",
-      "args_hash": "50fcda7d2b5db7a5",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-22T11:26:11.364875+00:00"
-    },
-    {
-      "tool": "Read",
-      "args_hash": "d2cd475f5f8cc541",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-22T11:26:16.330402+00:00"
-    },
-    {
-      "tool": "Edit",
-      "args_hash": "d6d02cf2aed923f0",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-22T11:26:17.262929+00:00"
-    },
-    {
-      "tool": "Edit",
-      "args_hash": "3d1edb8c97c2ec24",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-22T11:26:21.426615+00:00"
-    },
-    {
-      "tool": "Bash",
-      "args_hash": "cc82b7e0213ce9a7",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-22T11:26:22.676149+00:00"
-    },
-    {
-      "tool": "Bash",
-      "args_hash": "359292dd1c7b936c",
-      "is_error": false,
-      "decision": "allow",
-      "timestamp": "2026-06-22T11:26:25.020252+00:00"
-    },
-    {
       "tool": "Read",
       "args_hash": "ca90c8ac676b104b",
       "is_error": false,
@@ -353,12 +297,68 @@
       "is_error": false,
       "decision": "allow",
       "timestamp": "2026-06-22T11:30:39.820166+00:00"
+    },
+    {
+      "tool": "Bash",
+      "args_hash": "c1ae1da6623b147f",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-22T11:32:20.149948+00:00"
+    },
+    {
+      "tool": "Bash",
+      "args_hash": "0411eadb4c1033d8",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-22T11:33:17.568037+00:00"
+    },
+    {
+      "tool": "Bash",
+      "args_hash": "77e0b2529e69a75d",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-22T11:48:04.385308+00:00"
+    },
+    {
+      "tool": "WebSearch",
+      "args_hash": "570bd8d13feb6085",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-22T11:48:19.074508+00:00"
+    },
+    {
+      "tool": "WebSearch",
+      "args_hash": "5836734611595aa6",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-22T11:48:21.389892+00:00"
+    },
+    {
+      "tool": "Write",
+      "args_hash": "a4dc0d20e3812f7a",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-22T11:50:17.765296+00:00"
+    },
+    {
+      "tool": "Edit",
+      "args_hash": "d224f9617616c4e1",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-22T11:50:42.757149+00:00"
+    },
+    {
+      "tool": "Bash",
+      "args_hash": "36411da1145f8814",
+      "is_error": false,
+      "decision": "allow",
+      "timestamp": "2026-06-22T11:50:48.333501+00:00"
     }
   ],
-  "total_observed": 2924,
+  "total_observed": 2932,
   "total_warned": 36,
   "total_blocked": 27,
   "total_halted": 6,
   "created_at": "2026-06-12T02:47:19.735292+00:00",
-  "updated_at": "2026-06-22T11:30:39.820293+00:00"
+  "updated_at": "2026-06-22T11:50:48.333610+00:00"
 }
