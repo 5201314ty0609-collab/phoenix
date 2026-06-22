@@ -163,6 +163,15 @@ canvas { display:block; position:absolute; top:0; left:0; touch-action:none; }
 .tooltip .tt-stat-lbl { color:var(--text-dim); }
 .tooltip .tt-stat-val { color:var(--accent); font-weight:600; }
 
+/* CTM 指标动画 */
+@keyframes ctmPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.stats-bar .stat .stat-val[style*="00e5e5"] {
+  animation: ctmPulse 3s ease-in-out infinite;
+}
+
 /* 操作提示 */
 .controls-hint {
   position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:100;
@@ -194,7 +203,7 @@ canvas { display:block; position:absolute; top:0; left:0; touch-action:none; }
 <!-- 加载画面 -->
 <div class="loading-overlay" id="loading">
   <div class="loading-spinner"></div>
-  <div class="loading-text">Initializing Skill Network...</div>
+  <div class="loading-text">Initializing CTM Skill Network...</div>
 </div>
 
 <!-- Three.js 画布 -->
@@ -270,6 +279,8 @@ canvas { display:block; position:absolute; top:0; left:0; touch-action:none; }
   <div class="stat"><div class="stat-val" id="s-edges">0</div><div class="stat-lbl">连接</div></div>
   <div class="stat"><div class="stat-val" id="s-particles">0</div><div class="stat-lbl">粒子</div></div>
   <div class="stat"><div class="stat-val" id="s-fps">0</div><div class="stat-lbl">FPS</div></div>
+  <div class="stat" style="border-left:1px solid var(--border);padding-left:16px"><div class="stat-val" style="color:#00e5e5" id="s-ctm-streams">3</div><div class="stat-lbl">思维流</div></div>
+  <div class="stat"><div class="stat-val" style="color:#00e5e5" id="s-ctm-coherence">0.87</div><div class="stat-lbl">同步率</div></div>
 </div>
 
 <!-- 工具提示 -->
@@ -319,6 +330,7 @@ const CATEGORIES = {
   security: { color: new THREE.Color(1.0,0.85,0.2),     label:'安全',      hex:'#ffd933' },
   infra:    { color: new THREE.Color(0.6,0.6,0.8),      label:'基础设施',  hex:'#9999cc' },
   sense:    { color: new THREE.Color(0.85,0.6,1.0),     label:'感知',      hex:'#d999ff' },
+  ctm:      { color: new THREE.Color(0.0,0.9,0.9),     label:'CTM',       hex:'#00e5e5' },
 };
 
 const nodesData = [
@@ -390,6 +402,12 @@ const nodesData = [
   {id:'vestib',name:'Vestibular',type:'sense',category:'sense',icon:'⚖',strength:0.7,description:'工具多样性监控'},
   {id:'echo',name:'Echo',type:'sense',category:'sense',icon:'🔔',strength:0.72,description:'重复模式检测'},
   {id:'drift',name:'Drift',type:'sense',category:'sense',icon:'🎯',strength:0.68,description:'焦点偏离检测'},
+
+  // CTM 引擎 (Continuous Thought Machine)
+  {id:'ctm',name:'CTM Engine',type:'engine',category:'ctm',icon:'🧊',strength:0.92,description:'Continuous Thought Machine — 持续思维引擎，统一管理思维流、自适应计算、同步振荡'},
+  {id:'thought-stream',name:'Thinking Stream',type:'engine',category:'ctm',icon:'🌊',strength:0.88,description:'思维流引擎 — 多并发思维链管理，支持分叉、合并、衰减'},
+  {id:'adaptive-compute',name:'Adaptive Compute',type:'engine',category:'ctm',icon:'⚙',strength:0.85,description:'自适应计算 — 基于复杂度动态分配计算预算，优化 token 使用'},
+  {id:'sync-osc',name:'Oscillator Sync',type:'engine',category:'ctm',icon:'〰',strength:0.82,description:'同步振荡 — 多 Agent 相位同步，Kuramoto 模型协调'},
 ];
 
 const edgesData = [
@@ -468,6 +486,21 @@ const edgesData = [
   {source:'noci',target:'bash',label:'升级',strength:0.7},
   {source:'echo',target:'evolve',label:'检测',strength:0.65},
   {source:'drift',target:'plan',label:'锚定',strength:0.6},
+
+  // CTM 引擎连接
+  {source:'ctm',target:'phoenix',label:'驱动',strength:0.92},
+  {source:'ctm',target:'thought-stream',label:'思维',strength:0.9},
+  {source:'ctm',target:'adaptive-compute',label:'计算',strength:0.88},
+  {source:'ctm',target:'sync-osc',label:'同步',strength:0.85},
+  {source:'thought-stream',target:'metacog',label:'感知',strength:0.82},
+  {source:'thought-stream',target:'evolve',label:'进化',strength:0.78},
+  {source:'adaptive-compute',target:'o2',label:'监控',strength:0.8},
+  {source:'adaptive-compute',target:'knowledge',label:'检索',strength:0.75},
+  {source:'sync-osc',target:'planner',label:'协调',strength:0.8},
+  {source:'sync-osc',target:'architect',label:'同步',strength:0.75},
+  {source:'sync-osc',target:'reviewer',label:'协同',strength:0.72},
+  {source:'ctm',target:'reflect',label:'反思',strength:0.82},
+  {source:'ctm',target:'automem',label:'记忆',strength:0.78},
 ];
 
 // ============================================================
@@ -1256,8 +1289,11 @@ function animate() {
     if (state.searchQuery && !node.name.toLowerCase().includes(state.searchQuery)) visible = false;
     mesh.visible = visible;
 
-    // 悬停脉冲
-    const pulse = state.hoveredNode===node.id ? 1+Math.sin(time*4)*0.15 : 1;
+    // 悬停脉冲 + CTM 节点特殊脉冲
+    let pulse = state.hoveredNode===node.id ? 1+Math.sin(time*4)*0.15 : 1;
+    if (node.category === 'ctm') {
+      pulse *= 1 + Math.sin(time*2.5 + node.strength*10)*0.12;
+    }
     const s = mesh.userData.baseScale * pulse * state.nodeScale;
     mesh.scale.set(s, s, 1);
   }
@@ -1306,6 +1342,13 @@ function animate() {
       edgeCol[i+3]*=pulse*2; edgeCol[i+4]*=pulse*2; edgeCol[i+5]*=pulse*2;
     }
 
+    // CTM 边发光效果
+    if (s.category==='ctm' || t.category==='ctm') {
+      const ctmPulse = 0.8+0.4*Math.sin(time*3+edgeIdx*0.3);
+      edgeCol[i]*=ctmPulse*1.5; edgeCol[i+1]*=ctmPulse*1.5; edgeCol[i+2]*=ctmPulse*1.5;
+      edgeCol[i+3]*=ctmPulse*1.5; edgeCol[i+4]*=ctmPulse*1.5; edgeCol[i+5]*=ctmPulse*1.5;
+    }
+
     edgeIdx++;
   }
   edgeGeo.attributes.position.needsUpdate = true;
@@ -1344,11 +1387,13 @@ function animate() {
       const sColor = CATEGORIES[s.category]?.color || new THREE.Color(0.5,0.5,0.5);
       const tColor = CATEGORIES[t.category]?.color || new THREE.Color(0.5,0.5,0.5);
       const fadeIn=Math.min(p.t*5,1), fadeOut=Math.min((1-p.t)*5,1), fade=fadeIn*fadeOut;
+      // CTM 边粒子亮度增强
+      const ctmBoost = (s.category==='ctm'||t.category==='ctm') ? 1.6 : 1.0;
 
-      pCol[i*3]=(sColor.r+(tColor.r-sColor.r)*et)*fade;
-      pCol[i*3+1]=(sColor.g+(tColor.g-sColor.g)*et)*fade;
-      pCol[i*3+2]=(sColor.b+(tColor.b-sColor.b)*et)*fade;
-      pSizes[i]=p.size*fade;
+      pCol[i*3]=(sColor.r+(tColor.r-sColor.r)*et)*fade*ctmBoost;
+      pCol[i*3+1]=(sColor.g+(tColor.g-sColor.g)*et)*fade*ctmBoost;
+      pCol[i*3+2]=(sColor.b+(tColor.b-sColor.b)*et)*fade*ctmBoost;
+      pSizes[i]=p.size*fade*ctmBoost;
     }
     particleGeo.attributes.position.needsUpdate = true;
     particleGeo.attributes.color.needsUpdate = true;
@@ -1373,6 +1418,12 @@ function animate() {
 
   // 更新统计
   document.getElementById('s-particles').textContent = state.showParticles ? state.particleCount : 0;
+
+  // CTM 指标动态更新
+  const ctmCoherence = 0.82 + Math.sin(time*0.3)*0.08 + Math.sin(time*0.7)*0.04;
+  document.getElementById('s-ctm-coherence').textContent = ctmCoherence.toFixed(2);
+  const ctmStreams = 2 + Math.floor((Math.sin(time*0.15)+1)*1.5);
+  document.getElementById('s-ctm-streams').textContent = ctmStreams;
 
   composer.render();
 }

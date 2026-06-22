@@ -11,29 +11,41 @@
     --text: #e2e8f0; --text-dim: #94a3b8; --text-bright: #f8fafc;
     --green: #22c55e; --yellow: #f59e0b; --red: #ef4444;
     --blue: #3b82f6; --purple: #8b5cf6; --cyan: #06b6d4; --pink: #ec4899;
+    --amber: #f59e0b; --lime: #84cc16;
     --border: #475569; --radius: 12px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Inter', -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
-  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-  header h1 { font-size: 1.8rem; color: var(--text-bright); font-weight: 700; }
-  header .meta { color: var(--text-dim); font-size: 0.85rem; }
-  .health-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 1.1rem; }
+  .container { max-width: 1440px; margin: 0 auto; padding: 24px; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+  header h1 { font-size: 1.8rem; color: var(--text-bright); font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  header h1 .version { font-size: 0.7rem; background: var(--surface2); padding: 2px 8px; border-radius: 8px; color: var(--cyan); font-weight: 500; }
+  header .meta { color: var(--text-dim); font-size: 0.85rem; margin-top: 4px; }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .health-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 20px; font-weight: 600; font-size: 1.1rem; }
+  .health-badge .dot { width: 8px; height: 8px; border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
   .grid { display: grid; gap: 20px; margin-bottom: 24px; }
   .grid-2 { grid-template-columns: 1fr 1fr; }
   .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
-  .card h2 { font-size: 1rem; color: var(--text-dim); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-  .sense-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
-  .sense-item { background: var(--surface2); border-radius: 8px; padding: 14px; text-align: center; }
-  .sense-item .name { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; }
-  .sense-item .value { font-size: 1.6rem; font-weight: 700; }
-  .sense-item .status { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; margin-top: 6px; display: inline-block; }
+  .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  @media (max-width: 1100px) { .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: border-color 0.2s; }
+  .card:hover { border-color: #64748b; }
+  .card h2 { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .card h2 .icon { font-size: 1rem; }
+  .sense-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .sense-item { background: var(--surface2); border-radius: 8px; padding: 14px; text-align: center; transition: transform 0.15s, background 0.15s; position: relative; overflow: hidden; }
+  .sense-item:hover { transform: translateY(-2px); background: #3b4d66; }
+  .sense-item .name { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 4px; letter-spacing: 0.03em; }
+  .sense-item .value { font-size: 1.5rem; font-weight: 700; }
+  .sense-item .status { font-size: 0.68rem; padding: 2px 8px; border-radius: 10px; margin-top: 6px; display: inline-block; }
+  .sense-item .trend { position: absolute; top: 8px; right: 8px; font-size: 0.65rem; opacity: 0.6; }
   .status-normal { background: rgba(34,197,94,0.15); color: var(--green); }
   .status-warning { background: rgba(245,158,11,0.15); color: var(--yellow); }
   .status-critical { background: rgba(239,68,68,0.15); color: var(--red); }
+  .status-idle { background: rgba(148,163,184,0.15); color: var(--text-dim); }
   .alert-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--surface2); }
   .alert-item:last-child { border-bottom: none; }
   .alert-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
@@ -41,40 +53,80 @@
   .alert-content .msg { font-size: 0.85rem; }
   .alert-content .time { font-size: 0.7rem; color: var(--text-dim); }
   .alert-status { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; }
-  .chart-container { position: relative; height: 280px; }
+  .chart-container { position: relative; height: 300px; }
+  .chart-container-sm { position: relative; height: 220px; }
   .perf-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
   .perf-bar .label { width: 140px; font-size: 0.8rem; color: var(--text-dim); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .perf-bar .bar { flex: 1; height: 20px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
   .perf-bar .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
   .perf-bar .val { width: 70px; font-size: 0.8rem; color: var(--text-dim); }
-  .refresh-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+  .refresh-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: background 0.15s; }
   .refresh-btn:hover { background: var(--border); }
   .empty { color: var(--text-dim); font-style: italic; text-align: center; padding: 20px; }
+  .tag { display: inline-block; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: var(--surface2); color: var(--text-dim); margin-left: 6px; }
+  .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--surface2); font-size: 0.85rem; }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row .stat-label { color: var(--text-dim); }
+  .stat-row .stat-value { color: var(--text-bright); font-weight: 600; }
+  .ctm-stream-item { background: var(--surface2); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .ctm-stream-item .stream-id { font-family: monospace; font-size: 0.8rem; color: var(--cyan); }
+  .ctm-stream-item .stream-state { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; }
+  .ctm-metric-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .ctm-metric-bar .metric-label { width: 100px; font-size: 0.75rem; color: var(--text-dim); text-align: right; }
+  .ctm-metric-bar .metric-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .ctm-metric-bar .metric-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+  .ctm-metric-bar .metric-val { width: 50px; font-size: 0.75rem; color: var(--text-dim); }
 </style>
 </head>
 <body>
 <div class="container">
   <header>
     <div>
-      <h1>PHOENIX Observability</h1>
-      <div class="meta">Session: sess-20260622-084550 | Last update: 2026-06-22T08:45:50</div>
+      <h1>PHOENIX Observability <span class="version">v1.3.0</span></h1>
+      <div class="meta">Session: sess-20260622-084550 | Last update: 2026-06-22T08:45:50 | CTM: active</div>
     </div>
-    <div style="display:flex;align-items:center;gap:16px;">
+    <div class="header-right">
       <div class="health-badge" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;">
+        <span class="dot" style="background:#22c55e;"></span>
         Health: 100/100
       </div>
       <button class="refresh-btn" onclick="location.reload()">Refresh</button>
     </div>
   </header>
 
-  <!-- 7-Sense Overview -->
+  <!-- System Summary Stats -->
+  <div class="grid grid-4" style="margin-bottom:20px;">
+    <div class="card" style="padding:14px 16px;">
+      <div style="font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;">O2 Usage</div>
+      <div style="font-size:1.4rem;font-weight:700;color:var(--green);">1.6%</div>
+      <div style="font-size:0.65rem;color:var(--text-dim);">16,479 / 1M tokens</div>
+    </div>
+    <div class="card" style="padding:14px 16px;">
+      <div style="font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;">Active Senses</div>
+      <div style="font-size:1.4rem;font-weight:700;color:var(--cyan);">8/8</div>
+      <div style="font-size:0.65rem;color:var(--text-dim);">all normal</div>
+    </div>
+    <div class="card" style="padding:14px 16px;">
+      <div style="font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;">CTM Streams</div>
+      <div style="font-size:1.4rem;font-weight:700;color:var(--blue);">0</div>
+      <div style="font-size:0.65rem;color:var(--text-dim);">0 total created</div>
+    </div>
+    <div class="card" style="padding:14px 16px;">
+      <div style="font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;">Alerts (24h)</div>
+      <div style="font-size:1.4rem;font-weight:700;color:var(--yellow);">1</div>
+      <div style="font-size:0.65rem;color:var(--text-dim);">1 resolved</div>
+    </div>
+  </div>
+
+  <!-- 8-Sense Overview -->
   <div class="card" style="margin-bottom:20px;">
-    <h2>7-Sense Status</h2>
+    <h2><span class="icon">&#9673;</span> 8-Sense Metacognitive Status</h2>
     <div class="sense-grid">
       <div class="sense-item">
         <div class="name">O2 (Vitality)</div>
         <div class="value" style="color:#22c55e;">1.6</div>
         <div class="status status-normal">normal</div>
+        <div class="trend" title="trend">&#8593;</div>
       </div>
       <div class="sense-item">
         <div class="name">Nociception</div>
@@ -90,10 +142,11 @@
         <div class="name">Spatial</div>
         <div class="value" style="color:#f59e0b;">0.0</div>
         <div class="status status-normal">normal</div>
+        <div class="trend" title="trend">&#8595;</div>
       </div>
       <div class="sense-item">
         <div class="name">Vestibular</div>
-        <div class="value" style="color:#8b5cf6;">0.0</div>
+        <div class="value" style="color:#8b5cf6;">14.3</div>
         <div class="status status-normal">normal</div>
       </div>
       <div class="sense-item">
@@ -106,48 +159,102 @@
         <div class="value" style="color:#06b6d4;">5.0</div>
         <div class="status status-normal">normal</div>
       </div>
+      <div class="sense-item">
+        <div class="name">Aesthetic</div>
+        <div class="value" style="color:#84cc16;font-size:1.1rem;">V7 M6 D5</div>
+        <div class="status status-normal">normal</div>
+      </div>
     </div>
   </div>
 
   <!-- CTM (Continuous Thought Machine) Panel -->
   <div class="card" style="margin-bottom:20px;">
-    <h2>CTM - Continuous Thought Machine</h2>
-    <div class="sense-grid">
-      <div class="sense-item">
-        <div class="name">Active Streams</div>
-        <div class="value" style="color:#3b82f6;">0</div>
-        <div class="status status-normal">idle</div>
+    <h2><span class="icon">&#9881;</span> CTM Engine <span class="tag">Continuous Thought Machine</span></h2>
+    <div class="grid grid-2" style="margin-bottom:0;">
+      <!-- CTM Status Metrics -->
+      <div>
+        <div class="sense-grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="sense-item">
+            <div class="name">Active Streams</div>
+            <div class="value" style="color:#3b82f6;">0</div>
+            <div class="status status-idle">idle</div>
+          </div>
+          <div class="sense-item">
+            <div class="name">Total Created</div>
+            <div class="value" style="color:#8b5cf6;">0</div>
+            <div class="status status-idle">-</div>
+          </div>
+          <div class="sense-item">
+            <div class="name">Phase Coherence</div>
+            <div class="value" style="color:#06b6d4;">1.00</div>
+            <div class="status status-normal">synced</div>
+          </div>
+          <div class="sense-item">
+            <div class="name">Avg Complexity</div>
+            <div class="value" style="color:#f59e0b;">0.00</div>
+            <div class="status status-normal">low</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <div class="ctm-metric-bar">
+            <div class="metric-label">Quick</div>
+            <div class="metric-track"><div class="metric-fill" style="width:0%;background:var(--green);"></div></div>
+            <div class="metric-val">0%</div>
+          </div>
+          <div class="ctm-metric-bar">
+            <div class="metric-label">Standard</div>
+            <div class="metric-track"><div class="metric-fill" style="width:0%;background:var(--blue);"></div></div>
+            <div class="metric-val">0%</div>
+          </div>
+          <div class="ctm-metric-bar">
+            <div class="metric-label">Deep</div>
+            <div class="metric-track"><div class="metric-fill" style="width:0%;background:var(--purple);"></div></div>
+            <div class="metric-val">0%</div>
+          </div>
+          <div class="ctm-metric-bar">
+            <div class="metric-label">Exhaustive</div>
+            <div class="metric-track"><div class="metric-fill" style="width:0%;background:var(--amber);"></div></div>
+            <div class="metric-val">0%</div>
+          </div>
+        </div>
       </div>
-      <div class="sense-item">
-        <div class="name">Total Created</div>
-        <div class="value" style="color:#8b5cf6;">0</div>
-        <div class="status status-normal">-</div>
+      <!-- CTM Active Streams & Config -->
+      <div>
+        <div class="stat-row">
+          <span class="stat-label">Compute Strategy</span>
+          <span class="stat-value" style="color:var(--green);">standard</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Max Concurrent</span>
+          <span class="stat-value">10</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Cleanup Interval</span>
+          <span class="stat-value">24h</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Thinking Stream</span>
+          <span class="stat-value" style="color:var(--green);">enabled</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Adaptive Compute</span>
+          <span class="stat-value" style="color:var(--green);">enabled</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Oscillator Sync</span>
+          <span class="stat-value" style="color:var(--green);">enabled</span>
+        </div>
+        <div id="ctm-streams" style="margin-top:12px;">
+          <div class="empty" style="font-size:0.8rem;">No active thinking streams</div>
+        </div>
       </div>
-      <div class="sense-item">
-        <div class="name">Phase Coherence</div>
-        <div class="value" style="color:#06b6d4;">1.00</div>
-        <div class="status status-normal">synced</div>
-      </div>
-      <div class="sense-item">
-        <div class="name">Compute Strategy</div>
-        <div class="value" style="color:#22c55e;font-size:1.1rem;">standard</div>
-        <div class="status status-normal">balanced</div>
-      </div>
-      <div class="sense-item">
-        <div class="name">Avg Complexity</div>
-        <div class="value" style="color:#f59e0b;">0.00</div>
-        <div class="status status-normal">low</div>
-      </div>
-    </div>
-    <div id="ctm-streams" style="margin-top:16px;">
-      <div class="empty">No active thinking streams</div>
     </div>
   </div>
 
   <div class="grid grid-2">
-    <!-- Radar Chart -->
+    <!-- Radar Chart (8-Sense) -->
     <div class="card">
-      <h2>Sense Radar</h2>
+      <h2><span class="icon">&#9678;</span> 8-Sense Radar</h2>
       <div class="chart-container">
         <canvas id="radarChart"></canvas>
       </div>
@@ -155,27 +262,35 @@
 
     <!-- Trend Chart -->
     <div class="card">
-      <h2>24h Trends</h2>
+      <h2><span class="icon">&#9650;</span> 24h Trends</h2>
       <div class="chart-container">
         <canvas id="trendChart"></canvas>
       </div>
     </div>
   </div>
 
-  <div class="grid grid-2">
+  <div class="grid grid-3">
     <!-- CTM Compute Distribution -->
     <div class="card">
-      <h2>CTM Compute Strategy Distribution</h2>
-      <div class="chart-container">
+      <h2><span class="icon">&#9632;</span> CTM Compute</h2>
+      <div class="chart-container-sm">
         <canvas id="ctmChart"></canvas>
+      </div>
+    </div>
+
+    <!-- CTM Phase Coherence Gauge -->
+    <div class="card">
+      <h2><span class="icon">&#9673;</span> Phase Coherence</h2>
+      <div class="chart-container-sm">
+        <canvas id="coherenceChart"></canvas>
       </div>
     </div>
 
     <!-- CTM Recent Events -->
     <div class="card">
-      <h2>CTM Thinking Events</h2>
-      <div id="ctm-events">
-        <div class="empty">No CTM events recorded</div>
+      <h2><span class="icon">&#9854;</span> CTM Events</h2>
+      <div id="ctm-events" style="max-height:260px;overflow-y:auto;">
+        <div class="empty" style="font-size:0.85rem;">No CTM events recorded</div>
       </div>
     </div>
   </div>
@@ -183,7 +298,7 @@
   <div class="grid grid-2">
     <!-- Alerts -->
     <div class="card">
-      <h2>Recent Alerts</h2>
+      <h2><span class="icon">&#9888;</span> Recent Alerts</h2>
       <div class="alert-item">
         <div class="alert-dot" style="background:#ef4444;"></div>
         <div class="alert-content">
@@ -194,31 +309,61 @@
       </div>
     </div>
 
-    <!-- Performance -->
+    <!-- System Info -->
     <div class="card">
-      <h2>Performance (Top Operations)</h2>
-      <div class="empty">No performance data</div>
-      <div style="margin-top:12px;font-size:0.8rem;color:var(--text-dim);">
-        Active errors: 0 | Period: 24h
+      <h2><span class="icon">&#9881;</span> System Info</h2>
+      <div class="stat-row">
+        <span class="stat-label">Version</span>
+        <span class="stat-value">PHOENIX v1.3.0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Provider</span>
+        <span class="stat-value">mimo-v2.5-pro</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Senses Active</span>
+        <span class="stat-value" style="color:var(--green);">8/8</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">CTM Modules</span>
+        <span class="stat-value" style="color:var(--green);">3/3</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Active Errors</span>
+        <span class="stat-value" style="color:var(--green);">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Period</span>
+        <span class="stat-value">24h</span>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+// ── 8-Sense Radar Chart ──────────────────────────────────────────────────
 const radarCtx = document.getElementById('radarChart').getContext('2d');
 new Chart(radarCtx, {
   type: 'radar',
   data: {
-    labels: ["O2 (Vitality)", "Nociception", "Chronos (Time)", "Spatial", "Vestibular", "Echo", "Drift (Focus)"],
+    labels: ["O2 (Vitality)", "Nociception", "Chronos", "Spatial", "Vestibular", "Echo", "Drift", "Aesthetic"],
     datasets: [{
       label: 'Current',
-      data: [1.9, 0.0, 0.0, 0.0, 0.0, 0.0, 16.7],
-      backgroundColor: 'rgba(59, 130, 246, 0.15)',
+      data: [1.6, 0.0, 0.0, 0.0, 14.3, 0.0, 5.0, 6.0],
+      backgroundColor: 'rgba(59, 130, 246, 0.12)',
       borderColor: '#3b82f6',
       borderWidth: 2,
-      pointBackgroundColor: ["#22c55e", "#22c55e", "#22c55e", "#22c55e", "#22c55e", "#22c55e", "#22c55e"],
+      pointBackgroundColor: ["#22c55e", "#22c55e", "#22c55e", "#22c55e", "#22c55e", "#22c55e", "#22c55e", "#84cc16"],
       pointRadius: 5,
+      pointHoverRadius: 7,
+    }, {
+      label: 'Warning',
+      data: [70, 3, 300, 5, 70, 2, 25, 8],
+      backgroundColor: 'rgba(245, 158, 11, 0.05)',
+      borderColor: '#f59e0b44',
+      borderWidth: 1,
+      borderDash: [4, 4],
+      pointRadius: 0,
     }]
   },
   options: {
@@ -231,15 +376,31 @@ new Chart(radarCtx, {
         ticks: { color: '#94a3b8', backdropColor: 'transparent', stepSize: 25 },
         grid: { color: '#334155' },
         angleLines: { color: '#334155' },
-        pointLabels: { color: '#e2e8f0', font: { size: 11 } }
+        pointLabels: { color: '#e2e8f0', font: { size: 10 } }
       }
     },
-    plugins: { legend: { display: false } }
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: { color: '#94a3b8', boxWidth: 10, font: { size: 9 }, padding: 12 }
+      }
+    }
   }
 });
 
+// ── 24h Trend Chart ──────────────────────────────────────────────────────
 const trendCtx = document.getElementById('trendChart').getContext('2d');
-const trendData = [{"label": "O2 (Vitality)", "data": [1.6, 16479.0, 490.0, 1.6, 16479.0, 490.0, 1.6, 16479.0, 490.0], "labels": ["08:40", "08:40", "08:40", "08:45", "08:45", "08:45", "08:45", "08:45", "08:45"], "color": "#22c55e"}, {"label": "Nociception", "data": [0.0, 0.0, 0.0], "labels": ["08:40", "08:45", "08:45"], "color": "#ef4444"}, {"label": "Chronos (Time)", "data": [241833.788747, 0.0, 0.0], "labels": ["08:40", "08:45", "08:45"], "color": "#3b82f6"}, {"label": "Spatial", "data": [0.0, 0.0, 0.0], "labels": ["08:40", "08:45", "08:45"], "color": "#f59e0b"}, {"label": "Vestibular", "data": [0.0, 14.3, 14.3], "labels": ["08:40", "08:45", "08:45"], "color": "#8b5cf6"}, {"label": "Echo", "data": [0.0, 0.0, 0.0], "labels": ["08:40", "08:45", "08:45"], "color": "#ec4899"}, {"label": "Drift (Focus)", "data": [5.0, 5.0, 5.0], "labels": ["08:40", "08:45", "08:45"], "color": "#06b6d4"}];
+const trendData = [
+  {"label": "O2", "data": [1.6, 1.6, 1.6], "labels": ["08:40", "08:45", "08:45"], "color": "#22c55e"},
+  {"label": "Nociception", "data": [0.0, 0.0, 0.0], "labels": ["08:40", "08:45", "08:45"], "color": "#ef4444"},
+  {"label": "Chronos", "data": [0.0, 0.0, 0.0], "labels": ["08:40", "08:45", "08:45"], "color": "#3b82f6"},
+  {"label": "Spatial", "data": [0.0, 0.0, 0.0], "labels": ["08:40", "08:45", "08:45"], "color": "#f59e0b"},
+  {"label": "Vestibular", "data": [0.0, 14.3, 14.3], "labels": ["08:40", "08:45", "08:45"], "color": "#8b5cf6"},
+  {"label": "Echo", "data": [0.0, 0.0, 0.0], "labels": ["08:40", "08:45", "08:45"], "color": "#ec4899"},
+  {"label": "Drift", "data": [5.0, 5.0, 5.0], "labels": ["08:40", "08:45", "08:45"], "color": "#06b6d4"},
+  {"label": "Aesthetic", "data": [6.0, 6.0, 6.0], "labels": ["08:40", "08:45", "08:45"], "color": "#84cc16"}
+];
 const trendLabels = trendData.length > 0 ? trendData[0].labels : [];
 new Chart(trendCtx, {
   type: 'line',
@@ -263,11 +424,11 @@ new Chart(trendCtx, {
       x: { ticks: { color: '#94a3b8', maxTicksLimit: 12 }, grid: { color: '#1e293b' } },
       y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
     },
-    plugins: { legend: { labels: { color: '#e2e8f0', boxWidth: 12, font: { size: 10 } } } }
+    plugins: { legend: { labels: { color: '#e2e8f0', boxWidth: 10, font: { size: 9 } } } }
   }
 });
 
-// CTM Compute Strategy Distribution (Doughnut)
+// ── CTM Compute Strategy Distribution (Doughnut) ─────────────────────────
 const ctmCtx = document.getElementById('ctmChart');
 if (ctmCtx) {
   new Chart(ctmCtx.getContext('2d'), {
@@ -288,25 +449,69 @@ if (ctmCtx) {
       plugins: {
         legend: {
           position: 'bottom',
-          labels: { color: '#e2e8f0', boxWidth: 12, font: { size: 11 }, padding: 16 }
+          labels: { color: '#e2e8f0', boxWidth: 10, font: { size: 10 }, padding: 12 }
         }
       }
     }
   });
 }
 
-// Fetch CTM state from ctm_core if available
+// ── CTM Phase Coherence Gauge (Doughnut) ─────────────────────────────────
+const coherenceCtx = document.getElementById('coherenceChart');
+if (coherenceCtx) {
+  const coherenceValue = 1.0;
+  new Chart(coherenceCtx.getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Coherence', 'Gap'],
+      datasets: [{
+        data: [coherenceValue * 100, (1 - coherenceValue) * 100],
+        backgroundColor: ['#06b6d4', '#334155'],
+        borderColor: '#1e293b',
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '75%',
+      rotation: -90,
+      circumference: 180,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false }
+      }
+    },
+    plugins: [{
+      id: 'centerText',
+      afterDraw(chart) {
+        const { ctx, chartArea } = chart;
+        const cx = (chartArea.left + chartArea.right) / 2;
+        const cy = chartArea.bottom - 10;
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#06b6d4';
+        ctx.font = 'bold 28px Inter, system-ui';
+        ctx.fillText((coherenceValue * 100).toFixed(0) + '%', cx, cy);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px Inter, system-ui';
+        ctx.fillText('phase sync', cx, cy + 18);
+        ctx.restore();
+      }
+    }]
+  });
+}
+
+// ── CTM Dynamic State Loading ────────────────────────────────────────────
 (async function loadCTMState() {
+  const ctmPanel = document.querySelector('#ctm-streams');
+  const ctmEvents = document.querySelector('#ctm-events');
   try {
-    // Try to load CTM state via CLI
-    const ctmPanel = document.querySelector('#ctm-streams');
-    const ctmEvents = document.querySelector('#ctm-events');
     if (ctmPanel) {
-      // Static placeholder - CTM state loaded via python3 ctm_core.py status
-      ctmPanel.innerHTML = '<div class="empty">Run <code style="color:var(--cyan);">python3 ~/.claude/phoenix/ctm/ctm_core.py status</code> for live data</div>';
+      ctmPanel.innerHTML = '<div class="empty" style="font-size:0.8rem;">Run <code style="color:var(--cyan);">python3 ~/.claude/phoenix/ctm/ctm_core.py status</code> for live data</div>';
     }
     if (ctmEvents) {
-      ctmEvents.innerHTML = '<div class="empty">Run <code style="color:var(--cyan);">python3 ~/.claude/phoenix/ctm/ctm_core.py events</code> for live events</div>';
+      ctmEvents.innerHTML = '<div class="empty" style="font-size:0.85rem;">Run <code style="color:var(--cyan);">python3 ~/.claude/phoenix/ctm/ctm_core.py events</code> for live events</div>';
     }
   } catch (e) {
     // Silent fallback - dashboard works without CTM runtime

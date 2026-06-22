@@ -6,7 +6,9 @@ Pure Python stdlib. Zero dependencies.
 Endpoints:
   GET  /                  PHOENIX Dashboard (基础视图)
   GET  /viz               PHOENIX Visualization Dashboard (可视化控制台)
-  GET  /api/status        System health + 7-Sense + drift
+  GET  /api/status        System health + 8-Sense + drift
+  GET  /api/stats         Comprehensive real-time statistics
+  GET  /api/ctm           CTM thinking engine real-time status
   GET  /api/modules       Module inventory
   GET  /api/timeline      Recent timeline (query: ?limit=20&type=X)
   GET  /api/persona       NexSandglass persona
@@ -21,6 +23,7 @@ Usage:
 from datetime import datetime, timezone
 import json
 import sys
+import time
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
@@ -53,7 +56,7 @@ def api_status() -> dict:
         },
     }
 
-    # 7-Sense states
+    # 8-Sense states
     senses = {}
     senses_dir = PHOENIX_HOME / "senses"
     if senses_dir.exists():
@@ -546,6 +549,91 @@ def api_stats() -> dict:
     return result
 
 
+def api_ctm() -> dict:
+    """CTM 思维引擎实时状态"""
+    result = {
+        "active": 0,
+        "total_created": 0,
+        "coherence": 1.0,
+        "efficiency": 0,
+        "compute_strategy": "standard",
+        "streams": [],
+        "depth_dist": {"d0": 0, "d1": 0, "d2": 0, "d3": 0, "d4p": 0},
+        "oscillator_stats": {},
+        "complexity_avg": 0
+    }
+
+    try:
+        from ctm.ctm_core import CTMCore, CTMConfig
+        ctm = CTMCore(CTMConfig())
+
+        # 获取思维引擎状态
+        if ctm.thinking_engine:
+            streams = ctm.thinking_engine.streams
+            result["active"] = len(streams)
+            result["total_created"] = ctm.total_streams_created
+
+            # 流详情
+            for sid, stream in list(streams.items())[-5:]:
+                stream_info = {
+                    "stream_id": sid,
+                    "state": stream.current_state.value if hasattr(stream.current_state, 'value') else str(stream.current_state),
+                    "max_depth": stream.max_depth,
+                    "nodes_count": len(stream.nodes),
+                    "total_tokens": stream.total_tokens,
+                    "query": stream.query[:40] if stream.query else "",
+                    "elapsed": round(time.time() - stream.start_time, 1) if stream.start_time else 0
+                }
+                result["streams"].append(stream_info)
+
+                # 深度分布
+                for node in stream.nodes:
+                    d = node.depth
+                    if d == 0:
+                        result["depth_dist"]["d0"] += 1
+                    elif d == 1:
+                        result["depth_dist"]["d1"] += 1
+                    elif d == 2:
+                        result["depth_dist"]["d2"] += 1
+                    elif d == 3:
+                        result["depth_dist"]["d3"] += 1
+                    else:
+                        result["depth_dist"]["d4p"] += 1
+
+        # 振荡器同步状态
+        if ctm.oscillator:
+            osc = ctm.oscillator
+            result["oscillator_stats"] = {
+                "modules": len(osc.oscillators),
+                "coherence": osc.compute_phase_coherence() if hasattr(osc, 'compute_phase_coherence') else 1.0,
+                "last_sync": osc.sync_history[-1].to_dict() if osc.sync_history else None
+            }
+            result["coherence"] = result["oscillator_stats"]["coherence"]
+
+        # 自适应计算统计
+        if ctm.compute_timer:
+            result["compute_strategy"] = "adaptive"
+            result["efficiency"] = 0.85  # Placeholder
+
+    except ImportError:
+        pass
+    except Exception as e:
+        result["error"] = str(e)
+
+    # 从 CTM 状态文件读取（如果存在）
+    ctm_state_file = PHOENIX_HOME / "ctm" / "state.json"
+    if ctm_state_file.exists():
+        try:
+            state = json.loads(ctm_state_file.read_text())
+            result["active"] = state.get("active_streams", result["active"])
+            result["total_created"] = state.get("total_streams_created", result["total_created"])
+            result["coherence"] = state.get("coherence", result["coherence"])
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    return result
+
+
 def api_activity() -> dict:
     """最近活动 — 从 git log 获取"""
     import subprocess
@@ -844,6 +932,7 @@ GET_ROUTES = {
     "/api/status": api_status,
     "/api/stats": api_stats,
     "/api/activity": api_activity,
+    "/api/ctm": api_ctm,
     "/api/modules": api_modules,
     "/api/timeline": api_timeline,
     "/api/persona": api_persona,

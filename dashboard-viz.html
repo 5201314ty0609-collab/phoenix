@@ -99,7 +99,7 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
     <div class="chart-wrap"><canvas id="toolChart"></canvas></div>
   </div>
   <div class="card">
-    <h3>七感雷达 / 7-Sense Radar</h3>
+    <h3>八感雷达 / 8-Sense Radar</h3>
     <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
   </div>
 </div>
@@ -123,7 +123,7 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 <!-- Seven Sense + Modules -->
 <div class="grid">
   <div class="card">
-    <h3>七感状态 / 7-Sense Status <span class="badge">全部健康 all healthy</span></h3>
+    <h3>八感状态 / 8-Sense Status <span class="badge">全部健康 all healthy</span></h3>
     <div class="sense-grid" id="sense-grid"></div>
   </div>
   <div class="card">
@@ -142,8 +142,13 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
       <div class="sense-item"><div class="icon" style="font-size:1.1rem">🔗</div><div class="name">相位一致 / Coherence</div><div class="val" id="ctm-coherence" style="color:var(--green);font-size:1.1rem;font-weight:700">1.00</div></div>
       <div class="sense-item"><div class="icon" style="font-size:1.1rem">⚡</div><div class="name">效率 / Efficiency</div><div class="val" id="ctm-efficiency" style="color:var(--purple);font-size:1.1rem;font-weight:700">-</div></div>
     </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+      <div class="sense-item"><div class="icon" style="font-size:1rem">⚙️</div><div class="name">计算策略 / Strategy</div><div class="val" id="ctm-strategy" style="color:var(--accent2);font-size:0.85rem;font-weight:600">standard</div></div>
+      <div class="sense-item"><div class="icon" style="font-size:1rem">🔄</div><div class="name">振荡模块 / Oscillators</div><div class="val" id="ctm-oscillators" style="color:var(--accent);font-size:0.85rem;font-weight:600">8</div></div>
+      <div class="sense-item"><div class="icon" style="font-size:1rem">📈</div><div class="name">复杂度均值 / Avg Complexity</div><div class="val" id="ctm-complexity" style="color:var(--green);font-size:0.85rem;font-weight:600">-</div></div>
+    </div>
     <div class="tbl" style="max-height:140px">
-      <table><thead><tr><th>流 ID</th><th>状态</th><th>深度</th><th>节点</th><th>Token</th></tr></thead>
+      <table><thead><tr><th>流 ID</th><th>状态</th><th>深度</th><th>节点</th><th>Token</th><th>耗时</th></tr></thead>
       <tbody id="ctm-streams-body"></tbody></table>
     </div>
   </div>
@@ -162,7 +167,7 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
   </div>
 </div>
 
-<footer>PHOENIX v1.3.0 · <span id="footer-mode">GitHub Pages</span> · 自动刷新 / Auto-refresh: <span id="footer-refresh">30s</span></footer>
+<footer>PHOENIX v1.3.0 · CTM Engine · <span id="footer-mode">GitHub Pages</span> · 自动刷新 / Auto-refresh: <span id="footer-refresh">30s</span></footer>
 <div id="toast" style="display:none"></div>
 
 <script>
@@ -170,11 +175,11 @@ footer{text-align:center;margin-top:18px;color:var(--text-dim);font-size:0.65rem
 // FALLBACK — only used when server is unreachable
 // ═══════════════════════════════════════════════
 const FALLBACK = {
-  modules:27, rules:15, senses:8, rule_health:93, cost_health:72, cost_grade:'C',
-  toolCalls:2140, blocked:33,
-  frameworks_active:26, hooks:9,
+  modules:41, rules:15, senses:8, rule_health:93, cost_health:72, cost_grade:'C',
+  toolCalls:2804, blocked:33,
+  frameworks_active:26, hooks:21,
   wasteBreakdown:{ghost_skills:62,repeated_context:0,tool_imbalance:0,blocked_attempts:33,other:14},
-  ctm:{active:0,total_created:0,coherence:1.0,efficiency:0,streams:[],depth_dist:{d0:0,d1:0,d2:0,d3:0,d4p:0}},
+  ctm:{active:0,total_created:0,coherence:1.0,efficiency:0,compute_strategy:'standard',streams:[],depth_dist:{d0:0,d1:0,d2:0,d3:0,d4p:0},oscillator_stats:{modules:8,coherence:1.0},complexity_avg:0},
   senseStates:[
     {id:'o2',name:'O2 生命力/Vitality',icon:'🫁',val:12,status:'healthy',color:'green'},
     {id:'nociception',name:'痛觉/Nociception',icon:'💢',val:8,status:'healthy',color:'green'},
@@ -182,15 +187,17 @@ const FALLBACK = {
     {id:'spatial',name:'空间/Spatial',icon:'📍',val:15,status:'healthy',color:'green'},
     {id:'vestibular',name:'平衡/Vestibular',icon:'⚖️',val:22,status:'healthy',color:'green'},
     {id:'echo',name:'回响/Echo',icon:'🔁',val:3,status:'healthy',color:'green'},
-    {id:'drift',name:'漂移/Drift',icon:'🧭',val:6,status:'healthy',color:'green'}
+    {id:'drift',name:'漂移/Drift',icon:'🧭',val:6,status:'healthy',color:'green'},
+    {id:'metacog',name:'元认知/Metacog',icon:'🧠',val:18,status:'healthy',color:'green'}
   ],
   moduleList:['context_mapper','inspector','knowledge-base','phoenix-bash-guard','phoenix-cost-tracker','phoenix-mutation-gate','phoenix-observability','phoenix-auto-memory','phoenix-rule-health','server','tool-guard','reflection-engine','timeline','policy-engine'],
   timeline:[
+    {time:'2026-06-19',type:'ctm',desc:'CTM 引擎集成 — 思维流 + 自适应计算 + 振荡同步'},
     {time:'2026-06-17',type:'audit',desc:'v1.3 全面审计修复（10 项）'},
     {time:'2026-06-17',type:'check',desc:'每日基础检查 + ECC 安全评估'}
   ],
-  sessionsByDay:{'06-15':4,'06-16':7,'06-17':3},
-  errorByDay:{'06-15':2,'06-16':5,'06-17':1}
+  sessionsByDay:{'06-15':4,'06-16':7,'06-17':3,'06-18':5,'06-19':2},
+  errorByDay:{'06-15':2,'06-16':5,'06-17':1,'06-18':3,'06-19':0}
 };
 let data = JSON.parse(JSON.stringify(FALLBACK));
 let serverConnected = false;
@@ -352,6 +359,11 @@ function buildCTM(){
   document.getElementById('ctm-efficiency').textContent=ctm.efficiency>0?ctm.efficiency.toFixed(3):'-';
   document.getElementById('badge-ctm').textContent=ctm.active>0?ctm.active+' active':'idle';
 
+  // New CTM fields
+  document.getElementById('ctm-strategy').textContent=ctm.compute_strategy||'standard';
+  document.getElementById('ctm-oscillators').textContent=ctm.oscillator_stats?.modules||8;
+  document.getElementById('ctm-complexity').textContent=ctm.complexity_avg>0?ctm.complexity_avg.toFixed(2):'-';
+
   // Coherence color
   const cohEl=document.getElementById('ctm-coherence');
   cohEl.style.color=ctm.coherence>=0.7?'var(--green)':ctm.coherence>=0.3?'var(--yellow)':'var(--red)';
@@ -360,10 +372,10 @@ function buildCTM(){
   const tbody=document.getElementById('ctm-streams-body');
   if(ctm.streams&&ctm.streams.length>0){
     tbody.innerHTML=ctm.streams.slice(-5).map(s=>
-      `<tr><td style="font-family:var(--mono);font-size:0.68rem">${(s.stream_id||'').slice(-8)}</td><td style="font-size:0.68rem">${s.state||'?'}</td><td>${s.max_depth||0}</td><td>${s.nodes_count||0}</td><td>${s.total_tokens||0}</td></tr>`
+      `<tr><td style="font-family:var(--mono);font-size:0.68rem">${(s.stream_id||'').slice(-8)}</td><td style="font-size:0.68rem">${s.state||'?'}</td><td>${s.max_depth||0}</td><td>${s.nodes_count||0}</td><td>${s.total_tokens||0}</td><td>${s.elapsed? s.elapsed.toFixed(1)+'s' : '-'}</td></tr>`
     ).join('');
   }else{
-    tbody.innerHTML='<tr><td colspan="5" style="color:var(--text-dim);text-align:center;font-size:0.72rem">无思维流 / No streams</td></tr>';
+    tbody.innerHTML='<tr><td colspan="6" style="color:var(--text-dim);text-align:center;font-size:0.72rem">无思维流 / No streams</td></tr>';
   }
 }
 function buildKPIs(){
@@ -385,9 +397,15 @@ async function init(){
   // Fetch real data FIRST, then render
   try{
     const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),3000);
-    const r=await fetch(SERVER+'/api/stats',{signal:ctrl.signal});
-    if(r.ok){
-      const s=await r.json();
+    const[statsResp,ctmResp,activityResp]=await Promise.all([
+      fetch(SERVER+'/api/stats',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null),
+      fetch(SERVER+'/api/ctm',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null),
+      fetch(SERVER+'/api/activity',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null)
+    ]);
+
+    // Apply stats
+    if(statsResp){
+      const s=statsResp;
       data.modules=s.modules||0; data.rules=s.rules||0; data.senses=s.senses||0;
       data.toolCalls=s.tool_calls||0; data.blocked=s.blocked||0;
       data.rule_health=s.rule_health||0; data.cost_health=s.cost_health||0; data.cost_grade=s.cost_grade||'F';
@@ -399,18 +417,18 @@ async function init(){
       document.getElementById('footer-mode').textContent='Live Server';
       serverConnected=true;
     }else{ setConnStatus('err','离线 / offline'); }
-  }catch(e){ setConnStatus('err','离线 / offline'); }
-  // Fetch activity from API
-  try{
-    const ctrl2=new AbortController(); setTimeout(()=>ctrl2.abort(),3000);
-    const r2=await fetch(SERVER+'/api/activity',{signal:ctrl2.signal});
-    if(r2.ok){
-      const a=await r2.json();
-      if(a.entries && a.entries.length>0){
-        data.timeline=a.entries.slice(0,10).map(e=>({time:e.time,type:e.type,desc:e.desc}));
-      }
+
+    // Apply CTM data
+    if(ctmResp){
+      data.ctm=ctmResp;
     }
-  }catch(e){}
+
+    // Apply activity
+    if(activityResp?.entries?.length){
+      data.timeline=activityResp.entries.slice(0,10).map(e=>({time:e.time,type:e.type,desc:e.desc}));
+    }
+  }catch(e){ setConnStatus('err','离线 / offline'); }
+
   // Render with whatever data we have
   buildSenses(); buildModules(); buildTimeline(); buildKPIs(); buildCTM(); buildAllCharts();
   if(serverConnected) toast('已连接 PHOENIX 服务器 / Connected','ok');
@@ -420,28 +438,34 @@ async function refresh(){
   if(!serverConnected){ await tryConnect(); return; }
   try{
     const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),5000);
-    const r=await fetch(SERVER+'/api/stats',{signal:ctrl.signal});
-    if(!r.ok) throw new Error('not ok');
-    const s=await r.json();
-    // Direct DOM update — same pattern as dashboard.html
-    data.modules=s.modules||0; data.rules=s.rules||0; data.senses=s.senses||0;
-    data.toolCalls=s.tool_calls||0; data.blocked=s.blocked||0;
-    data.rule_health=s.rule_health||0; data.cost_health=s.cost_health||0; data.cost_grade=s.cost_grade||'F';
-    data.frameworks_active=s.frameworks_active||0; data.hooks=s.hooks||0;
-    if(s.tool_usage) data.toolUsage=s.tool_usage;
-    if(s.waste) data.wasteBreakdown=s.waste;
-    if(s.module_list) data.moduleList=s.module_list;
-    // Fetch activity
-    try{
-      const ctrl2=new AbortController(); setTimeout(()=>ctrl2.abort(),3000);
-      const r2=await fetch(SERVER+'/api/activity',{signal:ctrl2.signal});
-      if(r2.ok){
-        const a=await r2.json();
-        if(a.entries && a.entries.length>0){
-          data.timeline=a.entries.slice(0,10).map(e=>({time:e.time,type:e.type,desc:e.desc}));
-        }
-      }
-    }catch(e2){}
+    const[statsResp,ctmResp,activityResp]=await Promise.all([
+      fetch(SERVER+'/api/stats',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null),
+      fetch(SERVER+'/api/ctm',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null),
+      fetch(SERVER+'/api/activity',{signal:ctrl.signal}).then(r=>r.ok?r.json():null).catch(()=>null)
+    ]);
+
+    // Apply stats
+    if(statsResp){
+      const s=statsResp;
+      data.modules=s.modules||0; data.rules=s.rules||0; data.senses=s.senses||0;
+      data.toolCalls=s.tool_calls||0; data.blocked=s.blocked||0;
+      data.rule_health=s.rule_health||0; data.cost_health=s.cost_health||0; data.cost_grade=s.cost_grade||'F';
+      data.frameworks_active=s.frameworks_active||0; data.hooks=s.hooks||0;
+      if(s.tool_usage) data.toolUsage=s.tool_usage;
+      if(s.waste) data.wasteBreakdown=s.waste;
+      if(s.module_list) data.moduleList=s.module_list;
+    }
+
+    // Apply CTM data
+    if(ctmResp){
+      data.ctm=ctmResp;
+    }
+
+    // Apply activity
+    if(activityResp?.entries?.length){
+      data.timeline=activityResp.entries.slice(0,10).map(e=>({time:e.time,type:e.type,desc:e.desc}));
+    }
+
     // Update DOM
     buildKPIs(); buildModules(); buildTimeline(); buildCTM(); buildAllCharts();
     setConnStatus('ok','实时 / live @ :8765');

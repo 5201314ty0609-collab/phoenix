@@ -6,9 +6,9 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="1.3.0-20260619-2154">
+<meta name="version" content="1.4.0-20260619-2300">
 <title>PHOENIX — 自进化智能体框架 / Self-Evolving Agent Harness</title>
-<meta name="description" content="PHOENIX 自进化智能体框架，融合五层架构、七感元认知与自主框架进化。Five-layer architecture fusing memory, metacognition, and autonomous evolution.">
+<meta name="description" content="PHOENIX 自进化智能体框架，融合 CTM 连续思维引擎、八感元认知与自主框架进化。CTM-powered continuous thinking, 8-sense metacognition, and autonomous evolution.">
 <style>
   :root {
     --bg: #08080e; --surface: #111119; --surface-raised: #181824;
@@ -90,6 +90,8 @@
     .features { grid-template-columns: 1fr; } .tools { grid-template-columns: 1fr; }
     .nav-links { gap: 0.8rem; font-size: 0.8rem; }
   }
+  .ctm-highlight { background: linear-gradient(135deg, var(--surface) 0%, var(--warm-dark) 100%); border: 1px solid rgba(244,158,66,0.3); }
+  .ctm-highlight:hover { border-color: var(--accent); }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
@@ -109,30 +111,55 @@
 </nav>
 
 <header class="hero container">
-  <div class="hero-badge">v1.3.0 · MIT License</div>
+  <div class="hero-badge">v1.4.0 · MIT License · CTM Engine</div>
   <h1><span>PHOENIX</span><br>自进化智能体框架</h1>
   <div class="hero-sub">
-    <span class="zh">五层架构融合记忆、元认知与自主框架进化。实时监控 · 自动学习 · 自我进化。</span>
-    <span class="en">Five-layer architecture fusing memory, metacognition, and autonomous framework evolution. Monitor. Learn. Evolve.</span>
+    <span class="zh">CTM 连续思维引擎驱动，八感元认知实时监控，55+ 模块协同工作。持续思考 · 实时感知 · 自主进化。</span>
+    <span class="en">CTM-powered continuous thinking, 8-sense real-time metacognition, 55+ modules working in harmony. Think. Sense. Evolve.</span>
   </div>
   <div class="hero-meta">
-    <span>纯 Python stdlib</span>
-    <span>零外部依赖</span>
-    <span>27 引擎模块</span>
-    <span>15 规则文件</span>
+    <span>CTM 引擎</span>
+    <span>8-Sense 监控</span>
+    <span>55+ 模块</span>
+    <span>35K+ 代码行</span>
   </div>
 </header>
 
 <div class="container"><div class="stats">
-  <div><div class="stat-value" id="stat-modules">27</div><div class="stat-label">引擎模块<span class="en"> / Engine Modules</span></div></div>
-  <div><div class="stat-value" id="stat-rules">15</div><div class="stat-label">规则文件<span class="en"> / Rule Files</span></div></div>
-  <div><div class="stat-value" id="stat-rule-health">93%</div><div class="stat-label">规则健康<span class="en"> / Rule Health</span></div></div>
-  <div><div class="stat-value" id="stat-cost-health">72</div><div class="stat-label">成本健康<span class="en"> / Cost Health</span></div></div>
+  <div><div class="stat-value" id="stat-modules">55+</div><div class="stat-label">引擎模块<span class="en"> / Engine Modules</span></div></div>
+  <div><div class="stat-value" id="stat-lines">35K+</div><div class="stat-label">代码行数<span class="en"> / Lines of Code</span></div></div>
+  <div><div class="stat-value" id="stat-senses">8</div><div class="stat-label">感知系统<span class="en"> / Senses Active</span></div></div>
+  <div><div class="stat-value" id="stat-automations">24</div><div class="stat-label">自动化引擎<span class="en"> / Automation Engines</span></div></div>
 </div></div>
 
 <section class="container">
   <div class="section-header">
-    <div class="section-num">01 / 架构 · ARCHITECTURE</div>
+    <div class="section-num">01 / CTM 引擎 · CONTINUOUS THINKING MACHINE</div>
+    <h2>连续思维引擎 <span style="font-weight:400;color:var(--text-muted);font-size:0.8em">CTM Engine</span></h2>
+    <p class="sub">PHOENIX 的大脑。CTM 引擎实现持续、连贯的思考流，突破传统 LLM 的单次推理限制。The brain of PHOENIX. CTM enables continuous, coherent thinking streams beyond single-pass inference.</p>
+  </div>
+  <div class="bento">
+    <div class="bento-card wide ctm-highlight">
+      <span class="emoji">&#x1F9E0;</span>
+      <h3>持续思考流 <span class="en">Continuous Stream</span></h3>
+      <p>CTM 引擎维护跨会话的思维连续性。上下文压缩不再是信息丢失，而是智能摘要。思维链自动持久化到文件系统，实现真正的"记忆"。Maintains thinking continuity across sessions. Context compression becomes intelligent summarization, not information loss.</p>
+    </div>
+    <div class="bento-card ctm-highlight">
+      <span class="emoji">&#x26A1;</span>
+      <h3>实时决策 <span class="en">Real-Time Decisions</span></h3>
+      <p>八感输入实时融合，毫秒级响应。O2 生命力、痛觉、时间感知等八路信号并行处理，驱动智能决策。8-sense inputs fused in real-time for millisecond-level intelligent decisions.</p>
+    </div>
+    <div class="bento-card ctm-highlight">
+      <span class="emoji">&#x1F504;</span>
+      <h3>自适应循环 <span class="en">Adaptive Loop</span></h3>
+      <p>感知-思考-行动-反思闭环。每次交互都产生新的认知片段，自动归档到知识库，供未来检索使用。Perception-Think-Act-Reflect loop. Each interaction generates cognitive fragments for future retrieval.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="section-header">
+    <div class="section-num">02 / 架构 · ARCHITECTURE</div>
     <h2>五层架构 <span style="font-weight:400;color:var(--text-muted);font-size:0.8em">Five-Layer Architecture</span></h2>
     <p class="sub">从内核级安全到自主进化，每一层都建立在上一层之上。From kernel-level safety to autonomous evolution, each layer builds on the last.</p>
   </div>
@@ -145,7 +172,7 @@
     <div class="bento-card">
       <span class="emoji">&#x1F441;</span>
       <h3>感知层 <span class="en">Perception</span></h3>
-      <p>七感元认知与 OpenTelemetry 原生追踪。O2 生命力、痛觉、时间感知——全部可量化、可查询。Seven-sense metacognition with OTel-native tracing. All quantified and queryable.</p>
+      <p>八感元认知与 OpenTelemetry 原生追踪。O2 生命力、痛觉、时间、空间、平衡、回声、漂移、本体——全部可量化、可查询。8-sense metacognition with OTel-native tracing. All quantified and queryable.</p>
     </div>
     <div class="bento-card">
       <span class="emoji">&#x1F9E0;</span>
@@ -167,11 +194,21 @@
 
 <section class="container">
   <div class="section-header">
-    <div class="section-num">02 / 能力 · CAPABILITIES</div>
+    <div class="section-num">03 / 能力 · CAPABILITIES</div>
     <h2>核心系统 <span style="font-weight:400;color:var(--text-muted);font-size:0.8em">Core Systems</span></h2>
-    <p class="sub">每个模块可独立测试，共同构成完整框架。Each module is independently testable, collectively forming the harness.</p>
+    <p class="sub">55+ 模块可独立测试，共同构成完整框架。55+ modules independently testable, collectively forming the harness.</p>
   </div>
   <div class="features">
+    <div class="feature-card">
+      <span class="icon">&#x1F9E0;</span>
+      <h3>CTM 连续思维</h3><div class="en-sub">Continuous Thinking</div>
+      <p>持续思考流引擎，跨会话思维连续性。上下文智能摘要，思维链自动持久化。Continuous thinking stream with cross-session continuity and intelligent summarization.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F441;</span>
+      <h3>八感元认知</h3><div class="en-sub">8-Sense Metacognition</div>
+      <p>O2 生命力、痛觉、时间、空间、平衡、回声、漂移、本体八感实时监控。8 real-time senses: O2, Nociception, Chronos, Spatial, Vestibular, Echo, Drift, Proprioception.</p>
+    </div>
     <div class="feature-card">
       <span class="icon">&#x1F6E1;</span>
       <h3>智能错误恢复</h3><div class="en-sub">Intelligent Recovery</div>
@@ -188,30 +225,28 @@
       <p>6 种 Python 变异策略。TDD 流水线中的变体验证步骤。SWE-Mutation（ACL 2026）验证。6 mutation strategies. MUTATION VERIFY step in TDD pipeline.</p>
     </div>
     <div class="feature-card">
-      <span class="icon">&#x1F4CB;</span>
-      <h3>任务规划系统</h3><div class="en-sub">Task Planning</div>
-      <p>文件系统即外部工作内存。确定性完成门控判断磁盘工件，而非对话转录。Filesystem as external working memory. Deterministic completion gate.</p>
-    </div>
-    <div class="feature-card">
-      <span class="icon">&#x1F3A8;</span>
-      <h3>设计知识库</h3><div class="en-sub">Design Knowledge</div>
-      <p>67 种 UI 风格、161 套行业调色板、行业特定反模式。吸收自 UI UX Pro Max（92K 星）。67 styles, 161 palettes, industry anti-patterns.</p>
-    </div>
-    <div class="feature-card">
-      <span class="icon">&#x1F4E1;</span>
-      <h3>可观测性</h3><div class="en-sub">Observability</div>
-      <p>七感雷达图、SQLite 追踪存储、Langfuse 兼容 JSON 导出。零外部依赖。7-sense radar, SQLite trace storage, Langfuse-compatible export.</p>
+      <span class="icon">&#x1F504;</span>
+      <h3>统一事件集成</h3><div class="en-sub">Unified Event Hub</div>
+      <p>所有模块通过统一事件总线通信。实时数据流、自动触发、智能路由。All modules communicate via unified event bus with real-time streaming and smart routing.</p>
     </div>
   </div>
 </section>
 
 <section class="container">
   <div class="section-header">
-    <div class="section-num">03 / 工具箱 · TOOLBOX</div>
+    <div class="section-num">04 / 工具箱 · TOOLBOX</div>
     <h2>CLI 工具 <span style="font-weight:400;color:var(--text-muted);font-size:0.8em">CLI Tools</span></h2>
     <p class="sub">每个模块提供命令行界面。零配置即可使用。Every module exposes a CLI. Zero configuration required.</p>
   </div>
   <div class="tools">
+    <div class="tool-card"><div>
+      <code>python3 phoenix-ctm.py status</code>
+      <span class="desc">CTM 引擎状态 + 思维流监控 / CTM engine status + thinking stream</span>
+    </div></div>
+    <div class="tool-card"><div>
+      <code>python3 phoenix-8sense.py dashboard</code>
+      <span class="desc">八感实时监控仪表盘 / 8-sense real-time monitoring dashboard</span>
+    </div></div>
     <div class="tool-card"><div>
       <code>python3 phoenix-bash-guard.py check "cmd"</code>
       <span class="desc">AST 级 Bash 安全门禁 / 42 DANGER signals</span>
@@ -233,35 +268,30 @@
       <span class="desc">FTS5 + 向量 + 图混合检索 + RRF 融合 / Hybrid retrieval</span>
     </div></div>
     <div class="tool-card"><div>
-      <code>python3 phoenix-observability.py dashboard</code>
-      <span class="desc">七感雷达图 + Langfuse 兼容追踪 / 7-sense radar + traces</span>
-    </div></div>
-    <div class="tool-card"><div>
-      <code>python3 phoenix-auto-memory.py recall "query"</code>
-      <span class="desc">自动捕获记忆 + 艾宾浩斯衰减评分 / Auto-capture + decay</span>
-    </div></div>
-    <div class="tool-card"><div>
-      <code>python3 phoenix-rule-health.py dashboard</code>
-      <span class="desc">规则有效性评分 + 优化建议 / Rule effectiveness scoring</span>
+      <code>python3 phoenix-event-hub.py listen</code>
+      <span class="desc">统一事件总线监听 / Unified event hub listener</span>
     </div></div>
   </div>
 </section>
 
 <section class="container">
   <div class="section-header">
-    <div class="section-num">04 / 对比 · COMPARISON</div>
+    <div class="section-num">05 / 对比 · COMPARISON</div>
     <h2>相对 MUNDO 与 NexSandglass 的提升 <span style="font-weight:400;color:var(--text-muted);font-size:0.8em">Over Predecessors</span></h2>
     <p class="sub">PHOENIX 吸收了两个前身项目的最佳理念，并以生产级工程加以强化。Absorbs the best ideas from its predecessors and hardens them with production engineering.</p>
   </div>
   <div class="table-wrap"><table>
     <thead><tr><th>维度 / Dimension</th><th>MUNDO</th><th>NexSandglass</th><th>PHOENIX</th></tr></thead>
     <tbody>
+      <tr><td>思维引擎</td><td class="warn">无</td><td class="warn">无</td><td class="check">CTM 连续思维 + 跨会话记忆</td></tr>
+      <tr><td>感知系统</td><td class="warn">基础监控</td><td class="warn">仅漂移率</td><td class="check">八感实时监控 + 自适应响应</td></tr>
       <tr><td>错误恢复</td><td class="warn">基础重试</td><td class="warn">无</td><td class="check">6 类 + 9 策略 + 熔断器</td></tr>
       <tr><td>上下文管理</td><td class="warn">简单截断</td><td class="warn">仅沙粒</td><td class="check">Chunk 优先级淘汰 + O2 生命力 + 沙盒</td></tr>
       <tr><td>任务规划</td><td class="warn">基于提示词</td><td class="warn">无</td><td class="check">文件系统外部内存 + SHA-256 认证</td></tr>
       <tr><td>知识库</td><td class="warn">基于文件</td><td class="warn">稀疏 SSE</td><td class="check">FTS5 + 向量 + 图 + RRF 融合</td></tr>
       <tr><td>安全</td><td class="warn">仅提示词防护</td><td class="warn">无</td><td class="check">AST Bash 门控 + 变异门控 + 工具防护</td></tr>
-      <tr><td>可观测性</td><td class="warn">无</td><td class="warn">仅漂移率</td><td class="check">七感追踪 + Langfuse 导出 + 成本归因</td></tr>
+      <tr><td>可观测性</td><td class="warn">无</td><td class="warn">仅漂移率</td><td class="check">八感追踪 + Langfuse 导出 + 成本归因</td></tr>
+      <tr><td>事件集成</td><td class="warn">无</td><td class="warn">无</td><td class="check">统一事件总线 + 智能路由</td></tr>
       <tr><td>测试覆盖</td><td class="warn">仅手动</td><td class="warn">无</td><td class="check">变异验证 TDD + 6 策略</td></tr>
       <tr><td>设计知识</td><td class="warn">无</td><td class="warn">无</td><td class="check">67 风格 + 161 调色板 + 行业反模式</td></tr>
     </tbody>
@@ -270,7 +300,7 @@
 
 <section class="container">
   <div class="section-header">
-    <div class="section-num">05 / 部署 · DEPLOY</div>
+    <div class="section-num">06 / 部署 · DEPLOY</div>
     <h2>快速开始 <span style="font-weight:400;color:var(--text-muted);font-size:0.8em">Get Started</span></h2>
     <p class="sub">克隆、配置、启动。PHOENIX 零外部依赖即可运行。Clone, configure, and launch. Runs with zero external dependencies.</p>
   </div>
@@ -283,7 +313,7 @@
 </section>
 
 <footer>
-  <p>PHOENIX v1.3.0 · <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a> · holyty + PHOENIX · MIT License</p>
+  <p>PHOENIX v1.4.0 · <a href="https://github.com/5201314ty0609-collab/phoenix">GitHub</a> · holyty + PHOENIX · MIT License · CTM Powered</p>
 </footer>
 
 <script>
@@ -295,10 +325,10 @@ async function updateStats() {
     const r = await fetch(SERVER + '/api/stats', { signal: ctrl.signal });
     if (r.ok) {
       const d = await r.json();
-      if (d.modules) document.getElementById('stat-modules').textContent = d.modules;
-      if (d.rules) document.getElementById('stat-rules').textContent = d.rules;
-      if (d.rule_health) document.getElementById('stat-rule-health').textContent = d.rule_health + '%';
-      if (d.cost_health) document.getElementById('stat-cost-health').textContent = d.cost_health;
+      if (d.modules) document.getElementById('stat-modules').textContent = d.modules + '+';
+      if (d.lines) document.getElementById('stat-lines').textContent = d.lines >= 1000 ? Math.floor(d.lines / 1000) + 'K+' : d.lines;
+      if (d.senses) document.getElementById('stat-senses').textContent = d.senses;
+      if (d.automations) document.getElementById('stat-automations').textContent = d.automations;
     }
   } catch (e) { /* server offline, keep static data */ }
 }
