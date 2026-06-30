@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX CTM - 连续思维引擎
+鲤鱼 CTM - 连续思维引擎
 Thinking Stream Engine - 思维流状态机
 
 基于 Continuous Thought Machine 概念，实现思维流的连续演化

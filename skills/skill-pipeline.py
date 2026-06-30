@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Skill Pipeline — 技能组合与链式执行。
+鲤鱼 Skill: Skill Pipeline — 技能组合与链式执行。
 
 将多个技能串联执行，前一个的输出影响后一个的输入。
 
@@ -22,10 +22,10 @@ import sys
 import uuid
 
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-SKILLS_DIR = PHOENIX_HOME / "skills"
-PIPELINES_FILE = PHOENIX_HOME / "pipelines.json"
-PIPELINE_HISTORY_FILE = PHOENIX_HOME / "pipeline-history.jsonl"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+SKILLS_DIR = 鲤鱼_HOME / "skills"
+PIPELINES_FILE = 鲤鱼_HOME / "pipelines.json"
+PIPELINE_HISTORY_FILE = 鲤鱼_HOME / "pipeline-history.jsonl"
 
 
 # ── Data Model ──────────────────────────────────────────────────────────────

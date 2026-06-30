@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill Registry — 技能依赖与冲突管理系统
+鲤鱼 Skill Registry — 技能依赖与冲突管理系统
 Absorbed from MUNDO v2.0.9 skills.py (SkillRegistry with dependency resolution)
 
 核心能力：
@@ -389,7 +389,7 @@ class SkillRegistry:
             return None
 
         template = {
-            "_comment": f"PHOENIX Skill 元数据 — {name}",
+            "_comment": f"鲤鱼 Skill 元数据 — {name}",
             "version": skill.version or "1.0.0",
             "dependencies": [],
             "conflicts": [],
@@ -483,7 +483,7 @@ def main() -> None:
 
         elif cmd == "validate":
             result = registry.validate()
-            print(f"═══ PHOENIX Skill 验证 ───")
+            print(f"═══ 鲤鱼 Skill 验证 ───")
             print(f"  总技能: {result['total']}")
             print()
 
@@ -555,7 +555,7 @@ def main() -> None:
 
         elif cmd == "stats":
             s = registry.stats()
-            print(f"═══ PHOENIX Skill 统计 ───")
+            print(f"═══ 鲤鱼 Skill 统计 ───")
             print(f"  总计: {s['total']}")
             print(f"  启用: {s['enabled']}  禁用: {s['disabled']}")
             print(f"  有依赖关系: {s['with_dependencies']}")

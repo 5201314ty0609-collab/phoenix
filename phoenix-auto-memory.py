@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-PHOENIX Auto-Memory — OMEGA-style Memory System.
+鲤鱼 Auto-Memory — OMEGA-style Memory System.
 吸收自 OMEGA Agent 的 Auto-Capture + Ebbinghaus Decay + Cross-Agent Sharing 模式。
 
 自动从会话中提取事实/决策/教训，应用艾宾浩斯遗忘曲线衰减，
 支持跨 Agent 记忆类型（语义/情景/程序/关系）。
 
 Usage:
-  python3 phoenix-auto-memory.py capture [session-id]  从会话中自动捕获记忆
-  python3 phoenix-auto-memory.py recall <query>         带衰减评分检索记忆
-  python3 phoenix-auto-memory.py decay                  查看所有记忆的衰减状态
-  python3 phoenix-auto-memory.py stats                  记忆统计
-  python3 phoenix-auto-memory.py clean                  清理过期记忆（TTL=0）
+  python3 liyu-auto-memory.py capture [session-id]  从会话中自动捕获记忆
+  python3 liyu-auto-memory.py recall <query>         带衰减评分检索记忆
+  python3 liyu-auto-memory.py decay                  查看所有记忆的衰减状态
+  python3 liyu-auto-memory.py stats                  记忆统计
+  python3 liyu-auto-memory.py clean                  清理过期记忆（TTL=0）
 """
 
 from collections import defaultdict
@@ -29,13 +29,13 @@ import uuid
 
 # ── 路径 ─────────────────────────────────────────────────────────────────
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-STORY_FILE = PHOENIX_HOME / "story.jsonl"
-REFLECTIONS_FILE = PHOENIX_HOME / "reflections.jsonl"
-MEMORY_CACHE_FILE = PHOENIX_HOME / "auto-memory-cache.json"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+STORY_FILE = 鲤鱼_HOME / "story.jsonl"
+REFLECTIONS_FILE = 鲤鱼_HOME / "reflections.jsonl"
+MEMORY_CACHE_FILE = 鲤鱼_HOME / "auto-memory-cache.json"
 
 # 复用 knowledge-base.db 的 schema，在其上添加 auto-memory 表
-DB_PATH = PHOENIX_HOME / "knowledge-base.db"
+DB_PATH = 鲤鱼_HOME / "knowledge-base.db"
 
 # ── 艾宾浩斯衰减参数 ─────────────────────────────────────────────────────
 # 基于 Ebbinghaus (1885) 遗忘曲线: R = e^(-t/S)
@@ -155,7 +155,7 @@ def _extract_facts(text: str) -> List[Tuple[str, str, float]]:
         (r'(决定|选择|采用|使用|确定)[：:]\s*(.+?)(?:[。\n]|$)', 0.7),
         (r'(升级|迁移|切换到|替换为)\s*(.+?)(?:[。\n]|$)', 0.65),
         (r'(配置|设置|安装)[：:]\s*(.+?)(?:[。\n]|$)', 0.6),
-        (r'PHOENIX\s*(v[\d.]+|升级|吸收|整合).*?(.+?)(?:[。\n]|$)', 0.75),
+        (r'鲤鱼\s*(v[\d.]+|升级|吸收|整合).*?(.+?)(?:[。\n]|$)', 0.75),
         (r'(创建|建立|搭建)[：:]\s*(.+?)(?:[。\n]|$)', 0.55),
         (r'(规则|Rule|Framework)[：:]\s*(.+?)(?:[。\n]|$)', 0.6),
         (r'(吸收自|借鉴|参考)[：:]\s*(.+?)(?:[。\n]|$)', 0.7),
@@ -272,8 +272,8 @@ def _estimate_importance(content: str) -> float:
     """启发式估计内容重要性"""
     importance = 0.5
 
-    # PHOENIX 相关内容更重要
-    if re.search(r'PHOENIX|phoenix|框架|Framework|进化|evolution', content):
+    # 鲤鱼 相关内容更重要
+    if re.search(r'鲤鱼|liyu|框架|Framework|进化|evolution', content):
         importance += 0.2
 
     # 决策/架构类更重要
@@ -753,7 +753,7 @@ def main():
 
     elif cmd == "recall":
         if len(sys.argv) < 3:
-            print("Usage: python3 phoenix-auto-memory.py recall <query> [--type semantic|episodic|procedural|relational]")
+            print("Usage: python3 liyu-auto-memory.py recall <query> [--type semantic|episodic|procedural|relational]")
             return
         query = sys.argv[2]
         mem_type = ""

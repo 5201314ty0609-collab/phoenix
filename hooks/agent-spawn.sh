@@ -1,5 +1,5 @@
 #!/bin/bash
-# === PHOENIX AgentSpawn Hook v1.0 ===
+# === 鲤鱼 AgentSpawn Hook v1.0 ===
 # 子 Agent 启动时触发，注册 Agent 并初始化协调
 #
 # 功能：
@@ -13,10 +13,10 @@
 
 set -euo pipefail
 
-PHOENIX="$HOME/.claude/phoenix"
-COORD_DIR="/tmp/phoenix-coordination"
-HEARTBEAT_DIR="$PHOENIX/heartbeats"
-AGENT_LOG="$PHOENIX/agent-lifecycle.jsonl"
+鲤鱼="$HOME/.claude/liyu"
+COORD_DIR="/tmp/liyu-coordination"
+HEARTBEAT_DIR="$鲤鱼/heartbeats"
+AGENT_LOG="$鲤鱼/agent-lifecycle.jsonl"
 
 # 读取输入
 INPUT=$(cat)

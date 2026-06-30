@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-PHOENIX Cost Core — Data models, session parsing, waste detection, health calculation.
+鲤鱼 Cost Core — Data models, session parsing, waste detection, health calculation.
 
-Internal module used by phoenix-cost-tracker.py. Not invoked directly.
+Internal module used by liyu-cost-tracker.py. Not invoked directly.
 
 Reads Claude Code session transcripts to extract token usage, categorize costs,
 detect waste patterns, and compute health grades. Inspired by CodeBurn architecture.
@@ -22,7 +22,7 @@ from typing import Dict, List, Optional, Tuple, Any
 # ─── Constants ───────────────────────────────────────────────────────────────
 
 HOME = os.path.expanduser("~")
-PHOENIX_DIR = os.path.join(HOME, ".claude", "phoenix")
+鲤鱼_DIR = os.path.join(HOME, ".claude", "liyu")
 SESSION_DIR = os.path.join(HOME, ".claude", "projects", "-Users-holyty")
 RULES_DIR = os.path.join(HOME, ".claude", "rules")
 AGENTS_DIR = os.path.join(HOME, ".claude", "agents")
@@ -805,7 +805,7 @@ def pre_compact_check(sessions: List[SessionTokens],
     # Identify bloated language rules
     bloated_langs = [
         o for o in overheads
-        if o.language not in ("all", "common", "web", "phoenix")
+        if o.language not in ("all", "common", "web", "liyu")
         and o.est_tokens > 2000
     ]
     trim_savings = sum(o.est_tokens for o in bloated_langs)

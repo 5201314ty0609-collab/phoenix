@@ -1,0 +1,233 @@
+# =============================================================================
+# PHOENIX AIOS Docker Compose — 完整服务编排配置
+# =============================================================================
+# 服务列表:
+#   - phoenix-core:    PHOENIX 核心服务 (API + Dashboard)
+#   - nginx:           反向代理 + 负载均衡
+#   - redis:           缓存 + 会话存储
+#   - prometheus:      指标收集
+#   - grafana:         监控可视化
+#   - loki:            日志聚合
+#   - promtail:        日志收集器
+# =============================================================================
+
+version: '3.9'
+
+# ── 服务定义 ──────────────────────────────────────────────────────────────
+services:
+  # PHOENIX 核心服务
+  phoenix-core:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        - PHOENIX_ENV=production
+    container_name: phoenix-core
+    restart: unless-stopped
+    ports:
+      - "8765:8765"
+    environment:
+      - PHOENIX_PORT=8765
+      - PHOENIX_HOST=0.0.0.0
+      - PHOENIX_ENV=production
+      - SENTRY_DSN=${SENTRY_DSN:-}
+      - REDIS_URL=redis://redis:6379/0
+      - LOG_LEVEL=INFO
+    volumes:
+      - phoenix-data:/opt/phoenix/data
+      - phoenix-logs:/opt/phoenix/logs
+      - phoenix-configs:/opt/phoenix/configs
+      - ./config/phoenix.env:/opt/phoenix/.env:ro
+    networks:
+      - phoenix-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8765/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Nginx 反向代理
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: phoenix-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - nginx-cache:/var/cache/nginx
+      - phoenix-logs:/var/log/nginx
+    depends_on:
+      phoenix-core:
+        condition: service_healthy
+    networks:
+      - phoenix-network
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis 缓存服务
+  redis:
+    image: redis:7-alpine
+    container_name: phoenix-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --requirepass ${REDIS_PASSWORD:-phoenix_redis_pass}
+    volumes:
+      - redis-data:/data
+    networks:
+      - phoenix-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-phoenix_redis_pass}", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Prometheus 指标收集
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: phoenix-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/alert-rules.yml:/etc/prometheus/alert-rules.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - phoenix-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Grafana 监控可视化
+  grafana:
+    image: grafana/grafana:10.2.2
+    container_name: phoenix-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-phoenix_grafana}
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+      - GF_SERVER_ROOT_URL=${GRAFANA_URL:-http://localhost:3000}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    networks:
+      - phoenix-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Loki 日志聚合
+  loki:
+    image: grafana/loki:2.9.3
+    container_name: phoenix-loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - phoenix-network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3100/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Promtail 日志收集器
+  promtail:
+    image: grafana/promtail:2.9.3
+    container_name: phoenix-promtail
+    restart: unless-stopped
+    volumes:
+      - ./promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+      - /var/log:/var/log:ro
+      - phoenix-logs:/opt/phoenix/logs:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      loki:
+        condition: service_healthy
+    networks:
+      - phoenix-network
+
+# ── 数据卷定义 ────────────────────────────────────────────────────────────
+volumes:
+  phoenix-data:
+    driver: local
+    name: phoenix-data
+  phoenix-logs:
+    driver: local
+    name: phoenix-logs
+  phoenix-configs:
+    driver: local
+    name: phoenix-configs
+  nginx-cache:
+    driver: local
+    name: nginx-cache
+  redis-data:
+    driver: local
+    name: redis-data
+  prometheus-data:
+    driver: local
+    name: prometheus-data
+  grafana-data:
+    driver: local
+    name: grafana-data
+  loki-data:
+    driver: local
+    name: loki-data
+
+# ── 网络定义 ──────────────────────────────────────────────────────────────
+networks:
+  phoenix-network:
+    driver: bridge
+    name: phoenix-network
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

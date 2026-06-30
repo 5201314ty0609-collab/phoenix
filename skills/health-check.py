@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Health Check — 系统健康检查。
+鲤鱼 Skill: Health Check — 系统健康检查。
 
 检查系统状态：
 - 磁盘空间
 - 内存使用
 - Python/Node 环境
-- PHOENIX 组件状态
+- 鲤鱼 组件状态
 - Git 仓库状态
 
 Usage:
@@ -194,28 +194,28 @@ def run_git(args: List[str]) -> Tuple[str, int]:
     return run_cmd(["git"] + args)
 
 
-def check_phoenix_home() -> CheckResult:
-    """检查 PHOENIX 目录"""
-    phoenix_home = Path.home() / ".claude" / "phoenix"
-    if not phoenix_home.exists():
-        return CheckResult(name="PHOENIX Home", status="error", message="Directory not found")
+def check_liyu_home() -> CheckResult:
+    """检查 鲤鱼 目录"""
+    liyu_home = Path.home() / ".claude" / "liyu"
+    if not liyu_home.exists():
+        return CheckResult(name="鲤鱼 Home", status="error", message="Directory not found")
 
     # Count key files
-    py_files = list(phoenix_home.glob("*.py"))
-    skills_dir = phoenix_home / "skills"
+    py_files = list(liyu_home.glob("*.py"))
+    skills_dir = liyu_home / "skills"
     skills = list(skills_dir.glob("*.py")) if skills_dir.exists() else []
 
     return CheckResult(
-        name="PHOENIX Home",
+        name="鲤鱼 Home",
         status="ok",
         message=f"{len(py_files)} scripts, {len(skills)} skills",
-        details=str(phoenix_home),
+        details=str(liyu_home),
     )
 
 
 def check_knowledge_base() -> CheckResult:
     """检查知识库状态"""
-    db_path = Path.home() / ".claude" / "phoenix" / "knowledge-base.db"
+    db_path = Path.home() / ".claude" / "liyu" / "knowledge-base.db"
     if not db_path.exists():
         return CheckResult(name="Knowledge Base", status="info", message="Not initialized")
 
@@ -230,7 +230,7 @@ def check_knowledge_base() -> CheckResult:
 
 def check_observability() -> CheckResult:
     """检查可观测性状态"""
-    db_path = Path.home() / ".claude" / "phoenix" / "observability.db"
+    db_path = Path.home() / ".claude" / "liyu" / "observability.db"
     if not db_path.exists():
         return CheckResult(name="Observability", status="info", message="Not initialized")
 
@@ -240,7 +240,7 @@ def check_observability() -> CheckResult:
 
 def check_reflections() -> CheckResult:
     """检查反思引擎状态"""
-    reflections_file = Path.home() / ".claude" / "phoenix" / "reflections.jsonl"
+    reflections_file = Path.home() / ".claude" / "liyu" / "reflections.jsonl"
     if not reflections_file.exists():
         return CheckResult(name="Reflections", status="info", message="No reflections yet")
 
@@ -251,7 +251,7 @@ def check_reflections() -> CheckResult:
 
 def check_debug_sessions() -> CheckResult:
     """检查调试会话"""
-    sessions_file = Path.home() / ".claude" / "phoenix" / "debug-sessions.jsonl"
+    sessions_file = Path.home() / ".claude" / "liyu" / "debug-sessions.jsonl"
     if not sessions_file.exists():
         return CheckResult(name="Debug Sessions", status="info", message="No sessions")
 
@@ -276,7 +276,7 @@ def run_all_checks(quick: bool = False) -> List[CheckResult]:
         check_memory(),
         check_python(),
         check_git(),
-        check_phoenix_home(),
+        check_liyu_home(),
     ]
 
     if not quick:
@@ -310,7 +310,7 @@ def print_report(checks: List[CheckResult], as_json: bool = False):
 
     status_icons = {"ok": "OK", "warning": "WARN", "error": "ERR", "info": "INFO"}
 
-    print(f"PHOENIX Health Check — {platform.node()}")
+    print(f"鲤鱼 Health Check — {platform.node()}")
     print("=" * 60)
 
     for check in checks:

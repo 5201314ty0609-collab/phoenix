@@ -28,3 +28,7 @@
 {"id": "evt-66b828a307", "timestamp": "2026-06-22T11:14:21.928237+00:00", "source": "test", "type": "session.start", "severity": "info", "payload": {"key": "value"}, "correlation_id": ""}
 {"id": "evt-047dd817f2", "timestamp": "2026-06-22T11:14:21.928434+00:00", "source": "phoenix", "type": "heal.observe", "severity": "info", "payload": {"issue": "test"}, "correlation_id": ""}
 {"id": "evt-198668d4b4", "timestamp": "2026-06-22T11:15:19.682232+00:00", "source": "phoenix", "type": "test.verify", "severity": "info", "payload": {}, "correlation_id": ""}
+{"id": "evt-c2ec527ec8", "timestamp": "2026-06-22T15:53:35.425642+00:00", "source": "phoenix", "type": "session.start", "severity": "info", "payload": {"date": "2026-06-22", "mood": "正常", "frameworks_active": 26}, "correlation_id": ""}
+{"id": "evt-a461498d8c", "timestamp": "2026-06-30T03:57:38.747676+00:00", "source": "phoenix", "type": "session.start", "severity": "info", "payload": {"date": "2026-06-30", "mood": "正常", "frameworks_active": 26}, "correlation_id": ""}
+{"id": "evt-f72ec08130", "timestamp": "2026-06-30T04:03:52.124654+00:00", "source": "phoenix", "type": "session.start", "severity": "info", "payload": {"date": "2026-06-30", "mood": "正常", "frameworks_active": 26}, "correlation_id": ""}
+{"id": "evt-945833d54c", "timestamp": "2026-06-30T04:04:19.195966+00:00", "source": "phoenix", "type": "session.start", "severity": "info", "payload": {"date": "2026-06-30", "mood": "正常", "frameworks_active": 26}, "correlation_id": ""}

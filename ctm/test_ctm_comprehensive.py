@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX CTM 引擎 — 全面测试套件
+鲤鱼 CTM 引擎 — 全面测试套件
 覆盖：功能测试、边界情况、错误处理、性能、集成
 """
 
@@ -566,7 +566,7 @@ def suite_oscillator_advanced():
 
     # -- load 不存在的文件
     sync5 = OscillatorSyncModule()
-    sync5.load_state("/tmp/nonexistent_phoenix_ctm_test.json")
+    sync5.load_state("/tmp/nonexistent_liyu_ctm_test.json")
     assert_true(True, r, "load 不存在文件不崩溃")
 
     return r
@@ -894,7 +894,7 @@ def suite_singletons():
 
 def main():
     print("\n" + "=" * 70)
-    print("PHOENIX CTM 引擎 — 全面测试套件")
+    print("鲤鱼 CTM 引擎 — 全面测试套件")
     print("=" * 70 + "\n")
 
     suites = [

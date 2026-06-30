@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Observability v2 — Unified monitoring orchestrator.
+鲤鱼 Observability v2 — Unified monitoring orchestrator.
 ============================================================
 
 Ties together all observability modules:
@@ -10,12 +10,12 @@ Ties together all observability modules:
 - Original Observability (tracing + scoring)
 
 Usage:
-  phoenix-observability-v2.py status               Quick status of all 7 senses
-  phoenix-observability-v2.py cycle                 Run a full collect → alert → score cycle
-  phoenix-observability-v2.py dashboard [--open]    Generate HTML dashboard
-  phoenix-observability-v2.py watch [--interval 30] Continuous monitoring loop
-  phoenix-observability-v2.py report                Full text report
-  phoenix-observability-v2.py health                Health score with recommendations
+  liyu-observability-v2.py status               Quick status of all 7 senses
+  liyu-observability-v2.py cycle                 Run a full collect → alert → score cycle
+  liyu-observability-v2.py dashboard [--open]    Generate HTML dashboard
+  liyu-observability-v2.py watch [--interval 30] Continuous monitoring loop
+  liyu-observability-v2.py report                Full text report
+  liyu-observability-v2.py health                Health score with recommendations
 """
 
 from __future__ import annotations
@@ -28,13 +28,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
 PYTHON = sys.executable
 
 
 def _run_module(script: str, args: List[str], capture: bool = True) -> Optional[str]:
-    """Run a PHOENIX module and return stdout."""
-    cmd = [PYTHON, str(PHOENIX_HOME / script)] + args
+    """Run a 鲤鱼 module and return stdout."""
+    cmd = [PYTHON, str(鲤鱼_HOME / script)] + args
     try:
         result = subprocess.run(cmd, capture_output=capture, text=True, timeout=30)
         return result.stdout if capture else None
@@ -47,15 +47,15 @@ def run_cycle() -> Dict:
     results = {"timestamp": datetime.now(timezone.utc).isoformat()}
 
     # 1. Collect metrics
-    output = _run_module("phoenix-metrics-collector.py", ["collect"])
+    output = _run_module("liyu-metrics-collector.py", ["collect"])
     results["collect"] = output.strip() if output else "failed"
 
     # 2. Check alerts
-    output = _run_module("phoenix-alert-engine.py", ["check"])
+    output = _run_module("liyu-alert-engine.py", ["check"])
     results["alerts"] = output.strip() if output else "failed"
 
     # 3. Ingest into observability DB
-    output = _run_module("phoenix-observability.py", ["ingest", "all"])
+    output = _run_module("liyu-observability.py", ["ingest", "all"])
     results["ingest"] = output.strip() if output else "failed"
 
     return results
@@ -65,7 +65,7 @@ def get_status() -> Dict:
     """Get quick status of all senses."""
     senses = {}
     for sense_id in ["o2", "nociception", "chronos", "spatial", "vestibular", "echo", "drift"]:
-        path = PHOENIX_HOME / "senses" / f"{sense_id}.json"
+        path = 鲤鱼_HOME / "senses" / f"{sense_id}.json"
         if path.exists():
             with open(path) as f:
                 data = json.load(f)
@@ -78,7 +78,7 @@ def get_status() -> Dict:
             senses[sense_id] = {"status": "no_data", "metrics": {}, "updated": ""}
 
     # Active alerts
-    output = _run_module("phoenix-alert-engine.py", ["active"])
+    output = _run_module("liyu-alert-engine.py", ["active"])
     alerts_text = output.strip() if output else ""
 
     return {"senses": senses, "alerts_summary": alerts_text}
@@ -89,7 +89,7 @@ def generate_report() -> str:
     status = get_status()
     lines = [
         "=" * 60,
-        "  PHOENIX Observability Report",
+        "  鲤鱼 Observability Report",
         f"  Generated: {datetime.now(timezone.utc).isoformat()[:19]}",
         "=" * 60,
         "",
@@ -123,7 +123,7 @@ def generate_report() -> str:
         lines.append("  No active alerts.")
 
     # Performance summary
-    output = _run_module("phoenix-metrics-collector.py", ["perf"])
+    output = _run_module("liyu-metrics-collector.py", ["perf"])
     if output:
         lines.extend(["", "  PERFORMANCE", "  " + "-" * 50])
         for line in output.strip().split("\n"):
@@ -161,7 +161,7 @@ def get_health() -> Dict:
 
 def watch_loop(interval: int = 30):
     """Continuous monitoring loop."""
-    print(f"PHOENIX Watch Mode — collecting every {interval}s (Ctrl+C to stop)")
+    print(f"鲤鱼 Watch Mode — collecting every {interval}s (Ctrl+C to stop)")
     print("-" * 60)
 
     cycle_count = 0
@@ -225,7 +225,7 @@ def main():
         args = ["generate"]
         if "--open" in sys.argv:
             args.append("--open")
-        output = _run_module("phoenix-dashboard.py", args, capture=False)
+        output = _run_module("liyu-dashboard.py", args, capture=False)
 
     elif cmd == "watch":
         interval = 30

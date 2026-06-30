@@ -287,7 +287,7 @@
       "edges_in": 2
     },
     "mem-2e747664": {
-      "title": "phoenix-vision",
+      "title": "liyu-vision",
       "type": "memory",
       "confidence": 0.9,
       "stage": "active",
@@ -298,7 +298,7 @@
       "edges_in": 4
     },
     "mem-4db95721": {
-      "title": "hermes-phoenix-deployment",
+      "title": "hermes-liyu-deployment",
       "type": "memory",
       "confidence": 0.9,
       "stage": "active",
@@ -309,7 +309,7 @@
       "edges_in": 8
     },
     "mem-b417ba76": {
-      "title": "phoenix-genesis",
+      "title": "liyu-genesis",
       "type": "memory",
       "confidence": 0.9,
       "stage": "active",
@@ -419,7 +419,7 @@
       "edges_in": 14
     },
     "story-01c6d88c": {
-      "title": "session_end: PHOENIX 会话 — 详见日记",
+      "title": "session_end: 鲤鱼 会话 — 详见日记",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -485,7 +485,7 @@
       "edges_in": 2
     },
     "story-2c51473e": {
-      "title": "session_end: PHOENIX v1.1完整升级——神经系统(SessionStart/Stop hooks)+记忆精炼(15条→2条)+GitHub同步+启动器整理+多Age",
+      "title": "session_end: 鲤鱼 v1.1完整升级——神经系统(SessionStart/Stop hooks)+记忆精炼(15条→2条)+GitHub同步+启动器整理+多Age",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -507,7 +507,7 @@
       "edges_in": 2
     },
     "story-36fe0b91": {
-      "title": "hermes_session: 创作任务：用 p5js 创建一个「PHOENIX 七感元认知」实时可视化面板。\n\n要求：\n1. 创建文件 ~/phoenix-site/seven-senses",
+      "title": "hermes_session: 创作任务：用 p5js 创建一个「鲤鱼 七感元认知」实时可视化面板。\n\n要求：\n1. 创建文件 ~/liyu-site/seven-senses",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -518,7 +518,7 @@
       "edges_in": 2
     },
     "story-3c5beb50": {
-      "title": "hermes_session: 你好，我是李时宇，PHOENIX的创建者。请用中文回复我，简单介绍你自己。",
+      "title": "hermes_session: 你好，我是李时宇，鲤鱼的创建者。请用中文回复我，简单介绍你自己。",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -540,7 +540,7 @@
       "edges_in": 2
     },
     "story-5caab1bf": {
-      "title": "session_end: 接通PHOENIX神经系统(SessionStart+Stop hooks联调成功),建立跨会话连续性。记忆清理——归档2条低价值记忆,精简2条核心记忆,建立记",
+      "title": "session_end: 接通鲤鱼神经系统(SessionStart+Stop hooks联调成功),建立跨会话连续性。记忆清理——归档2条低价值记忆,精简2条核心记忆,建立记",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -551,7 +551,7 @@
       "edges_in": 2
     },
     "story-5e38423f": {
-      "title": "session_end: 接通 PHOENIX 神经系统 — 首次 SessionStart + Stop hooks 联调成功",
+      "title": "session_end: 接通 鲤鱼 神经系统 — 首次 SessionStart + Stop hooks 联调成功",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -562,7 +562,7 @@
       "edges_in": 2
     },
     "story-6847d20e": {
-      "title": "hermes_session: 创作任务：为 PHOENIX 设计一套完整的视觉身份系统。\n\n背景：\nPHOENIX 是李时宇的自进化 AI Agent，融合了 ECC、MUNDO Agent",
+      "title": "hermes_session: 创作任务：为 鲤鱼 设计一套完整的视觉身份系统。\n\n背景：\n鲤鱼 是李时宇的自进化 AI Agent，融合了 ECC、MUNDO Agent",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -573,7 +573,7 @@
       "edges_in": 2
     },
     "story-72bcd352": {
-      "title": "genesis: PHOENIX self-evolving agent harness initialized",
+      "title": "genesis: 鲤鱼 self-evolving agent harness initialized",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -595,7 +595,7 @@
       "edges_in": 2
     },
     "story-88bc578c": {
-      "title": "hermes_session: 创作任务：为 PHOENIX 写一首「诞生叙事」诗 + ASCII Art 封面。\n\n背景：\nPHOENIX 诞生于 2026年6月5日，由五大系统融合而成：\n",
+      "title": "hermes_session: 创作任务：为 鲤鱼 写一首「诞生叙事」诗 + ASCII Art 封面。\n\n背景：\n鲤鱼 诞生于 2026年6月5日，由五大系统融合而成：\n",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -617,7 +617,7 @@
       "edges_in": 2
     },
     "story-970175d3": {
-      "title": "session_end: PHOENIX v1.1升级——记忆清理(归档2条,精简2条,建立筛选原则)+GitHub探索吸收3个高星项目(disler/observability+age",
+      "title": "session_end: 鲤鱼 v1.1升级——记忆清理(归档2条,精简2条,建立筛选原则)+GitHub探索吸收3个高星项目(disler/observability+age",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -639,7 +639,7 @@
       "edges_in": 2
     },
     "story-c76f6b32": {
-      "title": "hermes_session: 用 claude-code skill，在 /tmp 目录下创建一个 phoenix-test.py 文件，内容是打印 'PHOENIX MCP Bridge ",
+      "title": "hermes_session: 用 claude-code skill，在 /tmp 目录下创建一个 liyu-test.py 文件，内容是打印 '鲤鱼 MCP Bridge ",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -650,7 +650,7 @@
       "edges_in": 2
     },
     "story-f432c569": {
-      "title": "session_end: PHOENIX v1.1 升级 — GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-age",
+      "title": "session_end: 鲤鱼 v1.1 升级 — GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-age",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -661,7 +661,7 @@
       "edges_in": 2
     },
     "story-f6dc76f4": {
-      "title": "hermes_session: 你现在有哪些系统能力？列出你的 PHOENIX 核心系统。",
+      "title": "hermes_session: 你现在有哪些系统能力？列出你的 鲤鱼 核心系统。",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",
@@ -672,7 +672,7 @@
       "edges_in": 2
     },
     "story-fafd5b63": {
-      "title": "hermes_session: 用一句话总结 PHOENIX MCP 桥的架构：Hermes 能调 Claude Code 吗？Claude Code 能调 Hermes 吗？",
+      "title": "hermes_session: 用一句话总结 鲤鱼 MCP 桥的架构：Hermes 能调 Claude Code 吗？Claude Code 能调 Hermes 吗？",
       "type": "story-event",
       "confidence": 0.5,
       "stage": "active",

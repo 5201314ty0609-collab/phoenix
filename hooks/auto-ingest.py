@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-PHOENIX Auto-Ingest Hook — 自动将对话喂入 NexSandglass
+鲤鱼 Auto-Ingest Hook — 自动将对话喂入 NexSandglass
 Claude Code UserPromptSubmit / SessionEnd hook 触发
 
 读取 stdin 的 hook JSON，提取用户消息，写入沙粒 + 检测决策粒子。
 同时通知 SSE 服务器有新数据到达。
 
 Usage (in settings.json hook):
-  python3 ~/.claude/phoenix/hooks/auto-ingest.py
+  python3 ~/.claude/liyu/hooks/auto-ingest.py
 """
 
 from datetime import datetime, timezone
@@ -16,8 +16,8 @@ import json
 import sys
 import time
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-sys.path.insert(0, str(PHOENIX_HOME))
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+sys.path.insert(0, str(鲤鱼_HOME))
 
 # ── Ingest ─────────────────────────────────────────────────────────────────
 
@@ -78,7 +78,7 @@ def ingest_assistant_message(session_id: str, content: str, turn_id: str = "") -
 
 def _notify_sse(event: dict):
     """通知 SSE 服务器有新事件"""
-    sse_file = PHOENIX_HOME / "nexsandglass" / "sse-events.jsonl"
+    sse_file = 鲤鱼_HOME / "nexsandglass" / "sse-events.jsonl"
     try:
         sse_file.parent.mkdir(parents=True, exist_ok=True)
         event["timestamp"] = datetime.now(timezone.utc).isoformat()

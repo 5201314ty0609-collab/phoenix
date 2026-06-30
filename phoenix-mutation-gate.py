@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Mutation Gate — TDD 变体验证步骤。
+鲤鱼 Mutation Gate — TDD 变体验证步骤。
 
 受 Tautest (canblmz1) + SWE-Mutation (ACL 2026) 启发：
 - 在测试通过后、重构前，对源码施加简单变体
@@ -20,9 +20,9 @@ Tautest 的 fix-prompt 规则（内化）：
   - 不能写占位测试
 
 Usage:
-  phoenix-mutation-gate.py run <source_file> <test_file> [--threshold 80]
-  phoenix-mutation-gate.py check <source_file> <test_file> [--mutants N]
-  phoenix-mutation-gate.py fix-prompt <source_file> <test_file>
+  liyu-mutation-gate.py run <source_file> <test_file> [--threshold 80]
+  liyu-mutation-gate.py check <source_file> <test_file> [--mutants N]
+  liyu-mutation-gate.py fix-prompt <source_file> <test_file>
 """
 
 import ast
@@ -339,7 +339,7 @@ def run_mutation_gate(
     print(f"Running mutation gate (threshold: {threshold}%)...")
     print("-" * 60)
 
-    with tempfile.TemporaryDirectory(prefix="phoenix-mutation-") as tmp_dir:
+    with tempfile.TemporaryDirectory(prefix="liyu-mutation-") as tmp_dir:
         tmp_source = Path(tmp_dir) / source_path.name
         shutil.copy2(source_path, tmp_source)
         lines = source_code.splitlines(keepends=True)
@@ -390,7 +390,7 @@ def generate_fix_prompt(report: MutationReport) -> str:
     killed = [r for r in report.results if r.killed]
 
     lines = []
-    lines.append("# PHOENIX Mutation Gate — Fix Prompt")
+    lines.append("# 鲤鱼 Mutation Gate — Fix Prompt")
     lines.append("")
     lines.append(f"**Generated**: {report.timestamp}")
     lines.append(f"**Source**: `{report.source_file}`")
@@ -481,7 +481,7 @@ def print_report(report: MutationReport):
     """打印终端报告"""
     print()
     print("=" * 60)
-    print("PHOENIX Mutation Gate — Report")
+    print("鲤鱼 Mutation Gate — Report")
     print("=" * 60)
     print()
 
@@ -501,7 +501,7 @@ def print_report(report: MutationReport):
                 print(f"  - L{r.mutation.line:4d} [{r.mutation.strategy:20s}] {r.mutation.description}")
         print()
 
-    print(f"Run 'phoenix-mutation-gate.py fix-prompt {report.source_file} {report.test_file}'")
+    print(f"Run 'liyu-mutation-gate.py fix-prompt {report.source_file} {report.test_file}'")
     print(f"to generate an AI-ready fix prompt.")
 
     if not passed:
@@ -541,7 +541,7 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="PHOENIX Mutation Gate — TDD mutation verification step",
+        description="鲤鱼 Mutation Gate — TDD mutation verification step",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -565,8 +565,8 @@ def main():
     fp_p = sub.add_parser("fix-prompt", help="Generate AI-ready fix prompt")
     fp_p.add_argument("source", help="Source file that was mutated")
     fp_p.add_argument("test", help="Test file that was run")
-    fp_p.add_argument("--output", type=str, default=".phoenix-mutation-fix-prompt.md",
-                      help="Output path (default: .phoenix-mutation-fix-prompt.md)")
+    fp_p.add_argument("--output", type=str, default=".liyu-mutation-fix-prompt.md",
+                      help="Output path (default: .liyu-mutation-fix-prompt.md)")
     fp_p.add_argument("--threshold", type=int, default=80, help="Pass threshold %%")
     fp_p.add_argument("--mutants", type=int, default=None, help="Max mutants to test")
 
@@ -587,8 +587,8 @@ def main():
 
         # 总是生成 fix-prompt 到默认位置
         default_prompt = generate_fix_prompt(report)
-        Path(".phoenix-mutation-fix-prompt.md").write_text(default_prompt)
-        print(f"Fix prompt auto-saved: .phoenix-mutation-fix-prompt.md")
+        Path(".liyu-mutation-fix-prompt.md").write_text(default_prompt)
+        print(f"Fix prompt auto-saved: .liyu-mutation-fix-prompt.md")
 
     elif args.command == "check":
         report = run_mutation_gate(args.source, args.test, args.threshold, args.mutants)

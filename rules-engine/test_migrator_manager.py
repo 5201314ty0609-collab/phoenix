@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Rule Migrator & Manager 测试脚本
+鲤鱼 Rule Migrator & Manager 测试脚本
 """
 
 import sys
@@ -45,7 +45,7 @@ def test_rule_analyzer_edge_cases():
 - **Rule ID**: test-rule
 - **Category**: testing
 - **Priority**: 8
-- **Layer**: phoenix
+- **Layer**: liyu
 - **Languages**: python, typescript
 
 ## Trigger
@@ -73,8 +73,8 @@ testing, quality
     results.append(("Category from title", category == 'testing'))
 
     # Test 5: determine_layer
-    layer = RuleAnalyzer.determine_layer(Path('/Users/.claude/rules/phoenix/test.md'))
-    results.append(("Phoenix layer", layer == 'phoenix'))
+    layer = RuleAnalyzer.determine_layer(Path('/Users/.claude/rules/liyu/test.md'))
+    results.append(("Phoenix layer", layer == 'liyu'))
 
     layer = RuleAnalyzer.determine_layer(Path('/Users/.claude/rules/common/test.md'))
     results.append(("Common layer", layer == 'common'))
@@ -83,7 +83,7 @@ testing, quality
     results.append(("Translation layer", layer == 'translation'))
 
     # Test 6: determine_priority
-    metadata = {'stage': 'hardened', 'enforcement_level': 6, 'layer': 'phoenix'}
+    metadata = {'stage': 'hardened', 'enforcement_level': 6, 'layer': 'liyu'}
     priority = RuleAnalyzer.determine_priority(metadata)
     results.append(("Priority hardened", priority == 10))
 
@@ -96,7 +96,7 @@ testing, quality
     languages = RuleAnalyzer.determine_languages(metadata)
     results.append(("Language from path", languages == ['typescript']))
 
-    metadata = {'file_path': '/Users/.claude/rules/phoenix/test.md'}
+    metadata = {'file_path': '/Users/.claude/rules/liyu/test.md'}
     languages = RuleAnalyzer.determine_languages(metadata)
     results.append(("Language all", languages == ['all']))
 
@@ -123,7 +123,7 @@ def test_rule_manager_edge_cases():
     rules = manager.list_rules(category='testing')
     results.append(("List by category", isinstance(rules, list)))
 
-    rules = manager.list_rules(layer='phoenix')
+    rules = manager.list_rules(layer='liyu')
     results.append(("List by layer", isinstance(rules, list)))
 
     # Test 3: Get stats
@@ -169,7 +169,7 @@ def test_rule_manager_lifecycle():
         rule_id='test-lifecycle-rule',
         category='testing',
         name='Test Lifecycle Rule',
-        layer='phoenix',
+        layer='liyu',
         priority=7
     )
     results.append(("Create rule", result is True))
@@ -180,7 +180,7 @@ def test_rule_manager_lifecycle():
     if rule:
         results.append(("Rule name matches", rule.get('name') == 'Test Lifecycle Rule'))
         results.append(("Rule category matches", rule.get('category') == 'testing'))
-        results.append(("Rule layer matches", rule.get('layer') == 'phoenix'))
+        results.append(("Rule layer matches", rule.get('layer') == 'liyu'))
         results.append(("Rule priority matches", rule.get('priority') == 7))
         results.append(("Rule stage is draft", rule.get('stage') == 'draft'))
 
@@ -265,7 +265,7 @@ def test_performance():
 def main():
     """运行所有测试"""
     print("=" * 72)
-    print("  PHOENIX Rule Migrator & Manager - Comprehensive Test Suite")
+    print("  鲤鱼 Rule Migrator & Manager - Comprehensive Test Suite")
     print("=" * 72)
     print()
 

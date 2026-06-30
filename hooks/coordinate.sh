@@ -1,5 +1,5 @@
 #!/bin/bash
-# === PHOENIX Coordinate v1.0 ===
+# === 鲤鱼 Coordinate v1.0 ===
 # Prompt-as-Code 多 Agent 协调系统
 # Agent 通过文件系统自组织，无需中央协调器
 # 参考: Dicklesworthstone/claude_code_agent_farm
@@ -15,8 +15,8 @@
 set -euo pipefail
 shopt -s nullglob
 
-COORD_DIR="${PHOENIX_COORD_DIR:-/tmp/phoenix-coordination}"
-AGENT_ID="${PHOENIX_AGENT_ID:-agent_$(date +%s)_$$}"
+COORD_DIR="${鲤鱼_COORD_DIR:-/tmp/liyu-coordination}"
+AGENT_ID="${鲤鱼_AGENT_ID:-agent_$(date +%s)_$$}"
 STALE_THRESHOLD_SEC=7200  # 2小时
 
 init() {
@@ -24,7 +24,7 @@ init() {
     echo "{\"created_at\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"agents\":[]}" > "$COORD_DIR/active_work_registry.json"
     echo "[]" > "$COORD_DIR/completed_work_log.json"
     echo "[]" > "$COORD_DIR/planned_work_queue.json"
-    echo "PHOENIX 协调目录已初始化: $COORD_DIR"
+    echo "鲤鱼 协调目录已初始化: $COORD_DIR"
 }
 
 _timestamp() { date -u +%Y-%m-%dT%H:%M:%SZ; }
@@ -122,7 +122,7 @@ json.dump(log, open('$log_file', 'w'), indent=2, ensure_ascii=False)
 }
 
 status() {
-    echo "=== PHOENIX 协调状态 ==="
+    echo "=== 鲤鱼 协调状态 ==="
     echo "目录: $COORD_DIR"
     echo ""
 
@@ -186,7 +186,7 @@ case "${1:-}" in
     status)   status ;;
     cleanup)  cleanup ;;
     *)
-        echo "PHOENIX Coordinate v1.0 — Prompt-as-Code 多 Agent 协调"
+        echo "鲤鱼 Coordinate v1.0 — Prompt-as-Code 多 Agent 协调"
         echo ""
         echo "用法: coordinate.sh {init|claim|release|complete|status|cleanup}"
         echo ""
@@ -198,7 +198,7 @@ case "${1:-}" in
         echo "  cleanup           清理过期锁（>2h）"
         echo ""
         echo "环境变量:"
-        echo "  PHOENIX_COORD_DIR  协调目录 (默认 /tmp/phoenix-coordination)"
-        echo "  PHOENIX_AGENT_ID   Agent 标识 (默认自动生成)"
+        echo "  鲤鱼_COORD_DIR  协调目录 (默认 /tmp/liyu-coordination)"
+        echo "  鲤鱼_AGENT_ID   Agent 标识 (默认自动生成)"
         ;;
 esac

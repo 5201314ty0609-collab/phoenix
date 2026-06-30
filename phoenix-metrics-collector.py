@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-PHOENIX Metrics Collector — Real-time system and agent metrics.
+鲤鱼 Metrics Collector — Real-time system and agent metrics.
 ================================================================
 
 Collects metrics from multiple sources and writes to sense files + SQLite.
 Designed to run as a background process or be invoked per-event.
 
 Usage:
-  phoenix-metrics-collector.py collect              Collect all metrics once
-  phoenix-metrics-collector.py collect --sense o2   Collect a specific sense
-  phoenix-metrics-collector.py start [--interval 30] Start continuous collection
-  phoenix-metrics-collector.py snapshot              Write a full snapshot to DB
-  phoenix-metrics-collector.py trends [--hours 24]   Show metric trends
-  phoenix-metrics-collector.py perf                  Show performance summary
+  liyu-metrics-collector.py collect              Collect all metrics once
+  liyu-metrics-collector.py collect --sense o2   Collect a specific sense
+  liyu-metrics-collector.py start [--interval 30] Start continuous collection
+  liyu-metrics-collector.py snapshot              Write a full snapshot to DB
+  liyu-metrics-collector.py trends [--hours 24]   Show metric trends
+  liyu-metrics-collector.py perf                  Show performance summary
 """
 
 from __future__ import annotations
@@ -27,11 +27,11 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-SENSES_DIR = PHOENIX_HOME / "senses"
-DB_PATH = PHOENIX_HOME / "observability.db"
-PERF_LOG = PHOENIX_HOME / "performance.jsonl"
-STORY_PATH = PHOENIX_HOME / "story.jsonl"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+SENSES_DIR = 鲤鱼_HOME / "senses"
+DB_PATH = 鲤鱼_HOME / "observability.db"
+PERF_LOG = 鲤鱼_HOME / "performance.jsonl"
+STORY_PATH = 鲤鱼_HOME / "story.jsonl"
 
 # ── Database ──────────────────────────────────────────────────────────────────
 
@@ -275,7 +275,7 @@ def collect_nociception() -> Dict:
 
 def collect_chronos() -> Dict:
     """Collect Chronos (session pacing) metrics."""
-    session_file = PHOENIX_HOME / "session-state.json"
+    session_file = 鲤鱼_HOME / "session-state.json"
     idle_seconds = 0
     session_duration = 0
     active_turns = 0
@@ -666,9 +666,9 @@ def main():
     elif cmd == "snapshot":
         results = collect_all()
         # Also ingest into observability
-        sys.path.insert(0, str(PHOENIX_HOME))
+        sys.path.insert(0, str(鲤鱼_HOME))
         try:
-            from phoenix_observability import ingest_all_senses
+            from liyu_observability import ingest_all_senses
             session = ingest_all_senses()
             print(f"Snapshot complete. Session: {session.session_id}, Health: {session.overall_health:.1f}/100")
         except ImportError:

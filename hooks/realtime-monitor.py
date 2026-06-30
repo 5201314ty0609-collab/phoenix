@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-PHOENIX Realtime Monitor — 7-Sense 实时监测
+鲤鱼 Realtime Monitor — 7-Sense 实时监测
 每次对话时自动更新 sense 数据并 ingest
 
 用法：
-  python3 ~/.claude/phoenix/hooks/realtime-monitor.py
+  python3 ~/.claude/liyu/hooks/realtime-monitor.py
 
 在 settings.json 中添加到 PostToolUse hook：
   {
     "matcher": "",
-    "command": "python3 ~/.claude/phoenix/hooks/realtime-monitor.py",
-    "description": "PHOENIX Realtime Monitor — 实时更新 7-Sense 数据"
+    "command": "python3 ~/.claude/liyu/hooks/realtime-monitor.py",
+    "description": "鲤鱼 Realtime Monitor — 实时更新 7-Sense 数据"
   }
 """
 
@@ -20,8 +20,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from collections import Counter
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-SENSES_DIR = PHOENIX_HOME / "senses"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+SENSES_DIR = 鲤鱼_HOME / "senses"
 
 
 def get_current_session_stats():
@@ -158,7 +158,7 @@ def ingest_to_observability():
     """调用 observability.py 进行 ingest"""
     import subprocess
     result = subprocess.run(
-        ["python3", str(PHOENIX_HOME / "phoenix-observability.py"), "ingest", "all"],
+        ["python3", str(鲤鱼_HOME / "liyu-observability.py"), "ingest", "all"],
         capture_output=True,
         text=True
     )

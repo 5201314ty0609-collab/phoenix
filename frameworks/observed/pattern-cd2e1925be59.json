@@ -1,0 +1,24 @@
+{
+  "id": "pattern-cd2e1925be59",
+  "trigger": "Tool sequence detected: Read→Bash→Read",
+  "action": "Tool 'Read' completed successfully",
+  "tool_signature": "Read→Bash→Read",
+  "confidence": 0.2,
+  "stage": "observed",
+  "enforcement_level": 1,
+  "observations": 1,
+  "successes": 1,
+  "failures": 0,
+  "domains": [
+    "auto-detected"
+  ],
+  "evolved_from": [],
+  "created_at": "2026-06-11T04:04:27.238166+00:00",
+  "promoted_at": {
+    "active": "2026-06-11T04:04:27.238167+00:00",
+    "observed": "2026-06-30T04:52:13.748187+00:00",
+    "validated": null,
+    "hardened": null
+  },
+  "amendments": []
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Memory Robustness Enhancer
+鲤鱼 Memory Robustness Enhancer
 错误恢复、数据一致性、并发安全、性能优化
 """
 
@@ -17,9 +17,9 @@ from typing import Dict, List, Optional, Tuple
 from contextlib import contextmanager
 from collections import defaultdict
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-DB_PATH = PHOENIX_HOME / "knowledge-base.db"
-HEALTH_DB = PHOENIX_HOME / "memory-health.db"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+DB_PATH = 鲤鱼_HOME / "knowledge-base.db"
+HEALTH_DB = 鲤鱼_HOME / "memory-health.db"
 
 
 class MemoryRobustness:
@@ -490,7 +490,7 @@ class MemoryRobustness:
 def main():
     """CLI 入口"""
     if len(sys.argv) < 2:
-        print("用法: phoenix-memory-robust.py <command>")
+        print("用法: liyu-memory-robust.py <command>")
         print("命令:")
         print("  check     - 一致性检查")
         print("  recover   - 错误恢复")
@@ -514,7 +514,7 @@ def main():
     
     elif command == "recover":
         if len(sys.argv) < 3:
-            print("用法: phoenix-memory-robust.py recover <error_type>")
+            print("用法: liyu-memory-robust.py recover <error_type>")
             print("错误类型: corrupted_db, missing_tables, fts_error, index_error")
             return
         error_type = sys.argv[2]

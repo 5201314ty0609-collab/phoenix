@@ -1,5 +1,5 @@
 #!/bin/bash
-# === PHOENIX Heartbeat v1.0 ===
+# === 鲤鱼 Heartbeat v1.0 ===
 # 写入心跳文件，用于 O2/Chronos 监测子 Agent 健康状态
 # 参考: Dicklesworthstone/claude_code_agent_farm
 #
@@ -9,7 +9,7 @@
 
 AGENT_ID="${1:-main}"
 STATUS="${2:-working}"
-HEARTBEAT_DIR="$HOME/.claude/phoenix/heartbeats"
+HEARTBEAT_DIR="$HOME/.claude/liyu/heartbeats"
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 mkdir -p "$HEARTBEAT_DIR"
@@ -19,6 +19,6 @@ cat > "$HEARTBEAT_DIR/${AGENT_ID}.heartbeat" << EOF
   "agent_id": "$AGENT_ID",
   "status": "$STATUS",
   "timestamp": "$TIMESTAMP",
-  "context_pct": "${PHOENIX_CTX_PCT:-unknown}"
+  "context_pct": "${鲤鱼_CTX_PCT:-unknown}"
 }
 EOF

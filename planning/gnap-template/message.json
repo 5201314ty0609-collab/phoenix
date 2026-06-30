@@ -1,5 +1,5 @@
 {
-  "$schema": "https://phoenix.local/gnap/message.schema.json",
+  "$schema": "https://liyu.local/gnap/message.schema.json",
   "$description": "GNAP Message — Run 内的单条消息记录，支持 replay/debug",
   "template": {
     "message_id": "string (required) — unique, typically run_id-seq",

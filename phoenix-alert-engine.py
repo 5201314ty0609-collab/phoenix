@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-PHOENIX Alert Engine — Threshold-based alerting with cooldown and escalation.
+鲤鱼 Alert Engine — Threshold-based alerting with cooldown and escalation.
 =============================================================================
 
 Monitors 7-Sense metrics and triggers alerts when thresholds are breached.
 Supports cooldown periods, escalation chains, and notification delivery.
 
 Usage:
-  phoenix-alert-engine.py check                  Check all senses and fire alerts
-  phoenix-alert-engine.py check --sense o2       Check a specific sense
-  phoenix-alert-engine.py history [--limit 20]   Show alert history
-  phoenix-alert-engine.py active                  Show active (unresolved) alerts
-  phoenix-alert-engine.py ack <alert-id>          Acknowledge an alert
-  phoenix-alert-engine.py config                  Show current alert config
+  liyu-alert-engine.py check                  Check all senses and fire alerts
+  liyu-alert-engine.py check --sense o2       Check a specific sense
+  liyu-alert-engine.py history [--limit 20]   Show alert history
+  liyu-alert-engine.py active                  Show active (unresolved) alerts
+  liyu-alert-engine.py ack <alert-id>          Acknowledge an alert
+  liyu-alert-engine.py config                  Show current alert config
 """
 
 from __future__ import annotations
@@ -26,11 +26,11 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-SENSES_DIR = PHOENIX_HOME / "senses"
-DB_PATH = PHOENIX_HOME / "observability.db"
-ALERTS_LOG = PHOENIX_HOME / "alerts.jsonl"
-ALERT_CONFIG_PATH = PHOENIX_HOME / "alert-config.json"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+SENSES_DIR = 鲤鱼_HOME / "senses"
+DB_PATH = 鲤鱼_HOME / "observability.db"
+ALERTS_LOG = 鲤鱼_HOME / "alerts.jsonl"
+ALERT_CONFIG_PATH = 鲤鱼_HOME / "alert-config.json"
 
 # ── Default Alert Configuration ───────────────────────────────────────────────
 
@@ -472,7 +472,7 @@ def main():
 
     elif cmd == "ack":
         if len(sys.argv) < 3:
-            print("Usage: phoenix-alert-engine.py ack <alert-id>")
+            print("Usage: liyu-alert-engine.py ack <alert-id>")
             sys.exit(1)
         alert_id = sys.argv[2]
         if ack_alert(alert_id):

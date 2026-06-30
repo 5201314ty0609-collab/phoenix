@@ -1,0 +1,74 @@
+# =============================================================================
+# PHOENIX AIOS Prometheus 配置 — 指标收集与告警规则
+# =============================================================================
+# 功能:
+#   - 收集 PHOENIX Core 指标
+#   - 收集 Nginx 指标
+#   - 收集 Redis 指标
+#   - 收集容器指标
+#   - 告警规则配置
+# =============================================================================
+
+# 全局配置
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+# 告警规则文件
+rule_files:
+  - "/etc/prometheus/alert-rules.yml"
+
+# 告警管理器（可选，集成 Alertmanager）
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
+
+# 抓取配置
+scrape_configs:
+  # ── Prometheus 自身监控 ─────────────────────────────────────────────────
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          instance: 'prometheus'
+
+  # ── PHOENIX Core 服务 ──────────────────────────────────────────────────
+  - job_name: 'phoenix-core'
+    metrics_path: '/api/metrics'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['phoenix-core:8765']
+        labels:
+          service: 'phoenix-core'
+          environment: 'production'
+
+  # ── Nginx 指标 ─────────────────────────────────────────────────────────
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx-exporter:9113']
+        labels:
+          service: 'nginx'
+
+  # ── Redis 指标 ─────────────────────────────────────────────────────────
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+        labels:
+          service: 'redis'
+
+  # ── Docker 容器指标 ────────────────────────────────────────────────────
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['docker-exporter:9323']
+        labels:
+          service: 'docker'
+
+  # ── Node Exporter（系统指标） ──────────────────────────────────────────
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          service: 'node'

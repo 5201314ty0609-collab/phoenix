@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Knowledge Base — SQLite + FTS5 + Vector + Graph 混合检索系统。
+鲤鱼 Knowledge Base — SQLite + FTS5 + Vector + Graph 混合检索系统。
 
 v2.0 — Hybrid Retrieval Upgrade (2026-06-17)
   - FTS5 BM25 全文搜索
@@ -53,9 +53,9 @@ except ImportError:
 
 # ── 路径 ─────────────────────────────────────────────────────────────────────
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
 MEMORY_DIR = Path.home() / ".claude/projects/-Users-holyty/memory"
-DB_PATH = PHOENIX_HOME / "knowledge-base.db"
+DB_PATH = 鲤鱼_HOME / "knowledge-base.db"
 
 # ── 向量配置 ────────────────────────────────────────────────────────────────
 
@@ -1261,7 +1261,7 @@ def stats():
 
     db.close()
 
-    print(f"=== PHOENIX Knowledge Base v2.0 ===")
+    print(f"=== 鲤鱼 Knowledge Base v2.0 ===")
     print(f"Memories:     {total} total ({active} active, {archived} archived)")
     print(f"By type:      {by_type}")
     print(f"Total chars:  {total_chars:,}")

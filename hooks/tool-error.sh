@@ -1,5 +1,5 @@
 #!/bin/bash
-# === PHOENIX ToolError Hook v1.0 ===
+# === 鲤鱼 ToolError Hook v1.0 ===
 # 工具执行失败时触发，记录错误详情并提供恢复建议
 #
 # 功能：
@@ -13,9 +13,9 @@
 
 set -euo pipefail
 
-PHOENIX="$HOME/.claude/phoenix"
-SENSES_DIR="$PHOENIX/senses"
-ERROR_LOG="$PHOENIX/tool-error-log.jsonl"
+鲤鱼="$HOME/.claude/liyu"
+SENSES_DIR="$鲤鱼/senses"
+ERROR_LOG="$鲤鱼/tool-error-log.jsonl"
 
 # 读取输入
 INPUT=$(cat)

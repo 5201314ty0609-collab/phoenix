@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX 统一测试框架 — 自测套件。
+鲤鱼 统一测试框架 — 自测套件。
 
 验证：
 - 所有断言函数正确工作
@@ -18,11 +18,11 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 # Load the framework module (hyphenated filename requires util)
 _spec = importlib.util.spec_from_file_location(
-    "phoenix-test-framework",
-    str(Path(__file__).parent / "phoenix-test-framework.py"),
+    "liyu-test-framework",
+    str(Path(__file__).parent / "liyu-test-framework.py"),
 )
 _fw = importlib.util.module_from_spec(_spec)
-sys.modules["phoenix-test-framework"] = _fw
+sys.modules["liyu-test-framework"] = _fw
 _spec.loader.exec_module(_fw)
 
 assert_equals = _fw.assert_equals
@@ -192,7 +192,7 @@ class TestLifecycle(PhoenixTestCase):
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("  PHOENIX Test Framework — Self-Test Suite")
+    print("  鲤鱼 Test Framework — Self-Test Suite")
     print("=" * 60)
 
     passed = 0

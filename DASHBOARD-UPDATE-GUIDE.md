@@ -1,4 +1,4 @@
-# PHOENIX Dashboard 更新指南
+# 鲤鱼 Dashboard 更新指南
 
 ## 问题描述
 
@@ -32,7 +32,7 @@ Ctrl + Shift + R
 
 ```bash
 # 更新所有 dashboard 数据并部署到 GitHub Pages
-~/.claude/phoenix/deploy-github-pages.sh
+~/.claude/liyu/deploy-github-pages.sh
 ```
 
 这个脚本会：
@@ -45,17 +45,17 @@ Ctrl + Shift + R
 
 ```bash
 # 仅同步数据（不部署）
-~/.claude/phoenix/sync-dashboard-data.py
+~/.claude/liyu/sync-dashboard-data.py
 
 # 或使用一键更新脚本
-~/.claude/phoenix/update-dashboard.sh
+~/.claude/liyu/update-dashboard.sh
 ```
 
 ### 方案 4: 本地服务器（实时更新）
 
 ```bash
 # 启动本地服务器
-~/.claude/phoenix/start-server.sh -b
+~/.claude/liyu/start-server.sh -b
 
 # 访问本地版本（实时数据）
 open http://127.0.0.1:8765/
@@ -82,7 +82,7 @@ open http://127.0.0.1:8765/viz
 
 ```bash
 # 每 5 分钟同步一次
-*/5 * * * * cd ~/.claude/phoenix && python3 sync-dashboard-data.py
+*/5 * * * * cd ~/.claude/liyu && python3 sync-dashboard-data.py
 ```
 
 ## 验证数据一致性
@@ -91,13 +91,13 @@ open http://127.0.0.1:8765/viz
 
 ```bash
 # 检查 index.html
-grep "stat-cost-health" ~/.claude/phoenix/index.html
+grep "stat-cost-health" ~/.claude/liyu/index.html
 
 # 检查 dashboard.html
-grep "kpi-cost-health" ~/.claude/phoenix/dashboard.html
+grep "kpi-cost-health" ~/.claude/liyu/dashboard.html
 
 # 检查 dashboard-viz.html FALLBACK
-grep -A5 "const FALLBACK" ~/.claude/phoenix/dashboard-viz.html
+grep -A5 "const FALLBACK" ~/.claude/liyu/dashboard-viz.html
 ```
 
 ### 检查服务器 API
@@ -112,7 +112,7 @@ python3 -c "import json,urllib.request; d=json.load(urllib.request.urlopen('http
 
 ### 检查 GitHub Pages
 
-访问：https://5201314ty0609-collab.github.io/phoenix/
+访问：https://5201314ty0609-collab.github.io/liyu/
 
 如果显示旧数据：
 1. 等待 1-2 分钟（GitHub Pages 部署延迟）
@@ -142,7 +142,7 @@ python3 -c "import json,urllib.request; d=json.load(urllib.request.urlopen('http
 
 ### Q: 如何确保所有页面数据一致？
 
-**A:** 使用 `~/.claude/phoenix/sync-dashboard-data.py` 同步所有文件。
+**A:** 使用 `~/.claude/liyu/sync-dashboard-data.py` 同步所有文件。
 
 ### Q: 本地服务器和 GitHub Pages 有什么区别？
 
@@ -152,7 +152,7 @@ python3 -c "import json,urllib.request; d=json.load(urllib.request.urlopen('http
 
 ### Q: 如何自动部署到 GitHub Pages？
 
-**A:** 使用 `~/.claude/phoenix/deploy-github-pages.sh` 脚本，或设置 GitHub Actions 自动部署。
+**A:** 使用 `~/.claude/liyu/deploy-github-pages.sh` 脚本，或设置 GitHub Actions 自动部署。
 
 ## 快速参考
 
@@ -161,13 +161,13 @@ python3 -c "import json,urllib.request; d=json.load(urllib.request.urlopen('http
 Cmd+Shift+R (Mac) / Ctrl+Shift+R (Windows)
 
 # 2. 一键更新并部署
-~/.claude/phoenix/deploy-github-pages.sh
+~/.claude/liyu/deploy-github-pages.sh
 
 # 3. 仅同步数据
-~/.claude/phoenix/sync-dashboard-data.py
+~/.claude/liyu/sync-dashboard-data.py
 
 # 4. 启动本地服务器
-~/.claude/phoenix/start-server.sh -b
+~/.claude/liyu/start-server.sh -b
 
 # 5. 检查数据
 curl -s http://127.0.0.1:8765/api/stats | jq '.cost_health'
@@ -179,7 +179,7 @@ curl -s http://127.0.0.1:8765/api/stats | jq '.cost_health'
 1. 检查 GitHub Actions 是否成功
 2. 查看浏览器控制台是否有错误
 3. 验证服务器是否运行：`lsof -i :8765`
-4. 检查文件权限：`ls -la ~/.claude/phoenix/*.html`
+4. 检查文件权限：`ls -la ~/.claude/liyu/*.html`
 
 ---
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# === PHOENIX ContextCompaction Hook v1.0 ===
+# === 鲤鱼 ContextCompaction Hook v1.0 ===
 # 上下文压缩时触发，保存关键状态并生成压缩摘要
 #
 # 功能：
@@ -13,9 +13,9 @@
 
 set -euo pipefail
 
-PHOENIX="$HOME/.claude/phoenix"
-SENSES_DIR="$PHOENIX/senses"
-COMPACTION_LOG="$PHOENIX/compaction-log.jsonl"
+鲤鱼="$HOME/.claude/liyu"
+SENSES_DIR="$鲤鱼/senses"
+COMPACTION_LOG="$鲤鱼/compaction-log.jsonl"
 
 # 读取输入
 INPUT=$(cat)
@@ -27,7 +27,7 @@ TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 # 保存当前状态
 save_current_state() {
-    local state_file="$PHOENIX/session-state.json"
+    local state_file="$鲤鱼/session-state.json"
 
     python3 << PYEOF
 import json
@@ -108,7 +108,7 @@ import json
 
 # 读取最近的工具调用历史
 try:
-    with open("$PHOENIX/tool-guard-history.jsonl") as f:
+    with open("$鲤鱼/tool-guard-history.jsonl") as f:
         lines = f.readlines()[-10:]  # 最近 10 条
         recent_tools = []
         for line in lines:

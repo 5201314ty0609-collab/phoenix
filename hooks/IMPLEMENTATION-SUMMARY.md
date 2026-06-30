@@ -1,8 +1,8 @@
-# PHOENIX Enhanced Hooks System - 实现总结
+# 鲤鱼 Enhanced Hooks System - 实现总结
 
 ## 概述
 
-本次实现对 PHOENIX 的 hooks 系统进行了全面增强，新增了 6 个生命周期钩子、智能触发条件引擎、用户通知系统和状态指示器。
+本次实现对 鲤鱼 的 hooks 系统进行了全面增强，新增了 6 个生命周期钩子、智能触发条件引擎、用户通知系统和状态指示器。
 
 ## 新增文件清单
 
@@ -197,7 +197,7 @@
   ],
   "MemoryFlush": [
     {
-      "hooks": [{"command": "phoenix-auto-memory.py capture"}],
+      "hooks": [{"command": "liyu-auto-memory.py capture"}],
       "matcher": ""
     }
   ],
@@ -345,49 +345,49 @@ Smart Trigger 评估
 
 ```bash
 # 完整状态概览
-python3 ~/.claude/phoenix/hooks/status-indicator.py overview
+python3 ~/.claude/liyu/hooks/status-indicator.py overview
 
 # 健康分数
-python3 ~/.claude/phoenix/hooks/status-indicator.py health
+python3 ~/.claude/liyu/hooks/status-indicator.py health
 
 # 当前警告
-python3 ~/.claude/phoenix/hooks/status-indicator.py warnings
+python3 ~/.claude/liyu/hooks/status-indicator.py warnings
 ```
 
 ### 2. 管理通知
 
 ```bash
 # 添加通知
-python3 ~/.claude/phoenix/hooks/notification-center.py add error_recovery high "错误信息"
+python3 ~/.claude/liyu/hooks/notification-center.py add error_recovery high "错误信息"
 
 # 列出通知
-python3 ~/.claude/phoenix/hooks/notification-center.py list
+python3 ~/.claude/liyu/hooks/notification-center.py list
 
 # 忽略通知
-python3 ~/.claude/phoenix/hooks/notification-center.py dismiss <id>
+python3 ~/.claude/liyu/hooks/notification-center.py dismiss <id>
 ```
 
 ### 3. 智能触发
 
 ```bash
 # 评估触发条件
-python3 ~/.claude/phoenix/hooks/smart-trigger.py evaluate PostToolUse '{"error_count":3}'
+python3 ~/.claude/liyu/hooks/smart-trigger.py evaluate PostToolUse '{"error_count":3}'
 
 # 查看触发条件
-python3 ~/.claude/phoenix/hooks/smart-trigger.py conditions
+python3 ~/.claude/liyu/hooks/smart-trigger.py conditions
 
 # 查看统计
-python3 ~/.claude/phoenix/hooks/smart-trigger.py stats
+python3 ~/.claude/liyu/hooks/smart-trigger.py stats
 ```
 
 ### 4. 监控数据
 
 ```bash
 # 实时监控
-python3 ~/.claude/phoenix/hooks/realtime-monitor-v2.py
+python3 ~/.claude/liyu/hooks/realtime-monitor-v2.py
 
 # Tool Guard 统计
-python3 ~/.claude/phoenix/tool-guard.py stats
+python3 ~/.claude/liyu/tool-guard.py stats
 ```
 
 ## 测试
@@ -395,7 +395,7 @@ python3 ~/.claude/phoenix/tool-guard.py stats
 ### 自动测试
 
 ```bash
-cd ~/.claude/phoenix/hooks
+cd ~/.claude/liyu/hooks
 ./setup-enhanced-hooks.sh --test
 ```
 
@@ -408,7 +408,7 @@ cd ~/.claude/phoenix/hooks
 ### 1. 安装
 
 ```bash
-cd ~/.claude/phoenix/hooks
+cd ~/.claude/liyu/hooks
 ./setup-enhanced-hooks.sh
 ```
 
@@ -458,4 +458,4 @@ cd ~/.claude/phoenix/hooks
 5. **增强版实时监控** - 真实数据收集和智能分析
 6. **完整文档和工具** - 安装脚本、测试说明、使用文档
 
-这些增强使 PHOENIX 的 hooks 系统更加智能、可观测和易用，为自进化 Agent 提供了更强大的基础设施支持。
+这些增强使 鲤鱼 的 hooks 系统更加智能、可观测和易用，为自进化 Agent 提供了更强大的基础设施支持。

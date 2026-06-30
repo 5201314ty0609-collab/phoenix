@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-PHOENIX Cost Tracker — CLI and report formatter for token cost attribution.
+鲤鱼 Cost Tracker — CLI and report formatter for token cost attribution.
 
 Usage:
-  python3 phoenix-cost-tracker.py report        # Full cost health report
-  python3 phoenix-cost-tracker.py optimize      # Waste scan + fix recommendations
-  python3 phoenix-cost-tracker.py session <id>  # Single session deep-dive
-  python3 phoenix-cost-tracker.py o2-check      # Quick O2 vitality check (JSON)
-  python3 phoenix-cost-tracker.py pre-compact   # PreCompact hook data
-  python3 phoenix-cost-tracker.py sessions      # List all sessions
-  python3 phoenix-cost-tracker.py json          # Full report as JSON
+  python3 liyu-cost-tracker.py report        # Full cost health report
+  python3 liyu-cost-tracker.py optimize      # Waste scan + fix recommendations
+  python3 liyu-cost-tracker.py session <id>  # Single session deep-dive
+  python3 liyu-cost-tracker.py o2-check      # Quick O2 vitality check (JSON)
+  python3 liyu-cost-tracker.py pre-compact   # PreCompact hook data
+  python3 liyu-cost-tracker.py sessions      # List all sessions
+  python3 liyu-cost-tracker.py json          # Full report as JSON
 
-Depends on phoenix_cost_core.py for data parsing and analysis.
+Depends on liyu_cost_core.py for data parsing and analysis.
 Inspired by CodeBurn (github.com/coder/codeburn) architecture.
 """
 
@@ -22,12 +22,12 @@ import argparse
 from datetime import datetime, timezone
 from collections import defaultdict, Counter
 
-# Add phoenix dir to path so we can import the core module
+# Add liyu dir to path so we can import the core module
 _here = os.path.dirname(os.path.abspath(__file__))
 if _here not in sys.path:
     sys.path.insert(0, _here)
 
-from phoenix_cost_core import (
+from liyu_cost_core import (
     parse_all_sessions,
     analyze_config_overhead,
     detect_waste,
@@ -80,7 +80,7 @@ def format_report(report: CostReport) -> str:
     sub = "-" * 72
 
     lines.append(sep)
-    lines.append("  PHOENIX COST TRACKER — Token Health Report")
+    lines.append("  鲤鱼 COST TRACKER — Token Health Report")
     lines.append(sep)
     lines.append(f"  Report time:  {report.report_time[:19]}")
     lines.append(f"  Date range:   {report.date_range[0]}  >>>  {report.date_range[1]}")
@@ -291,7 +291,7 @@ def generate_optimizations(sessions, overheads) -> str:
     sub = "-" * 72
 
     lines.append(sep)
-    lines.append("  PHOENIX COST TRACKER — Optimization Recommendations")
+    lines.append("  鲤鱼 COST TRACKER — Optimization Recommendations")
     lines.append(sep)
     lines.append(f"  Current grade: {grade}")
     lines.append("")
@@ -352,7 +352,7 @@ def generate_optimizations(sessions, overheads) -> str:
     lines.append("  4. Improve low-ratio sessions (behavior change)")
     lines.append("")
     lines.append(
-        "  Run 'python3 phoenix-cost-tracker.py report' after each change"
+        "  Run 'python3 liyu-cost-tracker.py report' after each change"
     )
     lines.append("  to see the impact on your health grade.")
     lines.append(sep)
@@ -448,7 +448,7 @@ def session_deep_dive(sessions, session_id: str) -> str:
 
 def cli():
     parser = argparse.ArgumentParser(
-        description="PHOENIX Cost Tracker — Token cost attribution & optimization",
+        description="鲤鱼 Cost Tracker — Token cost attribution & optimization",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
@@ -479,7 +479,7 @@ def cli():
         sid = args.args[0] if args.args else ""
         if not sid:
             print(
-                "Usage: python3 phoenix-cost-tracker.py session <session-id-prefix>"
+                "Usage: python3 liyu-cost-tracker.py session <session-id-prefix>"
             )
             print("\nAvailable sessions:")
             for s in sessions[:20]:
@@ -500,7 +500,7 @@ def cli():
         if args.json:
             print(json.dumps(result, indent=2, ensure_ascii=False))
         elif result["warnings"]:
-            print("\n  PHOENIX PreCompact Warning:")
+            print("\n  鲤鱼 PreCompact Warning:")
             for w in result["warnings"]:
                 print(f"    {w}")
             print(

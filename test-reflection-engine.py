@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Reflection Engine — 测试套件。
+鲤鱼 Reflection Engine — 测试套件。
 """
 
 from pathlib import Path
@@ -17,7 +17,7 @@ re = importlib.import_module("reflection-engine")
 def setup_test_env():
     """创建临时测试环境"""
     tmp_dir = tempfile.mkdtemp()
-    re.PHOENIX_HOME = Path(tmp_dir)
+    re.鲤鱼_HOME = Path(tmp_dir)
     re.REFLECTIONS_FILE = Path(tmp_dir) / "reflections.jsonl"
     re.ACTIVE_TASKS_FILE = Path(tmp_dir) / "active-tasks.json"
     return tmp_dir
@@ -27,9 +27,9 @@ def cleanup_test_env(tmp_dir):
     """清理测试环境"""
     import shutil
     shutil.rmtree(tmp_dir)
-    re.PHOENIX_HOME = Path.home() / ".claude/phoenix"
-    re.REFLECTIONS_FILE = re.PHOENIX_HOME / "reflections.jsonl"
-    re.ACTIVE_TASKS_FILE = re.PHOENIX_HOME / "active-tasks.json"
+    re.鲤鱼_HOME = Path.home() / ".claude/liyu"
+    re.REFLECTIONS_FILE = re.鲤鱼_HOME / "reflections.jsonl"
+    re.ACTIVE_TASKS_FILE = re.鲤鱼_HOME / "active-tasks.json"
 
 
 def test_start_task():
@@ -38,13 +38,13 @@ def test_start_task():
 
     tmp_dir = setup_test_env()
     try:
-        task_id = re.start_task("Test task for PHOENIX")
+        task_id = re.start_task("Test task for 鲤鱼")
 
         assert task_id.startswith("task-"), f"Invalid task_id: {task_id}"
 
         tasks = re.load_active_tasks()
         assert task_id in tasks
-        assert tasks[task_id].task_name == "Test task for PHOENIX"
+        assert tasks[task_id].task_name == "Test task for 鲤鱼"
         assert tasks[task_id].status == "active"
 
         print(f"  ✓ start_task works (id: {task_id})")
@@ -184,7 +184,7 @@ def test_reflect_on_task():
 def run_all_tests():
     """运行所有测试"""
     print("=" * 60)
-    print("PHOENIX Reflection Engine — Test Suite")
+    print("鲤鱼 Reflection Engine — Test Suite")
     print("=" * 60)
     print()
 

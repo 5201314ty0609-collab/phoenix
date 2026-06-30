@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Rule Migrator — 规则格式迁移工具
+鲤鱼 Rule Migrator — 规则格式迁移工具
 
 将现有规则文件迁移到新格式，添加元数据。
 
@@ -21,10 +21,10 @@ import sys
 
 # ── 路径配置 ─────────────────────────────────────────────────────────────
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
 RULES_DIR = Path.home() / ".claude" / "rules"
-PHOENIX_RULES_DIR = RULES_DIR / "phoenix"
-MIGRATION_LOG = PHOENIX_HOME / "rules-engine" / "migration-log.jsonl"
+鲤鱼_RULES_DIR = RULES_DIR / "liyu"
+MIGRATION_LOG = 鲤鱼_HOME / "rules-engine" / "migration-log.jsonl"
 
 # ── 数据类 ───────────────────────────────────────────────────────────────
 
@@ -144,8 +144,8 @@ class RuleAnalyzer:
     def determine_layer(file_path: Path) -> str:
         """确定规则层级"""
         parts = file_path.parts
-        if "phoenix" in parts:
-            return "phoenix"
+        if "liyu" in parts:
+            return "liyu"
         elif "common" in parts:
             return "common"
         elif "zh" in parts:
@@ -179,7 +179,7 @@ class RuleAnalyzer:
             base += 1
 
         # Layer 加成
-        if layer == 'phoenix':
+        if layer == 'liyu':
             base += 1
 
         return min(10, max(1, base))

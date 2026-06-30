@@ -46,7 +46,7 @@
       "domain": "code-quality",
       "condition": "write_content lines > 800",
       "action": "warn",
-      "message": "File exceeds 800-line limit (PHOENIX coding standard)",
+      "message": "File exceeds 800-line limit (鲤鱼 coding standard)",
       "chain": "quality-gate",
       "chain_order": 1
     },

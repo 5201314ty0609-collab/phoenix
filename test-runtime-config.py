@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PHOENIX runtime_config.py 测试套件
+"""鲤鱼 runtime_config.py 测试套件
 
 覆盖：
 - 九段配置默认值
@@ -98,8 +98,8 @@ def test_env_override():
     """L4: 环境变量覆盖"""
     mgr = ConfigManager()
     # 设置环境变量
-    os.environ["PHOENIX_LLM_MODEL"] = "mimo-v2.5"
-    os.environ["PHOENIX_SPRINT_MODE"] = "false"
+    os.environ["鲤鱼_LLM_MODEL"] = "mimo-v2.5"
+    os.environ["鲤鱼_SPRINT_MODE"] = "false"
 
     config = mgr.load()
     # 环境变量应该在 L4 被加载
@@ -107,26 +107,26 @@ def test_env_override():
     assert config.context.sprint_mode is False
 
     # 清理
-    del os.environ["PHOENIX_LLM_MODEL"]
-    del os.environ["PHOENIX_SPRINT_MODE"]
-    print("  ✓ Env overrides: PHOENIX_* env vars properly inject")
+    del os.environ["鲤鱼_LLM_MODEL"]
+    del os.environ["鲤鱼_SPRINT_MODE"]
+    print("  ✓ Env overrides: 鲤鱼_* env vars properly inject")
 
 
 def test_coerce_types():
     """类型转换"""
     mgr = ConfigManager()
-    os.environ["PHOENIX_LLM_TIMEOUT"] = "180"
-    os.environ["PHOENIX_CONTEXT_MAX_TOKENS"] = "200000"
-    os.environ["PHOENIX_METACOG_ENABLED"] = "false"
+    os.environ["鲤鱼_LLM_TIMEOUT"] = "180"
+    os.environ["鲤鱼_CONTEXT_MAX_TOKENS"] = "200000"
+    os.environ["鲤鱼_METACOG_ENABLED"] = "false"
 
     config = mgr.load()
     assert config.llm.timeout == 180       # int
     assert config.context.max_tokens == 200000  # int
     assert config.metacog.enabled is False  # bool
 
-    del os.environ["PHOENIX_LLM_TIMEOUT"]
-    del os.environ["PHOENIX_CONTEXT_MAX_TOKENS"]
-    del os.environ["PHOENIX_METACOG_ENABLED"]
+    del os.environ["鲤鱼_LLM_TIMEOUT"]
+    del os.environ["鲤鱼_CONTEXT_MAX_TOKENS"]
+    del os.environ["鲤鱼_METACOG_ENABLED"]
     print("  ✓ Type coercion: int, float, bool correctly parsed from env")
 
 
@@ -174,7 +174,7 @@ def test_save_global():
     assert config2.display.theme == "dark"
 
     # 恢复
-    mgr.set("display.theme", "phoenix")
+    mgr.set("display.theme", "liyu")
     mgr.save_global()
     print("  ✓ Save global: persist → reload → verify")
 
@@ -188,7 +188,7 @@ def test_reload():
 
     # 重载 → 覆盖被清除
     mgr.reload()
-    assert mgr.get("display.theme") == "phoenix"  # 回到默认
+    assert mgr.get("display.theme") == "liyu"  # 回到默认
     assert len(mgr.overrides) == 0
     print("  ✓ Reload: clears overrides, re-applies layers")
 
@@ -211,7 +211,7 @@ def test_all_sections_present():
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("PHOENIX Runtime Config — Test Suite")
+    print("鲤鱼 Runtime Config — Test Suite")
     print("=" * 60)
 
     test_default_config()

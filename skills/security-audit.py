@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Security Audit — 代码安全扫描。
+鲤鱼 Skill: Security Audit — 代码安全扫描。
 
 扫描代码中的安全问题：
 - 硬编码密钥/密码

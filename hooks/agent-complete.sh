@@ -1,5 +1,5 @@
 #!/bin/bash
-# === PHOENIX AgentComplete Hook v1.0 ===
+# === 鲤鱼 AgentComplete Hook v1.0 ===
 # 子 Agent 完成时触发，释放协调锁并记录完成状态
 #
 # 功能：
@@ -13,10 +13,10 @@
 
 set -euo pipefail
 
-PHOENIX="$HOME/.claude/phoenix"
-COORD_DIR="/tmp/phoenix-coordination"
-HEARTBEAT_DIR="$PHOENIX/heartbeats"
-AGENT_LOG="$PHOENIX/agent-lifecycle.jsonl"
+鲤鱼="$HOME/.claude/liyu"
+COORD_DIR="/tmp/liyu-coordination"
+HEARTBEAT_DIR="$鲤鱼/heartbeats"
+AGENT_LOG="$鲤鱼/agent-lifecycle.jsonl"
 
 # 读取输入
 INPUT=$(cat)

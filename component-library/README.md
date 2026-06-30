@@ -1,4 +1,4 @@
-# PHOENIX AIOS Component Library
+# 鲤鱼 AIOS Component Library
 
 基于原子设计方法论的 React 组件库，融合了 Radix UI 和 React Aria 的设计理念。
 
@@ -157,7 +157,7 @@ src/
 使用 oklch 色彩空间，感知均匀：
 
 ```typescript
-import { baseColors, lightColors, darkColors } from 'phoenix-ui';
+import { baseColors, lightColors, darkColors } from 'liyu-ui';
 
 // 基础色板
 baseColors.blue;      // oklch(65% 0.2 265)
@@ -173,11 +173,11 @@ lightColors.interactive.primary;    // oklch(55% 0.2 265)
 ```css
 /* 使用 CSS 变量 */
 .my-component {
-  background: var(--phoenix-bg-base);
-  color: var(--phoenix-text-primary);
-  border: 1px solid var(--phoenix-border-default);
-  border-radius: var(--phoenix-radius-md);
-  box-shadow: var(--phoenix-shadow-sm);
+  background: var(--liyu-bg-base);
+  color: var(--liyu-text-primary);
+  border: 1px solid var(--liyu-border-default);
+  border-radius: var(--liyu-radius-md);
+  box-shadow: var(--liyu-shadow-sm);
 }
 ```
 
@@ -186,7 +186,7 @@ lightColors.interactive.primary;    // oklch(55% 0.2 265)
 基于 4px 网格：
 
 ```typescript
-import { spacing } from 'phoenix-ui';
+import { spacing } from 'liyu-ui';
 
 spacing[4];  // '1rem' (16px)
 spacing[8];  // '2rem' (32px)
@@ -195,7 +195,7 @@ spacing[8];  // '2rem' (32px)
 ### 排版系统
 
 ```typescript
-import { textStyles } from 'phoenix-ui';
+import { textStyles } from 'liyu-ui';
 
 // 预定义的文本样式
 textStyles['heading-1'];
@@ -210,7 +210,7 @@ textStyles['code'];
 ### 基础用法
 
 ```tsx
-import { Button, Input, Badge } from 'phoenix-ui';
+import { Button, Input, Badge } from 'liyu-ui';
 
 function App() {
   return (
@@ -230,7 +230,7 @@ function App() {
 ### 表单示例
 
 ```tsx
-import { FormField, Button, Toggle } from 'phoenix-ui';
+import { FormField, Button, Toggle } from 'liyu-ui';
 
 function SignupForm() {
   const [agreed, setAgreed] = useState(false);
@@ -258,7 +258,7 @@ function SignupForm() {
 ### 自定义组件（使用 Hooks）
 
 ```tsx
-import { useToggle, useDisclosure, cn } from 'phoenix-ui';
+import { useToggle, useDisclosure, cn } from 'liyu-ui';
 
 function CustomSwitch() {
   const { checked, getSwitchProps } = useToggle();
@@ -305,7 +305,7 @@ function CustomModal() {
 ## 响应式设计
 
 ```tsx
-import { useMediaQuery, useBreakpoints, useCurrentBreakpoint } from 'phoenix-ui';
+import { useMediaQuery, useBreakpoints, useCurrentBreakpoint } from 'liyu-ui';
 
 function ResponsiveComponent() {
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -344,7 +344,7 @@ function ResponsiveComponent() {
 自动检测用户偏好：
 
 ```tsx
-import { useMediaQuery } from 'phoenix-ui';
+import { useMediaQuery } from 'liyu-ui';
 
 function AnimatedComponent() {
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');

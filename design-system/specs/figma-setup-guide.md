@@ -1,6 +1,6 @@
 # Figma 设置指南
 
-> 为 PHOENIX AIOS 设计系统配置 Figma 工作环境
+> 为 鲤鱼 AIOS 设计系统配置 Figma 工作环境
 
 ---
 
@@ -9,7 +9,7 @@
 ### 1.1 创建 Figma 项目
 
 ```
-PHOENIX Design System/
+鲤鱼 Design System/
 ├── 📄 Cover                    # 封面
 ├── 🎨 Foundations              # 基础元素
 │   ├── Colors

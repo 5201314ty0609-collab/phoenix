@@ -1,5 +1,5 @@
 #!/bin/bash
-# === PHOENIX Bash Guard — PreToolUse Hook v1.0 ===
+# === 鲤鱼 Bash Guard — PreToolUse Hook v1.0 ===
 # 吸收自 Kintsugi (github.com/arrowassassin/kintsugi) AST-level safety gate
 #
 # 在每次 Bash 工具调用前拦截并分类:
@@ -19,13 +19,13 @@
 #     "matcher": "Bash",
 #     "hooks": [{
 #       "type": "command",
-#       "command": "/Users/holyty/.claude/phoenix/hooks/bash-guard.sh"
+#       "command": "/Users/holyty/.claude/liyu/hooks/bash-guard.sh"
 #     }]
 #   }
 
 set -euo pipefail
 
-GUARD_PY="$HOME/.claude/phoenix/phoenix-bash-guard.py"
+GUARD_PY="$HOME/.claude/liyu/liyu-bash-guard.py"
 
 # Ensure the Python module exists
 if [ ! -f "$GUARD_PY" ]; then

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://phoenix.local/gnap/run.schema.json",
+  "$schema": "https://liyu.local/gnap/run.schema.json",
   "$description": "GNAP Run — 单次任务执行记录，一个 Task 可以有多个 Run（重试）",
   "template": {
     "run_id": "string (required) — unique run identifier",

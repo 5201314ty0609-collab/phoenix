@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-PHOENIX 状态图引擎 v2.0
+鲤鱼 状态图引擎 v2.0
 借鉴 LangGraph 的状态图概念，轻量化实现
 支持节点、边、状态、检查点、可视化、并行分支、子图、动态节点、执行历史
 
 用法：
-  from phoenix_graph import PhoenixGraph, PhoenixCheckpoint
+  from liyu_graph import PhoenixGraph, PhoenixCheckpoint
 
   graph = PhoenixGraph()
   graph.add_node("analyze", analyze_function)
@@ -145,7 +145,7 @@ class ExecutionTimeline:
 # ---------------------------------------------------------------------------
 
 class PhoenixState(TypedDict, total=False):
-    """PHOENIX 状态"""
+    """鲤鱼 状态"""
     data: Dict[str, Any]
     history: List[str]
     metadata: Dict[str, Any]
@@ -165,7 +165,7 @@ def make_state(data: Dict[str, Any], history: Optional[List[str]] = None,
 # ---------------------------------------------------------------------------
 
 class PhoenixNode:
-    """PHOENIX 节点"""
+    """鲤鱼 节点"""
     def __init__(self, name: str, func: Callable, *, is_dynamic: bool = False,
                  tags: Optional[List[str]] = None):
         self.name = name
@@ -195,7 +195,7 @@ class PhoenixNode:
 # ---------------------------------------------------------------------------
 
 class PhoenixEdge:
-    """PHOENIX 边"""
+    """鲤鱼 边"""
     def __init__(self, from_node: str, to_node: str,
                  condition: Optional[Callable] = None,
                  edge_type: EdgeType = EdgeType.NORMAL):
@@ -210,7 +210,7 @@ class PhoenixEdge:
 # ---------------------------------------------------------------------------
 
 class PhoenixCheckpoint:
-    """PHOENIX 检查点"""
+    """鲤鱼 检查点"""
     def __init__(self, path: str = ":memory:"):
         self.path = path
         self.states: Dict[str, PhoenixState] = {}
@@ -313,7 +313,7 @@ class PhoenixHistoryStore:
 # ---------------------------------------------------------------------------
 
 class PhoenixParallel:
-    """PHOENIX 并行分支执行器"""
+    """鲤鱼 并行分支执行器"""
 
     def __init__(self, branches: List[str]):
         if not branches:
@@ -387,7 +387,7 @@ class PhoenixParallel:
 # ---------------------------------------------------------------------------
 
 class PhoenixSubgraph:
-    """PHOENIX 子图节点"""
+    """鲤鱼 子图节点"""
 
     def __init__(self, name: str, graph: "PhoenixGraph"):
         self.name = name
@@ -416,7 +416,7 @@ class PhoenixSubgraph:
 # ---------------------------------------------------------------------------
 
 class PhoenixHumanApproval:
-    """PHOENIX 人类审批"""
+    """鲤鱼 人类审批"""
     def __init__(self, prompt: str):
         self.prompt = prompt
 
@@ -435,7 +435,7 @@ class PhoenixHumanApproval:
 # ---------------------------------------------------------------------------
 
 class PhoenixGraph:
-    """PHOENIX 状态图"""
+    """鲤鱼 状态图"""
 
     def __init__(self, name: Optional[str] = None):
         self.name = name
@@ -781,7 +781,7 @@ class PhoenixRunnable:
 # ---------------------------------------------------------------------------
 
 class PhoenixStream:
-    """PHOENIX 流式输出"""
+    """鲤鱼 流式输出"""
 
     def __init__(self, graph: PhoenixGraph):
         self.graph = graph
@@ -839,7 +839,7 @@ class PhoenixStream:
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("PHOENIX State Graph Engine v2.0 — Self-test")
+    print("鲤鱼 State Graph Engine v2.0 — Self-test")
     print("=" * 60)
 
     # -- 基础图 -------------------------------------------------------------
@@ -894,7 +894,7 @@ if __name__ == "__main__":
 
     print("\n[1] Basic pipeline run:")
     result = app.invoke(
-        {"question": "如何优化 PHOENIX 的多 Agent 协作?"},
+        {"question": "如何优化 鲤鱼 的多 Agent 协作?"},
         config={"configurable": {"thread_id": "demo-1"}},
     )
     print(f"  Question: {result['data']['question']}")

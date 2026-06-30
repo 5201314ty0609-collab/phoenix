@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Hooks Robustness Enhancer
+鲤鱼 Hooks Robustness Enhancer
 统一错误处理、依赖管理、执行状态追踪
 """
 
@@ -15,9 +15,9 @@ from datetime import datetime
 from typing import Dict, List, Optional, Callable
 from contextlib import contextmanager
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-HOOKS_DIR = PHOENIX_HOME / "hooks"
-HEALTH_DB = PHOENIX_HOME / "hooks-health.db"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+HOOKS_DIR = 鲤鱼_HOME / "hooks"
+HEALTH_DB = 鲤鱼_HOME / "hooks-health.db"
 
 
 class HookBase:
@@ -274,7 +274,7 @@ class HooksManager:
 def main():
     """CLI 入口"""
     if len(sys.argv) < 2:
-        print("用法: phoenix-hooks-robust.py <command>")
+        print("用法: liyu-hooks-robust.py <command>")
         print("命令:")
         print("  stats <hook_name>  - 查看 Hook 统计")
         print("  deps               - 检查依赖关系")

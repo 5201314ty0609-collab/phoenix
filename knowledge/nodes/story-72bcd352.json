@@ -1,9 +1,9 @@
 {
   "id": "story-72bcd352",
   "type": "story-event",
-  "title": "genesis: PHOENIX self-evolving agent harness initialized",
-  "description": "PHOENIX self-evolving agent harness initialized",
-  "content": "{\"event\": \"genesis\", \"timestamp\": \"2026-06-05T00:00:00Z\", \"description\": \"PHOENIX self-evolving agent harness initialized\", \"source\": \"Fusion of ECC v1.10.0 + MUNDO Agent v1.2.0 + Metacog + Claude Soul + Autoresearch + ContinuousClaude + Nexus patterns\"}",
+  "title": "genesis: 鲤鱼 self-evolving agent harness initialized",
+  "description": "鲤鱼 self-evolving agent harness initialized",
+  "content": "{\"event\": \"genesis\", \"timestamp\": \"2026-06-05T00:00:00Z\", \"description\": \"鲤鱼 self-evolving agent harness initialized\", \"source\": \"Fusion of ECC v1.10.0 + MUNDO Agent v1.2.0 + Metacog + Claude Soul + Autoresearch + ContinuousClaude + Nexus patterns\"}",
   "confidence": 0.5,
   "stage": "active",
   "domains": [
@@ -12,7 +12,7 @@
   "created_at": "2026-06-08T10:01:18.593978+00:00",
   "updated_at": "2026-06-08T10:01:18.593984+00:00",
   "source": {
-    "origin": "phoenix-story",
+    "origin": "liyu-story",
     "session_id": ""
   },
   "metadata": {

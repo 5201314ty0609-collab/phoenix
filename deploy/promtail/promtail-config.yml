@@ -1,0 +1,194 @@
+# =============================================================================
+# PHOENIX AIOS Promtail 配置 — 日志收集器
+# =============================================================================
+# 功能:
+#   - 收集 PHOENIX 应用日志
+#   - 收集 Nginx 访问日志
+#   - 收集系统日志
+#   - 标签提取和转换
+# =============================================================================
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+  log_level: info
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+    batchwait: 1s
+    batchsize: 1048576
+    timeout: 10s
+    backoff_config:
+      min_period: 500ms
+      max_period: 5m
+      max_retries: 10
+    external_labels:
+      cluster: phoenix-aios
+      environment: production
+
+scrape_configs:
+  # ── PHOENIX 应用日志 ───────────────────────────────────────────────────
+  - job_name: phoenix-app
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: phoenix-app
+          service: phoenix-core
+          __path__: /opt/phoenix/logs/*.log
+    pipeline_stages:
+      # JSON 日志解析
+      - json:
+          expressions:
+            level: level
+            msg: msg
+            timestamp: timestamp
+            module: module
+            trace_id: trace_id
+            span_id: span_id
+      # 时间戳提取
+      - timestamp:
+          source: timestamp
+          format: RFC3339Nano
+          fallback_formats:
+            - RFC3339
+            - Unix
+      # 标签提取
+      - labels:
+          level:
+          module:
+      # 级别映射
+      - template:
+          source: level
+          template: '{{ ToLower .Value }}'
+      - labels:
+          level:
+      # 过滤空行
+      - match:
+          selector: '{job="phoenix-app"}'
+          stages:
+            - drop:
+                expression: '^$'
+
+  # ── Nginx 访问日志 ─────────────────────────────────────────────────────
+  - job_name: nginx-access
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx-access
+          service: nginx
+          __path__: /var/log/nginx/access.log
+    pipeline_stages:
+      # Nginx 日志格式解析
+      - regex:
+          expression: '^(?P<remote_addr>[\w\.]+) - (?P<remote_user>[^ ]*) \[(?P<time_local>.*)\] "(?P<method>[A-Z]+) (?P<request_uri>[^ ]*) HTTP/(?P<http_version>[^"]*)" (?P<status>\d{3}) (?P<body_bytes_sent>\d+) "(?P<http_referer>[^"]*)" "(?P<http_user_agent>[^"]*)"'
+      # 时间戳提取
+      - timestamp:
+          source: time_local
+          format: '02/Jan/2006:15:04:05 -0700'
+      # 标签提取
+      - labels:
+          method:
+          status:
+          remote_addr:
+      # 状态码分类
+      - template:
+          source: status
+          template: '{{ .Value }}'
+      - labels:
+          status:
+      # 过滤健康检查
+      - match:
+          selector: '{job="nginx-access"}'
+          stages:
+            - drop:
+                expression: '.*\/health.*'
+
+  # ── Nginx 错误日志 ─────────────────────────────────────────────────────
+  - job_name: nginx-error
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx-error
+          service: nginx
+          __path__: /var/log/nginx/error.log
+    pipeline_stages:
+      # 错误日志格式解析
+      - regex:
+          expression: '(?P<time>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}) \[(?P<level>\w+)\] (?P<pid>\d+)#(?P<tid>\d+): (?P<message>.*)'
+      # 时间戳提取
+      - timestamp:
+          source: time
+          format: '2006/01/02 15:04:05'
+      # 标签提取
+      - labels:
+          level:
+      # 过滤空行
+      - match:
+          selector: '{job="nginx-error"}'
+          stages:
+            - drop:
+                expression: '^$'
+
+  # ── 系统日志 ───────────────────────────────────────────────────────────
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: system
+          service: system
+          __path__: /var/log/syslog
+    pipeline_stages:
+      # 系统日志格式解析
+      - regex:
+          expression: '(?P<time>[A-Z][a-z]{2} \d{2} \d{2}:\d{2}:\d{2}) (?P<host>[\w\-\.]+) (?P<service>[\w\-\.]+)(?:\[(?P<pid>\d+)\])?: (?P<message>.*)'
+      # 时间戳提取
+      - timestamp:
+          source: time
+          format: 'Jan 02 15:04:05'
+      # 标签提取
+      - labels:
+          service:
+          host:
+      # 过滤空行
+      - match:
+          selector: '{job="system"}'
+          stages:
+            - drop:
+                expression: '^$'
+
+  # ── Docker 容器日志 ────────────────────────────────────────────────────
+  - job_name: docker
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: docker
+          service: docker
+          __path__: /var/lib/docker/containers/*/*.log
+    pipeline_stages:
+      # Docker JSON 日志解析
+      - json:
+          expressions:
+            log: log
+            stream: stream
+            time: time
+      # 时间戳提取
+      - timestamp:
+          source: time
+          format: RFC3339Nano
+      # 标签提取
+      - labels:
+          stream:
+      # 过滤空日志
+      - match:
+          selector: '{job="docker"}'
+          stages:
+            - drop:
+                expression: '^$'

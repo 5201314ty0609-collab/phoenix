@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""PHOENIX 语义上下文映射器 v1.0 — O2 感知的核心引擎
+"""鲤鱼 语义上下文映射器 v1.0 — O2 感知的核心引擎
 
-吸收自 MUNDO Agent v2.2.1 context_mapper.py (LiHongwei-cn)，适配 PHOENIX 架构。
+吸收自 MUNDO Agent v2.2.1 context_mapper.py (LiHongwei-cn)，适配 鲤鱼 架构。
 
 核心升级（相对旧版 token 计数）：
 - 旧：简单 token 估算 + 阈值告警
@@ -30,12 +30,12 @@ from pathlib import Path
 from typing import Optional
 
 # ═══════════════════════════════════════════════
-# PHOENIX 路径
+# 鲤鱼 路径
 # ═══════════════════════════════════════════════
 
-PHOENIX_DIR = Path(__file__).parent
-O2_PATH = PHOENIX_DIR / "senses" / "o2.json"
-CONTEXT_LOG_PATH = PHOENIX_DIR / "context-operations.jsonl"
+鲤鱼_DIR = Path(__file__).parent
+O2_PATH = 鲤鱼_DIR / "senses" / "o2.json"
+CONTEXT_LOG_PATH = 鲤鱼_DIR / "context-operations.jsonl"
 
 
 # ═══════════════════════════════════════════════
@@ -477,7 +477,7 @@ if __name__ == "__main__":
         mapper.add_tool_result("文件内容: " + "data " * 200, tool_name="read_file", turn_id=f"turn_{i}")
 
     print("=" * 60)
-    print("PHOENIX Context Mapper — O2 Vitality Demo")
+    print("鲤鱼 Context Mapper — O2 Vitality Demo")
     print("=" * 60)
 
     print(f"\n  总 Tokens: {mapper.total_tokens}")

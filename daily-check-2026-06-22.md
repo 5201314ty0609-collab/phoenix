@@ -1,4 +1,4 @@
-# PHOENIX 日行检查 — 2026-06-22
+# 鲤鱼 日行检查 — 2026-06-22
 
 > 每日地基检查 + 项目检索 + 查漏补缺
 
@@ -15,7 +15,7 @@
 | sentence-transformers | 5.1.2 | ✓ 正常 |
 | numpy | 2.0.2 | ✓ 正常 |
 
-### PHOENIX 模块统计
+### 鲤鱼 模块统计
 
 | 类型 | 数量 | 状态 |
 |------|------|------|
@@ -74,7 +74,7 @@ Drift (Focus)        5.0%   [O] normal    (阈值 30%)
 **状态**: ✓ 正常运行
 **更新**: 无新版本
 
-### 6. PHOENIX Dependencies
+### 6. 鲤鱼 Dependencies
 
 **状态**: ✓ 全部正常
 - sentence-transformers: 5.1.2
@@ -92,34 +92,34 @@ Drift (Focus)        5.0%   [O] normal    (阈值 30%)
 1. **LangChain / LangGraph** ⭐ 95K+
    - Agent 编排框架
    - 状态图、工具调用
-   - PHOENIX 已借鉴 ✓
+   - 鲤鱼 已借鉴 ✓
 
 2. **AutoGen (Microsoft)** ⭐ 35K+
    - 多 Agent 对话框架
    - 自动化协作
-   - PHOENIX 可借鉴：多 Agent 协调
+   - 鲤鱼 可借鉴：多 Agent 协调
 
 3. **CrewAI** ⭐ 25K+
    - 多 Agent 协作平台
    - 角色分工、任务委派
-   - PHOENIX 可借鉴：角色系统
+   - 鲤鱼 可借鉴：角色系统
 
 4. **Pydantic AI** ⭐ 15K+
    - 类型安全 Agent
    - 结构化输出
-   - PHOENIX 可借鉴：类型系统
+   - 鲤鱼 可借鉴：类型系统
 
 5. **Smolagents (HuggingFace)** ⭐ 10K+
    - 轻量级 Agent
    - 代码生成、工具调用
-   - PHOENIX 可借鉴：轻量化设计
+   - 鲤鱼 可借鉴：轻量化设计
 
 ### 值得关注的新项目
 
 1. **MCP (Model Context Protocol)**
    - Anthropic 官方协议
    - Agent 工具集成标准
-   - PHOENIX 已支持 ✓
+   - 鲤鱼 已支持 ✓
 
 2. **OpenAI Agents SDK**
    - 官方 Agent 开发包
@@ -140,19 +140,19 @@ Drift (Focus)        5.0%   [O] normal    (阈值 30%)
 1. **LangGraph 官方文档**
    - https://langchain-ai.github.io/langgraph/
    - 学习状态图、Agent 编排
-   - PHOENIX 已学习 ✓
+   - 鲤鱼 已学习 ✓
 
 2. **CrewAI 文档**
    - https://docs.crewai.com/
    - 学习多 Agent 协作
-   - PHOENIX 计划学习
+   - 鲤鱼 计划学习
 
 3. **Pydantic AI 文档**
    - https://ai.pydantic.dev/
    - 学习类型安全 Agent
-   - PHOENIX 计划学习
+   - 鲤鱼 计划学习
 
-### PHOENIX 可改进点
+### 鲤鱼 可改进点
 
 1. **状态管理**
    - 借鉴 LangGraph 的状态图 ✓
@@ -200,7 +200,7 @@ Drift (Focus)        5.0%   [O] normal    (阈值 30%)
 
 ```
 ✓ 基础环境: 正常
-✓ PHOENIX 模块: 37个正常
+✓ 鲤鱼 模块: 37个正常
 ✓ 规则文件: 74个正常
 ✓ 活跃框架: 26个正常
 ✓ 7-Sense: 全部健康
@@ -236,6 +236,6 @@ Drift (Focus)        5.0%   [O] normal    (阈值 30%)
 
 ---
 
-**检查人**: PHOENIX 自动检查
+**检查人**: 鲤鱼 自动检查
 **检查时间**: 2026-06-22 23:50
 **状态**: ✓ 系统稳定，地基健康

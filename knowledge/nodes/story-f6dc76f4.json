@@ -1,9 +1,9 @@
 {
   "id": "story-f6dc76f4",
   "type": "story-event",
-  "title": "hermes_session: 你现在有哪些系统能力？列出你的 PHOENIX 核心系统。",
-  "description": "你现在有哪些系统能力？列出你的 PHOENIX 核心系统。",
-  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_173510_7aa7ac\", \"timestamp\": \"2026-06-08T09:35:23.466973+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 4, \"tools\": 1, \"summary\": \"你现在有哪些系统能力？列出你的 PHOENIX 核心系统。\"}",
+  "title": "hermes_session: 你现在有哪些系统能力？列出你的 鲤鱼 核心系统。",
+  "description": "你现在有哪些系统能力？列出你的 鲤鱼 核心系统。",
+  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_173510_7aa7ac\", \"timestamp\": \"2026-06-08T09:35:23.466973+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 4, \"tools\": 1, \"summary\": \"你现在有哪些系统能力？列出你的 鲤鱼 核心系统。\"}",
   "confidence": 0.5,
   "stage": "active",
   "domains": [
@@ -12,7 +12,7 @@
   "created_at": "2026-06-08T10:01:18.599317+00:00",
   "updated_at": "2026-06-08T10:01:18.599322+00:00",
   "source": {
-    "origin": "phoenix-story",
+    "origin": "liyu-story",
     "session_id": "20260608_173510_7aa7ac"
   },
   "metadata": {

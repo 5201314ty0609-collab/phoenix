@@ -1,4 +1,4 @@
-# PHOENIX Enhanced Hooks - 快速参考
+# 鲤鱼 Enhanced Hooks - 快速参考
 
 ## 新增 Hooks
 
@@ -8,7 +8,7 @@
 | ContextCompaction | 上下文压缩 | `context-compaction.sh` | 状态保存、O2 更新 |
 | AgentSpawn | Agent 启动 | `agent-spawn.sh` | 注册、心跳、协调锁 |
 | AgentComplete | Agent 完成 | `agent-complete.sh` | 释放锁、清理、统计 |
-| MemoryFlush | 记忆刷新 | `phoenix-auto-memory.py` | 记忆同步、衰减更新 |
+| MemoryFlush | 记忆刷新 | `liyu-auto-memory.py` | 记忆同步、衰减更新 |
 | EvolutionCycle | 进化周期 | 事件总线 | 进化记录、通知 |
 
 ## 常用命令
@@ -17,58 +17,58 @@
 
 ```bash
 # 系统状态概览
-python3 ~/.claude/phoenix/hooks/status-indicator.py overview
+python3 ~/.claude/liyu/hooks/status-indicator.py overview
 
 # 健康分数
-python3 ~/.claude/phoenix/hooks/status-indicator.py health
+python3 ~/.claude/liyu/hooks/status-indicator.py health
 
 # 当前警告
-python3 ~/.claude/phoenix/hooks/status-indicator.py warnings
+python3 ~/.claude/liyu/hooks/status-indicator.py warnings
 
 # 趋势分析
-python3 ~/.claude/phoenix/hooks/status-indicator.py trends --hours 24
+python3 ~/.claude/liyu/hooks/status-indicator.py trends --hours 24
 ```
 
 ### 通知管理
 
 ```bash
 # 添加通知
-python3 ~/.claude/phoenix/hooks/notification-center.py add <type> <priority> <message>
+python3 ~/.claude/liyu/hooks/notification-center.py add <type> <priority> <message>
 
 # 列出通知
-python3 ~/.claude/phoenix/hooks/notification-center.py list [--priority high]
+python3 ~/.claude/liyu/hooks/notification-center.py list [--priority high]
 
 # 忽略通知
-python3 ~/.claude/phoenix/hooks/notification-center.py dismiss <id>
+python3 ~/.claude/liyu/hooks/notification-center.py dismiss <id>
 
 # 通知统计
-python3 ~/.claude/phoenix/hooks/notification-center.py stats
+python3 ~/.claude/liyu/hooks/notification-center.py stats
 ```
 
 ### 智能触发
 
 ```bash
 # 评估触发条件
-python3 ~/.claude/phoenix/hooks/smart-trigger.py evaluate <hook> <context_json>
+python3 ~/.claude/liyu/hooks/smart-trigger.py evaluate <hook> <context_json>
 
 # 查看触发条件
-python3 ~/.claude/phoenix/hooks/smart-trigger.py conditions
+python3 ~/.claude/liyu/hooks/smart-trigger.py conditions
 
 # 触发统计
-python3 ~/.claude/phoenix/hooks/smart-trigger.py stats
+python3 ~/.claude/liyu/hooks/smart-trigger.py stats
 ```
 
 ### 监控数据
 
 ```bash
 # 实时监控
-python3 ~/.claude/phoenix/hooks/realtime-monitor-v2.py
+python3 ~/.claude/liyu/hooks/realtime-monitor-v2.py
 
 # Tool Guard 统计
-python3 ~/.claude/phoenix/tool-guard.py stats
+python3 ~/.claude/liyu/tool-guard.py stats
 
 # 通知中心统计
-python3 ~/.claude/phoenix/hooks/notification-center.py stats
+python3 ~/.claude/liyu/hooks/notification-center.py stats
 ```
 
 ## 通知类型
@@ -119,7 +119,7 @@ python3 ~/.claude/phoenix/hooks/notification-center.py stats
 
 ```bash
 # 安装
-cd ~/.claude/phoenix/hooks
+cd ~/.claude/liyu/hooks
 ./setup-enhanced-hooks.sh
 
 # 测试
@@ -160,21 +160,21 @@ cd ~/.claude/phoenix/hooks
 
 ```bash
 # 检查权限
-ls -la ~/.claude/phoenix/hooks/*.sh
+ls -la ~/.claude/liyu/hooks/*.sh
 
 # 修复权限
-chmod +x ~/.claude/phoenix/hooks/*.sh
-chmod +x ~/.claude/phoenix/hooks/*.py
+chmod +x ~/.claude/liyu/hooks/*.sh
+chmod +x ~/.claude/liyu/hooks/*.py
 ```
 
 ### 通知不显示
 
 ```bash
 # 检查偏好
-python3 ~/.claude/phoenix/hooks/notification-center.py preferences
+python3 ~/.claude/liyu/hooks/notification-center.py preferences
 
 # 检查队列
-python3 ~/.claude/phoenix/hooks/notification-center.py list --limit 50
+python3 ~/.claude/liyu/hooks/notification-center.py list --limit 50
 ```
 
 ### 触发不工作
@@ -183,14 +183,14 @@ python3 ~/.claude/phoenix/hooks/notification-center.py list --limit 50
 # 启用调试
 python3 -c "
 import json
-f = '/Users/holyty/.claude/phoenix/smart-trigger-config.json'
+f = '/Users/holyty/.claude/liyu/smart-trigger-config.json'
 c = json.load(open(f))
 c['global_settings']['enable_debug'] = True
 json.dump(c, open(f, 'w'), indent=2)
 "
 
 # 重新测试
-python3 ~/.claude/phoenix/hooks/smart-trigger.py evaluate TestHook '{"test":true}'
+python3 ~/.claude/liyu/hooks/smart-trigger.py evaluate TestHook '{"test":true}'
 ```
 
 ## 性能目标

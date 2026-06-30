@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Dashboard — HTML visualization for 7-Sense monitoring.
+鲤鱼 Dashboard — HTML visualization for 7-Sense monitoring.
 ===============================================================
 
 Generates an interactive HTML dashboard with:
@@ -11,9 +11,9 @@ Generates an interactive HTML dashboard with:
 - Error summary
 
 Usage:
-  phoenix-dashboard.py generate                 Generate dashboard HTML
-  phoenix-dashboard.py generate --open          Generate and open in browser
-  phoenix-dashboard.py serve [--port 8888]      Start local HTTP server
+  liyu-dashboard.py generate                 Generate dashboard HTML
+  liyu-dashboard.py generate --open          Generate and open in browser
+  liyu-dashboard.py serve [--port 8888]      Start local HTTP server
 """
 
 from __future__ import annotations
@@ -25,9 +25,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, List
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-DB_PATH = PHOENIX_HOME / "observability.db"
-DASHBOARD_PATH = PHOENIX_HOME / "dashboard.html"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+DB_PATH = 鲤鱼_HOME / "observability.db"
+DASHBOARD_PATH = 鲤鱼_HOME / "dashboard.html"
 
 SENSE_META = {
     "o2": {"name": "O2 (Vitality)", "color": "#22c55e", "warning": 70, "critical": 85},
@@ -176,7 +176,7 @@ def generate_html() -> str:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PHOENIX Observability Dashboard</title>
+<title>鲤鱼 Observability Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {{
@@ -229,7 +229,7 @@ def generate_html() -> str:
 <div class="container">
   <header>
     <div>
-      <h1>PHOENIX Observability</h1>
+      <h1>鲤鱼 Observability</h1>
       <div class="meta">Session: {session.get('session_id', 'N/A')} | Last update: {session.get('timestamp', 'N/A')[:19]}</div>
     </div>
     <div style="display:flex;align-items:center;gap:16px;">
@@ -418,7 +418,7 @@ def main():
 
         import http.server
         import os
-        os.chdir(str(PHOENIX_HOME))
+        os.chdir(str(鲤鱼_HOME))
         handler = http.server.SimpleHTTPRequestHandler
         with http.server.HTTPServer(("", port), handler) as httpd:
             print(f"Serving dashboard at http://localhost:{port}/dashboard.html")

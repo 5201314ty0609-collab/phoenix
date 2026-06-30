@@ -1,0 +1,20 @@
+{
+  "total_checks": 2,
+  "drifts_detected": 2,
+  "by_type": {
+    "robot_mode": 4,
+    "authenticity_loss": 1,
+    "premature_done": 2
+  },
+  "by_severity": {
+    "HIGH": 1,
+    "MEDIUM": 2,
+    "LOW": 4
+  },
+  "trend": [
+    4,
+    3
+  ],
+  "created_at": "2026-06-30T04:48:02.641233+00:00",
+  "updated_at": "2026-06-30T05:57:02.928436+00:00"
+}

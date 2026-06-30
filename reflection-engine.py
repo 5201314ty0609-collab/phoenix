@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Reflection Engine — 任务后自动反思。
+鲤鱼 Reflection Engine — 任务后自动反思。
 
 每个任务完成后自动评估：
 - 做了什么
@@ -25,10 +25,10 @@ import json
 import sys
 import uuid
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-REFLECTIONS_FILE = PHOENIX_HOME / "reflections.jsonl"
-ACTIVE_TASKS_FILE = PHOENIX_HOME / "active-tasks.json"
-CTM_REFLECTIONS_FILE = PHOENIX_HOME / "ctm-reflections.jsonl"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+REFLECTIONS_FILE = 鲤鱼_HOME / "reflections.jsonl"
+ACTIVE_TASKS_FILE = 鲤鱼_HOME / "active-tasks.json"
+CTM_REFLECTIONS_FILE = 鲤鱼_HOME / "ctm-reflections.jsonl"
 
 # ── 数据类 ───────────────────────────────────────────────────────────────
 
@@ -258,10 +258,10 @@ def reflect_on_thinking(stream_id: str = None) -> Optional[CTMReflection]:
     """
     try:
         import sys
-        ctm_dir = str(PHOENIX_HOME / "ctm")
+        ctm_dir = str(鲤鱼_HOME / "ctm")
         if ctm_dir not in sys.path:
-            sys.path.insert(0, str(PHOENIX_HOME.parent))
-        from phoenix.ctm.ctm_core import get_ctm_core
+            sys.path.insert(0, str(鲤鱼_HOME.parent))
+        from liyu.ctm.ctm_core import get_ctm_core
         ctm = get_ctm_core()
 
         if stream_id:

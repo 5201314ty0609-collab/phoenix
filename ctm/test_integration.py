@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX CTM 集成兼容性测试
+鲤鱼 CTM 集成兼容性测试
 验证 CTM 引擎集成后不影响现有功能
 """
 
@@ -136,7 +136,7 @@ def test_ctm_context_mapper_workflow():
 # ═════════════════════════════════════════════════════════════
 
 def test_sense_files():
-    senses_dir = Path.home() / ".claude/phoenix/senses"
+    senses_dir = Path.home() / ".claude/liyu/senses"
     for name in ["o2.json", "nociception.json", "chronos.json", "spatial.json",
                  "vestibular.json", "echo.json", "drift.json"]:
         p = senses_dir / name
@@ -151,7 +151,7 @@ def test_sense_files():
 # ═════════════════════════════════════════════════════════════
 
 def test_skills_system():
-    skills_dir = Path.home() / ".claude/phoenix/skills"
+    skills_dir = Path.home() / ".claude/liyu/skills"
     files = list(skills_dir.glob("*.py"))
     assert len(files) >= 10, f"Only {len(files)} skills"
 
@@ -161,7 +161,7 @@ def test_skills_system():
 # ═════════════════════════════════════════════════════════════
 
 def test_hooks_system():
-    hooks_dir = Path.home() / ".claude/phoenix/hooks"
+    hooks_dir = Path.home() / ".claude/liyu/hooks"
     for name in ["session-start.sh", "session-stop.sh", "bash-guard.sh", "heartbeat.sh"]:
         assert (hooks_dir / name).exists(), f"Missing hook: {name}"
 
@@ -171,9 +171,9 @@ def test_hooks_system():
 # ═════════════════════════════════════════════════════════════
 
 def test_knowledge_base():
-    phoenix = Path.home() / ".claude/phoenix"
-    assert (phoenix / "knowledge-base.py").exists()
-    assert (phoenix / "knowledge-base.db").exists()
+    liyu = Path.home() / ".claude/liyu"
+    assert (liyu / "knowledge-base.py").exists()
+    assert (liyu / "knowledge-base.db").exists()
 
 
 # ═════════════════════════════════════════════════════════════
@@ -253,7 +253,7 @@ def test_existing_chunk_types_preserved():
 
 def main():
     print("\n" + "=" * 70)
-    print("PHOENIX CTM 集成兼容性测试")
+    print("鲤鱼 CTM 集成兼容性测试")
     print("=" * 70 + "\n")
 
     tests = [

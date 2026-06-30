@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PHOENIX intelligent-recovery.py 测试套件
+"""鲤鱼 intelligent-recovery.py 测试套件
 
 覆盖：
 - 错误分类：7 类别 × 多种输入格式
@@ -287,7 +287,7 @@ def test_singleton():
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("PHOENIX Intelligent Recovery — Test Suite")
+    print("鲤鱼 Intelligent Recovery — Test Suite")
     print("=" * 60)
 
     test_classification()

@@ -1,11 +1,11 @@
-# PHOENIX AIOS 主题系统
+# 鲤鱼 AIOS 主题系统
 
 一个完整的暗色主题系统，支持渐变、发光、玻璃态等丰富视觉效果。
 
 ## 文件结构
 
 ```
-phoenix/
+liyu/
 ├── theme-system.css        # 主题变量和基础样式 (16KB)
 ├── visual-effects.css      # 视觉效果库 (12KB)
 ├── theme-manager.js        # 主题切换 JavaScript (8KB)
@@ -154,7 +154,7 @@ phoenix/
 
 ```html
 <nav class="glass-nav">
-  <div class="logo gradient-text">PHOENIX</div>
+  <div class="logo gradient-text">鲤鱼</div>
   <div class="nav-links">
     <a href="#" class="hover-border">首页</a>
     <a href="#" class="hover-border">功能</a>
@@ -179,7 +179,7 @@ phoenix/
 
 ```html
 <section class="hero">
-  <h1 class="gradient-text-demo">PHOENIX AIOS</h1>
+  <h1 class="gradient-text-demo">鲤鱼 AIOS</h1>
   <p class="hero-subtitle">专业、现代的 AI 操作系统</p>
   <div class="hero-buttons">
     <button class="btn btn-accent glow-accent">开始使用</button>
@@ -203,7 +203,7 @@ phoenix/
 
 ```javascript
 const themeManager = new ThemeManager({
-  storageKey: 'phoenix-theme',  // 本地存储键
+  storageKey: 'liyu-theme',  // 本地存储键
   defaultTheme: 'dark',         // 默认主题
   transitionDuration: 300,      // 过渡动画时长 (ms)
   onThemeChange: (theme, effectiveTheme) => {
@@ -365,7 +365,7 @@ MIT License
 
 ## 作者
 
-PHOENIX AIOS Design System
+鲤鱼 AIOS Design System
 
 ## 相关资源
 

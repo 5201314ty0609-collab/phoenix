@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Bash Safety Gate — AST-Aware Command Classification
+鲤鱼 Bash Safety Gate — AST-Aware Command Classification
 Absorbed from Kintsugi (github.com/arrowassassin/kintsugi) v0.x architecture.
 
 Kintsugi 吸收要点:
@@ -10,24 +10,24 @@ Kintsugi 吸收要点:
   - Wrap-depth unwrapping: strip sudo, bash -c, find -exec, xargs to reach real payload
   - Fail toward caution — unparseable commands default to CAUTION, never SAFE
 
-PHOENIX 适配:
+鲤鱼 适配:
   - 纯 Python regex 实现，无需 Rust toolchain
   - 集成 Nociception (pain sense): 重复危险尝试自动升级 CAUTION→DANGER
   - Three-tier: SAFE (exit 0), CAUTION (exit 0 + stderr warning), DANGER (exit 2 block)
   - 专注 coding agent 最可能触发的危险模式
 
 Usage:
-  phoenix-bash-guard.py check "<bash command>"
+  liyu-bash-guard.py check "<bash command>"
     分类单个命令，打印 verdict + 原因
 
-  phoenix-bash-guard.py hook-pre
+  liyu-bash-guard.py hook-pre
     从 stdin 读 Claude Code JSON hook 输入，输出决策 JSON
     Exit 0: allow (SAFE/CAUTION), Exit 2: block (DANGER)
 
-  phoenix-bash-guard.py stats
+  liyu-bash-guard.py stats
     查看防护统计
 
-  phoenix-bash-guard.py reset
+  liyu-bash-guard.py reset
     重置所有计数器和状态
 """
 
@@ -40,9 +40,9 @@ import re
 import sys
 
 # ── Paths ──────────────────────────────────────────────────────────────────
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-STATE_FILE = PHOENIX_HOME / "bash-guard-state.json"
-HISTORY_FILE = PHOENIX_HOME / "bash-guard-history.jsonl"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+STATE_FILE = 鲤鱼_HOME / "bash-guard-state.json"
+HISTORY_FILE = 鲤鱼_HOME / "bash-guard-history.jsonl"
 
 # ── Constants ──────────────────────────────────────────────────────────────
 MAX_WRAP_DEPTH = 6  # 最大解包深度 (Kintsugi uses 8)
@@ -546,7 +546,7 @@ def load_nociception_state() -> dict:
 
 def save_nociception_state(state: dict) -> None:
     """持久化痛觉状态"""
-    PHOENIX_HOME.mkdir(parents=True, exist_ok=True)
+    鲤鱼_HOME.mkdir(parents=True, exist_ok=True)
     state["updated_at"] = datetime.now(timezone.utc).isoformat()
     STATE_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2))
 
@@ -562,7 +562,7 @@ def check_with_nociception(cmd: str) -> Verdict:
     """分类 + 痛觉升级。
 
     如果相同的 CAUTION 命令被重复尝试 ≥2 次，自动升级为 DANGER。
-    这是 PHOENIX 的 Nociception (pain sense) 集成:
+    这是 鲤鱼 的 Nociception (pain sense) 集成:
       第1次危险尝试 = 痛 (CAUTION)
       第2次同样尝试 = 剧痛 (DANGER, block)
     """
@@ -638,7 +638,7 @@ def format_verdict_output(verdict: Verdict, cmd: str) -> dict:
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
             "permissionDecision": "deny" if verdict.tier == "DANGER" else "allow",
-            "permissionDecisionReason": f"[PHOENIX Bash Guard] {icon.get(verdict.tier, '?')} {verdict.reason}",
+            "permissionDecisionReason": f"[鲤鱼 Bash Guard] {icon.get(verdict.tier, '?')} {verdict.reason}",
         },
     }
 
@@ -651,9 +651,9 @@ def main():
     cmd = sys.argv[1]
 
     if cmd == "check":
-        # phoenix-bash-guard.py check "<bash command>"
+        # liyu-bash-guard.py check "<bash command>"
         if len(sys.argv) < 3:
-            print("Usage: phoenix-bash-guard.py check '<command>'", file=sys.stderr)
+            print("Usage: liyu-bash-guard.py check '<command>'", file=sys.stderr)
             sys.exit(1)
         bash_cmd = sys.argv[2]
         verdict = check_with_nociception(bash_cmd)
@@ -730,7 +730,7 @@ def main():
 
     elif cmd == "stats":
         state = load_nociception_state()
-        print("═══ PHOENIX Bash Guard Statistics ═══")
+        print("═══ 鲤鱼 Bash Guard Statistics ═══")
         print(f"  总计允许 (SAFE):    {state.get('total_allowed', 0)}")
         print(f"  总计警告 (CAUTION): {state.get('total_warned', 0)}")
         print(f"  总计阻断 (DANGER):  {state.get('total_blocked', 0)}")

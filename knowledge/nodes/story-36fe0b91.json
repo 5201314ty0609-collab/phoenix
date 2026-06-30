@@ -1,9 +1,9 @@
 {
   "id": "story-36fe0b91",
   "type": "story-event",
-  "title": "hermes_session: 创作任务：用 p5js 创建一个「PHOENIX 七感元认知」实时可视化面板。\n\n要求：\n1. 创建文件 ~/phoenix-site/seven-senses",
-  "description": "创作任务：用 p5js 创建一个「PHOENIX 七感元认知」实时可视化面板。\n\n要求：\n1. 创建文件 ~/phoenix-site/seven-senses.html\n2. 用 p5js CDN ",
-  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_173759_85c838\", \"timestamp\": \"2026-06-08T09:38:44.744952+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 1, \"tools\": 0, \"summary\": \"创作任务：用 p5js 创建一个「PHOENIX 七感元认知」实时可视化面板。\\n\\n要求：\\n1. 创建文件 ~/phoenix-site/seven-senses.html\\n2. 用 p5js CDN \"}",
+  "title": "hermes_session: 创作任务：用 p5js 创建一个「鲤鱼 七感元认知」实时可视化面板。\n\n要求：\n1. 创建文件 ~/liyu-site/seven-senses",
+  "description": "创作任务：用 p5js 创建一个「鲤鱼 七感元认知」实时可视化面板。\n\n要求：\n1. 创建文件 ~/liyu-site/seven-senses.html\n2. 用 p5js CDN ",
+  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_173759_85c838\", \"timestamp\": \"2026-06-08T09:38:44.744952+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 1, \"tools\": 0, \"summary\": \"创作任务：用 p5js 创建一个「鲤鱼 七感元认知」实时可视化面板。\\n\\n要求：\\n1. 创建文件 ~/liyu-site/seven-senses.html\\n2. 用 p5js CDN \"}",
   "confidence": 0.5,
   "stage": "active",
   "domains": [
@@ -12,7 +12,7 @@
   "created_at": "2026-06-08T10:01:18.599823+00:00",
   "updated_at": "2026-06-08T10:01:18.599828+00:00",
   "source": {
-    "origin": "phoenix-story",
+    "origin": "liyu-story",
     "session_id": "20260608_173759_85c838"
   },
   "metadata": {

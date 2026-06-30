@@ -1,0 +1,98 @@
+# =============================================================================
+# PHOENIX AIOS Loki 配置 — 日志聚合服务
+# =============================================================================
+# 功能:
+#   - 日志存储和索引
+#   - 基于标签的日志查询
+#   - 保留策略配置
+#   - 存储后端配置
+# =============================================================================
+
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 9096
+  log_level: info
+  http_server_read_timeout: 60s
+  http_server_write_timeout: 60s
+  http_server_idle_timeout: 120s
+
+common:
+  path_prefix: /loki
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+  replication_factor: 1
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+
+ingester:
+  chunk_idle_period: 1h
+  chunk_target_size: 1048576
+  max_chunk_age: 2h
+  chunk_retain_period: 30s
+  max_transfer_retries: 0
+  wal:
+    enabled: true
+    dir: /loki/wal
+    flush_on_shutdown: true
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+
+storage_config:
+  boltdb_shipper:
+    active_index_directory: /loki/boltdb-shipper-active
+    cache_location: /loki/boltdb-shipper-cache
+    cache_ttl: 24h
+    shared_store: filesystem
+  filesystem:
+    directory: /loki/chunks
+
+compactor:
+  working_directory: /loki/compactor
+  shared_store: filesystem
+  compaction_interval: 10m
+  retention_enabled: true
+  retention_delete_delay: 2h
+  retention_delete_worker_count: 150
+
+limits_config:
+  retention_period: 30d
+  max_query_length: 721h
+  max_query_parallelism: 32
+  max_entries_limit_per_query: 5000
+  max_cache_freshness_per_query: 10m
+  max_query_series: 100000
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h
+  ingestion_rate_mb: 10
+  ingestion_burst_size_mb: 20
+  per_stream_rate_limit: 5MB
+  per_stream_rate_limit_burst: 15MB
+
+chunk_store_config:
+  max_look_back_period: 0s
+  chunk_cache_config:
+    enable_fifocache: true
+    fifocache:
+      max_size_bytes: 500MB
+      validity: 24h
+
+table_manager:
+  retention_deletes_enabled: true
+  retention_period: 30d
+
+analytics:
+  reporting_enabled: false

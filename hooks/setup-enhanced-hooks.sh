@@ -1,5 +1,5 @@
 #!/bin/bash
-# === PHOENIX Enhanced Hooks Setup ===
+# === 鲤鱼 Enhanced Hooks Setup ===
 # 一键设置增强版 hooks 系统
 #
 # 用法：
@@ -9,8 +9,8 @@
 
 set -euo pipefail
 
-PHOENIX="$HOME/.claude/phoenix"
-HOOKS_DIR="$PHOENIX/hooks"
+鲤鱼="$HOME/.claude/liyu"
+HOOKS_DIR="$鲤鱼/hooks"
 SETTINGS_FILE="$HOME/.claude/settings.json"
 SETTINGS_BACKUP="$HOME/.claude/settings.json.backup"
 
@@ -181,7 +181,7 @@ show_status() {
 
     # 显示通知状态
     echo "=== 通知状态 ==="
-    if [ -f "$PHOENIX/notifications.json" ]; then
+    if [ -f "$鲤鱼/notifications.json" ]; then
         python3 "$HOOKS_DIR/notification-center.py" stats 2>/dev/null || echo "无法读取通知状态"
     else
         echo "无通知数据"
@@ -198,22 +198,22 @@ cleanup_old_files() {
     print_info "清理旧文件..."
 
     # 清理旧的心跳文件
-    if [ -d "$PHOENIX/heartbeats" ]; then
-        find "$PHOENIX/heartbeats" -name "*.heartbeat" -mtime +7 -delete 2>/dev/null || true
+    if [ -d "$鲤鱼/heartbeats" ]; then
+        find "$鲤鱼/heartbeats" -name "*.heartbeat" -mtime +7 -delete 2>/dev/null || true
         print_success "清理旧心跳文件"
     fi
 
     # 清理旧的通知
-    if [ -f "$PHOENIX/notifications.json" ]; then
+    if [ -f "$鲤鱼/notifications.json" ]; then
         python3 "$HOOKS_DIR/notification-center.py" auto-dismiss > /dev/null 2>&1 || true
         print_success "清理过期通知"
     fi
 
     # 清理旧的触发历史
-    if [ -f "$PHOENIX/smart-trigger-history.jsonl" ]; then
+    if [ -f "$鲤鱼/smart-trigger-history.jsonl" ]; then
         # 保留最近 1000 行
-        tail -1000 "$PHOENIX/smart-trigger-history.jsonl" > "$PHOENIX/smart-trigger-history.jsonl.tmp" 2>/dev/null || true
-        mv "$PHOENIX/smart-trigger-history.jsonl.tmp" "$PHOENIX/smart-trigger-history.jsonl" 2>/dev/null || true
+        tail -1000 "$鲤鱼/smart-trigger-history.jsonl" > "$鲤鱼/smart-trigger-history.jsonl.tmp" 2>/dev/null || true
+        mv "$鲤鱼/smart-trigger-history.jsonl.tmp" "$鲤鱼/smart-trigger-history.jsonl" 2>/dev/null || true
         print_success "清理触发历史"
     fi
 }
@@ -221,7 +221,7 @@ cleanup_old_files() {
 # 主函数
 main() {
     echo "═══════════════════════════════════════════"
-    echo "  PHOENIX Enhanced Hooks Setup v1.0"
+    echo "  鲤鱼 Enhanced Hooks Setup v1.0"
     echo "═══════════════════════════════════════════"
     echo ""
 
@@ -276,8 +276,8 @@ main() {
     echo ""
     echo "配置文件："
     echo "  $SETTINGS_FILE"
-    echo "  $PHOENIX/smart-trigger-config.json"
-    echo "  $PHOENIX/notification-preferences.json"
+    echo "  $鲤鱼/smart-trigger-config.json"
+    echo "  $鲤鱼/notification-preferences.json"
 }
 
 main

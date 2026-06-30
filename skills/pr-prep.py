@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: PR Prep — Pull Request 准备工具。
+鲤鱼 Skill: PR Prep — Pull Request 准备工具。
 
 自动生成 PR 描述、变更摘要、检查清单。
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Verify Completion — 完成前强制验证。
+鲤鱼 Skill: Verify Completion — 完成前强制验证。
 
 在声称工作完成前运行验证检查：
 - 代码是否能正常运行（语法检查）

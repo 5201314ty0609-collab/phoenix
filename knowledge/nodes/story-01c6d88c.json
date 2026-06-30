@@ -1,9 +1,9 @@
 {
   "id": "story-01c6d88c",
   "type": "story-event",
-  "title": "session_end: PHOENIX 会话 — 详见日记",
-  "description": "PHOENIX 会话 — 详见日记",
-  "content": "{\"event\": \"session_end\", \"timestamp\": \"2026-06-08T09:50:25Z\", \"date\": \"2026-06-08\", \"summary\": \"PHOENIX 会话 — 详见日记\", \"mood\": \"正常\"}",
+  "title": "session_end: 鲤鱼 会话 — 详见日记",
+  "description": "鲤鱼 会话 — 详见日记",
+  "content": "{\"event\": \"session_end\", \"timestamp\": \"2026-06-08T09:50:25Z\", \"date\": \"2026-06-08\", \"summary\": \"鲤鱼 会话 — 详见日记\", \"mood\": \"正常\"}",
   "confidence": 0.5,
   "stage": "active",
   "domains": [
@@ -12,7 +12,7 @@
   "created_at": "2026-06-08T10:01:18.600391+00:00",
   "updated_at": "2026-06-08T10:01:18.600396+00:00",
   "source": {
-    "origin": "phoenix-story",
+    "origin": "liyu-story",
     "session_id": ""
   },
   "metadata": {

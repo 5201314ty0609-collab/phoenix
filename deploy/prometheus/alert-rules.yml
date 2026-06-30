@@ -1,0 +1,142 @@
+# =============================================================================
+# PHOENIX AIOS 告警规则 — 基于 Prometheus 的告警配置
+# =============================================================================
+# 告警级别:
+#   - critical: 立即响应，影响服务可用性
+#   - warning:  需要关注，可能影响服务
+#   - info:     信息性告警，用于监控
+# =============================================================================
+
+groups:
+  # ── PHOENIX Core 告警 ──────────────────────────────────────────────────
+  - name: phoenix_core_alerts
+    rules:
+      # 服务存活检查
+      - alert: PhoenixCoreDown
+        expr: up{job="phoenix-core"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: phoenix-core
+        annotations:
+          summary: "PHOENIX Core 服务宕机"
+          description: "PHOENIX Core 服务已停止响应超过 1 分钟"
+
+      # 响应时间过长
+      - alert: PhoenixHighLatency
+        expr: http_request_duration_seconds{job="phoenix-core", handler!="/metrics"} > 2
+        for: 5m
+        labels:
+          severity: warning
+          service: phoenix-core
+        annotations:
+          summary: "PHOENIX API 响应时间过长"
+          description: "API 响应时间超过 2 秒，当前值: {{ $value }}s"
+
+      # 错误率过高
+      - alert: PhoenixHighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: phoenix-core
+        annotations:
+          summary: "PHOENIX API 错误率过高"
+          description: "5xx 错误率超过 5%，当前值: {{ $value | humanizePercentage }}"
+
+      # 内存使用过高
+      - alert: PhoenixHighMemoryUsage
+        expr: process_resident_memory_bytes{job="phoenix-core"} / 1024 / 1024 > 1024
+        for: 10m
+        labels:
+          severity: warning
+          service: phoenix-core
+        annotations:
+          summary: "PHOENIX Core 内存使用过高"
+          description: "内存使用超过 1GB，当前值: {{ $value | humanize }}MB"
+
+  # ── Nginx 告警 ─────────────────────────────────────────────────────────
+  - name: nginx_alerts
+    rules:
+      # Nginx 服务宕机
+      - alert: NginxDown
+        expr: up{job="nginx"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: nginx
+        annotations:
+          summary: "Nginx 服务宕机"
+          description: "Nginx 反向代理已停止响应"
+
+      # Nginx 5xx 错误率
+      - alert: NginxHighErrorRate
+        expr: rate(nginx_http_requests_total{status=~"5.."}[5m]) / rate(nginx_http_requests_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: nginx
+        annotations:
+          summary: "Nginx 5xx 错误率过高"
+          description: "Nginx 5xx 错误率超过 10%"
+
+  # ── Redis 告警 ─────────────────────────────────────────────────────────
+  - name: redis_alerts
+    rules:
+      # Redis 服务宕机
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: redis
+        annotations:
+          summary: "Redis 服务宕机"
+          description: "Redis 缓存服务已停止响应"
+
+      # Redis 内存使用过高
+      - alert: RedisHighMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: redis
+        annotations:
+          summary: "Redis 内存使用过高"
+          description: "Redis 内存使用超过 90%，当前值: {{ $value | humanizePercentage }}"
+
+  # ── 系统资源告警 ───────────────────────────────────────────────────────
+  - name: system_alerts
+    rules:
+      # CPU 使用率过高
+      - alert: HighCpuUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 10m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "系统 CPU 使用率过高"
+          description: "CPU 使用率超过 80%，当前值: {{ $value | humanize }}%"
+
+      # 磁盘空间不足
+      - alert: LowDiskSpace
+        expr: node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"} < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "磁盘空间不足"
+          description: "根分区可用空间不足 10%"
+
+      # 内存使用过高
+      - alert: HighMemoryUsage
+        expr: 1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) > 0.9
+        for: 10m
+        labels:
+          severity: warning
+          service: system
+        annotations:
+          summary: "系统内存使用过高"
+          description: "内存使用超过 90%"

@@ -1,6 +1,6 @@
-# Rule Title (PHOENIX Rule)
+# Rule Title (鲤鱼 Rule)
 
-> Auto-generated rule from PHOENIX Evolution Engine
+> Auto-generated rule from 鲤鱼 Evolution Engine
 > Stage: active | Enforcement: rule file (Level 4)
 > Version: 1.0.0
 > Created: YYYY-MM-DD
@@ -11,7 +11,7 @@
 - **Rule ID**: rule-id
 - **Category**: coding-style|testing|security|performance|patterns|hooks|agents|git-workflow|design|evolution
 - **Priority**: 1-10 (10 = highest)
-- **Layer**: common|phoenix|language-specific
+- **Layer**: common|liyu|language-specific
 - **Languages**: all|typescript|python|go|rust|swift|php
 - **Domains**: comma-separated domains
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Complexity Analyzer — 代码复杂度分析。
+鲤鱼 Skill: Complexity Analyzer — 代码复杂度分析。
 
 分析代码质量指标：
 - 圈复杂度（Cyclomatic Complexity）

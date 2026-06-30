@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PHOENIX Observability Dashboard</title>
+<title>鲤鱼 Observability Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {
@@ -82,7 +82,7 @@
 <div class="container">
   <header>
     <div>
-      <h1>PHOENIX Observability <span class="version">v1.3.0</span></h1>
+      <h1>鲤鱼 Observability <span class="version">v1.3.0</span></h1>
       <div class="meta">Session: sess-20260622-084550 | Last update: 2026-06-22T08:45:50 | CTM: active</div>
     </div>
     <div class="header-right">
@@ -314,7 +314,7 @@
       <h2><span class="icon">&#9881;</span> System Info</h2>
       <div class="stat-row">
         <span class="stat-label">Version</span>
-        <span class="stat-value">PHOENIX v1.3.0</span>
+        <span class="stat-value">鲤鱼 v1.3.0</span>
       </div>
       <div class="stat-row">
         <span class="stat-label">Provider</span>
@@ -508,10 +508,10 @@ if (coherenceCtx) {
   const ctmEvents = document.querySelector('#ctm-events');
   try {
     if (ctmPanel) {
-      ctmPanel.innerHTML = '<div class="empty" style="font-size:0.8rem;">Run <code style="color:var(--cyan);">python3 ~/.claude/phoenix/ctm/ctm_core.py status</code> for live data</div>';
+      ctmPanel.innerHTML = '<div class="empty" style="font-size:0.8rem;">Run <code style="color:var(--cyan);">python3 ~/.claude/liyu/ctm/ctm_core.py status</code> for live data</div>';
     }
     if (ctmEvents) {
-      ctmEvents.innerHTML = '<div class="empty" style="font-size:0.85rem;">Run <code style="color:var(--cyan);">python3 ~/.claude/phoenix/ctm/ctm_core.py events</code> for live events</div>';
+      ctmEvents.innerHTML = '<div class="empty" style="font-size:0.85rem;">Run <code style="color:var(--cyan);">python3 ~/.claude/liyu/ctm/ctm_core.py events</code> for live events</div>';
     }
   } catch (e) {
     // Silent fallback - dashboard works without CTM runtime

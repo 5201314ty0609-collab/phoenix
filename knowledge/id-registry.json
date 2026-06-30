@@ -1,8 +1,8 @@
 {
-  "hermes-phoenix-deployment": "mem-4db95721",
+  "hermes-liyu-deployment": "mem-4db95721",
   "memory-curation": "mem-de5e216a",
-  "phoenix-genesis": "mem-b417ba76",
-  "phoenix-vision": "mem-2e747664",
+  "liyu-genesis": "mem-b417ba76",
+  "liyu-vision": "mem-2e747664",
   "user-profile": "mem-e21b1496",
   "pattern-2fa9237cd790": "fw-7e0fc57e",
   "pattern-5a3528df60c1": "fw-d5279fb2",

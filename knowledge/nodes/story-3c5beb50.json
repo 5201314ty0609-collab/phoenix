@@ -1,9 +1,9 @@
 {
   "id": "story-3c5beb50",
   "type": "story-event",
-  "title": "hermes_session: 你好，我是李时宇，PHOENIX的创建者。请用中文回复我，简单介绍你自己。",
-  "description": "你好，我是李时宇，PHOENIX的创建者。请用中文回复我，简单介绍你自己。",
-  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_170734_a33fd5\", \"timestamp\": \"2026-06-08T09:32:47.901349+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 2, \"tools\": 0, \"summary\": \"你好，我是李时宇，PHOENIX的创建者。请用中文回复我，简单介绍你自己。\"}",
+  "title": "hermes_session: 你好，我是李时宇，鲤鱼的创建者。请用中文回复我，简单介绍你自己。",
+  "description": "你好，我是李时宇，鲤鱼的创建者。请用中文回复我，简单介绍你自己。",
+  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_170734_a33fd5\", \"timestamp\": \"2026-06-08T09:32:47.901349+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 2, \"tools\": 0, \"summary\": \"你好，我是李时宇，鲤鱼的创建者。请用中文回复我，简单介绍你自己。\"}",
   "confidence": 0.5,
   "stage": "active",
   "domains": [
@@ -12,7 +12,7 @@
   "created_at": "2026-06-08T10:01:18.599010+00:00",
   "updated_at": "2026-06-08T10:01:18.599016+00:00",
   "source": {
-    "origin": "phoenix-story",
+    "origin": "liyu-story",
     "session_id": "20260608_170734_a33fd5"
   },
   "metadata": {

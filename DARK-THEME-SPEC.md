@@ -1,4 +1,4 @@
-# PHOENIX AIOS 暗色主题设计规范
+# 鲤鱼 AIOS 暗色主题设计规范
 
 ## 1. 设计原则
 
@@ -110,7 +110,7 @@
 
 ### 2.1 OKLCH 色彩空间
 
-PHOENIX 使用 OKLCH 色彩空间，它具有以下优势：
+鲤鱼 使用 OKLCH 色彩空间，它具有以下优势：
 
 - **感知均匀**：相同数值变化产生相同视觉差异
 - **跨设备一致**：在不同显示器上表现一致
@@ -224,7 +224,7 @@ PHOENIX 使用 OKLCH 色彩空间，它具有以下优势：
 
 ### 3.1 WCAG 2.1 AA 标准
 
-| 元素类型 | 最小对比度 | PHOENIX 目标 |
+| 元素类型 | 最小对比度 | 鲤鱼 目标 |
 |---------|-----------|-------------|
 | 正常文字 (< 18px) | 4.5:1 | 7:1 |
 | 大文字 (≥ 18px 或 14px bold) | 3:1 | 4.5:1 |
@@ -256,7 +256,7 @@ function meetsWCAG(ratio, isLargeText = false) {
 }
 ```
 
-### 3.3 PHOENIX 对比度验证
+### 3.3 鲤鱼 对比度验证
 
 ```css
 /* 主要文字 vs 基础背景 */
@@ -318,9 +318,9 @@ const themes = {
 };
 
 // 存储键
-const STORAGE_KEY = 'phoenix-theme';
-const CONTRAST_KEY = 'phoenix-contrast';
-const REDUCE_MOTION_KEY = 'phoenix-reduce-motion';
+const STORAGE_KEY = 'liyu-theme';
+const CONTRAST_KEY = 'liyu-contrast';
+const REDUCE_MOTION_KEY = 'liyu-reduce-motion';
 ```
 
 ### 4.3 切换动画
@@ -511,7 +511,7 @@ window.matchMedia('(prefers-color-scheme: dark)')
 
 ```html
 <nav class="glass-nav">
-  <div class="logo gradient-text">PHOENIX</div>
+  <div class="logo gradient-text">鲤鱼</div>
   <div class="nav-links">
     <a href="#" class="hover-border">首页</a>
     <a href="#" class="hover-border">功能</a>
@@ -555,7 +555,7 @@ window.matchMedia('(prefers-color-scheme: dark)')
 ## 8. 文件结构
 
 ```
-phoenix/
+liyu/
 ├── theme-system.css      # 主题变量和基础样式
 ├── visual-effects.css    # 渐变、发光、玻璃态效果
 ├── theme-manager.js      # 主题切换 JavaScript
@@ -627,4 +627,4 @@ const toggle = new ThemeToggle('#theme-container', {
 
 **版本**: v1.0.0
 **最后更新**: 2026-06-22
-**作者**: PHOENIX AIOS Design System
+**作者**: 鲤鱼 AIOS Design System

@@ -1,11 +1,11 @@
-# PHOENIX Skills System v2.0
+# 鲤鱼 Skills System v2.0
 
-PHOENIX 的轻量级技能系统，从 5 个基础技能扩展为 13 个专业技能，支持管道组合、学习推荐、使用追踪。
+鲤鱼 的轻量级技能系统，从 5 个基础技能扩展为 13 个专业技能，支持管道组合、学习推荐、使用追踪。
 
 ## Architecture
 
 ```
-phoenix-skill.py (统一入口)
+liyu-skill.py (统一入口)
     |
     +-- skills/                 # 技能模块
     |   +-- code-tidy.py        # 代码整理
@@ -83,56 +83,56 @@ phoenix-skill.py (统一入口)
 
 ```bash
 # 代码整理
-phoenix-skill.py code-tidy src/ --dry-run
+liyu-skill.py code-tidy src/ --dry-run
 
 # 安全审计
-phoenix-skill.py security src/ --strict
+liyu-skill.py security src/ --strict
 
 # 复杂度分析
-phoenix-skill.py complexity src/ --threshold 15
+liyu-skill.py complexity src/ --threshold 15
 
 # 健康检查
-phoenix-skill.py health quick
+liyu-skill.py health quick
 ```
 
 ### Pipeline (链式执行)
 
 ```bash
 # 预定义管道
-phoenix-skill.py pipeline run-pipeline code-quality --target src/
-phoenix-skill.py pipeline run-pipeline pre-commit --target src/
-phoenix-skill.py pipeline run-pipeline security-review --target src/
-phoenix-skill.py pipeline run-pipeline full-review --target src/
+liyu-skill.py pipeline run-pipeline code-quality --target src/
+liyu-skill.py pipeline run-pipeline pre-commit --target src/
+liyu-skill.py pipeline run-pipeline security-review --target src/
+liyu-skill.py pipeline run-pipeline full-review --target src/
 
 # 临时管道
-phoenix-skill.py pipeline run code-tidy security-audit verify --target src/
+liyu-skill.py pipeline run code-tidy security-audit verify --target src/
 
 # 定义自定义管道
-phoenix-skill.py pipeline define my-check code-tidy security verify
+liyu-skill.py pipeline define my-check code-tidy security verify
 
 # 查看管道历史
-phoenix-skill.py pipeline history
+liyu-skill.py pipeline history
 ```
 
 ### Learning & Recommendation
 
 ```bash
 # 记录使用
-phoenix-skill.py learn record security-audit success --context "pre-deploy check"
-phoenix-skill.py learn record code-tidy failure --error "encoding issue"
+liyu-skill.py learn record security-audit success --context "pre-deploy check"
+liyu-skill.py learn record code-tidy failure --error "encoding issue"
 
 # 获取推荐
-phoenix-skill.py recommend "need to find security vulnerabilities"
-phoenix-skill.py recommend "code quality check before merge"
+liyu-skill.py recommend "need to find security vulnerabilities"
+liyu-skill.py recommend "code quality check before merge"
 
 # 查看统计
-phoenix-skill.py learn stats
+liyu-skill.py learn stats
 
 # 检测使用模式
-phoenix-skill.py learn patterns
+liyu-skill.py learn patterns
 
 # 查看技能评分
-phoenix-skill.py learn score security-audit
+liyu-skill.py learn score security-audit
 ```
 
 ## Predefined Pipelines
@@ -144,12 +144,12 @@ phoenix-skill.py learn score security-audit
 | `pre-commit` | tidy -> security -> verify | 提交前检查 |
 | `full-review` | tidy -> security -> verify -> complexity -> doc-gen | 完整代码审查 |
 
-## Integration with PHOENIX Ecosystem
+## Integration with 鲤鱼 Ecosystem
 
 ### Reflection Engine
 Skills 的执行结果自动记录到反思引擎：
 ```bash
-phoenix-skill.py learn record <skill> <result> --context "task context"
+liyu-skill.py learn record <skill> <result> --context "task context"
 ```
 
 ### Observability
@@ -191,12 +191,12 @@ composite = success_rate * 40 + recency * 25 + frequency * 20 + trend * 15
 ## Adding New Skills
 
 1. Create `skills/<name>.py` with a `main()` function
-2. Register in `phoenix-skill.py` SKILLS dict
+2. Register in `liyu-skill.py` SKILLS dict
 3. Add context keywords to `skill-learn.py` SKILL_CONTEXT_KEYWORDS
 4. Optionally add to predefined pipelines in `skill-pipeline.py`
 
 ```python
-# In phoenix-skill.py SKILLS:
+# In liyu-skill.py SKILLS:
 "my-skill": {
     "description": "What it does",
     "module": "my-skill",

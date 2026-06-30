@@ -99,7 +99,7 @@
       "priority": 40,
       "enabled": true,
       "handler_type": "file",
-      "target": "/tmp/phoenix-test-events.jsonl",
+      "target": "/tmp/liyu-test-events.jsonl",
       "max_retries": 2,
       "timeout_seconds": 30,
       "created_at": "2026-06-22T09:07:00.007901+00:00",

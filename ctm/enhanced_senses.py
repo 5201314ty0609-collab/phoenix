@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX CTM - 增强八感知系统
+鲤鱼 CTM - 增强八感知系统
 Enhanced 8-Sense System with CTM
 
 基于 CTM 的连续性、自适应、同步性增强八感知能力
@@ -234,7 +234,7 @@ def main():
     command = sys.argv[1]
 
     # 尝试从文件更新
-    senses_dir = Path.home() / ".claude" / "phoenix" / "senses"
+    senses_dir = Path.home() / ".claude" / "liyu" / "senses"
     if senses_dir.exists():
         senses.update_from_sense_files(senses_dir)
 

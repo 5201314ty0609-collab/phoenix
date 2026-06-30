@@ -1,4 +1,4 @@
-# PHOENIX AIOS 样式系统
+# 鲤鱼 AIOS 样式系统
 
 基于 Tailwind CSS v4 + 自定义设计令牌的完整样式系统。
 

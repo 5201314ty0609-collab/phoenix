@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-PHOENIX Web Server — 独立 HTTP API + 仪表盘
+鲤鱼 Web Server — 独立 HTTP API + 仪表盘
 Pure Python stdlib. Zero dependencies.
 
 Endpoints:
-  GET  /                  PHOENIX Dashboard (基础视图)
-  GET  /viz               PHOENIX Visualization Dashboard (可视化控制台)
+  GET  /                  鲤鱼 Dashboard (基础视图)
+  GET  /viz               鲤鱼 Visualization Dashboard (可视化控制台)
   GET  /api/status        System health + 8-Sense + drift
   GET  /api/stats         Comprehensive real-time statistics
   GET  /api/ctm           CTM thinking engine real-time status
@@ -35,11 +35,11 @@ class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-sys.path.insert(0, str(PHOENIX_HOME))
-DASHBOARD_FILE = PHOENIX_HOME / "dashboard.html"
-DASHBOARD_VIZ_FILE = PHOENIX_HOME / "dashboard-viz.html"
-INDEX_FILE = PHOENIX_HOME / "index.html"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+sys.path.insert(0, str(鲤鱼_HOME))
+DASHBOARD_FILE = 鲤鱼_HOME / "dashboard.html"
+DASHBOARD_VIZ_FILE = 鲤鱼_HOME / "dashboard-viz.html"
+INDEX_FILE = 鲤鱼_HOME / "index.html"
 PORT = 8765
 HOST = "127.0.0.1"
 
@@ -49,7 +49,7 @@ HOST = "127.0.0.1"
 def api_status() -> dict:
     """系统综合状态"""
     data = {
-        "phoenix": {
+        "liyu": {
             "version": "1.3.0",
             "uptime": "since session start",
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -58,7 +58,7 @@ def api_status() -> dict:
 
     # 8-Sense states
     senses = {}
-    senses_dir = PHOENIX_HOME / "senses"
+    senses_dir = 鲤鱼_HOME / "senses"
     if senses_dir.exists():
         for f in sorted(senses_dir.glob("*.json")):
             try:
@@ -72,7 +72,7 @@ def api_status() -> dict:
     data["senses"] = senses
 
     # Drift velocity (NexSandglass)
-    drift_file = PHOENIX_HOME / "nexsandglass" / "drift.json"
+    drift_file = 鲤鱼_HOME / "nexsandglass" / "drift.json"
     if drift_file.exists():
         try:
             drift = json.loads(drift_file.read_text())
@@ -85,7 +85,7 @@ def api_status() -> dict:
             pass
 
     # Framework evolution
-    frameworks_dir = PHOENIX_HOME / "frameworks" / "active"
+    frameworks_dir = 鲤鱼_HOME / "frameworks" / "active"
     if frameworks_dir.exists():
         data["evolution"] = {
             "active_frameworks": len(list(frameworks_dir.glob("*.json"))),
@@ -97,7 +97,7 @@ def api_status() -> dict:
 def api_modules() -> dict:
     """模块清单与统计"""
     modules = {}
-    for py_file in sorted(PHOENIX_HOME.glob("*.py")):
+    for py_file in sorted(鲤鱼_HOME.glob("*.py")):
         if py_file.name.startswith("test_"):
             continue
         try:
@@ -137,7 +137,7 @@ def api_timeline(params: dict) -> dict:
         return {"entries": rows, "total": len(rows)}
     except ImportError:
         # Fallback: read story.jsonl directly
-        story_file = PHOENIX_HOME / "story.jsonl"
+        story_file = 鲤鱼_HOME / "story.jsonl"
         entries = []
         if story_file.exists():
             with open(story_file) as f:
@@ -152,9 +152,9 @@ def api_timeline(params: dict) -> dict:
 
 def api_persona() -> dict:
     """NexSandglass 画像"""
-    persona_file = PHOENIX_HOME / "nexsandglass" / "persona.md"
-    drift_file = PHOENIX_HOME / "nexsandglass" / "drift.json"
-    sand_db = PHOENIX_HOME / "nexsandglass" / "sand.db"
+    persona_file = 鲤鱼_HOME / "nexsandglass" / "persona.md"
+    drift_file = 鲤鱼_HOME / "nexsandglass" / "drift.json"
+    sand_db = 鲤鱼_HOME / "nexsandglass" / "sand.db"
 
     result = {"available": False}
 
@@ -237,9 +237,9 @@ def api_persona_all(params: dict = None) -> dict:
         # For now, we only have one persona file (for holyty-founder)
         # In a multi-user system, each user would have their own persona file
         if user_id == "holyty-founder":
-            persona_file = PHOENIX_HOME / "nexsandglass" / "persona.md"
-            drift_file = PHOENIX_HOME / "nexsandglass" / "drift.json"
-            sand_db = PHOENIX_HOME / "nexsandglass" / "sand.db"
+            persona_file = 鲤鱼_HOME / "nexsandglass" / "persona.md"
+            drift_file = 鲤鱼_HOME / "nexsandglass" / "drift.json"
+            sand_db = 鲤鱼_HOME / "nexsandglass" / "sand.db"
 
             persona_data = {"available": False}
 
@@ -275,7 +275,7 @@ def api_persona_all(params: dict = None) -> dict:
             result["personas"][user_id] = persona_data
         else:
             # For other users, check if they have a persona file
-            user_persona_file = PHOENIX_HOME / "nexsandglass" / f"persona-{user_id}.md"
+            user_persona_file = 鲤鱼_HOME / "nexsandglass" / f"persona-{user_id}.md"
             if user_persona_file.exists():
                 try:
                     result["personas"][user_id] = {
@@ -292,9 +292,9 @@ def api_persona_all(params: dict = None) -> dict:
 
 def api_tool_guard() -> dict:
     """工具防护状态"""
-    state_file = PHOENIX_HOME / "tool-guard-state.json"
-    config_file = PHOENIX_HOME / "tool-guard-config.json"
-    history_file = PHOENIX_HOME / "tool-guard-history.jsonl"
+    state_file = 鲤鱼_HOME / "tool-guard-state.json"
+    config_file = 鲤鱼_HOME / "tool-guard-config.json"
+    history_file = 鲤鱼_HOME / "tool-guard-history.jsonl"
 
     result = {}
     if state_file.exists():
@@ -376,7 +376,7 @@ def api_skills() -> dict:
 
 def api_events() -> dict:
     """事件总线统计"""
-    events_file = PHOENIX_HOME / "event-bus" / "events.jsonl"
+    events_file = 鲤鱼_HOME / "event-bus" / "events.jsonl"
     if not events_file.exists():
         return {"total": 0}
 
@@ -419,32 +419,32 @@ def api_stats() -> dict:
     }
 
     # Count Python modules (excluding test files)
-    py_files = [f for f in PHOENIX_HOME.glob("*.py") if not f.name.startswith("test_") and not f.name.startswith("test-")]
+    py_files = [f for f in 鲤鱼_HOME.glob("*.py") if not f.name.startswith("test_") and not f.name.startswith("test-")]
     result["modules"] = len(py_files)
     result["module_list"] = sorted([f.stem for f in py_files])
 
     # Count rules
-    rules_dir = Path.home() / ".claude" / "rules" / "phoenix"
+    rules_dir = Path.home() / ".claude" / "rules" / "liyu"
     if rules_dir.exists():
         result["rules"] = len(list(rules_dir.glob("*.md")))
 
     # Count senses
-    senses_dir = PHOENIX_HOME / "senses"
+    senses_dir = 鲤鱼_HOME / "senses"
     if senses_dir.exists():
         result["senses"] = len(list(senses_dir.glob("*.json")))
 
     # Count active frameworks
-    fw_dir = PHOENIX_HOME / "frameworks" / "active"
+    fw_dir = 鲤鱼_HOME / "frameworks" / "active"
     if fw_dir.exists():
         result["frameworks_active"] = len(list(fw_dir.glob("*.json")))
 
     # Count hooks
-    hooks_dir = PHOENIX_HOME / "hooks"
+    hooks_dir = 鲤鱼_HOME / "hooks"
     if hooks_dir.exists():
         result["hooks"] = len([f for f in hooks_dir.iterdir() if f.suffix in ('.sh', '.py')])
 
     # Tool usage from tool-guard history
-    history_file = PHOENIX_HOME / "tool-guard-history.jsonl"
+    history_file = 鲤鱼_HOME / "tool-guard-history.jsonl"
     if history_file.exists():
         tool_counts = {}
         blocked_count = 0
@@ -470,7 +470,7 @@ def api_stats() -> dict:
     try:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
-            "rule_health", PHOENIX_HOME / "phoenix-rule-health.py"
+            "rule_health", 鲤鱼_HOME / "liyu-rule-health.py"
         )
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
@@ -486,7 +486,7 @@ def api_stats() -> dict:
     try:
         import importlib.util
         spec3 = importlib.util.spec_from_file_location(
-            "cost_tracker", PHOENIX_HOME / "phoenix-cost-tracker.py"
+            "cost_tracker", 鲤鱼_HOME / "liyu-cost-tracker.py"
         )
         mod3 = importlib.util.module_from_spec(spec3)
         spec3.loader.exec_module(mod3)
@@ -621,7 +621,7 @@ def api_ctm() -> dict:
         result["error"] = str(e)
 
     # 从 CTM 状态文件读取（如果存在）
-    ctm_state_file = PHOENIX_HOME / "ctm" / "state.json"
+    ctm_state_file = 鲤鱼_HOME / "ctm" / "state.json"
     if ctm_state_file.exists():
         try:
             state = json.loads(ctm_state_file.read_text())
@@ -641,7 +641,7 @@ def api_activity() -> dict:
     try:
         result = subprocess.run(
             ["git", "log", "--since=7 days ago", "--format=%ai|%s", "--no-merges"],
-            capture_output=True, text=True, cwd=str(PHOENIX_HOME), timeout=5
+            capture_output=True, text=True, cwd=str(鲤鱼_HOME), timeout=5
         )
         if result.returncode == 0:
             for line in result.stdout.strip().split("\n")[:20]:
@@ -654,7 +654,7 @@ def api_activity() -> dict:
         pass
 
     # Also include story.jsonl events
-    story_file = PHOENIX_HOME / "story.jsonl"
+    story_file = 鲤鱼_HOME / "story.jsonl"
     if story_file.exists():
         try:
             with open(story_file) as f:
@@ -685,7 +685,7 @@ def api_evolve(params: dict = None) -> dict:
     try:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
-            "policy_engine", PHOENIX_HOME / "policy-engine.py"
+            "policy_engine", 鲤鱼_HOME / "policy-engine.py"
         )
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
@@ -703,7 +703,7 @@ def api_tool_guard_reset(params: dict = None) -> dict:
     try:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
-            "tool_guard", PHOENIX_HOME / "tool-guard.py"
+            "tool_guard", 鲤鱼_HOME / "tool-guard.py"
         )
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
@@ -775,7 +775,7 @@ def api_users() -> dict:
 def api_sense_detail(params: dict) -> dict:
     """单个 sense 详情"""
     sense_name = params.get("name", ["o2"])[0]
-    sense_file = PHOENIX_HOME / "senses" / f"{sense_name}.json"
+    sense_file = 鲤鱼_HOME / "senses" / f"{sense_name}.json"
     if sense_file.exists():
         try:
             return json.loads(sense_file.read_text())
@@ -844,7 +844,7 @@ def api_model_list(params: dict = None) -> dict:
     try:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
-            "phoenix_model", PHOENIX_HOME / "phoenix-model.py"
+            "liyu_model", 鲤鱼_HOME / "liyu-model.py"
         )
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
@@ -901,11 +901,11 @@ def _broadcast_sse(event: dict):
 
 def _poll_sse_events():
     """检查 sse-events.jsonl 是否有新事件，有则广播"""
-    sse_file = PHOENIX_HOME / "nexsandglass" / "sse-events.jsonl"
+    sse_file = 鲤鱼_HOME / "nexsandglass" / "sse-events.jsonl"
     if not sse_file.exists():
         return
     # Track last read position
-    state_file = PHOENIX_HOME / "nexsandglass" / ".sse-position"
+    state_file = 鲤鱼_HOME / "nexsandglass" / ".sse-position"
     last_pos = 0
     if state_file.exists():
         try:
@@ -957,7 +957,7 @@ POST_ROUTES = {
 
 
 class PhoenixHandler(BaseHTTPRequestHandler):
-    """PHOENIX HTTP Request Handler"""
+    """鲤鱼 HTTP Request Handler"""
 
     def log_message(self, format, *args):
         """Silence default logging — use our own."""
@@ -1042,7 +1042,7 @@ class PhoenixHandler(BaseHTTPRequestHandler):
                         return
                     except OSError:
                         pass
-            self._send_html("<h1>PHOENIX</h1><p>v1.3.0 — Self-Evolving Agent Harness</p>")
+            self._send_html("<h1>鲤鱼</h1><p>v1.3.0 — Self-Evolving Agent Harness</p>")
             return
 
         # Simple Dashboard
@@ -1054,7 +1054,7 @@ class PhoenixHandler(BaseHTTPRequestHandler):
                     return
                 except OSError:
                     pass
-            self._send_html("<h1>PHOENIX Dashboard</h1><p>Dashboard file not found.</p>")
+            self._send_html("<h1>鲤鱼 Dashboard</h1><p>Dashboard file not found.</p>")
             return
 
         # Visualization Dashboard
@@ -1066,11 +1066,11 @@ class PhoenixHandler(BaseHTTPRequestHandler):
                     return
                 except OSError:
                     pass
-            self._send_html("<h1>PHOENIX Visualization Dashboard</h1><p>Dashboard file not found.</p>")
+            self._send_html("<h1>鲤鱼 Visualization Dashboard</h1><p>Dashboard file not found.</p>")
             return
 
         # Test Dashboard
-        test_file = PHOENIX_HOME / "test-dashboard.html"
+        test_file = 鲤鱼_HOME / "test-dashboard.html"
         if path == "/test" or path == "/test-dashboard.html":
             if test_file.exists():
                 try:
@@ -1084,7 +1084,7 @@ class PhoenixHandler(BaseHTTPRequestHandler):
 
         # Generic HTML file serving
         if path.endswith(".html"):
-            html_file = PHOENIX_HOME / path.lstrip("/")
+            html_file = 鲤鱼_HOME / path.lstrip("/")
             if html_file.exists():
                 try:
                     html = html_file.read_text()
@@ -1110,7 +1110,7 @@ class PhoenixHandler(BaseHTTPRequestHandler):
 
         # Health check
         if path == "/health":
-            self._send_json({"status": "ok", "service": "PHOENIX"})
+            self._send_json({"status": "ok", "service": "鲤鱼"})
             return
 
         # 404
@@ -1164,7 +1164,7 @@ def main():
             HOST = sys.argv[i + 1]
 
     server = ThreadingHTTPServer((HOST, PORT), PhoenixHandler)
-    print(f"🐦‍🔥 PHOENIX Server")
+    print(f"🐦‍🔥 鲤鱼 Server")
     print(f"   http://{HOST}:{PORT}")
     print(f"   API: http://{HOST}:{PORT}/api/status")
     print(f"   Press Ctrl+C to stop")
@@ -1172,7 +1172,7 @@ def main():
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\n👋 PHOENIX Server stopped")
+        print("\n👋 鲤鱼 Server stopped")
         server.server_close()
 
 

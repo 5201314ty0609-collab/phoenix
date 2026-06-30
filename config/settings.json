@@ -97,7 +97,7 @@
   },
   "memory": {
     "enabled": true,
-    "db_path": "/Users/holyty/.claude/phoenix/knowledge-base.db",
+    "db_path": "/Users/holyty/.claude/liyu/knowledge-base.db",
     "fts_enabled": true,
     "auto_sync": true,
     "auto_extract": true,
@@ -115,7 +115,7 @@
     "auto_amend": false
   },
   "display": {
-    "theme": "phoenix",
+    "theme": "liyu",
     "language": "zh",
     "stream_output": true,
     "show_tool_output": true,

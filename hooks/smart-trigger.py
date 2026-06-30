@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Smart Trigger Engine — 智能触发条件引擎
+鲤鱼 Smart Trigger Engine — 智能触发条件引擎
 根据上下文、错误状态、时间间隔等因素智能决定是否触发钩子
 
 功能：
@@ -28,10 +28,10 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 import re
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-CONFIG_FILE = PHOENIX_HOME / "smart-trigger-config.json"
-STATE_FILE = PHOENIX_HOME / "smart-trigger-state.json"
-HISTORY_FILE = PHOENIX_HOME / "smart-trigger-history.jsonl"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+CONFIG_FILE = 鲤鱼_HOME / "smart-trigger-config.json"
+STATE_FILE = 鲤鱼_HOME / "smart-trigger-state.json"
+HISTORY_FILE = 鲤鱼_HOME / "smart-trigger-history.jsonl"
 
 
 # 默认触发条件配置
@@ -191,7 +191,7 @@ def load_state() -> dict:
 
 def save_state(state: dict) -> None:
     """保存状态"""
-    PHOENIX_HOME.mkdir(parents=True, exist_ok=True)
+    鲤鱼_HOME.mkdir(parents=True, exist_ok=True)
     state["updated_at"] = datetime.now(timezone.utc).isoformat()
     STATE_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2))
 
@@ -382,7 +382,7 @@ def main():
 
     elif cmd == "stats":
         stats = trigger.get_stats()
-        print("═══ PHOENIX Smart Trigger ───")
+        print("═══ 鲤鱼 Smart Trigger ───")
         print(f"  总评估次数: {stats['total_evaluations']}")
         print(f"  活跃冷却: {stats['active_cooldowns']}")
         print()

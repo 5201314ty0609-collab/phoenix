@@ -1,4 +1,4 @@
-# PHOENIX AIOS Agent 架构
+# 鲤鱼 AIOS Agent 架构
 
 ## 核心概念
 
@@ -349,13 +349,13 @@ class ToolRegistry:
 
 ---
 
-## PHOENIX Agent 集成
+## 鲤鱼 Agent 集成
 
 ### Agent 核心
 
 ```python
 class PhoenixAgent:
-    """PHOENIX Agent 核心"""
+    """鲤鱼 Agent 核心"""
     
     def __init__(self, config: dict):
         self.config = config

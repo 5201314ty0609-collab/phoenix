@@ -1,0 +1,15 @@
+{
+  "agents": {
+    "test-agent": {
+      "max_iterations": 90,
+      "used": 1,
+      "remaining": 89
+    },
+    "main-agent": {
+      "max_iterations": 90,
+      "used": 0,
+      "remaining": 90
+    }
+  },
+  "updated_at": "2026-06-30T05:55:06.206158+00:00"
+}

@@ -1,5 +1,5 @@
 #!/bin/bash
-# === PHOENIX E2E Visual Check Hook v1.0 ===
+# === 鲤鱼 E2E Visual Check Hook v1.0 ===
 # PostToolUse hook: triggers visual regression on frontend file changes.
 # Absorbed from: Midscene.js E2E Visual Testing (P1#6)
 #
@@ -24,7 +24,7 @@ if [[ -n "$FILE_PATH" ]]; then
     fi
 fi
 
-PHOENIX_HOME="$HOME/.claude/phoenix"
+鲤鱼_HOME="$HOME/.claude/liyu"
 E2E_DIR="${E2E_DIR:-$(pwd)/e2e}"
 BASE_URL="${E2E_BASE_URL:-http://localhost:3000}"
 

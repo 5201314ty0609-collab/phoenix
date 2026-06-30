@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Rule Manager — 规则生命周期管理工具
+鲤鱼 Rule Manager — 规则生命周期管理工具
 
 管理规则的创建、更新、废弃和删除。
 
@@ -24,10 +24,10 @@ import sys
 
 # ── 路径配置 ─────────────────────────────────────────────────────────────
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
 RULES_DIR = Path.home() / ".claude" / "rules"
-PHOENIX_RULES_DIR = RULES_DIR / "phoenix"
-ENGINE_DIR = PHOENIX_HOME / "rules-engine"
+鲤鱼_RULES_DIR = RULES_DIR / "liyu"
+ENGINE_DIR = 鲤鱼_HOME / "rules-engine"
 RULE_REGISTRY = ENGINE_DIR / "rule-registry.json"
 MANAGER_LOG = ENGINE_DIR / "manager-log.jsonl"
 
@@ -90,7 +90,7 @@ class RuleManager:
         rule_id: str,
         category: str,
         name: str = "",
-        layer: str = "phoenix",
+        layer: str = "liyu",
         languages: List[str] = None,
         priority: int = 5,
     ) -> bool:
@@ -101,12 +101,12 @@ class RuleManager:
             return False
 
         # 确定文件路径
-        if layer == "phoenix":
-            file_path = PHOENIX_RULES_DIR / f"{rule_id}.md"
+        if layer == "liyu":
+            file_path = 鲤鱼_RULES_DIR / f"{rule_id}.md"
         elif layer == "common":
             file_path = RULES_DIR / "common" / f"{rule_id}.md"
         else:
-            file_path = PHOENIX_RULES_DIR / f"{rule_id}.md"
+            file_path = 鲤鱼_RULES_DIR / f"{rule_id}.md"
 
         # 检查文件是否已存在
         if file_path.exists():
@@ -364,9 +364,9 @@ class RuleManager:
         created: str,
     ) -> str:
         """生成规则模板"""
-        return f"""# {name} (PHOENIX Rule)
+        return f"""# {name} (鲤鱼 Rule)
 
-> Auto-generated rule from PHOENIX Evolution Engine
+> Auto-generated rule from 鲤鱼 Evolution Engine
 > Stage: draft | Enforcement: rule file (Level 4)
 > Version: 1.0.0
 > Created: {created}
@@ -408,7 +408,7 @@ const bad = ...;
 
 ## Evolution History
 
-- Created: {created} from PHOENIX Evolution Engine
+- Created: {created} from 鲤鱼 Evolution Engine
 """
 
 
@@ -429,7 +429,7 @@ def main():
         rule_id = sys.argv[2]
         category = sys.argv[3]
         name = sys.argv[4] if len(sys.argv) > 4 else ""
-        layer = sys.argv[5] if len(sys.argv) > 5 else "phoenix"
+        layer = sys.argv[5] if len(sys.argv) > 5 else "liyu"
         priority = int(sys.argv[6]) if len(sys.argv) > 6 else 5
         manager.create_rule(rule_id, category, name, layer, priority=priority)
 
@@ -473,7 +473,7 @@ def main():
     elif cmd == "stats":
         stats = manager.get_stats()
         print("=" * 72)
-        print("  PHOENIX Rule Manager Statistics")
+        print("  鲤鱼 Rule Manager Statistics")
         print("=" * 72)
         print()
         print(f"Total rules: {stats['total']}")

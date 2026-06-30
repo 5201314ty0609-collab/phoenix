@@ -1,9 +1,9 @@
 {
   "id": "story-6847d20e",
   "type": "story-event",
-  "title": "hermes_session: 创作任务：为 PHOENIX 设计一套完整的视觉身份系统。\n\n背景：\nPHOENIX 是李时宇的自进化 AI Agent，融合了 ECC、MUNDO Agent",
-  "description": "创作任务：为 PHOENIX 设计一套完整的视觉身份系统。\n\n背景：\nPHOENIX 是李时宇的自进化 AI Agent，融合了 ECC、MUNDO Agent、Metacog、Claude Soul",
-  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_173804_d06c8f\", \"timestamp\": \"2026-06-08T09:38:44.744901+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 1, \"tools\": 0, \"summary\": \"创作任务：为 PHOENIX 设计一套完整的视觉身份系统。\\n\\n背景：\\nPHOENIX 是李时宇的自进化 AI Agent，融合了 ECC、MUNDO Agent、Metacog、Claude Soul\"}",
+  "title": "hermes_session: 创作任务：为 鲤鱼 设计一套完整的视觉身份系统。\n\n背景：\n鲤鱼 是李时宇的自进化 AI Agent，融合了 ECC、MUNDO Agent",
+  "description": "创作任务：为 鲤鱼 设计一套完整的视觉身份系统。\n\n背景：\n鲤鱼 是李时宇的自进化 AI Agent，融合了 ECC、MUNDO Agent、Metacog、Claude Soul",
+  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_173804_d06c8f\", \"timestamp\": \"2026-06-08T09:38:44.744901+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 1, \"tools\": 0, \"summary\": \"创作任务：为 鲤鱼 设计一套完整的视觉身份系统。\\n\\n背景：\\n鲤鱼 是李时宇的自进化 AI Agent，融合了 ECC、MUNDO Agent、Metacog、Claude Soul\"}",
   "confidence": 0.5,
   "stage": "active",
   "domains": [
@@ -12,7 +12,7 @@
   "created_at": "2026-06-08T10:01:18.599741+00:00",
   "updated_at": "2026-06-08T10:01:18.599746+00:00",
   "source": {
-    "origin": "phoenix-story",
+    "origin": "liyu-story",
     "session_id": "20260608_173804_d06c8f"
   },
   "metadata": {

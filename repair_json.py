@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX JSON Repair Module — 借鉴 MUNDO v2.2.7 的 repair_json 模式。
+鲤鱼 JSON Repair Module — 借鉴 MUNDO v2.2.7 的 repair_json 模式。
 
 提供鲁棒的 JSON 解析，处理 LLM 输出的格式不正确 JSON。
 """

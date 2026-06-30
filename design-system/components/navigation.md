@@ -7,7 +7,7 @@
 
 ## 概述
 
-导航系统帮助用户在 PHOENIX 中定位和移动。包括顶部导航栏、侧边导航、标签页和面包屑。
+导航系统帮助用户在 鲤鱼 中定位和移动。包括顶部导航栏、侧边导航、标签页和面包屑。
 
 ---
 
@@ -19,7 +19,7 @@
 <header class="topnav">
   <div class="topnav__brand">
     <svg class="topnav__logo"><!-- logo --></svg>
-    <span class="topnav__title">PHOENIX</span>
+    <span class="topnav__title">鲤鱼</span>
   </div>
 
   <nav class="topnav__menu" aria-label="主导航">

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Config Manager
+鲤鱼 Config Manager
 统一配置管理、验证、热重载、版本控制
 """
 
@@ -13,9 +13,9 @@ from datetime import datetime
 from typing import Dict, Any, Optional, List
 import sqlite3
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-CONFIGS_DIR = PHOENIX_HOME / "configs"
-DB_PATH = PHOENIX_HOME / "config-manager.db"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+CONFIGS_DIR = 鲤鱼_HOME / "configs"
+DB_PATH = 鲤鱼_HOME / "config-manager.db"
 
 # 默认配置
 DEFAULT_CONFIGS = {
@@ -69,7 +69,7 @@ DEFAULT_CONFIGS = {
 
 
 class PhoenixConfigManager:
-    """PHOENIX 统一配置管理器"""
+    """鲤鱼 统一配置管理器"""
     
     def __init__(self):
         self.configs_dir = CONFIGS_DIR
@@ -291,7 +291,7 @@ class PhoenixConfigManager:
 def main():
     """CLI 入口"""
     if len(sys.argv) < 2:
-        print("用法: phoenix-config-manager.py <command>")
+        print("用法: liyu-config-manager.py <command>")
         print("命令:")
         print("  list           - 列出所有配置")
         print("  get <name>     - 获取配置")
@@ -313,7 +313,7 @@ def main():
     
     elif command == "get":
         if len(sys.argv) < 3:
-            print("用法: phoenix-config-manager.py get <name>")
+            print("用法: liyu-config-manager.py get <name>")
             return
         name = sys.argv[2]
         config = manager.get_config(name)
@@ -324,7 +324,7 @@ def main():
     
     elif command == "set":
         if len(sys.argv) < 5:
-            print("用法: phoenix-config-manager.py set <name> <key> <value>")
+            print("用法: liyu-config-manager.py set <name> <key> <value>")
             return
         name, key, value = sys.argv[2], sys.argv[3], sys.argv[4]
         try:
@@ -338,7 +338,7 @@ def main():
     
     elif command == "history":
         if len(sys.argv) < 3:
-            print("用法: phoenix-config-manager.py history <name>")
+            print("用法: liyu-config-manager.py history <name>")
             return
         name = sys.argv[2]
         history = manager.get_config_history(name)
@@ -360,7 +360,7 @@ def main():
     
     elif command == "validate":
         if len(sys.argv) < 3:
-            print("用法: phoenix-config-manager.py validate <name>")
+            print("用法: liyu-config-manager.py validate <name>")
             return
         name = sys.argv[2]
         result = manager.validate_config(name)

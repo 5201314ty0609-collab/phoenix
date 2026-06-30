@@ -1,4 +1,4 @@
-# PHOENIX Rules Engine v2.0
+# 鲤鱼 Rules Engine v2.0
 
 智能规则管理系统，提供动态加载、冲突检测、依赖管理和上下文感知。
 
@@ -100,21 +100,21 @@ python3 rule_manager.py stats
 python3 rule_manager.py promote <rule-id> <stage>
 ```
 
-### Rule Health (`phoenix-rule-health.py`)
+### Rule Health (`liyu-rule-health.py`)
 规则健康检查和优化建议。
 
 ```bash
 # 生成健康报告
-python3 phoenix-rule-health.py report
+python3 liyu-rule-health.py report
 
 # 查看单个规则评分
-python3 phoenix-rule-health.py score <rule-id>
+python3 liyu-rule-health.py score <rule-id>
 
 # 优化建议
-python3 phoenix-rule-health.py optimize
+python3 liyu-rule-health.py optimize
 
 # 综合仪表盘
-python3 phoenix-rule-health.py dashboard
+python3 liyu-rule-health.py dashboard
 ```
 
 ## 规则格式
@@ -122,9 +122,9 @@ python3 phoenix-rule-health.py dashboard
 ### 新格式（推荐）
 
 ```markdown
-# Rule Title (PHOENIX Rule)
+# Rule Title (鲤鱼 Rule)
 
-> Auto-generated rule from PHOENIX Evolution Engine
+> Auto-generated rule from 鲤鱼 Evolution Engine
 > Stage: active | Enforcement: rule file (Level 4)
 > Version: 1.0.0
 > Created: 2026-06-19
@@ -135,7 +135,7 @@ python3 phoenix-rule-health.py dashboard
 - **Rule ID**: rule-id
 - **Category**: coding-style
 - **Priority**: 7
-- **Layer**: phoenix
+- **Layer**: liyu
 - **Languages**: all
 
 ## Trigger
@@ -170,7 +170,7 @@ domain1, domain2
 | Rule ID | string | 规则唯一标识符 |
 | Category | enum | 分类：coding-style, testing, security, performance, patterns, hooks, agents, git-workflow, design, evolution |
 | Priority | int | 优先级 1-10，10 = 最高 |
-| Layer | enum | 层级：common, phoenix, language-specific, translation |
+| Layer | enum | 层级：common, liyu, language-specific, translation |
 | Languages | list | 适用语言，all 表示所有语言 |
 | Version | string | 语义化版本号 |
 | Created | date | 创建日期 |
@@ -210,7 +210,7 @@ priority = base + stage_bonus + enforcement_bonus + layer_bonus
 |------|----------|
 | Stage | +0 (draft) ~ +4 (hardened) |
 | Enforcement Level | +0 (1-3) ~ +2 (6-7) |
-| Layer | +0 (common) ~ +1 (phoenix) |
+| Layer | +0 (common) ~ +1 (liyu) |
 
 ## 冲突检测
 
@@ -250,7 +250,7 @@ priority = base + stage_bonus + enforcement_bonus + layer_bonus
 
 ## 集成指南
 
-### 与 PHOENIX Evolution Engine 集成
+### 与 鲤鱼 Evolution Engine 集成
 
 ```python
 from rule_engine import RuleEngine
@@ -284,7 +284,7 @@ for match in matches:
     "PreToolUse": [
       {
         "matcher": "",
-        "command": "python3 ~/.claude/phoenix/rules-engine/rule_engine.py context $TASK_TYPE $LANGUAGE",
+        "command": "python3 ~/.claude/liyu/rules-engine/rule_engine.py context $TASK_TYPE $LANGUAGE",
         "description": "Load context-aware rules"
       }
     ]
@@ -304,13 +304,13 @@ for match in matches:
 ### 规则维护
 
 1. 定期运行 `rule_engine.py validate` 检查完整性
-2. 使用 `phoenix-rule-health.py report` 监控健康状态
+2. 使用 `liyu-rule-health.py report` 监控健康状态
 3. 及时废弃不再使用的规则
 4. 保持规则文档更新
 
 ### 规则优化
 
-1. 运行 `phoenix-rule-health.py optimize` 获取优化建议
+1. 运行 `liyu-rule-health.py optimize` 获取优化建议
 2. 合并重叠的规则
 3. 简化过于复杂的规则
 4. 删除未使用的规则
@@ -318,7 +318,7 @@ for match in matches:
 ## 文件结构
 
 ```
-~/.claude/phoenix/rules-engine/
+~/.claude/liyu/rules-engine/
 ├── README.md                    # 本文档
 ├── rule_engine.py              # 核心规则引擎
 ├── rule_migrator.py            # 规则格式迁移工具
@@ -332,9 +332,9 @@ for match in matches:
 
 ## 与现有系统的关系
 
-### 与 phoenix-rule-health.py 的关系
+### 与 liyu-rule-health.py 的关系
 
-- `phoenix-rule-health.py` 专注于规则健康评分和优化建议
+- `liyu-rule-health.py` 专注于规则健康评分和优化建议
 - `rule_engine.py` 提供更全面的规则管理功能
 - 两者共享规则注册表数据
 

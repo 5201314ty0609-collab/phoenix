@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skills Extensibility Enhancer
+鲤鱼 Skills Extensibility Enhancer
 自动技能发现、版本管理、依赖管理
 """
 
@@ -14,9 +14,9 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-SKILLS_DIR = PHOENIX_HOME / "skills"
-DB_PATH = PHOENIX_HOME / "skills-registry.db"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+SKILLS_DIR = 鲤鱼_HOME / "skills"
+DB_PATH = 鲤鱼_HOME / "skills-registry.db"
 
 
 class SkillMetadata:
@@ -24,7 +24,7 @@ class SkillMetadata:
     
     def __init__(self, skill_id: str, name: str, version: str = "1.0.0",
                  description: str = "", dependencies: List[str] = None,
-                 tags: List[str] = None, author: str = "PHOENIX"):
+                 tags: List[str] = None, author: str = "鲤鱼"):
         self.skill_id = skill_id
         self.name = name
         self.version = version
@@ -57,7 +57,7 @@ class SkillMetadata:
             description=data.get("description", ""),
             dependencies=data.get("dependencies", []),
             tags=data.get("tags", []),
-            author=data.get("author", "PHOENIX")
+            author=data.get("author", "鲤鱼")
         )
         meta.created_at = data.get("created_at", meta.created_at)
         meta.updated_at = data.get("updated_at", meta.updated_at)
@@ -364,7 +364,7 @@ class SkillVersionManager:
 def main():
     """CLI 入口"""
     if len(sys.argv) < 2:
-        print("用法: phoenix-skills-ext.py <command>")
+        print("用法: liyu-skills-ext.py <command>")
         print("命令:")
         print("  discover        - 发现新技能")
         print("  list            - 列出所有技能")
@@ -393,7 +393,7 @@ def main():
     
     elif command == "get":
         if len(sys.argv) < 3:
-            print("用法: phoenix-skills-ext.py get <skill_id>")
+            print("用法: liyu-skills-ext.py get <skill_id>")
             return
         skill_id = sys.argv[2]
         skill = registry.get_skill(skill_id)
@@ -404,7 +404,7 @@ def main():
     
     elif command == "deps":
         if len(sys.argv) < 3:
-            print("用法: phoenix-skills-ext.py deps <skill_id>")
+            print("用法: liyu-skills-ext.py deps <skill_id>")
             return
         skill_id = sys.argv[2]
         result = registry.check_dependencies(skill_id)
@@ -415,7 +415,7 @@ def main():
     
     elif command == "versions":
         if len(sys.argv) < 3:
-            print("用法: phoenix-skills-ext.py versions <skill_id>")
+            print("用法: liyu-skills-ext.py versions <skill_id>")
             return
         skill_id = sys.argv[2]
         versions = version_mgr.get_versions(skill_id)

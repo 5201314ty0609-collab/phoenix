@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Code Tidy — 代码洁癖级整理。
+鲤鱼 Skill: Code Tidy — 代码洁癖级整理。
 
 扫描并清理：
 - 未使用的 import

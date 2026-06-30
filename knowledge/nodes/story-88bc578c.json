@@ -1,9 +1,9 @@
 {
   "id": "story-88bc578c",
   "type": "story-event",
-  "title": "hermes_session: 创作任务：为 PHOENIX 写一首「诞生叙事」诗 + ASCII Art 封面。\n\n背景：\nPHOENIX 诞生于 2026年6月5日，由五大系统融合而成：\n",
-  "description": "创作任务：为 PHOENIX 写一首「诞生叙事」诗 + ASCII Art 封面。\n\n背景：\nPHOENIX 诞生于 2026年6月5日，由五大系统融合而成：\n- ECC (Everything Cl",
-  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_173812_8678be\", \"timestamp\": \"2026-06-08T09:38:44.744698+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 5, \"tools\": 2, \"summary\": \"创作任务：为 PHOENIX 写一首「诞生叙事」诗 + ASCII Art 封面。\\n\\n背景：\\nPHOENIX 诞生于 2026年6月5日，由五大系统融合而成：\\n- ECC (Everything Cl\"}",
+  "title": "hermes_session: 创作任务：为 鲤鱼 写一首「诞生叙事」诗 + ASCII Art 封面。\n\n背景：\n鲤鱼 诞生于 2026年6月5日，由五大系统融合而成：\n",
+  "description": "创作任务：为 鲤鱼 写一首「诞生叙事」诗 + ASCII Art 封面。\n\n背景：\n鲤鱼 诞生于 2026年6月5日，由五大系统融合而成：\n- ECC (Everything Cl",
+  "content": "{\"event\": \"hermes_session\", \"session_id\": \"20260608_173812_8678be\", \"timestamp\": \"2026-06-08T09:38:44.744698+00:00\", \"date\": \"2026-06-08\", \"model\": \"claude-sonnet-4-6\", \"messages\": 5, \"tools\": 2, \"summary\": \"创作任务：为 鲤鱼 写一首「诞生叙事」诗 + ASCII Art 封面。\\n\\n背景：\\n鲤鱼 诞生于 2026年6月5日，由五大系统融合而成：\\n- ECC (Everything Cl\"}",
   "confidence": 0.5,
   "stage": "active",
   "domains": [
@@ -12,7 +12,7 @@
   "created_at": "2026-06-08T10:01:18.599652+00:00",
   "updated_at": "2026-06-08T10:01:18.599657+00:00",
   "source": {
-    "origin": "phoenix-story",
+    "origin": "liyu-story",
     "session_id": "20260608_173812_8678be"
   },
   "metadata": {

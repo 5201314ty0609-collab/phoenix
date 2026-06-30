@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Model Switch — 模型切换工具
+鲤鱼 Model Switch — 模型切换工具
 独立于 Claude Code 的模型管理能力。
 
 功能：
@@ -13,20 +13,20 @@ PHOENIX Model Switch — 模型切换工具
   export      导出当前配置
 
 Usage:
-  python3 phoenix-model.py list
-  python3 phoenix-model.py current
-  python3 phoenix-model.py switch mimo-v2.5-pro
-  python3 phoenix-model.py preset mimo
-  python3 phoenix-model.py add --name gpt-4 --base-url https://api.openai.com/v1 --api-key sk-xxx
+  python3 liyu-model.py list
+  python3 liyu-model.py current
+  python3 liyu-model.py switch mimo-v2.5-pro
+  python3 liyu-model.py preset mimo
+  python3 liyu-model.py add --name gpt-4 --base-url https://api.openai.com/v1 --api-key sk-xxx
 """
 
 from pathlib import Path
 import json
 import sys
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
 SETTINGS_FILE = Path.home() / ".claude" / "settings.json"
-MODELS_CONFIG_FILE = PHOENIX_HOME / "models-config.json"
+MODELS_CONFIG_FILE = 鲤鱼_HOME / "models-config.json"
 
 # 预设配置
 PRESETS = {
@@ -110,7 +110,7 @@ class ModelManager:
         return {}
 
     def _load_models_config(self) -> dict:
-        """加载 PHOENIX 模型配置"""
+        """加载 鲤鱼 模型配置"""
         if MODELS_CONFIG_FILE.exists():
             try:
                 return json.loads(MODELS_CONFIG_FILE.read_text())
@@ -123,7 +123,7 @@ class ModelManager:
         SETTINGS_FILE.write_text(json.dumps(self.settings, ensure_ascii=False, indent=2))
 
     def _save_models_config(self):
-        """保存 PHOENIX 模型配置"""
+        """保存 鲤鱼 模型配置"""
         MODELS_CONFIG_FILE.write_text(json.dumps(self.models_config, ensure_ascii=False, indent=2))
 
     def list_models(self) -> List[dict]:
@@ -327,7 +327,7 @@ class ModelManager:
 
 def main():
     if len(sys.argv) < 2:
-        print("用法: python3 phoenix-model.py <command> [args]")
+        print("用法: python3 liyu-model.py <command> [args]")
         print()
         print("命令:")
         print("  list              列出可用模型")
@@ -366,7 +366,7 @@ def main():
 
     elif command == "switch":
         if len(sys.argv) < 3:
-            print("用法: python3 phoenix-model.py switch <model>")
+            print("用法: python3 liyu-model.py switch <model>")
             return
         model = sys.argv[2]
         result = manager.switch_model(model)
@@ -374,7 +374,7 @@ def main():
 
     elif command == "preset":
         if len(sys.argv) < 3:
-            print("用法: python3 phoenix-model.py preset <id>")
+            print("用法: python3 liyu-model.py preset <id>")
             print()
             print("可用预设:")
             for pid, p in PRESETS.items():
@@ -397,7 +397,7 @@ def main():
 
     elif command == "remove":
         if len(sys.argv) < 3:
-            print("用法: python3 phoenix-model.py remove <model_id>")
+            print("用法: python3 liyu-model.py remove <model_id>")
             return
         model_id = sys.argv[2]
         result = manager.remove_model(model_id)
@@ -409,7 +409,7 @@ def main():
 
     elif command == "import":
         if len(sys.argv) < 3:
-            print("用法: python3 phoenix-model.py import <file>")
+            print("用法: python3 liyu-model.py import <file>")
             return
         file_path = sys.argv[2]
         try:
@@ -422,7 +422,7 @@ def main():
 
     else:
         print(f"未知命令: {command}")
-        print("使用 'python3 phoenix-model.py' 查看帮助")
+        print("使用 'python3 liyu-model.py' 查看帮助")
 
 
 if __name__ == "__main__":

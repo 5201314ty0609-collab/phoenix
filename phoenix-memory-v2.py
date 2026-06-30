@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Memory System v2.0 — Unified Memory Manager.
+鲤鱼 Memory System v2.0 — Unified Memory Manager.
 
 Consolidates knowledge-base, auto-memory, reflection-engine, and memory/*.md
 into a single coherent memory system with:
@@ -12,13 +12,13 @@ into a single coherent memory system with:
   - Memory graph linking across all memory types
 
 Usage:
-  python3 phoenix-memory-v2.py prime                Prime context for session start
-  python3 phoenix-memory-v2.py capture [--text FILE] Capture memories from session text
-  python3 phoenix-memory-v2.py search <query>        Unified search across all stores
-  python3 phoenix-memory-v2.py consolidate            Merge/simplify stale memories
-  python3 phoenix-memory-v2.py stats                  System-wide memory statistics
-  python3 phoenix-memory-v2.py link                   Build cross-store memory links
-  python3 phoenix-memory-v2.py inject                 Generate context injection block
+  python3 liyu-memory-v2.py prime                Prime context for session start
+  python3 liyu-memory-v2.py capture [--text FILE] Capture memories from session text
+  python3 liyu-memory-v2.py search <query>        Unified search across all stores
+  python3 liyu-memory-v2.py consolidate            Merge/simplify stale memories
+  python3 liyu-memory-v2.py stats                  System-wide memory statistics
+  python3 liyu-memory-v2.py link                   Build cross-store memory links
+  python3 liyu-memory-v2.py inject                 Generate context injection block
 """
 
 from dataclasses import dataclass, field
@@ -35,13 +35,13 @@ import uuid
 
 # ── Paths ─────────────────────────────────────────────────────────────────
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
 MEMORY_DIR = Path.home() / ".claude" / "projects" / "-Users-holyty" / "memory"
-DB_PATH = PHOENIX_HOME / "knowledge-base.db"
-STORY_FILE = PHOENIX_HOME / "story.jsonl"
-REFLECTIONS_FILE = PHOENIX_HOME / "reflections.jsonl"
-LAST_SESSION_FILE = PHOENIX_HOME / "last-session.json"
-SESSION_CAPTURE_FILE = PHOENIX_HOME / "session-capture.jsonl"
+DB_PATH = 鲤鱼_HOME / "knowledge-base.db"
+STORY_FILE = 鲤鱼_HOME / "story.jsonl"
+REFLECTIONS_FILE = 鲤鱼_HOME / "reflections.jsonl"
+LAST_SESSION_FILE = 鲤鱼_HOME / "last-session.json"
+SESSION_CAPTURE_FILE = 鲤鱼_HOME / "session-capture.jsonl"
 
 # ── Constants ─────────────────────────────────────────────────────────────
 
@@ -503,7 +503,7 @@ def prime_session() -> str:
     if MEMORY_DIR.exists():
         core_files = [
             "user-profile.md", "last-session.md", "memory-curation.md",
-            "website-is-mirror.md", "phoenix-learning-progress.md",
+            "website-is-mirror.md", "liyu-learning-progress.md",
         ]
         for fname in core_files:
             fpath = MEMORY_DIR / fname
@@ -685,7 +685,7 @@ def _extract_all_memories(text: str, session_id: str) -> List[dict]:
         (r'(决定|选择|采用|使用|确定|偏好|喜欢|倾向)[：:]\s*(.+?)(?:[。\n]|$)', 0.7, ["decision"]),
         (r'(升级|迁移|切换到|替换为|从.+迁移到)\s*(.+?)(?:[。\n]|$)', 0.65, ["upgrade"]),
         (r'(配置|设置|安装|部署)[：:]\s*(.+?)(?:[。\n]|$)', 0.6, ["config"]),
-        (r'(PHOENIX|phoenix)\s*(v[\d.]+|升级|吸收|整合|进化).*?(.+?)(?:[。\n]|$)', 0.75, ["phoenix"]),
+        (r'(鲤鱼|liyu)\s*(v[\d.]+|升级|吸收|整合|进化).*?(.+?)(?:[。\n]|$)', 0.75, ["liyu"]),
         (r'(创建|建立|搭建|实现|开发)[：:]\s*(.+?)(?:[。\n]|$)', 0.55, ["creation"]),
         (r'(规则|Rule|Framework|框架)[：:]\s*(.+?)(?:[。\n]|$)', 0.6, ["rule"]),
         (r'(吸收自|借鉴|参考|基于|来自)\s*[：:]?\s*(.+?)(?:[。\n]|$)', 0.7, ["absorption"]),
@@ -764,7 +764,7 @@ def _estimate_importance(content: str) -> float:
     score = 0.5
 
     high_keywords = [
-        'PHOENIX', 'phoenix', '关键', '核心', '重要', '必须', 'critical',
+        '鲤鱼', 'liyu', '关键', '核心', '重要', '必须', 'critical',
         '架构', '决定', '升级', '迁移', '用户', '时宇', 'HolyTy',
     ]
     medium_keywords = [
@@ -1042,7 +1042,7 @@ def show_stats():
     db = get_db()
     try:
         print("=" * 60)
-        print("PHOENIX Memory System v2.0 — Statistics")
+        print("鲤鱼 Memory System v2.0 — Statistics")
         print("=" * 60)
 
         # Knowledge base
@@ -1127,7 +1127,7 @@ def main():
 
     elif cmd == "search":
         if len(sys.argv) < 3:
-            print("Usage: phoenix-memory-v2.py search <query>")
+            print("Usage: liyu-memory-v2.py search <query>")
             return
         query = " ".join(sys.argv[2:])
         results = unified_search(query)

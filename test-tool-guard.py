@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Tool Guard 测试套件
+鲤鱼 Tool Guard 测试套件
 
 测试三种检测器的完整升级链路：
   1. 精确失败: ALLOW → WARN(2) → BLOCK(4) → HALT(6)
@@ -13,7 +13,7 @@ import json
 import subprocess
 import sys
 
-GUARD = Path.home() / ".claude/phoenix/tool-guard.py"
+GUARD = Path.home() / ".claude/liyu/tool-guard.py"
 PASS = 0
 FAIL = 0
 

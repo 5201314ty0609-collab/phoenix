@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "PHOENIX Auto-Enhance 配置",
+  "description": "鲤鱼 Auto-Enhance 配置",
   "auto_enhance": {
     "skill_discovery": {
       "enabled": true,

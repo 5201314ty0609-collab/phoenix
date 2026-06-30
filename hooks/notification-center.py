@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Notification Center — 用户通知系统
+鲤鱼 Notification Center — 用户通知系统
 管理错误恢复建议、性能警告、进化状态更新等通知
 
 功能：
@@ -34,10 +34,10 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 from enum import Enum
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-NOTIFICATIONS_FILE = PHOENIX_HOME / "notifications.json"
-NOTIFICATION_HISTORY = PHOENIX_HOME / "notification-history.jsonl"
-PREFERENCES_FILE = PHOENIX_HOME / "notification-preferences.json"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+NOTIFICATIONS_FILE = 鲤鱼_HOME / "notifications.json"
+NOTIFICATION_HISTORY = 鲤鱼_HOME / "notification-history.jsonl"
+PREFERENCES_FILE = 鲤鱼_HOME / "notification-preferences.json"
 
 
 class NotificationType(Enum):
@@ -89,7 +89,7 @@ def load_preferences() -> dict:
 
 def save_preferences(prefs: dict) -> None:
     """保存通知偏好"""
-    PHOENIX_HOME.mkdir(parents=True, exist_ok=True)
+    鲤鱼_HOME.mkdir(parents=True, exist_ok=True)
     PREFERENCES_FILE.write_text(json.dumps(prefs, ensure_ascii=False, indent=2))
 
 
@@ -106,7 +106,7 @@ def load_notifications() -> List[dict]:
 
 def save_notifications(notifications: List[dict]) -> None:
     """保存通知列表"""
-    PHOENIX_HOME.mkdir(parents=True, exist_ok=True)
+    鲤鱼_HOME.mkdir(parents=True, exist_ok=True)
 
     # 限制数量
     prefs = load_preferences()
@@ -412,7 +412,7 @@ def main():
 
     elif cmd == "stats":
         stats = center.stats()
-        print("═══ PHOENIX Notification Center ───")
+        print("═══ 鲤鱼 Notification Center ───")
         print(f"  总通知数: {stats['total']}")
         print(f"  活跃通知: {stats['active']}")
         print(f"  未读通知: {stats['unread']}")

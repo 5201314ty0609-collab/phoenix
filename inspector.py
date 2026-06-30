@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-PHOENIX Inspector — Lightweight HTTP monitoring endpoint.
+鲤鱼 Inspector — Lightweight HTTP monitoring endpoint.
 Absorbed from Hermes PR #43289 Inspector server pattern.
 
-Exposes PHOENIX system state for monitoring tools, sidecars, and dashboards.
-Non-fatal startup — if port is busy, PHOENIX continues without Inspector.
+Exposes 鲤鱼 system state for monitoring tools, sidecars, and dashboards.
+Non-fatal startup — if port is busy, 鲤鱼 continues without Inspector.
 
 Usage:
   inspector.py [--port 8646] [--host 127.0.0.1]
@@ -30,12 +30,12 @@ import time
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-KNOWLEDGE_GRAPH = Path.home() / ".claude/skills/phoenix/scripts/knowledge-graph.py"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+KNOWLEDGE_GRAPH = Path.home() / ".claude/skills/liyu/scripts/knowledge-graph.py"
 SELF_HEAL = Path.home() / ".hermes/hooks/self-heal.py"
-EVENT_BUS = PHOENIX_HOME / "event-bus/bus.py"
-TIMELINE = PHOENIX_HOME / "timeline.py"
-SENSES_DIR = PHOENIX_HOME / "senses"
+EVENT_BUS = 鲤鱼_HOME / "event-bus/bus.py"
+TIMELINE = 鲤鱼_HOME / "timeline.py"
+SENSES_DIR = 鲤鱼_HOME / "senses"
 START_TIME = time.time()
 
 # ── Sensitive key filter ──────────────────────────────────────────────────
@@ -188,7 +188,7 @@ class InspectorHandler(BaseHTTPRequestHandler):
         else:
             self._json({
                 "endpoints": list(routes.keys()),
-                "description": "PHOENIX Inspector v1.3.0",
+                "description": "鲤鱼 Inspector v1.3.0",
             })
 
 # ── Main ──────────────────────────────────────────────────────────────────
@@ -205,12 +205,12 @@ def main():
 
     try:
         server = HTTPServer((host, port), InspectorHandler)
-        print(f"PHOENIX Inspector listening on http://{host}:{port}")
+        print(f"鲤鱼 Inspector listening on http://{host}:{port}")
         print(f"Endpoints: /health /state /senses /events /timeline /config/public")
         server.serve_forever()
     except OSError as e:
         print(f"Inspector: cannot bind {host}:{port} — {e}")
-        print("(Non-fatal — PHOENIX continues without Inspector)")
+        print("(Non-fatal — 鲤鱼 continues without Inspector)")
         sys.exit(0)
     except KeyboardInterrupt:
         print("\nInspector stopped.")

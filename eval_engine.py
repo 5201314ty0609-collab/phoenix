@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-PHOENIX Eval Engine — 借鉴 MUNDO v2.2.7 的评估框架。
+鲤鱼 Eval Engine — 借鉴 MUNDO v2.2.7 的评估框架。
 
-提供简单的评估框架来验证 PHOENIX 的效果。
+提供简单的评估框架来验证 鲤鱼 的效果。
 """
 
 import json
@@ -47,11 +47,11 @@ class EvalSuite:
     results: List[EvalResult] = field(default_factory=list)
 
 
-class PHOENIXEvalEngine:
-    """PHOENIX 评估引擎"""
+class 鲤鱼EvalEngine:
+    """鲤鱼 评估引擎"""
     
     def __init__(self, results_dir: Optional[Path] = None):
-        self.results_dir = results_dir or Path.home() / ".claude/phoenix/eval_results"
+        self.results_dir = results_dir or Path.home() / ".claude/liyu/eval_results"
         self.results_dir.mkdir(parents=True, exist_ok=True)
         self.suites: Dict[str, EvalSuite] = {}
         self._register_builtin_suites()
@@ -68,7 +68,7 @@ class PHOENIXEvalEngine:
                     name="基本关键词搜索",
                     description="测试基本的关键词搜索功能",
                     category="knowledge",
-                    input_data={"query": "PHOENIX 架构", "mode": "fts5"},
+                    input_data={"query": "鲤鱼 架构", "mode": "fts5"},
                     expected_output={"min_results": 1, "max_duration_ms": 1000},
                 ),
                 EvalCase(
@@ -241,7 +241,7 @@ class PHOENIXEvalEngine:
         """生成评估报告"""
         report_lines = [
             "=" * 60,
-            "  PHOENIX Evaluation Report",
+            "  鲤鱼 Evaluation Report",
             f"  Generated: {datetime.now(timezone.utc).isoformat()}",
             "=" * 60,
             "",
@@ -339,7 +339,7 @@ def main():
         return
     
     command = sys.argv[1]
-    engine = PHOENIXEvalEngine()
+    engine = 鲤鱼EvalEngine()
     
     if command == "list":
         print("Evaluation Suites:")
@@ -358,7 +358,7 @@ def main():
         
         # 简单的执行器示例
         def executor(case):
-            # 这里应该调用实际的 PHOENIX 功能
+            # 这里应该调用实际的 鲤鱼 功能
             # 为了演示，返回模拟数据
             if case.category == "knowledge":
                 return {"results": [], "count": 0}

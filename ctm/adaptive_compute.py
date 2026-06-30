@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX CTM - 自适应计算时间
+鲤鱼 CTM - 自适应计算时间
 Adaptive Compute Timer - 根据问题复杂度动态分配计算资源
 
 基于 CTM 的自适应计算概念，实现动态资源分配

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Dashboard Data Sync — 同步实时数据到 FALLBACK
+鲤鱼 Dashboard Data Sync — 同步实时数据到 FALLBACK
 定期更新 dashboard-viz.html 中的 FALLBACK 数据，确保离线也能显示最新状态
 
 用法：
@@ -15,12 +15,12 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-DASHBOARD_FILE = PHOENIX_HOME / "dashboard-viz.html"
-INDEX_FILE = PHOENIX_HOME / "index.html"
-DASHBOARD_BASIC_FILE = PHOENIX_HOME / "dashboard.html"
-OBSERVABILITY_DB = PHOENIX_HOME / "observability.db"
-SENSES_DIR = PHOENIX_HOME / "senses"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+DASHBOARD_FILE = 鲤鱼_HOME / "dashboard-viz.html"
+INDEX_FILE = 鲤鱼_HOME / "index.html"
+DASHBOARD_BASIC_FILE = 鲤鱼_HOME / "dashboard.html"
+OBSERVABILITY_DB = 鲤鱼_HOME / "observability.db"
+SENSES_DIR = 鲤鱼_HOME / "senses"
 
 
 def get_current_stats():
@@ -61,7 +61,7 @@ def get_current_stats():
 
     # 备用：从本地文件收集数据
     # 计算模块数
-    modules = list(PHOENIX_HOME.glob("*.py"))
+    modules = list(鲤鱼_HOME.glob("*.py"))
     stats["modules"] = len([m for m in modules if not m.name.startswith("test_")])
 
     # 计算规则数
@@ -70,7 +70,7 @@ def get_current_stats():
         stats["rules"] = len(list(rules_dir.rglob("*.md")))
 
     # 计算活跃框架数
-    frameworks_dir = PHOENIX_HOME / "frameworks" / "active"
+    frameworks_dir = 鲤鱼_HOME / "frameworks" / "active"
     if frameworks_dir.exists():
         stats["frameworks_active"] = len(list(frameworks_dir.glob("*.json")))
 
@@ -85,7 +85,7 @@ def get_current_stats():
             pass
 
     # 从 tool-guard 获取工具调用统计
-    tool_guard_log = PHOENIX_HOME / "tool-guard-stats.json"
+    tool_guard_log = 鲤鱼_HOME / "tool-guard-stats.json"
     if tool_guard_log.exists():
         try:
             tg_stats = json.loads(tool_guard_log.read_text())
@@ -195,8 +195,8 @@ def update_dashboard_basic_static(stats):
 
     # 更新页面描述
     content = re.sub(
-        r'PHOENIX v1\.3\.0 · \d+ 模块 · \d+ 规则 · 规则健康 \d+% · 成本健康 \d+/100 · \d{4}-\d{2}-\d{2}',
-        f'PHOENIX v1.3.0 · {stats["modules"]} 模块 · {stats["rules"]} 规则 · 规则健康 {stats["rule_health"]}% · 成本健康 {stats["cost_health"]}/100 · {datetime.now().strftime("%Y-%m-%d")}',
+        r'鲤鱼 v1\.3\.0 · \d+ 模块 · \d+ 规则 · 规则健康 \d+% · 成本健康 \d+/100 · \d{4}-\d{2}-\d{2}',
+        f'鲤鱼 v1.3.0 · {stats["modules"]} 模块 · {stats["rules"]} 规则 · 规则健康 {stats["rule_health"]}% · 成本健康 {stats["cost_health"]}/100 · {datetime.now().strftime("%Y-%m-%d")}',
         content
     )
 

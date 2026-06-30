@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Realtime Monitor v2.0 — 7-Sense 实时监测增强版
+鲤鱼 Realtime Monitor v2.0 — 7-Sense 实时监测增强版
 每次对话时自动更新 sense 数据并 ingest
 
 增强功能：
@@ -11,13 +11,13 @@ PHOENIX Realtime Monitor v2.0 — 7-Sense 实时监测增强版
   5. 性能指标追踪
 
 用法：
-  python3 ~/.claude/phoenix/hooks/realtime-monitor-v2.py
+  python3 ~/.claude/liyu/hooks/realtime-monitor-v2.py
 
 在 settings.json 中添加到 PostToolUse hook：
   {
     "matcher": "",
-    "command": "python3 ~/.claude/phoenix/hooks/realtime-monitor-v2.py",
-    "description": "PHOENIX Realtime Monitor v2 — 增强版 7-Sense 数据收集"
+    "command": "python3 ~/.claude/liyu/hooks/realtime-monitor-v2.py",
+    "description": "鲤鱼 Realtime Monitor v2 — 增强版 7-Sense 数据收集"
   }
 """
 
@@ -29,13 +29,13 @@ from collections import Counter, deque
 from typing import Dict, List, Optional, Any
 import statistics
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-SENSES_DIR = PHOENIX_HOME / "senses"
-TOOL_GUARD_STATE = PHOENIX_HOME / "tool-guard-state.json"
-TOOL_GUARD_HISTORY = PHOENIX_HOME / "tool-guard-history.jsonl"
-SESSION_STATE = PHOENIX_HOME / "session-state.json"
-HEARTBEAT_DIR = PHOENIX_HOME / "heartbeats"
-METRICS_HISTORY = PHOENIX_HOME / "monitor-metrics-history.jsonl"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+SENSES_DIR = 鲤鱼_HOME / "senses"
+TOOL_GUARD_STATE = 鲤鱼_HOME / "tool-guard-state.json"
+TOOL_GUARD_HISTORY = 鲤鱼_HOME / "tool-guard-history.jsonl"
+SESSION_STATE = 鲤鱼_HOME / "session-state.json"
+HEARTBEAT_DIR = 鲤鱼_HOME / "heartbeats"
+METRICS_HISTORY = 鲤鱼_HOME / "monitor-metrics-history.jsonl"
 
 
 class MetricsCollector:
@@ -470,7 +470,7 @@ def ingest_to_observability() -> str:
     import subprocess
     try:
         result = subprocess.run(
-            ["python3", str(PHOENIX_HOME / "phoenix-observability.py"), "ingest", "all"],
+            ["python3", str(鲤鱼_HOME / "liyu-observability.py"), "ingest", "all"],
             capture_output=True,
             text=True,
             timeout=30

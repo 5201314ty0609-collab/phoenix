@@ -49,7 +49,7 @@
     "retry_backoff": {"description": "指数退避重试+抖动", "cost": "medium", "success_rate_estimate": 0.8},
     "retry_variation": {"description": "改变参数重试", "cost": "medium", "success_rate_estimate": 0.5},
     "switch_endpoint": {"description": "切换API端点", "cost": "low", "success_rate_estimate": 0.7},
-    "switch_model": {"description": "切换模型（PHOENIX特有）", "cost": "high", "success_rate_estimate": 0.9},
+    "switch_model": {"description": "切换模型（鲤鱼特有）", "cost": "high", "success_rate_estimate": 0.9},
     "compress_context": {"description": "压缩上下文", "cost": "medium", "success_rate_estimate": 0.85},
     "degrade_quality": {"description": "降级质量", "cost": "medium", "success_rate_estimate": 0.7},
     "ask_user": {"description": "询问用户", "cost": "high", "success_rate_estimate": 1.0},

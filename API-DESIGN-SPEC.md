@@ -1,4 +1,4 @@
-# PHOENIX AIOS API 设计规范
+# 鲤鱼 AIOS API 设计规范
 
 ## 核心原则
 

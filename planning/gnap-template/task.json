@@ -1,5 +1,5 @@
 {
-  "$schema": "https://phoenix.local/gnap/task.schema.json",
+  "$schema": "https://liyu.local/gnap/task.schema.json",
   "$description": "GNAP Task — Agent 间协调的工作单元",
   "template": {
     "task_id": "string (required) — unique task identifier",

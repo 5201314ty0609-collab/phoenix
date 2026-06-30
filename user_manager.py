@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-PHOENIX 用户层级管理 — User Tier System
+鲤鱼 用户层级管理 — User Tier System
 
 三层体系:
-  founder  — 创始人（时宇 + PHOENIX），全权限，不可降级
+  founder  — 创始人（时宇 + 鲤鱼），全权限，不可降级
   partner  — 合伙人（已构建 ≥10 沙粒的画像），完整功能
   user     — 使用者（未构建画像），学习期
 
 自动升级: user → partner (persona 激活时)
-创始人: 仅 holyty-founder + phoenix-founder，硬编码保护
+创始人: 仅 holyty-founder + liyu-founder，硬编码保护
 
 Usage:
   user_manager.py list                   列出所有用户
@@ -23,22 +23,22 @@ from typing import Optional
 import json
 import sys
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-USERS_FILE = PHOENIX_HOME / "users.json"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+USERS_FILE = 鲤鱼_HOME / "users.json"
 
 # 创始人名单——硬编码保护，不可降级、不可删除
 FOUNDERS = {
     "holyty-founder": {
         "name": "holyty",
         "tier": "founder",
-        "description": "PHOENIX 联合创始人 · 架构设计与方向",
+        "description": "鲤鱼 联合创始人 · 架构设计与方向",
         "created_at": "2026-06-05T00:00:00+00:00",
         "persona_status": "active",
     },
-    "phoenix-founder": {
-        "name": "PHOENIX",
+    "liyu-founder": {
+        "name": "鲤鱼",
         "tier": "founder",
-        "description": "PHOENIX 联合创始人 · 自进化引擎核心",
+        "description": "鲤鱼 联合创始人 · 自进化引擎核心",
         "created_at": "2026-06-05T00:00:00+00:00",
         "persona_status": "active",
     },
@@ -53,7 +53,7 @@ TIER_LABELS = {
 
 
 class UserManager:
-    """PHOENIX 用户层级管理器"""
+    """鲤鱼 用户层级管理器"""
 
     def __init__(self):
         self.users = self._load()
@@ -201,7 +201,7 @@ def main() -> None:
 
     if cmd == "list":
         users = mgr.list_all()
-        print(f"═══ PHOENIX 用户 ({len(users)} 人) ═══")
+        print(f"═══ 鲤鱼 用户 ({len(users)} 人) ═══")
         for u in users:
             icon = u["tier_icon"]
             grains = f" · {u['total_grains']} 沙粒" if u["total_grains"] > 0 else ""
@@ -249,7 +249,7 @@ def main() -> None:
 
     elif cmd == "stats":
         s = mgr.stats()
-        print(f"═══ PHOENIX 用户统计 ═══")
+        print(f"═══ 鲤鱼 用户统计 ═══")
         print(f"  总用户: {s['total']}")
         for tier, count in s["by_tier"].items():
             info = s["tiers"].get(tier, {})
@@ -258,7 +258,7 @@ def main() -> None:
 
     elif cmd == "setup":
         # 首次部署引导——创建用户身份
-        print("🐦‍🔥 PHOENIX 首次部署 · 用户身份创建")
+        print("🐦‍🔥 鲤鱼 首次部署 · 用户身份创建")
         print("")
         # Check if already set up
         existing = [u for u in mgr.users.values() if u["tier"] != "founder"]
@@ -276,14 +276,14 @@ def main() -> None:
         if not re.match(r"^[a-zA-Z0-9_]{2,30}$", username):
             print("❌ 用户名格式无效。只允许英文字母、数字、下划线，2-30 个字符。")
             return
-        result = mgr.register(username, "user", f"PHOENIX 使用者 · {username}")
+        result = mgr.register(username, "user", f"鲤鱼 使用者 · {username}")
         if result["status"] == "ok":
             print(f"✅ 欢迎，{username}！")
             print(f"   你的 ID: {result['user_id']}")
             print(f"   当前层级: 🌱 使用者")
             print(f"   积累 ≥10 条对话沙粒后自动升级为 ⭐ 合伙人")
             print(f"")
-            print(f"   PHOENIX 仪表盘: http://127.0.0.1:8765")
+            print(f"   鲤鱼 仪表盘: http://127.0.0.1:8765")
         else:
             print(f"❌ {result['message']}")
 

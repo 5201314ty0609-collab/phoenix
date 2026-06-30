@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skills — 统一入口。
+鲤鱼 Skills — 统一入口。
 
 轻量级 Skill 系统，常用操作快速触发。
 
 Usage:
-  phoenix-skill.py <skill_name> [args...]    执行指定 Skill
-  phoenix-skill.py list                       列出所有可用 Skill
-  phoenix-skill.py help <skill_name>          显示 Skill 帮助
+  liyu-skill.py <skill_name> [args...]    执行指定 Skill
+  liyu-skill.py list                       列出所有可用 Skill
+  liyu-skill.py help <skill_name>          显示 Skill 帮助
 """
 
 from pathlib import Path
@@ -45,9 +45,9 @@ SKILLS = {
     },
     "mutation-gate": {
         "description": "变体门控 — TDD 变体验证步骤，检查测试是否真正捕获缺陷",
-        "module": None,  # standalone script at phoenix root
-        "usage": "phoenix-mutation-gate.py run <source> <test> [--threshold 80]",
-        "script": str(Path(__file__).parent / "phoenix-mutation-gate.py"),
+        "module": None,  # standalone script at liyu root
+        "usage": "liyu-mutation-gate.py run <source> <test> [--threshold 80]",
+        "script": str(Path(__file__).parent / "liyu-mutation-gate.py"),
     },
 }
 
@@ -67,7 +67,7 @@ def load_skill(module_name: str):
 
 def list_skills():
     """列出所有可用 Skill"""
-    print("PHOENIX Skills")
+    print("鲤鱼 Skills")
     print("=" * 60)
     print()
 
@@ -110,7 +110,7 @@ def main():
 
     elif cmd == "help":
         if len(sys.argv) < 3:
-            print("Usage: phoenix-skill.py help <skill_name>")
+            print("Usage: liyu-skill.py help <skill_name>")
             return
         show_help(sys.argv[2])
 
@@ -147,7 +147,7 @@ def main():
             print(f"Unknown skill: {skill_name}")
             print("Available skills:", ", ".join(SKILLS.keys()))
             print()
-            print("Use 'phoenix-skill.py list' to see all skills")
+            print("Use 'liyu-skill.py list' to see all skills")
 
 
 if __name__ == "__main__":

@@ -1,13 +1,13 @@
 #!/bin/bash
-# PHOENIX Auto-Enhance Hook
-# 集成自动增强系统到 PHOENIX hooks 系统
+# 鲤鱼 Auto-Enhance Hook
+# 集成自动增强系统到 鲤鱼 hooks 系统
 
 set -e
 
-PHOENIX_HOME="$HOME/.claude/phoenix"
-AUTO_ENHANCE="$PHOENIX_HOME/phoenix-auto-enhance.py"
-CONFIG_FILE="$PHOENIX_HOME/auto-enhance-config.json"
-LOG_FILE="$PHOENIX_HOME/auto-enhance.log"
+鲤鱼_HOME="$HOME/.claude/liyu"
+AUTO_ENHANCE="$鲤鱼_HOME/liyu-auto-enhance.py"
+CONFIG_FILE="$鲤鱼_HOME/auto-enhance-config.json"
+LOG_FILE="$鲤鱼_HOME/auto-enhance.log"
 
 # 记录日志
 log() {
@@ -93,7 +93,7 @@ post_tool_use_hook() {
             # 代码修改后检查规则优化
             if is_enabled "rule_optimization"; then
                 # 限制频率，每小时最多一次
-                local last_run_file="$PHOENIX_HOME/.last-rule-optimize"
+                local last_run_file="$鲤鱼_HOME/.last-rule-optimize"
                 local now=$(date +%s)
                 local last_run=0
 

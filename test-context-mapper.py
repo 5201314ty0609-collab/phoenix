@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PHOENIX context_mapper.py 测试套件
+"""鲤鱼 context_mapper.py 测试套件
 
 覆盖：
 - Chunk 类型和优先级
@@ -214,7 +214,7 @@ def test_snapshot():
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("PHOENIX Context Mapper — Test Suite")
+    print("鲤鱼 Context Mapper — Test Suite")
     print("=" * 60)
 
     test_chunk_creation()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX CTM - 同步振荡协调
+鲤鱼 CTM - 同步振荡协调
 Oscillator Sync Module - 多模块节奏同步
 
 基于 CTM 的神经同步概念，实现多模块协调

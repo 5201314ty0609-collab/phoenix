@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Skill Learn — 技能学习与追踪系统。
+鲤鱼 Skill: Skill Learn — 技能学习与追踪系统。
 
 追踪技能使用情况，学习模式，自动推荐技能。
 
@@ -24,9 +24,9 @@ import sys
 import uuid
 
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-USAGE_FILE = PHOENIX_HOME / "skill-usage.jsonl"
-PATTERNS_FILE = PHOENIX_HOME / "skill-patterns.json"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+USAGE_FILE = 鲤鱼_HOME / "skill-usage.jsonl"
+PATTERNS_FILE = 鲤鱼_HOME / "skill-patterns.json"
 
 
 # ── Context Keywords for Recommendation ─────────────────────────────────────

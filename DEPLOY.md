@@ -1,9 +1,9 @@
-# 🐦‍🔥 PHOENIX 部署指南
+# 🐦‍🔥 鲤鱼 部署指南
 
 ## 第一步：创建你的身份
 
 ```bash
-python3 ~/.claude/phoenix/user_manager.py setup
+python3 ~/.claude/liyu/user_manager.py setup
 ```
 
 输入你的用户名（英文字母+数字+下划线，如 `alice`、`dev_zhang`）。
@@ -15,7 +15,7 @@ python3 ~/.claude/phoenix/user_manager.py setup
 ## 第二步：启动仪表盘
 
 ```bash
-python3 ~/.claude/phoenix/server.py
+python3 ~/.claude/liyu/server.py
 ```
 
 打开 http://127.0.0.1:8765
@@ -24,7 +24,7 @@ python3 ~/.claude/phoenix/server.py
 
 | 层级 | 图标 | 权限 | 升级条件 |
 |------|------|------|---------|
-| 创始人 | 👑 | 全权限，不可降级 | holyty + PHOENIX |
+| 创始人 | 👑 | 全权限，不可降级 | holyty + 鲤鱼 |
 | 合伙人 | ⭐ | 完整功能，画像可见 | ≥10 条对话沙粒 |
 | 使用者 | 🌱 | 基础功能，学习期 | 注册默认 |
 
@@ -34,7 +34,7 @@ python3 ~/.claude/phoenix/server.py
 
 | 模块 | 功能 |
 |------|------|
-| 系统概览 | PHOENIX 核心运行状态 |
+| 系统概览 | 鲤鱼 核心运行状态 |
 | 七感监测 | 7 个元认知感知器 |
 | 偏移速率 | 决策倾向变化追踪 |
 | 模块清单 | 所有引擎模块健康度 |

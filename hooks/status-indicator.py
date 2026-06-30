@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Status Indicator — 状态指示器
+鲤鱼 Status Indicator — 状态指示器
 提供上下文使用率、工具执行成功率、错误级联状态、Agent 协调状态等可视化指示
 
 功能：
@@ -34,12 +34,12 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 import statistics
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-SENSES_DIR = PHOENIX_HOME / "senses"
-TOOL_GUARD_STATE = PHOENIX_HOME / "tool-guard-state.json"
-SESSION_STATE = PHOENIX_HOME / "session-state.json"
-HEARTBEAT_DIR = PHOENIX_HOME / "heartbeats"
-METRICS_HISTORY = PHOENIX_HOME / "monitor-metrics-history.jsonl"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+SENSES_DIR = 鲤鱼_HOME / "senses"
+TOOL_GUARD_STATE = 鲤鱼_HOME / "tool-guard-state.json"
+SESSION_STATE = 鲤鱼_HOME / "session-state.json"
+HEARTBEAT_DIR = 鲤鱼_HOME / "heartbeats"
+METRICS_HISTORY = 鲤鱼_HOME / "monitor-metrics-history.jsonl"
 
 
 def load_senses() -> dict:
@@ -330,7 +330,7 @@ def format_overview(senses: dict, tool_guard: dict, heartbeats: List[dict],
                     health: dict, warnings: List[dict]) -> str:
     """格式化状态概览"""
     lines = []
-    lines.append("═══ PHOENIX Status Overview ═══")
+    lines.append("═══ 鲤鱼 Status Overview ═══")
     lines.append("")
 
     # 健康分数

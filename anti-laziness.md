@@ -1,6 +1,6 @@
-# PHOENIX Anti-Laziness Rules
+# 鲤鱼 Anti-Laziness Rules
 
-> 借鉴 agent-skills 最佳实践，确保 PHOENIX 工作时不偷懒
+> 借鉴 agent-skills 最佳实践，确保 鲤鱼 工作时不偷懒
 > 来源: yfge/agentskill.work, liqiongyu/my-agents, EfanWang/skills-manager
 > Stage: active | Enforcement: rule file (Level 4)
 
@@ -442,4 +442,4 @@ def test_something():
 ---
 
 *这些规则借鉴了 GitHub 上最佳的 agent-skills 实践*
-*确保 PHOENIX 工作时不会偷懒*
+*确保 鲤鱼 工作时不会偷懒*

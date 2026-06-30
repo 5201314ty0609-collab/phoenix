@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX NexSandglass 测试套件
+鲤鱼 NexSandglass 测试套件
 
 测试覆盖:
   L1: 沙粒写入、SQLite 双写、去重
@@ -15,7 +15,7 @@ import json
 import sys
 
 # Import the module
-sys.path.insert(0, str(Path.home() / ".claude" / "phoenix"))
+sys.path.insert(0, str(Path.home() / ".claude" / "liyu"))
 from nexsandglass import (
     NexSandglass, SandWriter, DriftEngine, DecisionDetector, PersonaBuilder,
     SandGrain, SAND_DB, SAND_FILE, DRIFT_FILE, DECISIONS_FILE, PERSONA_FILE,
@@ -218,7 +218,7 @@ else:
 # ── Test 8: Interaction Guide ──────────────────────────────────────────
 print("\n═══ 测试8: 交互协议指南 ═══")
 guide = ns.interaction_guide()
-assert_contains(guide, "PHOENIX", "指南标题正确")
+assert_contains(guide, "鲤鱼", "指南标题正确")
 assert_contains(guide, "沙粒", "提及沙粒数量")
 
 

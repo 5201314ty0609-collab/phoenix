@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Tool Guard — 工具循环防护系统
+鲤鱼 Tool Guard — 工具循环防护系统
 Absorbed from MUNDO v2.0.9 tool_guard.py (Hermes Agent pattern)
 
 三种检测器：
@@ -30,7 +30,7 @@ Usage:
 Hook 集成（settings.json）:
   {
     "matcher": "",
-    "command": "python3 ~/.claude/phoenix/tool-guard.py observe $TOOL_NAME $TOOL_ARGS_JSON --result $TOOL_RESULT"
+    "command": "python3 ~/.claude/liyu/tool-guard.py observe $TOOL_NAME $TOOL_ARGS_JSON --result $TOOL_RESULT"
   }
 """
 
@@ -43,10 +43,10 @@ import json
 import sys
 
 # ── Paths ──────────────────────────────────────────────────────────────────
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-STATE_FILE = PHOENIX_HOME / "tool-guard-state.json"
-CONFIG_FILE = PHOENIX_HOME / "tool-guard-config.json"
-HISTORY_FILE = PHOENIX_HOME / "tool-guard-history.jsonl"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+STATE_FILE = 鲤鱼_HOME / "tool-guard-state.json"
+CONFIG_FILE = 鲤鱼_HOME / "tool-guard-config.json"
+HISTORY_FILE = 鲤鱼_HOME / "tool-guard-history.jsonl"
 
 # ── Constants ──────────────────────────────────────────────────────────────
 
@@ -122,7 +122,7 @@ def load_state() -> dict:
 
 def save_state(state: dict) -> None:
     """持久化状态到 JSON"""
-    PHOENIX_HOME.mkdir(parents=True, exist_ok=True)
+    鲤鱼_HOME.mkdir(parents=True, exist_ok=True)
     state["updated_at"] = datetime.now(timezone.utc).isoformat()
     STATE_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2))
 
@@ -572,7 +572,7 @@ def main():
 
     elif cmd == "stats":
         s = guard.stats()
-        print("═══ PHOENIX Tool Guard ───")
+        print("═══ 鲤鱼 Tool Guard ───")
         print(f"  配置版本: {s['config_version']}")
         print(f"  硬停开关: {'🟢 开启' if s['hard_stop'] else '🔴 关闭'}")
         print()

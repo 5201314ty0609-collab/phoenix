@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Rules Engine — 智能规则管理系统
+鲤鱼 Rules Engine — 智能规则管理系统
 
 特性：
 1. 动态规则加载 - 根据上下文智能加载规则
@@ -28,10 +28,10 @@ import sys
 
 # ── 路径配置 ─────────────────────────────────────────────────────────────
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
 RULES_DIR = Path.home() / ".claude" / "rules"
-PHOENIX_RULES_DIR = RULES_DIR / "phoenix"
-ENGINE_DIR = PHOENIX_HOME / "rules-engine"
+鲤鱼_RULES_DIR = RULES_DIR / "liyu"
+ENGINE_DIR = 鲤鱼_HOME / "rules-engine"
 RULE_REGISTRY = ENGINE_DIR / "rule-registry.json"
 CONFLICT_LOG = ENGINE_DIR / "conflicts.jsonl"
 
@@ -43,7 +43,7 @@ class RuleMetadata:
     rule_id: str
     name: str
     file_path: str
-    layer: str                      # common, phoenix, language-specific
+    layer: str                      # common, liyu, language-specific
     category: str                   # coding-style, testing, security, etc.
     stage: str                      # draft, active, observed, validated, hardened
     enforcement_level: int          # 1-7
@@ -190,8 +190,8 @@ class RuleParser:
     @staticmethod
     def _determine_layer(file_path: Path) -> str:
         parts = file_path.parts
-        if "phoenix" in parts:
-            return "phoenix"
+        if "liyu" in parts:
+            return "liyu"
         elif "common" in parts:
             return "common"
         elif "zh" in parts:
@@ -260,7 +260,7 @@ class RuleParser:
             base += 1
 
         # Layer 加成
-        if layer == 'phoenix':
+        if layer == 'liyu':
             base += 1
         elif layer == 'common':
             base += 0
@@ -572,8 +572,8 @@ class ContextMatcher:
         }
         score += stage_bonus.get(rule.stage, 0)
 
-        # Layer 加成（phoenix 规则优先）
-        if rule.layer == 'phoenix':
+        # Layer 加成（liyu 规则优先）
+        if rule.layer == 'liyu':
             score += 0.1
             reasons.append("Phoenix layer rule")
 
@@ -653,7 +653,7 @@ class RuleValidator:
 # ── 规则引擎主类 ─────────────────────────────────────────────────────────
 
 class RuleEngine:
-    """PHOENIX 规则引擎"""
+    """鲤鱼 规则引擎"""
 
     def __init__(self):
         self.registry = RuleRegistry()
@@ -664,7 +664,7 @@ class RuleEngine:
     def analyze(self):
         """分析规则系统"""
         print("=" * 72)
-        print("  PHOENIX Rules Engine Analysis")
+        print("  鲤鱼 Rules Engine Analysis")
         print(f"  {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
         print("=" * 72)
         print()
@@ -732,7 +732,7 @@ class RuleEngine:
     def detect_conflicts(self):
         """检测规则冲突"""
         print("=" * 72)
-        print("  PHOENIX Rules Conflict Detection")
+        print("  鲤鱼 Rules Conflict Detection")
         print("=" * 72)
         print()
 
@@ -835,7 +835,7 @@ class RuleEngine:
     def get_context_rules(self, task_type: str, language: str = "", domains: List[str] = None):
         """获取上下文相关规则"""
         print("=" * 72)
-        print("  PHOENIX Context-Aware Rule Loading")
+        print("  鲤鱼 Context-Aware Rule Loading")
         print(f"  Task: {task_type}")
         print(f"  Language: {language or 'any'}")
         print(f"  Domains: {domains or 'any'}")
@@ -891,7 +891,7 @@ class RuleEngine:
     def validate(self):
         """验证规则完整性"""
         print("=" * 72)
-        print("  PHOENIX Rules Validation")
+        print("  鲤鱼 Rules Validation")
         print("=" * 72)
         print()
 

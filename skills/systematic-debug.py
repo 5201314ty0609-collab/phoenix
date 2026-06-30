@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Systematic Debug — 4 阶段根因调试。
+鲤鱼 Skill: Systematic Debug — 4 阶段根因调试。
 
 系统化调试流程：
 1. 重现问题
@@ -24,8 +24,8 @@ import json
 import sys
 import uuid
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-DEBUG_SESSIONS_FILE = PHOENIX_HOME / "debug-sessions.jsonl"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+DEBUG_SESSIONS_FILE = 鲤鱼_HOME / "debug-sessions.jsonl"
 
 
 def load_sessions() -> List[Dict]:

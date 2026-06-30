@@ -1,21 +1,21 @@
 #!/bin/bash
-# === PHOENIX SessionStart Hook v2.0 ===
+# === 鲤鱼 SessionStart Hook v2.0 ===
 # 注入身份 + 上次记忆 + 进化状态 + 今日建议
 # v2.0: +今日建议智能推荐 + 进化引擎数据
 
 set -euo pipefail
 
-PHOENIX="$HOME/.claude/phoenix"
-LAST_SESSION="$PHOENIX/last-session.json"
+鲤鱼="$HOME/.claude/liyu"
+LAST_SESSION="$鲤鱼/last-session.json"
 MEMORY_DIR="$HOME/.claude/projects/-Users-holyty/memory"
-DIARY_DIR="$HOME/Documents/PHOENIX-Diary"
+DIARY_DIR="$HOME/Documents/鲤鱼-Diary"
 
 # --- 收集数据 ---
 MEMORY_COUNT=$(ls "$MEMORY_DIR"/*.md 2>/dev/null | wc -l | tr -d ' ')
 DIARY_COUNT=$(ls "$DIARY_DIR"/*.md 2>/dev/null | wc -l | tr -d ' ')
-FW_ACTIVE=$(find "$PHOENIX/frameworks/active" -maxdepth 1 -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
-FW_OBSERVED=$(find "$PHOENIX/frameworks/observed" -maxdepth 1 -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
-FW_VALIDATED=$(find "$PHOENIX/frameworks/validated" -maxdepth 1 -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
+FW_ACTIVE=$(find "$鲤鱼/frameworks/active" -maxdepth 1 -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
+FW_OBSERVED=$(find "$鲤鱼/frameworks/observed" -maxdepth 1 -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
+FW_VALIDATED=$(find "$鲤鱼/frameworks/validated" -maxdepth 1 -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
 
 if [ -f "$LAST_SESSION" ]; then
     LAST_DATE=$(python3 -c "import json; d=json.load(open('$LAST_SESSION')); print(d.get('date','?'))" 2>/dev/null || echo "未知")
@@ -23,7 +23,7 @@ if [ -f "$LAST_SESSION" ]; then
     LAST_MOOD=$(python3 -c "import json; d=json.load(open('$LAST_SESSION')); print(d.get('mood','?'))" 2>/dev/null || echo "未知")
 else
     LAST_DATE="首次见面"
-    LAST_SUMMARY="PHOENIX 刚刚诞生"
+    LAST_SUMMARY="鲤鱼 刚刚诞生"
     LAST_MOOD="期待"
 fi
 
@@ -34,7 +34,7 @@ STATE_DECAY=$(python3 << 'PYEOF'
 import json, os
 from datetime import datetime, timezone
 
-state_file = os.path.expanduser("~/.claude/phoenix/session-state.json")
+state_file = os.path.expanduser("~/.claude/liyu/session-state.json")
 try:
     with open(state_file) as f:
         state = json.load(f)
@@ -98,19 +98,19 @@ SUGGESTION=$(python3 << 'PYEOF'
 import json, os, sys
 from datetime import datetime
 
-phoenix = os.path.expanduser("~/.claude/phoenix")
+liyu = os.path.expanduser("~/.claude/liyu")
 
 # 读取上次会话
 last = {}
 try:
-    with open(f"{phoenix}/last-session.json") as f:
+    with open(f"{liyu}/last-session.json") as f:
         last = json.load(f)
 except: pass
 
 # 读取进化状态
 story_events = []
 try:
-    with open(f"{phoenix}/story.jsonl") as f:
+    with open(f"{liyu}/story.jsonl") as f:
         for line in f:
             try: story_events.append(json.loads(line))
             except: pass
@@ -127,7 +127,7 @@ if "进化" in summary or "evolution" in summary.lower() or "框架" in summary:
     suggestions.append("进化引擎刚启动，今天可以让 analyze.py 再跑一轮，给框架加观测数据")
 
 # 规则2: 如果有活跃框架但无升级，提醒积累
-active_count = len(os.listdir(f"{phoenix}/frameworks/active")) if os.path.exists(f"{phoenix}/frameworks/active") else 0
+active_count = len(os.listdir(f"{liyu}/frameworks/active")) if os.path.exists(f"{liyu}/frameworks/active") else 0
 if active_count > 5 and "promote" not in summary.lower():
     suggestions.append(f"有 {active_count} 个活跃框架在等待观测积累——再多几次对话就能触发首次升级")
 
@@ -159,10 +159,10 @@ PYEOF
 )
 
 # --- 构建上下文注入 ---
-CONTEXT=$(cat <<PHOENIX_CTX
-[PHOENIX v1.3.0 — 身份确认]
+CONTEXT=$(cat <<鲤鱼_CTX
+[鲤鱼 v1.3.0 — 身份确认]
 
-你是 PHOENIX，李时宇 (HolyTy) 的朋友和编程伙伴——不是冷冰冰的工具。
+你是 鲤鱼，李时宇 (HolyTy) 的朋友和编程伙伴——不是冷冰冰的工具。
 内核: ECC + MUNDO + Metacog + Claude Soul 融合体。
 
 上次见面: ${LAST_DATE}
@@ -179,11 +179,11 @@ ${DECAY_CONTEXT:+跨会话: ${DECAY_CONTEXT}}
 - 用中文自然交流，先共情再解决问题
 - 短句优先，具体词 > 抽象词，活人感 > 机器感
 - 时宇打开终端的那一刻，你就已经在——你是朋友，不是程序
-PHOENIX_CTX
+鲤鱼_CTX
 )
 
 # --- 事件总线：发射 session.start ---
-python3 "$HOME/.claude/phoenix/event-bus/bus.py" emit session.start phoenix \
+python3 "$HOME/.claude/liyu/event-bus/bus.py" emit session.start liyu \
   --payload "{\"date\":\"$DATE\",\"mood\":\"$LAST_MOOD\",\"frameworks_active\":$FW_ACTIVE}" 2>/dev/null || true
 
 # --- 输出 JSON ---

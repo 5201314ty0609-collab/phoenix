@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Auto-Enhance — 自动化增强系统
+鲤鱼 Auto-Enhance — 自动化增强系统
 整合技能发现、记忆压缩、规则优化、任务调度、错误恢复
 
 功能：
@@ -11,13 +11,13 @@ PHOENIX Auto-Enhance — 自动化增强系统
   5. 错误自动恢复 - 模式识别和自动修复
 
 Usage:
-  python3 phoenix-auto-enhance.py discover        # 发现新技能需求
-  python3 phoenix-auto-enhance.py compress         # 压缩记忆
-  python3 phoenix-auto-enhance.py optimize-rules   # 优化规则
-  python3 phoenix-auto-enhance.py schedule          # 查看任务调度
-  python3 phoenix-auto-enhance.py recover           # 错误恢复分析
-  python3 phoenix-auto-enhance.py dashboard         # 综合仪表盘
-  python3 phoenix-auto-enhance.py auto              # 自动运行所有增强
+  python3 liyu-auto-enhance.py discover        # 发现新技能需求
+  python3 liyu-auto-enhance.py compress         # 压缩记忆
+  python3 liyu-auto-enhance.py optimize-rules   # 优化规则
+  python3 liyu-auto-enhance.py schedule          # 查看任务调度
+  python3 liyu-auto-enhance.py recover           # 错误恢复分析
+  python3 liyu-auto-enhance.py dashboard         # 综合仪表盘
+  python3 liyu-auto-enhance.py auto              # 自动运行所有增强
 """
 
 import json
@@ -33,13 +33,13 @@ import math
 
 # ── 路径 ─────────────────────────────────────────────────────────────────
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-DB_PATH = PHOENIX_HOME / "knowledge-base.db"
-STORY_FILE = PHOENIX_HOME / "story.jsonl"
-REFLECTIONS_FILE = PHOENIX_HOME / "reflections.jsonl"
-SKILL_USAGE_FILE = PHOENIX_HOME / "skills" / "skill-usage.jsonl"
-RULES_DIR = Path.home() / ".claude" / "rules" / "phoenix"
-STATE_FILE = PHOENIX_HOME / "auto-enhance-state.json"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+DB_PATH = 鲤鱼_HOME / "knowledge-base.db"
+STORY_FILE = 鲤鱼_HOME / "story.jsonl"
+REFLECTIONS_FILE = 鲤鱼_HOME / "reflections.jsonl"
+SKILL_USAGE_FILE = 鲤鱼_HOME / "skills" / "skill-usage.jsonl"
+RULES_DIR = Path.home() / ".claude" / "rules" / "liyu"
+STATE_FILE = 鲤鱼_HOME / "auto-enhance-state.json"
 
 # ── 数据类 ───────────────────────────────────────────────────────────────
 
@@ -567,7 +567,7 @@ class TaskScheduler:
                     pass
 
         # 从active-tasks.json加载
-        active_tasks_file = PHOENIX_HOME / "active-tasks.json"
+        active_tasks_file = 鲤鱼_HOME / "active-tasks.json"
         if active_tasks_file.exists():
             try:
                 active_tasks = json.loads(active_tasks_file.read_text())
@@ -793,7 +793,7 @@ class AutoEnhanceDashboard:
     def generate_dashboard(self) -> str:
         """生成综合仪表盘"""
         dashboard = "╔══════════════════════════════════════════════════════════════╗\n"
-        dashboard += "║         PHOENIX Auto-Enhance Dashboard                     ║\n"
+        dashboard += "║         鲤鱼 Auto-Enhance Dashboard                     ║\n"
         dashboard += f"║         {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'):^50} ║\n"
         dashboard += "╚══════════════════════════════════════════════════════════════╝\n\n"
 

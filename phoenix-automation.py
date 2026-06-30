@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Automation System
+鲤鱼 Automation System
 自动发现、压缩、调度、恢复
 """
 
@@ -14,13 +14,13 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 import hashlib
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-SKILLS_DIR = PHOENIX_HOME / "skills"
-DB_PATH = PHOENIX_HOME / "automation.db"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+SKILLS_DIR = 鲤鱼_HOME / "skills"
+DB_PATH = 鲤鱼_HOME / "automation.db"
 
 
 class PhoenixAutomation:
-    """PHOENIX 自动化系统"""
+    """鲤鱼 自动化系统"""
     
     def __init__(self):
         self.db_path = DB_PATH
@@ -132,7 +132,7 @@ class PhoenixAutomation:
         stats = {"removed": 0, "kept": 0, "space_saved": 0}
         
         # 压缩 auto_memories
-        db_path = PHOENIX_HOME / "knowledge-base.db"
+        db_path = 鲤鱼_HOME / "knowledge-base.db"
         if db_path.exists():
             conn = sqlite3.connect(db_path)
             
@@ -310,7 +310,7 @@ class PhoenixAutomation:
 def main():
     """CLI 入口"""
     if len(sys.argv) < 2:
-        print("用法: phoenix-automation.py <command>")
+        print("用法: liyu-automation.py <command>")
         print("命令:")
         print("  discover   - 发现新技能")
         print("  compress   - 压缩旧记忆")

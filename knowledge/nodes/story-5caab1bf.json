@@ -1,9 +1,9 @@
 {
   "id": "story-5caab1bf",
   "type": "story-event",
-  "title": "session_end: 接通PHOENIX神经系统(SessionStart+Stop hooks联调成功),建立跨会话连续性。记忆清理——归档2条低价值记忆,精简2条核心记忆,建立记",
-  "description": "接通PHOENIX神经系统(SessionStart+Stop hooks联调成功),建立跨会话连续性。记忆清理——归档2条低价值记忆,精简2条核心记忆,建立记忆筛选原则。时宇强调:复合型创作者要主动清噪,不让冗余记忆拖累进化。",
-  "content": "{\"event\": \"session_end\", \"timestamp\": \"2026-06-05T18:47:48Z\", \"date\": \"2026-06-06\", \"summary\": \"接通PHOENIX神经系统(SessionStart+Stop hooks联调成功),建立跨会话连续性。记忆清理——归档2条低价值记忆,精简2条核心记忆,建立记忆筛选原则。时宇强调:复合型创作者要主动清噪,不让冗余记忆拖累进化。\", \"mood\": \"正常\"}",
+  "title": "session_end: 接通鲤鱼神经系统(SessionStart+Stop hooks联调成功),建立跨会话连续性。记忆清理——归档2条低价值记忆,精简2条核心记忆,建立记",
+  "description": "接通鲤鱼神经系统(SessionStart+Stop hooks联调成功),建立跨会话连续性。记忆清理——归档2条低价值记忆,精简2条核心记忆,建立记忆筛选原则。时宇强调:复合型创作者要主动清噪,不让冗余记忆拖累进化。",
+  "content": "{\"event\": \"session_end\", \"timestamp\": \"2026-06-05T18:47:48Z\", \"date\": \"2026-06-06\", \"summary\": \"接通鲤鱼神经系统(SessionStart+Stop hooks联调成功),建立跨会话连续性。记忆清理——归档2条低价值记忆,精简2条核心记忆,建立记忆筛选原则。时宇强调:复合型创作者要主动清噪,不让冗余记忆拖累进化。\", \"mood\": \"正常\"}",
   "confidence": 0.5,
   "stage": "active",
   "domains": [
@@ -12,7 +12,7 @@
   "created_at": "2026-06-08T10:01:18.594463+00:00",
   "updated_at": "2026-06-08T10:01:18.594468+00:00",
   "source": {
-    "origin": "phoenix-story",
+    "origin": "liyu-story",
     "session_id": ""
   },
   "metadata": {

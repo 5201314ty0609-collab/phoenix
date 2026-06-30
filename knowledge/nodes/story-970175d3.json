@@ -1,9 +1,9 @@
 {
   "id": "story-970175d3",
   "type": "story-event",
-  "title": "session_end: PHOENIX v1.1升级——记忆清理(归档2条,精简2条,建立筛选原则)+GitHub探索吸收3个高星项目(disler/observability+age",
-  "description": "PHOENIX v1.1升级——记忆清理(归档2条,精简2条,建立筛选原则)+GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-agents)→Stop-hook guar",
-  "content": "{\"event\": \"session_end\", \"timestamp\": \"2026-06-05T19:51:49Z\", \"date\": \"2026-06-06\", \"summary\": \"PHOENIX v1.1升级——记忆清理(归档2条,精简2条,建立筛选原则)+GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-agents)→Stop-hook guard+Heartbeat监测+Prompt-as-Code协调+自适应时间+Context预清理,全部写入CLAUDE.md。换节点多次确保网速顺畅。时宇强调复合型创作者要主动清噪。\", \"mood\": \"正常\"}",
+  "title": "session_end: 鲤鱼 v1.1升级——记忆清理(归档2条,精简2条,建立筛选原则)+GitHub探索吸收3个高星项目(disler/observability+age",
+  "description": "鲤鱼 v1.1升级——记忆清理(归档2条,精简2条,建立筛选原则)+GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-agents)→Stop-hook guar",
+  "content": "{\"event\": \"session_end\", \"timestamp\": \"2026-06-05T19:51:49Z\", \"date\": \"2026-06-06\", \"summary\": \"鲤鱼 v1.1升级——记忆清理(归档2条,精简2条,建立筛选原则)+GitHub探索吸收3个高星项目(disler/observability+agent-farm+community-agents)→Stop-hook guard+Heartbeat监测+Prompt-as-Code协调+自适应时间+Context预清理,全部写入CLAUDE.md。换节点多次确保网速顺畅。时宇强调复合型创作者要主动清噪。\", \"mood\": \"正常\"}",
   "confidence": 0.5,
   "stage": "active",
   "domains": [
@@ -12,7 +12,7 @@
   "created_at": "2026-06-08T10:01:18.594845+00:00",
   "updated_at": "2026-06-08T10:01:18.594850+00:00",
   "source": {
-    "origin": "phoenix-story",
+    "origin": "liyu-story",
     "session_id": ""
   },
   "metadata": {

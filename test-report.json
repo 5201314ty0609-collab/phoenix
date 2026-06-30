@@ -1,5 +1,5 @@
 {
-  "framework": "phoenix-test-framework",
+  "framework": "liyu-test-framework",
   "version": "1.0.0",
   "started_at": "2026-06-22T09:19:57.507847+00:00",
   "finished_at": "2026-06-22T09:20:07.894467+00:00",
@@ -15,7 +15,7 @@
   "modules": [
     {
       "name": "test-context-mapper",
-      "file": "/Users/holyty/.claude/phoenix/test-context-mapper.py",
+      "file": "/Users/holyty/.claude/liyu/test-context-mapper.py",
       "total": 12,
       "passed": 12,
       "failed": 0,
@@ -123,7 +123,7 @@
     },
     {
       "name": "test-intelligent-recovery",
-      "file": "/Users/holyty/.claude/phoenix/test-intelligent-recovery.py",
+      "file": "/Users/holyty/.claude/liyu/test-intelligent-recovery.py",
       "total": 8,
       "passed": 8,
       "failed": 0,
@@ -199,7 +199,7 @@
     },
     {
       "name": "test-knowledge-base",
-      "file": "/Users/holyty/.claude/phoenix/test-knowledge-base.py",
+      "file": "/Users/holyty/.claude/liyu/test-knowledge-base.py",
       "total": 6,
       "passed": 5,
       "failed": 0,
@@ -253,13 +253,13 @@
           "status": "error",
           "duration_ms": 6.44,
           "message": "AssertionError: ",
-          "traceback": "Traceback (most recent call last):\n  File \"/Users/holyty/.claude/phoenix/phoenix-test-framework.py\", line 712, in _run_single\n    reg.func()\n  File \"/Users/holyty/.claude/phoenix/phoenix-test-framework.py\", line 542, in lazy_runner\n    return func()\n  File \"/Users/holyty/.claude/phoenix/test-knowledge-base.py\", line 231, in test_stats\n    assert \"Total memories: 3\" in output\nAssertionError\n"
+          "traceback": "Traceback (most recent call last):\n  File \"/Users/holyty/.claude/liyu/liyu-test-framework.py\", line 712, in _run_single\n    reg.func()\n  File \"/Users/holyty/.claude/liyu/liyu-test-framework.py\", line 542, in lazy_runner\n    return func()\n  File \"/Users/holyty/.claude/liyu/test-knowledge-base.py\", line 231, in test_stats\n    assert \"Total memories: 3\" in output\nAssertionError\n"
         }
       ]
     },
     {
-      "name": "test-phoenix-skills",
-      "file": "/Users/holyty/.claude/phoenix/test-phoenix-skills.py",
+      "name": "test-liyu-skills",
+      "file": "/Users/holyty/.claude/liyu/test-liyu-skills.py",
       "total": 5,
       "passed": 5,
       "failed": 0,
@@ -269,7 +269,7 @@
       "tests": [
         {
           "name": "test_code_tidy",
-          "module": "test-phoenix-skills",
+          "module": "test-liyu-skills",
           "status": "passed",
           "duration_ms": 1.57,
           "message": "",
@@ -277,7 +277,7 @@
         },
         {
           "name": "test_dispatch_parallel",
-          "module": "test-phoenix-skills",
+          "module": "test-liyu-skills",
           "status": "passed",
           "duration_ms": 1.46,
           "message": "",
@@ -285,7 +285,7 @@
         },
         {
           "name": "test_knowledge_sync",
-          "module": "test-phoenix-skills",
+          "module": "test-liyu-skills",
           "status": "passed",
           "duration_ms": 1.92,
           "message": "",
@@ -293,7 +293,7 @@
         },
         {
           "name": "test_systematic_debug",
-          "module": "test-phoenix-skills",
+          "module": "test-liyu-skills",
           "status": "passed",
           "duration_ms": 2.42,
           "message": "",
@@ -301,7 +301,7 @@
         },
         {
           "name": "test_verify_completion",
-          "module": "test-phoenix-skills",
+          "module": "test-liyu-skills",
           "status": "passed",
           "duration_ms": 1.45,
           "message": "",
@@ -311,7 +311,7 @@
     },
     {
       "name": "test-reflection-engine",
-      "file": "/Users/holyty/.claude/phoenix/test-reflection-engine.py",
+      "file": "/Users/holyty/.claude/liyu/test-reflection-engine.py",
       "total": 5,
       "passed": 5,
       "failed": 0,
@@ -363,7 +363,7 @@
     },
     {
       "name": "test-runtime-config",
-      "file": "/Users/holyty/.claude/phoenix/test-runtime-config.py",
+      "file": "/Users/holyty/.claude/liyu/test-runtime-config.py",
       "total": 12,
       "passed": 12,
       "failed": 0,
@@ -471,7 +471,7 @@
     },
     {
       "name": "test-test-framework",
-      "file": "/Users/holyty/.claude/phoenix/test-test-framework.py",
+      "file": "/Users/holyty/.claude/liyu/test-test-framework.py",
       "total": 16,
       "passed": 16,
       "failed": 0,

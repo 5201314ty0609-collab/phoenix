@@ -1,4 +1,4 @@
-# PHOENIX AIOS 记忆系统
+# 鲤鱼 AIOS 记忆系统
 
 ## 核心概念
 
@@ -363,13 +363,13 @@ class MemoryCompressor:
 
 ---
 
-## PHOENIX 记忆集成
+## 鲤鱼 记忆集成
 
 ### 集成方案
 
 ```python
 class PhoenixMemorySystem:
-    """PHOENIX 记忆系统"""
+    """鲤鱼 记忆系统"""
     
     def __init__(self, config: dict):
         self.config = config

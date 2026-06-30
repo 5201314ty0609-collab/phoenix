@@ -1,8 +1,8 @@
-# PHOENIX 动画设计规范 v1
+# 鲤鱼 动画设计规范 v1
 
 > 创建日期: 2026-06-23
 > 版本: v1.0.0
-> 维护者: PHOENIX Design System
+> 维护者: 鲤鱼 Design System
 
 ---
 
@@ -451,7 +451,7 @@ const modalAnimation = {
 ## 文件结构
 
 ```
-/Users/holyty/.claude/phoenix/
+/Users/holyty/.claude/liyu/
 ├── animation-system.css      # CSS 动画系统
 ├── framer-motion.ts          # Framer Motion 配置
 ├── micro-interactions.css    # 微交互样式

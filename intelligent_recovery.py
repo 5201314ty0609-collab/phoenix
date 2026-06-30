@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""PHOENIX 智能错误恢复 v1.0 — 痛觉的智慧
+"""鲤鱼 智能错误恢复 v1.0 — 痛觉的智慧
 
-吸收自 MUNDO Agent v2.2.3 intelligent_recovery.py (LiHongwei-cn)，适配 PHOENIX 七感架构。
+吸收自 MUNDO Agent v2.2.3 intelligent_recovery.py (LiHongwei-cn)，适配 鲤鱼 七感架构。
 
 核心升级（相对旧 heal-rules.json）：
 - 旧：7条静态正则规则，无分类，无自适应
@@ -34,13 +34,13 @@ from pathlib import Path
 from typing import Any, Callable, Optional
 
 # ═══════════════════════════════════════════════
-# PHOENIX 路径
+# 鲤鱼 路径
 # ═══════════════════════════════════════════════
 
-PHOENIX_DIR = Path(__file__).parent
-HEAL_RULES_PATH = PHOENIX_DIR / "heal-rules.json"
-RECOVERY_LOG_PATH = PHOENIX_DIR / "recovery-history.jsonl"
-NOCICEPTION_PATH = PHOENIX_DIR / "senses" / "nociception.json"
+鲤鱼_DIR = Path(__file__).parent
+HEAL_RULES_PATH = 鲤鱼_DIR / "heal-rules.json"
+RECOVERY_LOG_PATH = 鲤鱼_DIR / "recovery-history.jsonl"
+NOCICEPTION_PATH = 鲤鱼_DIR / "senses" / "nociception.json"
 
 
 # ═══════════════════════════════════════════════
@@ -64,7 +64,7 @@ class RecoveryStrategy(Enum):
     RETRY_BACKOFF = "retry_backoff"           # 指数退避重试（限流/服务不可用）
     RETRY_WITH_VARIATION = "retry_variation"   # 改变参数重试（逻辑错误）
     SWITCH_ENDPOINT = "switch_endpoint"        # 切换 API 端点（网络问题）
-    SWITCH_MODEL = "switch_model"              # 🆕 切换模型（PHOENIX特有）
+    SWITCH_MODEL = "switch_model"              # 🆕 切换模型（鲤鱼特有）
     COMPRESS_CONTEXT = "compress_context"      # 压缩上下文（溢出）
     DEGRADE_QUALITY = "degrade_quality"        # 降级质量（资源不足）
     ASK_USER = "ask_user"                      # 询问用户（权限/关键错误）
@@ -446,7 +446,7 @@ class CircuitBreakerOpenError(Exception):
 # ═══════════════════════════════════════════════
 
 class IntelligentRecovery:
-    """PHOENIX 智能错误恢复引擎
+    """鲤鱼 智能错误恢复引擎
 
     不是简单重试。是根据错误类型智能选择恢复策略。
     集成 Nociception（痛觉）感知 — 级联错误自动熔断。
@@ -769,7 +769,7 @@ if __name__ == "__main__":
     ]
 
     print("=" * 60)
-    print("PHOENIX Intelligent Recovery — Error Classification Demo")
+    print("鲤鱼 Intelligent Recovery — Error Classification Demo")
     print("=" * 60)
 
     for err in test_errors:

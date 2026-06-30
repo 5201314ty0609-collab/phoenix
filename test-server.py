@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PHOENIX Server API 测试"""
+"""鲤鱼 Server API 测试"""
 
 from pathlib import Path
 import json
@@ -10,7 +10,7 @@ import urllib.request
 
 from threading import Thread
 
-sys.path.insert(0, str(Path.home() / ".claude" / "phoenix"))
+sys.path.insert(0, str(Path.home() / ".claude" / "liyu"))
 
 PASS, FAIL = 0, 0
 
@@ -41,7 +41,7 @@ else:
     FAIL += 1; print(f"  ❌ /health: {data}")
 
 print("\n═══ API Endpoints ═══")
-for path, key in [("/api/status", "phoenix"), ("/api/modules", "modules"),
+for path, key in [("/api/status", "liyu"), ("/api/modules", "modules"),
                    ("/api/timeline", "entries"), ("/api/persona", "available"),
                    ("/api/tool-guard", "summary"), ("/api/skills", "total"),
                    ("/api/events", "total")]:
@@ -55,7 +55,7 @@ print("\n═══ Dashboard HTML ═══")
 try:
     with urllib.request.urlopen(BASE + "/", timeout=5) as r:
         html = r.read().decode()
-        if "PHOENIX" in html and "</html>" in html:
+        if "鲤鱼" in html and "</html>" in html:
             PASS += 1; print("  ✅ Dashboard HTML valid")
         else:
             FAIL += 1; print("  ❌ Dashboard HTML incomplete")

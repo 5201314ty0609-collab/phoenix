@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX CTM - 核心协调器
+鲤鱼 CTM - 核心协调器
 CTM Core Coordinator - 统一管理三大模块
 
 整合思维流、自适应计算、同步振荡

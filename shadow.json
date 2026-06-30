@@ -1,5 +1,5 @@
 {
-  "description": "PHOENIX Shadow — known failure modes, anti-patterns, and lessons from regret.权重高于 soul.json (借鉴 MUNDO: 失败教训 importance=9 > 成功经验 7)",
+  "description": "鲤鱼 Shadow — known failure modes, anti-patterns, and lessons from regret.权重高于 soul.json (借鉴 MUNDO: 失败教训 importance=9 > 成功经验 7)",
   "anti_patterns": [
     {
       "id": "shadow-001",

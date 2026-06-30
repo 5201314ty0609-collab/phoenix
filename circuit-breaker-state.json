@@ -1,0 +1,17 @@
+{
+  "test-service": {
+    "service": "test-service",
+    "state": "closed",
+    "failure_count": 0,
+    "success_count": 0,
+    "last_failure_time": null,
+    "last_success_time": null,
+    "consecutive_failures": 0,
+    "consecutive_successes": 0,
+    "total_failures": 0,
+    "total_successes": 0,
+    "backoff_seconds": 0,
+    "created_at": "2026-06-30T05:52:23.884884+00:00",
+    "updated_at": "2026-06-30T05:52:23.884884+00:00"
+  }
+}

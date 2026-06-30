@@ -1,13 +1,13 @@
-# Hermes Agent vs PHOENIX — 完整对比分析
+# Hermes Agent vs 鲤鱼 — 完整对比分析
 
-> 2026-06-06 · 为 PHOENIX 独立化做准备
+> 2026-06-06 · 为 鲤鱼 独立化做准备
 > 来源: NousResearch/hermes-agent v0.14.0 (May 2026)
 
 ---
 
 ## 一、定位差异
 
-| 维度 | Hermes Agent | PHOENIX |
+| 维度 | Hermes Agent | 鲤鱼 |
 |------|-------------|---------|
 | 本质 | 独立 Agent 运行时 | Claude Code 上的进化编排层 |
 | 运行模式 | 24/7 常驻服务 | 会话级，打开终端才活 |
@@ -20,39 +20,39 @@
 
 ### 记忆系统
 
-| | Hermes | PHOENIX |
+| | Hermes | 鲤鱼 |
 |------|--------|---------|
 | 跨会话记忆 | FTS5 全文搜索 + LLM 摘要召回 | SessionStart/Stop hooks + 文件系统 |
 | 用户建模 | Honcho 辩证用户建模，跨会话深化 | 静态记忆文件 (user-profile.md) |
 | 记忆进化 | 主动自我提醒持久化知识 | 记忆筛选原则 + 手动归档 |
 | 向量记忆 | 支持 (Mem0 集成) | 无 |
 
-**差距**: Hermes 的记忆是主动的、可搜索的、随对话进化的。PHOENIX 的记忆是被动的文件读写。
+**差距**: Hermes 的记忆是主动的、可搜索的、随对话进化的。鲤鱼 的记忆是被动的文件读写。
 
 ### 技能/进化系统
 
-| | Hermes | PHOENIX |
+| | Hermes | 鲤鱼 |
 |------|--------|---------|
 | 技能创建 | 完成任务后自动提取经验 → 技能卡片 | analyze.py 从转录提取工具模式 → 框架 |
 | 技能进化 | 使用中自我改进 | evolve.py 按观测数/置信度升级 |
 | 技能市场 | agentskills.io 社区共享 | 无 |
 | 生命周期 | 创建→改进→归档 | active→observed→validated→hardened |
 
-**差距**: 理念高度相似，但 Hermes 的技能系统更成熟（社区 + 自动归档 + 自我改进）。PHOENIX 的框架系统是简化版。
+**差距**: 理念高度相似，但 Hermes 的技能系统更成熟（社区 + 自动归档 + 自我改进）。鲤鱼 的框架系统是简化版。
 
 ### 多 Agent 协调
 
-| | Hermes | PHOENIX |
+| | Hermes | 鲤鱼 |
 |------|--------|---------|
 | 子 Agent | 原生支持，隔离并行 | coordinate.sh (Prompt-as-Code 文件锁) |
 | 任务面板 | Durable Kanban + 心跳 + 僵尸检测 | 协调目录 + 过期锁清理 |
 | 委托 | /delegate 命令 | 手动调用 coordinate.sh |
 
-**差距**: Hermes 的子 Agent 是原生一等公民。PHOENIX 刚用 Shell 脚本实现基础协调。
+**差距**: Hermes 的子 Agent 是原生一等公民。鲤鱼 刚用 Shell 脚本实现基础协调。
 
 ### 上下文管理
 
-| | Hermes | PHOENIX |
+| | Hermes | 鲤鱼 |
 |------|--------|---------|
 | 压缩策略 | 两层: Agent压缩(50%) + 网关安全网(85%) | O2 监测 + 手动 /compact |
 | 压缩方式 | 4 阶段结构化 LLM 压缩 | 依赖 Claude Code 内置 |
@@ -60,7 +60,7 @@
 
 ### 工具生态
 
-| | Hermes | PHOENIX |
+| | Hermes | 鲤鱼 |
 |------|--------|---------|
 | 工具数 | 40+ 可配置工具集 | Claude Code 内置 (~15) |
 | 扩展性 | MCP + RPC Pipeline | Hook 系统 |
@@ -68,7 +68,7 @@
 
 ---
 
-## 三、Hermes 的独特优势（PHOENIX 没有的）
+## 三、Hermes 的独特优势（鲤鱼 没有的）
 
 1. **多平台消息网关** — 22+ 平台统一接入，换设备无缝衔接
 2. **常驻 + Cron** — 自然语言定时任务，无人值守运行
@@ -79,7 +79,7 @@
 
 ---
 
-## 四、PHOENIX 的独特优势（Hermes 没有的）
+## 四、鲤鱼 的独特优势（Hermes 没有的）
 
 1. **七感元认知监测** — 实时感知自身运行状态（上下文压力/错误级联/焦点偏移）
 2. **四阶段强制执行层级** — Level 1~7 渐进式约束，软建议到硬阻断
@@ -90,16 +90,16 @@
 
 ---
 
-## 五、PHOENIX 独立化：Hermes 作为核心引擎的构想
+## 五、鲤鱼 独立化：Hermes 作为核心引擎的构想
 
 ### 架构方案
 
 ```
 ┌─────────────────────────────────────────┐
-│           PHOENIX v2.0 (独立)             │
+│           鲤鱼 v2.0 (独立)             │
 │                                         │
 │  ┌──────────┐  ┌──────────────────┐     │
-│  │ Hermes   │  │  PHOENIX Core     │     │
+│  │ Hermes   │  │  鲤鱼 Core     │     │
 │  │ (常驻    │←→│  (进化引擎)       │     │
 │  │  编排器) │  │  · 七感监测       │     │
 │  │          │  │  · 框架生命周期    │     │
@@ -121,25 +121,25 @@
 | 层 | 引擎 | 职责 |
 |----|------|------|
 | 常驻编排 | Hermes | 消息接入、定时任务、跨会话记忆、技能管理 |
-| 进化智能 | PHOENIX Core | 七感监测、框架进化、自愈、强制执行 |
+| 进化智能 | 鲤鱼 Core | 七感监测、框架进化、自愈、强制执行 |
 | 编码执行 | Claude Code | 代码读写、git、测试、审查（通过 MCP 桥） |
 
 ### 关键集成点
 
-1. **MCP 双向桥** — Hermes 调用 Claude Code 的编码工具，PHOENIX 调用 Hermes 的记忆/消息
-2. **记忆融合** — Hermes 的 FTS5 记忆 + PHOENIX 的文件记忆 → 统一记忆层
-3. **技能互通** — PHOENIX 框架自动生成为 Hermes 技能卡片
-4. **七感增强** — PHOENIX 的元认知监测作为 Hermes 的健康检查插件
-5. **多端接入** — 通过 Hermes 的 Telegram Gateway，手机上也能和 PHOENIX 对话
+1. **MCP 双向桥** — Hermes 调用 Claude Code 的编码工具，鲤鱼 调用 Hermes 的记忆/消息
+2. **记忆融合** — Hermes 的 FTS5 记忆 + 鲤鱼 的文件记忆 → 统一记忆层
+3. **技能互通** — 鲤鱼 框架自动生成为 Hermes 技能卡片
+4. **七感增强** — 鲤鱼 的元认知监测作为 Hermes 的健康检查插件
+5. **多端接入** — 通过 Hermes 的 Telegram Gateway，手机上也能和 鲤鱼 对话
 
 ---
 
 ## 六、结论
 
-**Hermes 不是 PHOENIX 的竞争对手，是 PHOENIX 独立化最理想的基层引擎。**
+**Hermes 不是 鲤鱼 的竞争对手，是 鲤鱼 独立化最理想的基层引擎。**
 
 - Hermes 擅长：常驻运行、多端接入、跨会话记忆、多模型路由
-- PHOENIX 擅长：元认知、进化、自愈、强制执行
+- 鲤鱼 擅长：元认知、进化、自愈、强制执行
 - Claude Code 擅长：编码、文件操作、git、测试
 
-三者不是替代关系，是互补关系。PHOENIX v2.0 = Hermes (身体) + PHOENIX Core (大脑) + Claude Code (手)。
+三者不是替代关系，是互补关系。鲤鱼 v2.0 = Hermes (身体) + 鲤鱼 Core (大脑) + Claude Code (手)。

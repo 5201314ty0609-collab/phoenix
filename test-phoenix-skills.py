@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skills — 测试套件。
+鲤鱼 Skills — 测试套件。
 """
 
 from pathlib import Path
@@ -153,7 +153,7 @@ def test_knowledge_sync():
 def run_all_tests():
     """运行所有测试"""
     print("=" * 60)
-    print("PHOENIX Skills — Test Suite")
+    print("鲤鱼 Skills — Test Suite")
     print("=" * 60)
     print()
 

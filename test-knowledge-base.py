@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Knowledge Base — 测试套件。
+鲤鱼 Knowledge Base — 测试套件。
 """
 
 from pathlib import Path
@@ -9,7 +9,7 @@ import os
 import sys
 import tempfile
 
-# 添加 phoenix 目录到路径
+# 添加 liyu 目录到路径
 sys.path.insert(0, str(Path(__file__).parent))
 
 import importlib
@@ -28,7 +28,7 @@ def setup_test_db():
 def cleanup_test_db(path):
     """清理测试数据库"""
     os.unlink(path)
-    kb.DB_PATH = kb.PHOENIX_HOME / "knowledge-base.db"
+    kb.DB_PATH = kb.鲤鱼_HOME / "knowledge-base.db"
 
 
 def test_parse_frontmatter():
@@ -39,7 +39,7 @@ def test_parse_frontmatter():
 name: test-memory
 description: A test memory
 type: user
-domains: phoenix, testing
+domains: liyu, testing
 ---
 
 This is the body content with [[other-link]] reference."""
@@ -57,10 +57,10 @@ def test_extract_links():
     """测试链接提取"""
     print("Testing extract_links...")
 
-    content = "See [[phoenix-genesis]] and [[user-profile]] for details."
+    content = "See [[liyu-genesis]] and [[user-profile]] for details."
     links = kb.extract_links(content)
 
-    assert "phoenix-genesis" in links
+    assert "liyu-genesis" in links
     assert "user-profile" in links
     assert len(links) == 2
     print("  ✓ extract_links works")
@@ -72,12 +72,12 @@ def test_semantic_hash():
 
     index = kb.SemanticHashIndex(hash_bits=64)
 
-    index.add("doc1", "PHOENIX is a self-evolving agent system")
+    index.add("doc1", "鲤鱼 is a self-evolving agent system")
     index.add("doc2", "MUNDO Agent uses three-source fusion")
     index.add("doc3", "The quick brown fox jumps over the lazy dog")
 
     # 相似查询应该找到 doc1
-    results = index.search("PHOENIX agent evolution", top_k=2)
+    results = index.search("鲤鱼 agent evolution", top_k=2)
     assert len(results) > 0
     assert results[0][0] == "doc1", f"Expected doc1, got {results[0][0]}"
 
@@ -102,11 +102,11 @@ def test_insert_and_search():
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             "test-1",
-            "PHOENIX Genesis",
-            "The birth record of PHOENIX system",
+            "鲤鱼 Genesis",
+            "The birth record of 鲤鱼 system",
             "reference",
-            "PHOENIX was created by merging ECC, MUNDO, Metacog, Claude Soul, and Taste-Skill.",
-            json.dumps(["phoenix", "genesis"]),
+            "鲤鱼 was created by merging ECC, MUNDO, Metacog, Claude Soul, and Taste-Skill.",
+            json.dumps(["liyu", "genesis"]),
             json.dumps(["ecc", "mundo"]),
             "2026-06-05T00:00:00Z",
             "2026-06-05T00:00:00Z",
@@ -120,7 +120,7 @@ def test_insert_and_search():
             "User Profile",
             "李时宇的个人档案",
             "user",
-            "李时宇 (HolyTy)，PHOENIX 的创造者，复合型创作者。",
+            "李时宇 (HolyTy)，鲤鱼 的创造者，复合型创作者。",
             json.dumps(["user", "profile"]),
             json.dumps([]),
             "2026-06-05T00:00:00Z",
@@ -132,20 +132,20 @@ def test_insert_and_search():
 
         # 测试搜索
         kb._semantic_index = None  # 重置语义索引
-        results = kb.search("PHOENIX", top_k=5)
+        results = kb.search("鲤鱼", top_k=5)
 
         assert len(results) > 0, "Should find at least one result"
-        assert results[0].chunk.name in ["PHOENIX Genesis", "User Profile"]
-        print(f"  ✓ Found {len(results)} results for 'PHOENIX'")
+        assert results[0].chunk.name in ["鲤鱼 Genesis", "User Profile"]
+        print(f"  ✓ Found {len(results)} results for '鲤鱼'")
 
         # 测试类型过滤
-        results = kb.search("PHOENIX", mem_type="user")
+        results = kb.search("鲤鱼", mem_type="user")
         for r in results:
             assert r.chunk.type == "user"
         print("  ✓ Type filter works")
 
         # 测试上下文
-        context = kb.get_context_for_query("PHOENIX agent")
+        context = kb.get_context_for_query("鲤鱼 agent")
         assert len(context) > 0
         print(f"  ✓ Context generation works ({len(context)} chars)")
 
@@ -238,7 +238,7 @@ def test_stats():
 def run_all_tests():
     """运行所有测试"""
     print("=" * 60)
-    print("PHOENIX Knowledge Base — Test Suite")
+    print("鲤鱼 Knowledge Base — Test Suite")
     print("=" * 60)
     print()
 

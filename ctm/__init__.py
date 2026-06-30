@@ -1,5 +1,5 @@
 """
-PHOENIX CTM - 连续思维机器
+鲤鱼 CTM - 连续思维机器
 Continuous Thought Machine Engine
 
 基于 Sakana AI 的 CTM 概念，实现思维流的连续演化

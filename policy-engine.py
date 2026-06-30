@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Policy Engine — Structured rule chains with priority adjudication.
+鲤鱼 Policy Engine — Structured rule chains with priority adjudication.
 Absorbed from MUNDO v2.0.9 Policy Engine (15 built-in rules, chain evaluation).
 
 Usage:
@@ -16,9 +16,9 @@ from pathlib import Path
 import json
 import sys
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-RULES_FILE = PHOENIX_HOME / "policy-rules.json"
-POLICY_LOG = PHOENIX_HOME / "policy-decisions.jsonl"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+RULES_FILE = 鲤鱼_HOME / "policy-rules.json"
+POLICY_LOG = 鲤鱼_HOME / "policy-decisions.jsonl"
 
 # ── Built-in Rules ────────────────────────────────────────────────────────
 
@@ -75,7 +75,7 @@ DEFAULT_RULES = {
             "domain": "code-quality",
             "condition": "write_content lines > 800",
             "action": "warn",
-            "message": "File exceeds 800-line limit (PHOENIX coding standard)",
+            "message": "File exceeds 800-line limit (鲤鱼 coding standard)",
             "chain": "quality-gate",
             "chain_order": 1,
         },

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX 统一测试框架 (Unified Test Framework)
+鲤鱼 统一测试框架 (Unified Test Framework)
 
 解决的问题：
 - 各系统测试方法不一致
@@ -9,25 +9,25 @@ PHOENIX 统一测试框架 (Unified Test Framework)
 
 功能：
 1. 统一测试基类 (PhoenixTestCase) — 提供 setup/teardown、断言、临时环境
-2. 测试注册机制 — 装饰器 @phoenix_test + 自动发现 test-*.py
+2. 测试注册机制 — 装饰器 @liyu_test + 自动发现 test-*.py
 3. 测试运行器 — 支持全量运行、按模块过滤、并行执行
 4. 测试报告生成 — JSON + 终端彩色输出 + 覆盖率摘要
 
 用法：
     # 运行所有测试
-    python3 phoenix-test-framework.py run
+    python3 liyu-test-framework.py run
 
     # 运行指定模块
-    python3 phoenix-test-framework.py run --filter knowledge-base
+    python3 liyu-test-framework.py run --filter knowledge-base
 
     # 只列出测试，不运行
-    python3 phoenix-test-framework.py list
+    python3 liyu-test-framework.py list
 
     # 生成 JSON 报告
-    python3 phoenix-test-framework.py run --report json --output report.json
+    python3 liyu-test-framework.py run --report json --output report.json
 
     # 在代码中使用
-    from phoenix_test_framework import phoenix_test, PhoenixTestCase, assert_equals
+    from liyu_test_framework import liyu_test, PhoenixTestCase, assert_equals
 """
 
 from __future__ import annotations
@@ -68,7 +68,7 @@ from typing import (
 # Constants
 # ============================================================
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
 TEST_FILE_PATTERN = "test-*.py"
 TEST_FUNC_PREFIX = "test_"
 MAX_FILE_LINES = 800
@@ -329,7 +329,7 @@ class PhoenixTestCase:
 
     _temp_dirs: List[str] = field(default_factory=list) if hasattr(None, '_field') else []
 
-    def make_temp_dir(self, prefix: str = "phoenix_test_") -> Path:
+    def make_temp_dir(self, prefix: str = "liyu_test_") -> Path:
         """创建临时目录，tearDown 时自动清理。"""
         d = Path(tempfile.mkdtemp(prefix=prefix))
         if not hasattr(self, "_temp_dirs"):
@@ -337,7 +337,7 @@ class PhoenixTestCase:
         self._temp_dirs.append(str(d))
         return d
 
-    def make_temp_file(self, suffix: str = ".tmp", content: str = "", prefix: str = "phoenix_test_") -> Path:
+    def make_temp_file(self, suffix: str = ".tmp", content: str = "", prefix: str = "liyu_test_") -> Path:
         """创建临时文件，tearDown 时自动清理。"""
         fd, path = tempfile.mkstemp(suffix=suffix, prefix=prefix, text=True)
         if content:
@@ -384,7 +384,7 @@ class RegisteredTest:
 class TestRegistry:
     """
     全局测试注册表。
-    通过 @phoenix_test 装饰器注册，或通过自动发现扫描 test-*.py 文件。
+    通过 @liyu_test 装饰器注册，或通过自动发现扫描 test-*.py 文件。
     """
 
     def __init__(self) -> None:
@@ -443,24 +443,24 @@ class TestRegistry:
 _registry = TestRegistry()
 
 
-def phoenix_test(
+def liyu_test(
     tags: Optional[Set[str]] = None,
     description: str = "",
     skip: Optional[str] = None,
 ) -> Callable:
     """
-    装饰器：将函数注册为 PHOENIX 测试。
+    装饰器：将函数注册为 鲤鱼 测试。
 
-    @phoenix_test(tags={"unit", "fast"}, description="测试解析逻辑")
+    @liyu_test(tags={"unit", "fast"}, description="测试解析逻辑")
     def test_parse_json():
         ...
     """
     def decorator(func: Callable) -> Callable:
         # 延迟注册：在发现阶段补全 module_name / module_path
-        func._phoenix_test = True
-        func._phoenix_tags = tags or set()
-        func._phoenix_description = description
-        func._phoenix_skip = skip
+        func._liyu_test = True
+        func._liyu_tags = tags or set()
+        func._liyu_description = description
+        func._liyu_skip = skip
         return func
     return decorator
 
@@ -495,7 +495,7 @@ def _ast_discover(test_file: Path) -> Tuple[List[str], Dict[str, str], List[Tupl
 
         elif isinstance(node, ast.ClassDef):
             # 检查是否继承 PhoenixTestCase（简单名字匹配）
-            is_phoenix_case = any(
+            is_liyu_case = any(
                 (isinstance(b, ast.Name) and b.id == "PhoenixTestCase") or
                 (isinstance(b, ast.Attribute) and b.attr == "PhoenixTestCase")
                 for b in node.bases
@@ -548,7 +548,7 @@ def _make_lazy_func(func_name: str, module_path: str, test_class: Optional[str] 
 
 
 def discover_tests(
-    search_dir: Path = PHOENIX_HOME,
+    search_dir: Path = 鲤鱼_HOME,
     pattern: str = TEST_FILE_PATTERN,
     registry: TestRegistry = _registry,
 ) -> int:
@@ -638,7 +638,7 @@ class TestRunner:
 
         if self._verbose:
             print(f"\n{_C.BOLD}{'=' * 60}")
-            print(f"  PHOENIX Test Runner")
+            print(f"  鲤鱼 Test Runner")
             print(f"{'=' * 60}{_C.RESET}")
             print(f"  Modules: {len(modules)}  |  Tests: {len(tests)}")
             print()
@@ -824,7 +824,7 @@ class ReportGenerator:
     @staticmethod
     def to_json(suite: SuiteResult) -> Dict[str, Any]:
         return {
-            "framework": "phoenix-test-framework",
+            "framework": "liyu-test-framework",
             "version": "1.0.0",
             "started_at": suite.started_at,
             "finished_at": suite.finished_at,
@@ -864,7 +864,7 @@ class ReportGenerator:
     def to_markdown(suite: SuiteResult) -> str:
         """生成 Markdown 格式的报告。"""
         lines = [
-            "# PHOENIX Test Report",
+            "# 鲤鱼 Test Report",
             "",
             f"**Date**: {suite.started_at}",
             f"**Duration**: {suite.total_duration_ms:.0f}ms",
@@ -902,17 +902,17 @@ class ReportGenerator:
 # ============================================================
 
 class CoverageScanner:
-    """扫描 PHOENIX 目录，识别有/无测试的模块。"""
+    """扫描 鲤鱼 目录，识别有/无测试的模块。"""
 
-    def __init__(self, phoenix_dir: Path = PHOENIX_HOME) -> None:
-        self._dir = phoenix_dir
+    def __init__(self, liyu_dir: Path = 鲤鱼_HOME) -> None:
+        self._dir = liyu_dir
 
     def scan(self) -> Dict[str, Any]:
         """扫描并返回覆盖率信息。"""
         # 所有 Python 模块（排除 test-* 和本框架）
         all_modules = []
         for f in sorted(self._dir.glob("*.py")):
-            if f.name.startswith("test-") or f.name == "phoenix-test-framework.py":
+            if f.name.startswith("test-") or f.name == "liyu-test-framework.py":
                 continue
             if f.name.startswith("_"):
                 continue
@@ -972,7 +972,7 @@ class CoverageScanner:
         """打印覆盖率报告到终端。"""
         result = self.scan()
         print(f"\n{_C.BOLD}{'=' * 60}")
-        print(f"  PHOENIX Test Coverage Scan")
+        print(f"  鲤鱼 Test Coverage Scan")
         print(f"{'=' * 60}{_C.RESET}")
         print(f"  Modules: {result['total_modules']}")
         print(f"  With tests: {_C.GREEN}{result['covered']}{_C.RESET}")
@@ -992,10 +992,10 @@ class CoverageScanner:
 
 def _print_usage() -> None:
     print(f"""
-{_C.BOLD}PHOENIX Unified Test Framework v1.0.0{_C.RESET}
+{_C.BOLD}鲤鱼 Unified Test Framework v1.0.0{_C.RESET}
 
 {_C.CYAN}Usage:{_C.RESET}
-  python3 phoenix-test-framework.py <command> [options]
+  python3 liyu-test-framework.py <command> [options]
 
 {_C.CYAN}Commands:{_C.RESET}
   run              Run all discovered tests
@@ -1005,18 +1005,18 @@ def _print_usage() -> None:
 
 {_C.CYAN}Options:{_C.RESET}
   --filter <pat>   Filter tests by name/module pattern (regex)
-  --dir <path>     Test search directory (default: ~/.claude/phoenix)
+  --dir <path>     Test search directory (default: ~/.claude/liyu)
   --output <path>  Output path for JSON report
   --fail-fast      Stop on first failure
   --quiet          Suppress per-test output
   --help           Show this help
 
 {_C.CYAN}Examples:{_C.RESET}
-  python3 phoenix-test-framework.py run
-  python3 phoenix-test-framework.py run --filter knowledge-base
-  python3 phoenix-test-framework.py list
-  python3 phoenix-test-framework.py scan
-  python3 phoenix-test-framework.py report --output test-report.json
+  python3 liyu-test-framework.py run
+  python3 liyu-test-framework.py run --filter knowledge-base
+  python3 liyu-test-framework.py list
+  python3 liyu-test-framework.py scan
+  python3 liyu-test-framework.py report --output test-report.json
 """)
 
 
@@ -1032,7 +1032,7 @@ def main() -> int:
     # Parse options
     options: Dict[str, Any] = {
         "filter": None,
-        "dir": PHOENIX_HOME,
+        "dir": 鲤鱼_HOME,
         "output": None,
         "fail_fast": False,
         "verbose": True,
@@ -1079,7 +1079,7 @@ def main() -> int:
         return 0
 
     elif command == "scan":
-        scanner = CoverageScanner(phoenix_dir=options["dir"])
+        scanner = CoverageScanner(liyu_dir=options["dir"])
         scanner.print_report()
         return 0
 
@@ -1098,7 +1098,7 @@ def main() -> int:
 
         # Save JSON report if requested or if command is "report"
         if command == "report" or options["output"]:
-            output_path = options["output"] or (PHOENIX_HOME / "test-report.json")
+            output_path = options["output"] or (鲤鱼_HOME / "test-report.json")
             ReportGenerator.save_json(suite, output_path)
 
         return 0 if suite.success else 1

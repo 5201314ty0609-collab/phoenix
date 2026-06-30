@@ -1,4 +1,4 @@
-# PHOENIX Enhanced Hooks 测试说明
+# 鲤鱼 Enhanced Hooks 测试说明
 
 由于权限限制，需要手动运行测试。请按照以下步骤进行测试。
 
@@ -7,7 +7,7 @@
 运行安装脚本的测试模式：
 
 ```bash
-cd ~/.claude/phoenix/hooks
+cd ~/.claude/liyu/hooks
 ./setup-enhanced-hooks.sh --test
 ```
 
@@ -17,7 +17,7 @@ cd ~/.claude/phoenix/hooks
 
 ```bash
 echo '{"tool_name":"Bash","error_message":"permission denied","error_type":"permission"}' | \
-  bash ~/.claude/phoenix/hooks/tool-error.sh
+  bash ~/.claude/liyu/hooks/tool-error.sh
 ```
 
 **预期输出**: JSON 包含 decision, reason, recovery_suggestions
@@ -26,7 +26,7 @@ echo '{"tool_name":"Bash","error_message":"permission denied","error_type":"perm
 
 ```bash
 echo '{"session_id":"test-123","context_usage":85,"message_count":50,"compression_type":"auto"}' | \
-  bash ~/.claude/phoenix/hooks/context-compaction.sh
+  bash ~/.claude/liyu/hooks/context-compaction.sh
 ```
 
 **预期输出**: JSON 包含 decision, reason, compaction_summary
@@ -35,7 +35,7 @@ echo '{"session_id":"test-123","context_usage":85,"message_count":50,"compressio
 
 ```bash
 echo '{"agent_type":"specialist","agent_name":"test-agent","task_description":"测试任务","parent_agent":"main"}' | \
-  bash ~/.claude/phoenix/hooks/agent-spawn.sh
+  bash ~/.claude/liyu/hooks/agent-spawn.sh
 ```
 
 **预期输出**: JSON 包含 agent_id, coordination 信息
@@ -44,7 +44,7 @@ echo '{"agent_type":"specialist","agent_name":"test-agent","task_description":"�
 
 ```bash
 echo '{"agent_id":"agent_test_123","status":"completed","result_summary":"测试完成","duration_seconds":60}' | \
-  bash ~/.claude/phoenix/hooks/agent-complete.sh
+  bash ~/.claude/liyu/hooks/agent-complete.sh
 ```
 
 **预期输出**: JSON 包含 completion_info, coordination 统计
@@ -53,48 +53,48 @@ echo '{"agent_id":"agent_test_123","status":"completed","result_summary":"测试
 
 ```bash
 # 评估触发条件
-python3 ~/.claude/phoenix/hooks/smart-trigger.py evaluate TestHook '{"error_count":3}'
+python3 ~/.claude/liyu/hooks/smart-trigger.py evaluate TestHook '{"error_count":3}'
 
 # 查看触发条件
-python3 ~/.claude/phoenix/hooks/smart-trigger.py conditions
+python3 ~/.claude/liyu/hooks/smart-trigger.py conditions
 
 # 查看触发统计
-python3 ~/.claude/phoenix/hooks/smart-trigger.py stats
+python3 ~/.claude/liyu/hooks/smart-trigger.py stats
 ```
 
 ### 6. 测试 Notification Center
 
 ```bash
 # 添加通知
-python3 ~/.claude/phoenix/hooks/notification-center.py add error_recovery high "测试错误恢复通知"
+python3 ~/.claude/liyu/hooks/notification-center.py add error_recovery high "测试错误恢复通知"
 
 # 列出通知
-python3 ~/.claude/phoenix/hooks/notification-center.py list
+python3 ~/.claude/liyu/hooks/notification-center.py list
 
 # 查看统计
-python3 ~/.claude/phoenix/hooks/notification-center.py stats
+python3 ~/.claude/liyu/hooks/notification-center.py stats
 ```
 
 ### 7. 测试 Status Indicator
 
 ```bash
 # 显示状态概览
-python3 ~/.claude/phoenix/hooks/status-indicator.py overview
+python3 ~/.claude/liyu/hooks/status-indicator.py overview
 
 # 显示健康分数
-python3 ~/.claude/phoenix/hooks/status-indicator.py health
+python3 ~/.claude/liyu/hooks/status-indicator.py health
 
 # 显示趋势分析
-python3 ~/.claude/phoenix/hooks/status-indicator.py trends --hours 24
+python3 ~/.claude/liyu/hooks/status-indicator.py trends --hours 24
 
 # 显示当前警告
-python3 ~/.claude/phoenix/hooks/status-indicator.py warnings
+python3 ~/.claude/liyu/hooks/status-indicator.py warnings
 ```
 
 ### 8. 测试 Realtime Monitor v2
 
 ```bash
-python3 ~/.claude/phoenix/hooks/realtime-monitor-v2.py
+python3 ~/.claude/liyu/hooks/realtime-monitor-v2.py
 ```
 
 **预期输出**: JSON 包含 health_score, sense_statuses, metrics_summary
@@ -122,13 +122,13 @@ cat ~/.claude/settings.json | python3 -m json.tool | grep -A5 "ToolError"
 ### 检查智能触发配置
 
 ```bash
-cat ~/.claude/phoenix/smart-trigger-config.json | python3 -m json.tool
+cat ~/.claude/liyu/smart-trigger-config.json | python3 -m json.tool
 ```
 
 ### 检查通知偏好
 
 ```bash
-cat ~/.claude/phoenix/notification-preferences.json | python3 -m json.tool
+cat ~/.claude/liyu/notification-preferences.json | python3 -m json.tool
 ```
 
 ## 查看日志
@@ -136,31 +136,31 @@ cat ~/.claude/phoenix/notification-preferences.json | python3 -m json.tool
 ### 错误日志
 
 ```bash
-tail -20 ~/.claude/phoenix/tool-error-log.jsonl
+tail -20 ~/.claude/liyu/tool-error-log.jsonl
 ```
 
 ### 通知历史
 
 ```bash
-tail -20 ~/.claude/phoenix/notification-history.jsonl
+tail -20 ~/.claude/liyu/notification-history.jsonl
 ```
 
 ### 触发历史
 
 ```bash
-tail -20 ~/.claude/phoenix/smart-trigger-history.jsonl
+tail -20 ~/.claude/liyu/smart-trigger-history.jsonl
 ```
 
 ### Agent 生命周期
 
 ```bash
-tail -20 ~/.claude/phoenix/agent-lifecycle.jsonl
+tail -20 ~/.claude/liyu/agent-lifecycle.jsonl
 ```
 
 ### 压缩日志
 
 ```bash
-tail -20 ~/.claude/phoenix/compaction-log.jsonl
+tail -20 ~/.claude/liyu/compaction-log.jsonl
 ```
 
 ## 故障排除
@@ -169,21 +169,21 @@ tail -20 ~/.claude/phoenix/compaction-log.jsonl
 
 ```bash
 # 检查权限
-ls -la ~/.claude/phoenix/hooks/*.sh
+ls -la ~/.claude/liyu/hooks/*.sh
 
 # 修复权限
-chmod +x ~/.claude/phoenix/hooks/*.sh
-chmod +x ~/.claude/phoenix/hooks/*.py
+chmod +x ~/.claude/liyu/hooks/*.sh
+chmod +x ~/.claude/liyu/hooks/*.py
 ```
 
 ### 问题: 通知不显示
 
 ```bash
 # 检查通知队列
-python3 ~/.claude/phoenix/hooks/notification-center.py list --limit 50
+python3 ~/.claude/liyu/hooks/notification-center.py list --limit 50
 
 # 检查通知偏好
-python3 ~/.claude/phoenix/hooks/notification-center.py preferences
+python3 ~/.claude/liyu/hooks/notification-center.py preferences
 ```
 
 ### 问题: 智能触发不工作
@@ -192,7 +192,7 @@ python3 ~/.claude/phoenix/hooks/notification-center.py preferences
 # 启用调试模式
 python3 -c "
 import json
-config_file = '/Users/holyty/.claude/phoenix/smart-trigger-config.json'
+config_file = '/Users/holyty/.claude/liyu/smart-trigger-config.json'
 with open(config_file) as f:
     config = json.load(f)
 config['global_settings']['enable_debug'] = True
@@ -202,20 +202,20 @@ print('调试模式已启用')
 "
 
 # 再次测试
-python3 ~/.claude/phoenix/hooks/smart-trigger.py evaluate TestHook '{"error_count":3}'
+python3 ~/.claude/liyu/hooks/smart-trigger.py evaluate TestHook '{"error_count":3}'
 ```
 
 ### 问题: 监控数据不准确
 
 ```bash
 # 检查 Tool Guard 状态
-python3 ~/.claude/phoenix/tool-guard.py stats
+python3 ~/.claude/liyu/tool-guard.py stats
 
 # 检查 Sense 文件
-ls -la ~/.claude/phoenix/senses/
+ls -la ~/.claude/liyu/senses/
 
 # 手动更新监控
-python3 ~/.claude/phoenix/hooks/realtime-monitor-v2.py
+python3 ~/.claude/liyu/hooks/realtime-monitor-v2.py
 ```
 
 ## 完整测试流程

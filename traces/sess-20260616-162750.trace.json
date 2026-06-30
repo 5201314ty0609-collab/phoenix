@@ -1,19 +1,19 @@
 {
   "trace": {
     "id": "sess-20260616-162750",
-    "name": "PHOENIX Session sess-20260616-162750",
-    "userId": "phoenix-agent",
+    "name": "鲤鱼 Session sess-20260616-162750",
+    "userId": "liyu-agent",
     "sessionId": "sess-20260616-162750",
     "timestamp": "2026-06-16T16:27:50.961123+00:00",
     "metadata": {
       "overall_health": 100.0,
       "sense_count": 7,
       "tags": [],
-      "framework": "PHOENIX v1.2.0",
+      "framework": "鲤鱼 v1.2.0",
       "observability_version": "1.0.0"
     },
     "tags": [
-      "phoenix",
+      "liyu",
       "7-sense",
       "metacognition"
     ]

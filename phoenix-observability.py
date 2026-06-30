@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-PHOENIX Observability Module — 7-Sense Agent Tracing.
+鲤鱼 Observability Module — 7-Sense Agent Tracing.
 =====================================================
 
-Maps PHOENIX metacognitive 7-sense events to Langfuse-compatible trace format.
+Maps 鲤鱼 metacognitive 7-sense events to Langfuse-compatible trace format.
 Supports self-hosted SQLite mode (no Langfuse dependency required).
 
 Absorbed from: Langfuse Agent Tracing (P1#4)
 
 Usage:
-  phoenix-observability.py trace <session-id>     Generate trace for a session
-  phoenix-observability.py dashboard              Print 7-sense radar + session scores
-  phoenix-observability.py ingest <sense-file>    Ingest a sense JSON snapshot
-  phoenix-observability.py score <session-id>     Score a session on all 7 senses
-  phoenix-observability.py export [--format json|lft]  Export all traces
+  liyu-observability.py trace <session-id>     Generate trace for a session
+  liyu-observability.py dashboard              Print 7-sense radar + session scores
+  liyu-observability.py ingest <sense-file>    Ingest a sense JSON snapshot
+  liyu-observability.py score <session-id>     Score a session on all 7 senses
+  liyu-observability.py export [--format json|lft]  Export all traces
 
 Sense → Trace Event Mapping:
   O2 (Vitality)      → token_pressure
@@ -39,10 +39,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-SENSES_DIR = PHOENIX_HOME / "senses"
-DB_PATH = PHOENIX_HOME / "observability.db"
-TRACES_DIR = PHOENIX_HOME / "traces"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+SENSES_DIR = 鲤鱼_HOME / "senses"
+DB_PATH = 鲤鱼_HOME / "observability.db"
+TRACES_DIR = 鲤鱼_HOME / "traces"
 
 # ── Connection Pool ──────────────────────────────────────────────────────────
 # Reuses a single SQLite connection per thread instead of open/init/close on
@@ -314,10 +314,10 @@ def ingest_ctm_state(session_id: Optional[str] = None) -> SessionScore:
 
     try:
         import sys
-        ctm_dir = str(PHOENIX_HOME / "ctm")
+        ctm_dir = str(鲤鱼_HOME / "ctm")
         if ctm_dir not in sys.path:
-            sys.path.insert(0, str(PHOENIX_HOME.parent))
-        from phoenix.ctm.ctm_core import get_ctm_core
+            sys.path.insert(0, str(鲤鱼_HOME.parent))
+        from liyu.ctm.ctm_core import get_ctm_core
         ctm = get_ctm_core()
         state = ctm.get_ctm_state()
 
@@ -509,18 +509,18 @@ def generate_trace(session_id: str) -> Dict:
     trace = {
         "trace": {
             "id": session_id,
-            "name": f"PHOENIX Session {session_id}",
-            "userId": "phoenix-agent",
+            "name": f"鲤鱼 Session {session_id}",
+            "userId": "liyu-agent",
             "sessionId": session_id,
             "timestamp": first_ts,
             "metadata": {
                 "overall_health": session["overall_health"],
                 "sense_count": len(snapshots),
                 "tags": json.loads(session["tags"]) if session["tags"] else [],
-                "framework": "PHOENIX v1.3.0",
+                "framework": "鲤鱼 v1.3.0",
                 "observability_version": "1.0.0",
             },
-            "tags": ["phoenix", "7-sense", "metacognition"] + (json.loads(session["tags"]) if session["tags"] else []),
+            "tags": ["liyu", "7-sense", "metacognition"] + (json.loads(session["tags"]) if session["tags"] else []),
         },
         "observations": observations,
     }
@@ -607,7 +607,7 @@ def dashboard_command() -> str:
 
     lines = [
         f"{'='*60}",
-        f"  PHOENIX 7-Sense Dashboard  |  Session: {latest['session_id']}",
+        f"  鲤鱼 7-Sense Dashboard  |  Session: {latest['session_id']}",
         f"  Captured: {latest['timestamp']}",
         f"  Overall Health: {radar['overallHealth']:.1f}/100",
         f"{'='*60}",
@@ -666,7 +666,7 @@ def main():
 
     if cmd == "trace":
         if len(sys.argv) < 3:
-            print("Usage: phoenix-observability.py trace <session-id> [--format json|lft]")
+            print("Usage: liyu-observability.py trace <session-id> [--format json|lft]")
             sys.exit(1)
         sid = sys.argv[2]
         fmt = "json"
@@ -704,7 +704,7 @@ def main():
 
     elif cmd == "score":
         if len(sys.argv) < 3:
-            print("Usage: phoenix-observability.py score <session-id>")
+            print("Usage: liyu-observability.py score <session-id>")
             sys.exit(1)
         radar = score_command(sys.argv[1])
         print(json.dumps(radar, indent=2, ensure_ascii=False))

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX NexSandglass — Agent 专用记忆引擎
+鲤鱼 NexSandglass — Agent 专用记忆引擎
 Absorbed from NexSandglass V2.9.3 (lovevin1314-tech) + 自主改进
 
 四层架构（每层只追加，永不替换下层）:
@@ -37,14 +37,14 @@ import sys
 import time
 
 # ── Paths ──────────────────────────────────────────────────────────────────
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-SAND_DIR = PHOENIX_HOME / "nexsandglass"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+SAND_DIR = 鲤鱼_HOME / "nexsandglass"
 SAND_FILE = SAND_DIR / "sand.txt"           # L1: 纯文本沙粒
 SAND_DB = SAND_DIR / "sand.db"              # L1: SQLite 双写
 DRIFT_FILE = SAND_DIR / "drift.json"        # L2: 偏移率状态
 DECISIONS_FILE = SAND_DIR / "decisions.jsonl"  # L3: 决策链
 PERSONA_FILE = SAND_DIR / "persona.md"      # L4: 用户画像
-SENSES_DIR = PHOENIX_HOME / "senses"        # 7-Sense 集成目标
+SENSES_DIR = 鲤鱼_HOME / "senses"        # 7-Sense 集成目标
 
 # ── L1: 沙粒数据结构 ──────────────────────────────────────────────────────
 
@@ -181,7 +181,7 @@ class DriftEngine:
     稳定性分级（标准差）:
       高度稳定 <15 | 稳定 <30 | 波动 <50 | 剧烈波动 ≥50
 
-    改进: 融入 PHOENIX 7-Sense，为每个 sense 输出趋势线
+    改进: 融入 鲤鱼 7-Sense，为每个 sense 输出趋势线
     """
 
     def __init__(self):
@@ -272,7 +272,7 @@ class DriftEngine:
     def sense_trends(self) -> dict:
         """
         将偏移率映射到 7-Sense 趋势预测。
-        这是 NexSandglass → PHOENIX 的核心集成点。
+        这是 NexSandglass → 鲤鱼 的核心集成点。
         """
         drift = self.compute_range(7)
         direction = drift["direction"]
@@ -604,7 +604,7 @@ class PersonaBuilder:
         return persona
 
     def interaction_guide(self) -> str:
-        """生成交互协议指南——教 PHOENIX 如何正确服务用户"""
+        """生成交互协议指南——教 鲤鱼 如何正确服务用户"""
         persona = self.build()
         if persona.get("status") == "insufficient_data":
             return "数据不足，继续对话以学习交互偏好。"
@@ -612,7 +612,7 @@ class PersonaBuilder:
         protocol = persona["layers"]["protocol"]
         kernel = persona["layers"]["kernel"]
 
-        lines = ["## PHOENIX 交互协议（自动学习）\n"]
+        lines = ["## 鲤鱼 交互协议（自动学习）\n"]
         lines.append(f"> 基于 {persona['total_grains']} 条沙粒蒸馏\n")
 
         if protocol.get("style"):
@@ -729,7 +729,7 @@ class PersonaBuilder:
     def _write_persona(self, persona: dict) -> None:
         """将画像持久化到 persona.md"""
         lines = [
-            f"# PHOENIX Persona",
+            f"# 鲤鱼 Persona",
             f"> 自动蒸馏 · {persona['total_grains']} 沙粒 · {persona['updated'][:19]}",
             "",
         ]
@@ -771,7 +771,7 @@ class PersonaBuilder:
 # ── 统一接口 ──────────────────────────────────────────────────────────────
 
 class NexSandglass:
-    """PHOENIX NexSandglass — 四层记忆引擎统一入口"""
+    """鲤鱼 NexSandglass — 四层记忆引擎统一入口"""
 
     def __init__(self):
         self.writer = SandWriter()
@@ -920,7 +920,7 @@ class NexSandglass:
                 except OSError:
                     pass
 
-        lines = ["[PHOENIX NexSandglass 记忆注入]", ""]
+        lines = ["[鲤鱼 NexSandglass 记忆注入]", ""]
 
         # 交互协议
         lines.append(f"协议: {compact['context_block']}")

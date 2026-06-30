@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Doc Gen — 文档生成工具。
+鲤鱼 Skill: Doc Gen — 文档生成工具。
 
 自动生成/更新文档：
 - 函数 docstring

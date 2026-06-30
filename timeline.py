@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Timeline — Queryable execution traces with SQLite backend.
+鲤鱼 Timeline — Queryable execution traces with SQLite backend.
 Absorbed from MUNDO v2.0.9 Timeline (SQLite-persisted, queryable, replayable).
 
 Usage:
@@ -17,9 +17,9 @@ import json
 import sqlite3
 import sys
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-TIMELINE_DB = PHOENIX_HOME / "timeline.db"
-STORY_FILE = PHOENIX_HOME / "story.jsonl"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+TIMELINE_DB = 鲤鱼_HOME / "timeline.db"
+STORY_FILE = 鲤鱼_HOME / "story.jsonl"
 
 # ── Database ──────────────────────────────────────────────────────────────
 
@@ -35,7 +35,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp TEXT NOT NULL,
             date TEXT NOT NULL,
-            source TEXT NOT NULL DEFAULT 'phoenix',
+            source TEXT NOT NULL DEFAULT 'liyu',
             event_type TEXT NOT NULL,
             severity TEXT DEFAULT 'info',
             payload TEXT DEFAULT '{}',
@@ -57,7 +57,7 @@ def init_db():
     db.commit()
     db.close()
 
-def record(event_type: str, source: str = "phoenix", payload: dict = None,
+def record(event_type: str, source: str = "liyu", payload: dict = None,
            severity: str = "info", session_id: str = "", summary: str = ""):
     init_db()
     now = datetime.now(timezone.utc)
@@ -93,7 +93,7 @@ def migrate():
                     (
                         event.get("timestamp", datetime.now(timezone.utc).isoformat()),
                         event.get("date", ""),
-                        event.get("source", "phoenix"),
+                        event.get("source", "liyu"),
                         event.get("event", event.get("type", "unknown")),
                         event.get("severity", "info"),
                         json.dumps(event.get("payload", {})),
@@ -230,7 +230,7 @@ def main():
 
     elif cmd == "record":
         etype = sys.argv[2] if len(sys.argv) > 2 else "system.event"
-        src = sys.argv[3] if len(sys.argv) > 3 else "phoenix"
+        src = sys.argv[3] if len(sys.argv) > 3 else "liyu"
         payload = {}
         for i, arg in enumerate(sys.argv):
             if arg == "--payload" and i + 1 < len(sys.argv):

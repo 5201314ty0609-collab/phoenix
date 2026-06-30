@@ -1,13 +1,13 @@
 # GNAP Migration Guide — Lock-File to Structured Protocol
 
-当前 PHOENIX 的协调模式 → GNAP 结构化协议迁移路径。
+当前 鲤鱼 的协调模式 → GNAP 结构化协议迁移路径。
 
 ## Current State (Pre-GNAP)
 
-PHOENIX 已有以下协调机制（吸收自 disler/observability + agent-farm + community-agents）：
+鲤鱼 已有以下协调机制（吸收自 disler/observability + agent-farm + community-agents）：
 
 ```
-~/.claude/phoenix/
+~/.claude/liyu/
 ├── heartbeats/
 │   └── <agent-id>.heartbeat       # 纯文本心跳
 ├── coordination/
@@ -20,7 +20,7 @@ PHOENIX 已有以下协调机制（吸收自 disler/observability + agent-farm +
 ## Target State (GNAP)
 
 ```
-~/.claude/phoenix/.gnap/
+~/.claude/liyu/.gnap/
 ├── agents/
 │   └── <agent-id>.json             # 结构化 Agent 注册
 ├── tasks/
@@ -43,10 +43,10 @@ PHOENIX 已有以下协调机制（吸收自 disler/observability + agent-farm +
 
 ```bash
 # 创建 .gnap 结构
-mkdir -p ~/.claude/phoenix/.gnap/{agents,tasks,runs,messages,locks,heartbeats}
+mkdir -p ~/.claude/liyu/.gnap/{agents,tasks,runs,messages,locks,heartbeats}
 
 # 初始化 git 追踪
-cd ~/.claude/phoenix/.gnap
+cd ~/.claude/liyu/.gnap
 git init
 git add -A
 git commit -m "feat: initialize GNAP coordination directory"
@@ -85,7 +85,7 @@ git -C .gnap commit -m "agent: register code-reviewer"
 
 ```bash
 # 使用 task.json 模板
-cp ~/.claude/phoenix/planning/gnap-template/task.json .gnap/tasks/task-review-auth.json
+cp ~/.claude/liyu/planning/gnap-template/task.json .gnap/tasks/task-review-auth.json
 # 编辑填充实际值
 git -C .gnap add tasks/task-review-auth.json
 git -C .gnap commit -m "task: create review-auth (agent:code-reviewer)"
@@ -152,7 +152,7 @@ After (JSON):
 ```bash
 #!/bin/bash
 # 将旧锁迁移到 GNAP 格式
-for lock in ~/.claude/phoenix/coordination/agent_locks/*.lock; do
+for lock in ~/.claude/liyu/coordination/agent_locks/*.lock; do
   task_id=$(basename "$lock" .lock)
   echo "{\"task_id\":\"$task_id\",\"acquired_by\":\"unknown\",\"acquired_at\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"expires_at\":\"$(date -u -v+2H +%Y-%m-%dT%H:%M:%SZ)\"}" \
     > ".gnap/locks/$task_id.lock"
@@ -184,7 +184,7 @@ git -C .gnap log --format="%h %ad %s" --date=short -- tasks/ | head -20
     "PostToolUse": [
       {
         "matcher": "Write",
-        "command": "if echo \"$FILE_PATH\" | grep -q '.gnap/'; then cd ~/.claude/phoenix && git -C .gnap add -A && git -C .gnap diff --cached --quiet || git -C .gnap commit -m \"gnap: auto-audit $FILE_PATH\"; fi"
+        "command": "if echo \"$FILE_PATH\" | grep -q '.gnap/'; then cd ~/.claude/liyu && git -C .gnap add -A && git -C .gnap diff --cached --quiet || git -C .gnap commit -m \"gnap: auto-audit $FILE_PATH\"; fi"
       }
     ]
   }

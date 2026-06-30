@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill Registry 测试套件
+鲤鱼 Skill Registry 测试套件
 
 测试：
   1. 发现与加载 — 62 skills + 27 skill.json
@@ -17,7 +17,7 @@ import json
 import subprocess
 import sys
 
-REGISTRY = Path.home() / ".claude/phoenix/skill-registry.py"
+REGISTRY = Path.home() / ".claude/liyu/skill-registry.py"
 PASS = 0
 FAIL = 0
 

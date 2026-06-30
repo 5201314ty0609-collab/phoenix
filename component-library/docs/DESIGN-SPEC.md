@@ -1,4 +1,4 @@
-# PHOENIX AIOS Component Library — Design Specification
+# 鲤鱼 AIOS Component Library — Design Specification
 
 ## 1. Atomic Design Methodology
 
@@ -319,34 +319,34 @@ Component Tokens → 组件专属 (button.bg.primary)
 ```css
 :root {
   /* 基础颜色 */
-  --phoenix-color-black: oklch(0% 0 0);
-  --phoenix-color-white: oklch(100% 0 0);
+  --liyu-color-black: oklch(0% 0 0);
+  --liyu-color-white: oklch(100% 0 0);
 
   /* 语义颜色 */
-  --phoenix-color-primary: oklch(55% 0.25 265);
-  --phoenix-color-danger: oklch(55% 0.25 25);
-  --phoenix-color-success: oklch(55% 0.25 145);
+  --liyu-color-primary: oklch(55% 0.25 265);
+  --liyu-color-danger: oklch(55% 0.25 25);
+  --liyu-color-success: oklch(55% 0.25 145);
 
   /* 间距 */
-  --phoenix-space-1: 0.25rem;
-  --phoenix-space-2: 0.5rem;
-  --phoenix-space-4: 1rem;
-  --phoenix-space-8: 2rem;
+  --liyu-space-1: 0.25rem;
+  --liyu-space-2: 0.5rem;
+  --liyu-space-4: 1rem;
+  --liyu-space-8: 2rem;
 
   /* 圆角 */
-  --phoenix-radius-sm: 0.25rem;
-  --phoenix-radius-md: 0.5rem;
-  --phoenix-radius-lg: 1rem;
-  --phoenix-radius-full: 9999px;
+  --liyu-radius-sm: 0.25rem;
+  --liyu-radius-md: 0.5rem;
+  --liyu-radius-lg: 1rem;
+  --liyu-radius-full: 9999px;
 
   /* 阴影 */
-  --phoenix-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --phoenix-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --liyu-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --liyu-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 
   /* 动画 */
-  --phoenix-duration-fast: 150ms;
-  --phoenix-duration-normal: 300ms;
-  --phoenix-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --liyu-duration-fast: 150ms;
+  --liyu-duration-normal: 300ms;
+  --liyu-easing: cubic-bezier(0.16, 1, 0.3, 1);
 }
 ```
 

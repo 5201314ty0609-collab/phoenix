@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""PHOENIX 运行时配置系统 v1.0 — 五层声明式配置
+"""鲤鱼 运行时配置系统 v1.0 — 五层声明式配置
 
-吸收自 MUNDO Agent v2.1.1 runtime_config.py (LiHongwei-cn)，适配 PHOENIX 七感架构。
+吸收自 MUNDO Agent v2.1.1 runtime_config.py (LiHongwei-cn)，适配 鲤鱼 七感架构。
 
 设计哲学：
 - 配置是分层的：默认 → 全局 → 项目 → 会话 → 运行时
@@ -12,9 +12,9 @@
 
 层级说明：
   L1 DEFAULT   — 硬编码默认值（dataclass 默认字段）
-  L2 GLOBAL    — ~/.claude/phoenix/config/settings.json
-  L3 PROJECT   — <project>/.phoenix/config.json
-  L4 SESSION   — 环境变量 PHOENIX_*
+  L2 GLOBAL    — ~/.claude/liyu/config/settings.json
+  L3 PROJECT   — <project>/.liyu/config.json
+  L4 SESSION   — 环境变量 鲤鱼_*
   L5 RUNTIME   — ConfigManager.set() 运行时覆盖
 
 集成点：
@@ -37,10 +37,10 @@ from typing import Any, Optional
 # 路径常量
 # ═══════════════════════════════════════════════
 
-PHOENIX_DIR = Path.home() / ".claude" / "phoenix"
-GLOBAL_CONFIG_DIR = PHOENIX_DIR / "config"
+鲤鱼_DIR = Path.home() / ".claude" / "liyu"
+GLOBAL_CONFIG_DIR = 鲤鱼_DIR / "config"
 GLOBAL_CONFIG_PATH = GLOBAL_CONFIG_DIR / "settings.json"
-PROJECT_CONFIG_NAME = Path(".phoenix") / "config.json"
+PROJECT_CONFIG_NAME = Path(".liyu") / "config.json"
 
 
 # ═══════════════════════════════════════════════
@@ -62,7 +62,7 @@ class LLMConfig:
     retry_count: int = 3
     retry_delay: float = 2.0
 
-    # 模型切换（PHOENIX 特有）
+    # 模型切换（鲤鱼 特有）
     auto_select_model: bool = False
     fallback_model: str = "mimo-v2.5"
     fast_model: str = "mimo-v2-flash"
@@ -175,7 +175,7 @@ class RecoveryConfig:
 class MemoryConfig:
     """知识库记忆配置"""
     enabled: bool = True
-    db_path: str = str(PHOENIX_DIR / "knowledge-base.db")
+    db_path: str = str(鲤鱼_DIR / "knowledge-base.db")
     fts_enabled: bool = True
     auto_sync: bool = True
     auto_extract: bool = True
@@ -199,7 +199,7 @@ class EvolutionConfig:
 @dataclass
 class DisplayConfig:
     """显示配置"""
-    theme: str = "phoenix"
+    theme: str = "liyu"
     language: str = "zh"
     stream_output: bool = True
     show_tool_output: bool = True
@@ -224,7 +224,7 @@ class PolicyConfig:
 
 @dataclass
 class PhoenixConfig:
-    """PHOENIX 总配置 — 九段合一"""
+    """鲤鱼 总配置 — 九段合一"""
     version: str = "1.0.0"
     llm: LLMConfig = field(default_factory=LLMConfig)
     context: ContextConfig = field(default_factory=ContextConfig)
@@ -276,13 +276,13 @@ class PhoenixConfig:
 # ═══════════════════════════════════════════════
 
 class ConfigManager:
-    """PHOENIX 配置管理器 — 五层声明式配置
+    """鲤鱼 配置管理器 — 五层声明式配置
 
     加载顺序（后加载覆盖前加载）:
       L1: 硬编码默认值（PhoenixConfig dataclass 默认字段）
-      L2: ~/.claude/phoenix/config/settings.json（全局）
-      L3: <project>/.phoenix/config.json（项目级）
-      L4: 环境变量 PHOENIX_*（会话级）
+      L2: ~/.claude/liyu/config/settings.json（全局）
+      L3: <project>/.liyu/config.json（项目级）
+      L4: 环境变量 鲤鱼_*（会话级）
       L5: set() 运行时覆盖（运行时）
     """
 
@@ -392,17 +392,17 @@ class ConfigManager:
             pass
 
     def _load_env(self) -> None:
-        """从环境变量加载（PHOENIX_* 前缀）"""
+        """从环境变量加载（鲤鱼_* 前缀）"""
         env_map = {
-            "PHOENIX_LLM_MODEL": "llm.model",
-            "PHOENIX_LLM_PROVIDER": "llm.provider",
-            "PHOENIX_LLM_TIMEOUT": "llm.timeout",
-            "PHOENIX_CONTEXT_MAX_TOKENS": "context.max_tokens",
-            "PHOENIX_SPRINT_MODE": "context.sprint_mode",
-            "PHOENIX_METACOG_ENABLED": "metacog.enabled",
-            "PHOENIX_RECOVERY_ENABLED": "recovery.enabled",
-            "PHOENIX_MEMORY_ENABLED": "memory.enabled",
-            "PHOENIX_LANGUAGE": "display.language",
+            "鲤鱼_LLM_MODEL": "llm.model",
+            "鲤鱼_LLM_PROVIDER": "llm.provider",
+            "鲤鱼_LLM_TIMEOUT": "llm.timeout",
+            "鲤鱼_CONTEXT_MAX_TOKENS": "context.max_tokens",
+            "鲤鱼_SPRINT_MODE": "context.sprint_mode",
+            "鲤鱼_METACOG_ENABLED": "metacog.enabled",
+            "鲤鱼_RECOVERY_ENABLED": "recovery.enabled",
+            "鲤鱼_MEMORY_ENABLED": "memory.enabled",
+            "鲤鱼_LANGUAGE": "display.language",
         }
 
         for env_key, dotted_key in env_map.items():
@@ -489,7 +489,7 @@ if __name__ == "__main__":
     config = mgr.load()
 
     print("=" * 60)
-    print("PHOENIX Runtime Config — Five-Layer Demo")
+    print("鲤鱼 Runtime Config — Five-Layer Demo")
     print("=" * 60)
 
     # 展示关键配置
@@ -517,8 +517,8 @@ if __name__ == "__main__":
     print(f"  non.existent.key = {mgr.get('non.existent.key', 'N/A')}")
 
     # 演示环境变量
-    if os.environ.get("PHOENIX_LLM_MODEL"):
-        print(f"\n  PHOENIX_LLM_MODEL env override: {os.environ['PHOENIX_LLM_MODEL']}")
+    if os.environ.get("鲤鱼_LLM_MODEL"):
+        print(f"\n  鲤鱼_LLM_MODEL env override: {os.environ['鲤鱼_LLM_MODEL']}")
 
     print(f"\n  Config loaded at: {time.strftime('%H:%M:%S', time.localtime(mgr.loaded_at))}")
     print(f"  Load count: {mgr.load_count}")

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHOENIX Button 组件演示</title>
+  <style>
+    /* 主题变量 */
+    :root,
+    [data-theme="dark"] {
+      --bg: hsl(220, 15%, 8%);
+      --surface: hsl(220, 15%, 12%);
+      --foreground: hsl(220, 10%, 95%);
+      --foreground-muted: hsl(220, 10%, 50%);
+      --primary: 220, 70%, 50%;
+      --primary-foreground: 0, 0%, 100%;
+      --primary-hover: 220, 70%, 45%;
+      --secondary: 220, 15%, 20%;
+      --secondary-foreground: 220, 10%, 95%;
+      --accent: 25, 95%, 55%;
+      --accent-foreground: 0, 0%, 100%;
+      --destructive: 0, 85%, 50%;
+      --destructive-foreground: 0, 0%, 100%;
+      --border: hsl(220, 15%, 20%);
+      --success: 150, 70%, 40%;
+      --warning: 40, 95%, 50%;
+      --info: 210, 85%, 50%;
+    }
+
+    [data-theme="light"] {
+      --bg: hsl(0, 0%, 100%);
+      --surface: hsl(0, 0%, 98%);
+      --foreground: hsl(220, 15%, 10%);
+      --foreground-muted: hsl(220, 10%, 60%);
+      --primary: 220, 70%, 50%;
+      --primary-foreground: 0, 0%, 100%;
+      --primary-hover: 220, 70%, 45%;
+      --secondary: 220, 15%, 92%;
+      --secondary-foreground: 220, 15%, 10%;
+      --accent: 25, 95%, 55%;
+      --accent-foreground: 0, 0%, 100%;
+      --destructive: 0, 85%, 50%;
+      --destructive-foreground: 0, 0%, 100%;
+      --border: hsl(220, 15%, 88%);
+      --success: 150, 70%, 40%;
+      --warning: 40, 95%, 50%;
+      --info: 210, 85%, 50%;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'SF Pro Display', 'PingFang SC', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--foreground);
+      line-height: 1.6;
+      padding: 2rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* 头部 */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--primary)));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* 区块 */
+    .section {
+      margin-bottom: 3rem;
+    }
+
+    .section h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: hsl(var(--accent));
+    }
+
+    .section-desc {
+      font-size: 0.875rem;
+      color: var(--foreground-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    /* 按钮容器 */
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .button-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+    }
+
+    /* 按钮基础样式 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s ease-out;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid hsl(var(--primary));
+      outline-offset: 2px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* 变体 */
+    .btn-primary {
+      background: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+    }
+    .btn-primary:hover { background: hsl(var(--primary-hover)); }
+
+    .btn-secondary {
+      background: hsl(var(--secondary));
+      color: hsl(var(--secondary-foreground));
+    }
+    .btn-secondary:hover { background: hsl(220, 15%, 25%); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--foreground);
+    }
+    .btn-ghost:hover { background: hsl(var(--secondary)); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--foreground);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: hsl(var(--secondary)); }
+
+    .btn-danger {
+      background: hsl(var(--destructive));
+      color: hsl(var(--destructive-foreground));
+    }
+    .btn-danger:hover { background: hsl(0, 85%, 45%); }
+
+    .btn-link {
+      background: transparent;
+      color: hsl(var(--primary));
+      text-decoration: none;
+    }
+    .btn-link:hover { text-decoration: underline; }
+
+    /* 尺寸 */
+    .btn-xs { height: 24px; padding: 0 8px; font-size: 0.75rem; border-radius: 4px; gap: 4px; }
+    .btn-sm { height: 32px; padding: 0 12px; font-size: 0.875rem; border-radius: 6px; gap: 6px; }
+    .btn-md { height: 40px; padding: 0 16px; font-size: 0.875rem; border-radius: 6px; gap: 8px; }
+    .btn-lg { height: 48px; padding: 0 24px; font-size: 1rem; border-radius: 8px; gap: 8px; }
+    .btn-xl { height: 56px; padding: 0 32px; font-size: 1.125rem; border-radius: 8px; gap: 12px; }
+
+    /* 全宽 */
+    .btn-full { width: 100%; }
+
+    /* 图标按钮 */
+    .btn-icon { padding: 0; }
+
+    /* 加载动画 */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    /* 主题变量展示 */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .color-card {
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    /* 动画展示 */
+    .demo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .header { flex-direction: column; gap: 1rem; }
+      .button-group { flex-direction: column; align-items: stretch; }
+      .button-stack { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 头部 -->
+  <div class="header">
+    <h1>PHOENIX Button 组件</h1>
+    <button class="btn btn-outline btn-md" onclick="toggleTheme()">
+      🌙 切换主题
+    </button>
+  </div>
+
+  <!-- 变体展示 -->
+  <div class="section">
+    <h2>🎨 变体 (Variants)</h2>
+    <p class="section-desc">6 种按钮变体，适用于不同场景</p>
+    <div class="button-group">
+      <button class="btn btn-primary btn-md">Primary</button>
+      <button class="btn btn-secondary btn-md">Secondary</button>
+      <button class="btn btn-ghost btn-md">Ghost</button>
+      <button class="btn btn-outline btn-md">Outline</button>
+      <button class="btn btn-danger btn-md">Danger</button>
+      <button class="btn btn-link btn-md">Link</button>
+    </div>
+  </div>
+
+  <!-- 尺寸展示 -->
+  <div class="section">
+    <h2>📏 尺寸 (Sizes)</h2>
+    <p class="section-desc">5 种尺寸，从紧凑到醒目</p>
+    <div class="button-group">
+      <button class="btn btn-primary btn-xs">Extra Small</button>
+      <button class="btn btn-primary btn-sm">Small</button>
+      <button class="btn btn-primary btn-md">Medium</button>
+      <button class="btn btn-primary btn-lg">Large</button>
+      <button class="btn btn-primary btn-xl">Extra Large</button>
+    </div>
+  </div>
+
+  <!-- 状态展示 -->
+  <div class="section">
+    <h2>⚡ 状态 (States)</h2>
+    <p class="section-desc">默认、禁用、加载中状态</p>
+    <div class="button-group">
+      <button class="btn btn-primary btn-md">Default</button>
+      <button class="btn btn-primary btn-md" disabled>Disabled</button>
+      <button class="btn btn-primary btn-md" onclick="simulateLoading(this)">
+        点击加载
+      </button>
+      <button class="btn btn-primary btn-md" disabled>
+        <span class="spinner"></span>
+        Loading...
+      </button>
+    </div>
+  </div>
+
+  <!-- 图标展示 -->
+  <div class="section">
+    <h2>🎯 图标 (Icons)</h2>
+    <p class="section-desc">支持左右图标和纯图标按钮</p>
+    <div class="button-group">
+      <button class="btn btn-primary btn-md">
+        <span>←</span> 返回
+      </button>
+      <button class="btn btn-primary btn-md">
+        下一步 <span>→</span>
+      </button>
+      <button class="btn btn-primary btn-md">
+        <span>✓</span> 确认 <span>→</span>
+      </button>
+      <button class="btn btn-primary btn-icon btn-md">🔥</button>
+      <button class="btn btn-outline btn-icon btn-md">⚡</button>
+    </div>
+  </div>
+
+  <!-- 全宽展示 -->
+  <div class="section">
+    <h2>📐 全宽 (Full Width)</h2>
+    <p class="section-desc">适用于表单和移动设备</p>
+    <div class="button-stack">
+      <button class="btn btn-primary btn-md btn-full">全宽按钮</button>
+      <button class="btn btn-outline btn-md btn-full">全宽轮廓按钮</button>
+      <button class="btn btn-ghost btn-md btn-full">全宽幽灵按钮</button>
+    </div>
+  </div>
+
+  <!-- 组合展示 -->
+  <div class="section">
+    <h2>🎭 组合示例</h2>
+    <p class="section-desc">实际使用场景</p>
+    <div class="demo-card">
+      <div class="button-group">
+        <button class="btn btn-primary btn-lg">
+          🚀 开始使用
+        </button>
+        <button class="btn btn-outline btn-lg">
+          了解更多
+        </button>
+      </div>
+    </div>
+    <div class="demo-card">
+      <div class="button-group">
+        <button class="btn btn-danger btn-md">
+          🗑️ 删除
+        </button>
+        <button class="btn btn-ghost btn-md">
+          取消
+        </button>
+        <button class="btn btn-primary btn-md">
+          ✓ 确认
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主题变量展示 -->
+  <div class="section">
+    <h2>🎨 主题变量</h2>
+    <p class="section-desc">支持暗色/亮色主题切换</p>
+    <div class="color-grid">
+      <div class="color-card" style="background: hsl(var(--primary));">Primary</div>
+      <div class="color-card" style="background: hsl(var(--secondary)); color: var(--foreground);">Secondary</div>
+      <div class="color-card" style="background: hsl(var(--accent));">Accent</div>
+      <div class="color-card" style="background: hsl(var(--success));">Success</div>
+      <div class="color-card" style="background: hsl(var(--warning)); color: #000;">Warning</div>
+      <div class="color-card" style="background: hsl(var(--destructive));">Destructive</div>
+      <div class="color-card" style="background: hsl(var(--info));">Info</div>
+    </div>
+  </div>
+
+  <!-- 动画效果展示 -->
+  <div class="section">
+    <h2>✨ 动画效果</h2>
+    <p class="section-desc">悬停、点击、加载动画</p>
+    <div class="demo-card">
+      <div class="button-group">
+        <button class="btn btn-primary btn-md">悬停效果</button>
+        <button class="btn btn-primary btn-md">点击缩放</button>
+        <button class="btn btn-primary btn-md" onclick="simulateLoading(this)">
+          加载动画
+        </button>
+      </div>
+      <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--foreground-muted);">
+        • 悬停：颜色渐变<br>
+        • 点击：缩放 0.98<br>
+        • 加载：旋转动画
+      </p>
+    </div>
+  </div>
+
+  <!-- 设计原则 -->
+  <div class="section">
+    <h2>📐 设计原则</h2>
+    <div class="demo-card">
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+        <li>✓ <strong>CVA</strong> — 类型安全的样式变体</li>
+        <li>✓ <strong>主题变量</strong> — 支持暗色/亮色切换</li>
+        <li>✓ <strong>动画效果</strong> — 悬停、点击、加载</li>
+        <li>✓ <strong>无障碍</strong> — ARIA 属性、键盘导航</li>
+        <li>✓ <strong>响应式</strong> — 自适应布局</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 主题切换
+  function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  }
+
+  // 加载动画
+  function simulateLoading(btn) {
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> 加载中...';
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = '✓ 完成';
+      setTimeout(() => {
+        btn.innerHTML = original;
+      }, 1000);
+    }, 2000);
+  }
+
+  // 初始化主题
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+</script>
+
+</body>
+</html>

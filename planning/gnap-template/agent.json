@@ -1,5 +1,5 @@
 {
-  "$schema": "https://phoenix.local/gnap/agent.schema.json",
+  "$schema": "https://liyu.local/gnap/agent.schema.json",
   "$description": "GNAP Agent registration — 每个参与协调的 Agent 维护一个注册文件",
   "template": {
     "agent_id": "string (required) — unique kebab-case identifier",

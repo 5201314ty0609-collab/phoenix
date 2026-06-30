@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Rules Engine 测试脚本
+鲤鱼 Rules Engine 测试脚本
 
 测试内容：
 1. 代码语法检查
@@ -62,10 +62,10 @@ def test_rule_parser_edge_cases():
     results.append(("No match returns default", result == '1.0.0'))
 
     # Test 6: _determine_priority edge cases
-    p1 = RuleParser._determine_priority("hardened", 6, "phoenix")
+    p1 = RuleParser._determine_priority("hardened", 6, "liyu")
     p2 = RuleParser._determine_priority("draft", 1, "common")
     p3 = RuleParser._determine_priority("validated", 4, "translation")
-    results.append(("Priority hardened+6+phoenix", p1 == 10))
+    results.append(("Priority hardened+6+liyu", p1 == 10))
     results.append(("Priority draft+1+common", p2 == 5))
     results.append(("Priority validated+4+translation", p3 == 9))
 
@@ -139,7 +139,7 @@ def test_conflict_detector_edge_cases():
     # Test 2: Single rule
     single_rule = RuleMetadata(
         rule_id='test', name='Test', file_path='/tmp/test.md',
-        layer='phoenix', category='testing', stage='active',
+        layer='liyu', category='testing', stage='active',
         enforcement_level=4, priority=5
     )
     empty_registry.rules = {'test': single_rule}
@@ -149,7 +149,7 @@ def test_conflict_detector_edge_cases():
     # Test 3: Two rules with no conflicts
     rule_a = RuleMetadata(
         rule_id='rule-a', name='Rule A', file_path='/tmp/a.md',
-        layer='phoenix', category='testing', stage='active',
+        layer='liyu', category='testing', stage='active',
         enforcement_level=4, priority=5
     )
     rule_b = RuleMetadata(
@@ -190,7 +190,7 @@ def test_rule_validator_edge_cases():
     # Test 2: Invalid rule metadata
     invalid_rule = RuleMetadata(
         rule_id='', name='', file_path='',
-        layer='phoenix', category='testing', stage='invalid',
+        layer='liyu', category='testing', stage='invalid',
         enforcement_level=0, priority=11
     )
     registry.rules['invalid'] = invalid_rule
@@ -201,7 +201,7 @@ def test_rule_validator_edge_cases():
     # Test 3: Missing dependency
     dep_rule = RuleMetadata(
         rule_id='dep-test', name='Dep Test', file_path='/tmp/dep.md',
-        layer='phoenix', category='testing', stage='active',
+        layer='liyu', category='testing', stage='active',
         enforcement_level=4, priority=5,
         dependencies=['nonexistent-dep']
     )
@@ -213,7 +213,7 @@ def test_rule_validator_edge_cases():
     # Test 4: Missing conflict target
     conflict_rule = RuleMetadata(
         rule_id='conflict-test', name='Conflict Test', file_path='/tmp/conflict.md',
-        layer='phoenix', category='testing', stage='active',
+        layer='liyu', category='testing', stage='active',
         enforcement_level=4, priority=5,
         conflicts_with=['nonexistent-conflict']
     )
@@ -279,7 +279,7 @@ def test_performance():
 def main():
     """运行所有测试"""
     print("=" * 72)
-    print("  PHOENIX Rules Engine - Comprehensive Test Suite")
+    print("  鲤鱼 Rules Engine - Comprehensive Test Suite")
     print("=" * 72)
     print()
 

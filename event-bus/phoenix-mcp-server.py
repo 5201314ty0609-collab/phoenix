@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-PHOENIX MCP Server — Expose PHOENIX tools via Model Context Protocol.
+鲤鱼 MCP Server — Expose 鲤鱼 tools via Model Context Protocol.
 
 Lightweight JSON-RPC 2.0 over stdio. No external dependencies.
 Tools: knowledge_graph, self_heal, event_bus, sense_check
 
 Register in Claude Code:
-  ~/.claude/mcp-servers.json → {"mcpServers": {"phoenix": {"command": "python3", "args": [...]}}}
+  ~/.claude/mcp-servers.json → {"mcpServers": {"liyu": {"command": "python3", "args": [...]}}}
 
 Register in Hermes:
-  hermes mcp add phoenix --command python3 --args ".../phoenix-mcp-server.py"
+  hermes mcp add liyu --command python3 --args ".../liyu-mcp-server.py"
 """
 
 from pathlib import Path
@@ -17,17 +17,17 @@ import json
 import subprocess
 import sys
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
-KNOWLEDGE_GRAPH = Path.home() / ".claude/skills/phoenix/scripts/knowledge-graph.py"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
+KNOWLEDGE_GRAPH = Path.home() / ".claude/skills/liyu/scripts/knowledge-graph.py"
 SELF_HEAL = Path.home() / ".hermes/hooks/self-heal.py"
-EVENT_BUS = PHOENIX_HOME / "event-bus/bus.py"
+EVENT_BUS = 鲤鱼_HOME / "event-bus/bus.py"
 
 # ── Tool Definitions ──────────────────────────────────────────────────────
 
 TOOLS = [
     {
-        "name": "phoenix_knowledge_search",
-        "description": "Search the PHOENIX knowledge graph (64 nodes, 103 edges). Returns relevance-ranked results with node IDs, types, and confidence scores.",
+        "name": "liyu_knowledge_search",
+        "description": "Search the 鲤鱼 knowledge graph (64 nodes, 103 edges). Returns relevance-ranked results with node IDs, types, and confidence scores.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -38,15 +38,15 @@ TOOLS = [
         },
     },
     {
-        "name": "phoenix_knowledge_status",
-        "description": "Get PHOENIX knowledge graph statistics: total nodes, edges, by type, by stage.",
+        "name": "liyu_knowledge_status",
+        "description": "Get 鲤鱼 knowledge graph statistics: total nodes, edges, by type, by stage.",
         "inputSchema": {
             "type": "object",
             "properties": {},
         },
     },
     {
-        "name": "phoenix_knowledge_context",
+        "name": "liyu_knowledge_context",
         "description": "Get a node and its 1-hop neighbors as formatted context. Use node_id from search results.",
         "inputSchema": {
             "type": "object",
@@ -57,28 +57,28 @@ TOOLS = [
         },
     },
     {
-        "name": "phoenix_self_heal_status",
-        "description": "Get PHOENIX self-healing engine status: 7 rules, escalation levels, confidence scores.",
+        "name": "liyu_self_heal_status",
+        "description": "Get 鲤鱼 self-healing engine status: 7 rules, escalation levels, confidence scores.",
         "inputSchema": {
             "type": "object",
             "properties": {},
         },
     },
     {
-        "name": "phoenix_event_bus_stats",
-        "description": "Get PHOENIX unified event bus statistics: total events, by source, by type.",
+        "name": "liyu_event_bus_stats",
+        "description": "Get 鲤鱼 unified event bus statistics: total events, by source, by type.",
         "inputSchema": {
             "type": "object",
             "properties": {},
         },
     },
     {
-        "name": "phoenix_event_bus_tail",
-        "description": "Get recent events from the PHOENIX event bus, optionally filtered.",
+        "name": "liyu_event_bus_tail",
+        "description": "Get recent events from the 鲤鱼 event bus, optionally filtered.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "source": {"type": "string", "description": "Filter by source: phoenix, hermes, mundo"},
+                "source": {"type": "string", "description": "Filter by source: liyu, hermes, mundo"},
                 "event_type": {"type": "string", "description": "Filter by type: heal.*, sense.*, knowledge.*"},
                 "limit": {"type": "integer", "description": "Max events (default 10)", "default": 10},
             },
@@ -138,12 +138,12 @@ def handle_event_bus_tail(args):
     return "\n".join(lines) if lines else "No events."
 
 HANDLERS = {
-    "phoenix_knowledge_search": handle_knowledge_search,
-    "phoenix_knowledge_status": handle_knowledge_status,
-    "phoenix_knowledge_context": handle_knowledge_context,
-    "phoenix_self_heal_status": handle_self_heal_status,
-    "phoenix_event_bus_stats": handle_event_bus_stats,
-    "phoenix_event_bus_tail": handle_event_bus_tail,
+    "liyu_knowledge_search": handle_knowledge_search,
+    "liyu_knowledge_status": handle_knowledge_status,
+    "liyu_knowledge_context": handle_knowledge_context,
+    "liyu_self_heal_status": handle_self_heal_status,
+    "liyu_event_bus_stats": handle_event_bus_stats,
+    "liyu_event_bus_tail": handle_event_bus_tail,
 }
 
 # ── JSON-RPC ──────────────────────────────────────────────────────────────
@@ -163,7 +163,7 @@ def handle_request(req):
             "protocolVersion": "2024-11-05",
             "capabilities": {"tools": {}},
             "serverInfo": {
-                "name": "phoenix-mcp-server",
+                "name": "liyu-mcp-server",
                 "version": "1.2.0",
             },
         })

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Event Integration — Unified nervous system connecting all PHOENIX subsystems.
+鲤鱼 Event Integration — Unified nervous system connecting all 鲤鱼 subsystems.
 ====================================================================================
 
 Bridges event-bus, observability, alerting, memory, automation, metrics, and
@@ -14,7 +14,7 @@ Architecture:
   └──────────┬──────────────────────────────────────────────────┘
              │  emit / ingest
   ┌──────────▼──────────────────────────────────────────────────┐
-  │              phoenix-event-integration.py                    │
+  │              liyu-event-integration.py                    │
   │  ┌───────────┐ ┌───────────┐ ┌────────────┐ ┌───────────┐  │
   │  │  Handler   │ │  Router   │ │  Filter    │ │  Store    │  │
   │  │  Registry  │ │  (pattern │ │  Chain     │ │  (SQLite) │  │
@@ -29,16 +29,16 @@ Architecture:
   └─────────────────────────────────────────────────────────────┘
 
 Usage:
-  phoenix-event-integration.py emit <type> <source> [--payload '{}']
-  phoenix-event-integration.py handler list
-  phoenix-event-integration.py handler register <name> <pattern> [--priority N]
-  phoenix-event-integration.py handler unregister <name>
-  phoenix-event-integration.py route [--type X] [--source X] [--since ISO] [--limit N]
-  phoenix-event-integration.py stats
-  phoenix-event-integration.py replay <event-id>
-  phoenix-event-integration.py bridge --all | --source <name>
-  phoenix-event-integration.py prune [--days N]
-  phoenix-event-integration.py health
+  liyu-event-integration.py emit <type> <source> [--payload '{}']
+  liyu-event-integration.py handler list
+  liyu-event-integration.py handler register <name> <pattern> [--priority N]
+  liyu-event-integration.py handler unregister <name>
+  liyu-event-integration.py route [--type X] [--source X] [--since ISO] [--limit N]
+  liyu-event-integration.py stats
+  liyu-event-integration.py replay <event-id>
+  liyu-event-integration.py bridge --all | --source <name>
+  liyu-event-integration.py prune [--days N]
+  liyu-event-integration.py health
 """
 
 from __future__ import annotations
@@ -59,21 +59,21 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-EVENT_BUS_DIR = PHOENIX_HOME / "event-bus"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+EVENT_BUS_DIR = 鲤鱼_HOME / "event-bus"
 EVENTS_FILE = EVENT_BUS_DIR / "events.jsonl"
-DB_PATH = PHOENIX_HOME / "event-integration.db"
-HANDLERS_FILE = PHOENIX_HOME / "event-handlers.json"
-ROUTING_RULES_FILE = PHOENIX_HOME / "event-routing-rules.json"
-INTEGRATION_LOG = PHOENIX_HOME / "event-integration.log"
+DB_PATH = 鲤鱼_HOME / "event-integration.db"
+HANDLERS_FILE = 鲤鱼_HOME / "event-handlers.json"
+ROUTING_RULES_FILE = 鲤鱼_HOME / "event-routing-rules.json"
+INTEGRATION_LOG = 鲤鱼_HOME / "event-integration.log"
 
 # Subsystem paths
-STORY_FILE = PHOENIX_HOME / "story.jsonl"
-REFLECTIONS_FILE = PHOENIX_HOME / "reflections.jsonl"
-SENSES_DIR = PHOENIX_HOME / "senses"
-OBSERVABILITY_DB = PHOENIX_HOME / "observability.db"
-ALERTS_LOG = PHOENIX_HOME / "alerts.jsonl"
-HEARTBEATS_DIR = PHOENIX_HOME / "heartbeats"
+STORY_FILE = 鲤鱼_HOME / "story.jsonl"
+REFLECTIONS_FILE = 鲤鱼_HOME / "reflections.jsonl"
+SENSES_DIR = 鲤鱼_HOME / "senses"
+OBSERVABILITY_DB = 鲤鱼_HOME / "observability.db"
+ALERTS_LOG = 鲤鱼_HOME / "alerts.jsonl"
+HEARTBEATS_DIR = 鲤鱼_HOME / "heartbeats"
 
 # ── Event Types (superset of bus.py + integration-specific) ───────────────────
 
@@ -977,7 +977,7 @@ class RoutingEngine:
             "payload": event.payload,
             "auto_captured": True,
         }
-        cache_file = PHOENIX_HOME / "event-memory-buffer.jsonl"
+        cache_file = 鲤鱼_HOME / "event-memory-buffer.jsonl"
         with open(cache_file, "a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
@@ -1001,7 +1001,7 @@ class RoutingEngine:
             "event_type": event.type,
             "payload": event.payload,
         }
-        buffer_file = PHOENIX_HOME / "event-reflection-buffer.jsonl"
+        buffer_file = 鲤鱼_HOME / "event-reflection-buffer.jsonl"
         with open(buffer_file, "a") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
@@ -1012,10 +1012,10 @@ class RoutingEngine:
             return
         try:
             env = os.environ.copy()
-            env["PHOENIX_EVENT_ID"] = event.id
-            env["PHOENIX_EVENT_TYPE"] = event.type
-            env["PHOENIX_EVENT_SOURCE"] = event.source
-            env["PHOENIX_EVENT_JSON"] = json.dumps(event.to_dict(), ensure_ascii=False)
+            env["鲤鱼_EVENT_ID"] = event.id
+            env["鲤鱼_EVENT_TYPE"] = event.type
+            env["鲤鱼_EVENT_SOURCE"] = event.source
+            env["鲤鱼_EVENT_JSON"] = json.dumps(event.to_dict(), ensure_ascii=False)
             subprocess.run(
                 cmd, shell=True, env=env, timeout=30,
                 capture_output=True, text=True,
@@ -1210,7 +1210,7 @@ class HandlerExecutor:
 
     def _builtin_memory(self, event: Event) -> Dict:
         """Capture to memory buffer."""
-        cache_file = PHOENIX_HOME / "event-memory-buffer.jsonl"
+        cache_file = 鲤鱼_HOME / "event-memory-buffer.jsonl"
         entry = {
             "timestamp": event.timestamp,
             "source": event.source,
@@ -1255,11 +1255,11 @@ class HandlerExecutor:
     def _execute_command(self, handler: HandlerRegistration, event: Event) -> Dict:
         """Execute a command-line handler."""
         env = os.environ.copy()
-        env["PHOENIX_EVENT_ID"] = event.id
-        env["PHOENIX_EVENT_TYPE"] = event.type
-        env["PHOENIX_EVENT_SOURCE"] = event.source
-        env["PHOENIX_EVENT_SEVERITY"] = event.severity
-        env["PHOENIX_EVENT_JSON"] = json.dumps(event.to_dict(), ensure_ascii=False)
+        env["鲤鱼_EVENT_ID"] = event.id
+        env["鲤鱼_EVENT_TYPE"] = event.type
+        env["鲤鱼_EVENT_SOURCE"] = event.source
+        env["鲤鱼_EVENT_SEVERITY"] = event.severity
+        env["鲤鱼_EVENT_JSON"] = json.dumps(event.to_dict(), ensure_ascii=False)
 
         result = subprocess.run(
             handler.target, shell=True, env=env,
@@ -1741,7 +1741,7 @@ def cmd_stats(engine: PhoenixEventIntegration, args: List[str]) -> None:
     """Show integration statistics."""
     stats = engine.stats()
 
-    print(f"=== PHOENIX Event Integration Stats ===")
+    print(f"=== 鲤鱼 Event Integration Stats ===")
     print(f"Total events:       {stats['total_events']}")
     print(f"Dead letter queue:  {stats['dead_letter_count']}")
     print(f"Oldest event:       {stats.get('oldest_event', 'N/A')}")

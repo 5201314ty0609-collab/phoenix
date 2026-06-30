@@ -70,18 +70,18 @@ for mcp_path in ['~/.claude/.mcp.json', '~/.claude/mcp.json', '~/.claude/mcp-con
         results[os.path.basename(p)] = {'size': size, 'est_tokens': size // 4}
         print(f"\n{os.path.basename(p)}: {size:,} bytes, ~{size//4:,} tokens")
 
-# PHOENIX directory
-phoenix_dir = os.path.join(home, '.claude/phoenix')
-phoenix_size = 0
-for root, dirs, files in os.walk(phoenix_dir):
+# 鲤鱼 directory
+liyu_dir = os.path.join(home, '.claude/liyu')
+liyu_size = 0
+for root, dirs, files in os.walk(liyu_dir):
     for f in files:
         p = os.path.join(root, f)
         try:
-            phoenix_size += os.path.getsize(p)
+            liyu_size += os.path.getsize(p)
         except:
             pass
-results['phoenix_dir'] = {'total_size': phoenix_size}
-print(f"\nPHOENIX directory: {phoenix_size:,} bytes total")
+results['liyu_dir'] = {'total_size': liyu_size}
+print(f"\n鲤鱼 directory: {liyu_size:,} bytes total")
 
 # Total overhead estimate
 grand_total = sum(v.get('est_tokens', 0) for v in results.values())

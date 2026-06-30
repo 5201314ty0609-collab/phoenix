@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Unified Event Bus — Shared nervous system for PHOENIX + Hermes + MUNDO
+鲤鱼 Unified Event Bus — Shared nervous system for 鲤鱼 + Hermes + MUNDO
 
 Design: Append-only JSONL + pluggable bridges. Zero dependencies.
 Pattern: MUNDO v2.0.9 Event Bus (25 event types, pub-sub)
@@ -24,7 +24,7 @@ import threading
 import time
 
 # ── Paths ────────────────────────────────────────────────────────────────
-BUS_DIR = Path.home() / ".claude/phoenix/event-bus"
+BUS_DIR = Path.home() / ".claude/liyu/event-bus"
 EVENTS_FILE = BUS_DIR / "events.jsonl"
 SUBSCRIBERS_FILE = BUS_DIR / "subscribers.json"
 BRIDGES_DIR = BUS_DIR / "bridges"
@@ -104,14 +104,14 @@ class BufferedWriter:
 _event_writer = BufferedWriter(EVENTS_FILE, capacity=64, flush_interval_s=2.0)
 
 # ── Event Types ──────────────────────────────────────────────────────────
-# Modeled after MUNDO v2.0.9 Event Bus (25 types) + PHOENIX-specific
+# Modeled after MUNDO v2.0.9 Event Bus (25 types) + 鲤鱼-specific
 EVENT_TYPES = {
     # Session lifecycle
     "session.start":        {"severity": "info",    "desc": "Session begins"},
     "session.end":          {"severity": "info",    "desc": "Session ends"},
     "session.heartbeat":    {"severity": "info",    "desc": "Periodic heartbeat"},
 
-    # Sense alerts (PHOENIX metacognition)
+    # Sense alerts (鲤鱼 metacognition)
     "sense.alert":          {"severity": "warn",    "desc": "Sense threshold breached"},
     "sense.o2":             {"severity": "warn",    "desc": "Context pressure alert"},
     "sense.nociception":    {"severity": "critical","desc": "Error cascade detected"},
@@ -152,8 +152,8 @@ EVENT_TYPES = {
     "ctm.thinking.interrupt":{"severity": "warn",    "desc": "Thinking stream interrupted"},
 
     # System
-    "system.startup":       {"severity": "info",    "desc": "PHOENIX startup"},
-    "system.shutdown":      {"severity": "info",    "desc": "PHOENIX shutdown"},
+    "system.startup":       {"severity": "info",    "desc": "鲤鱼 startup"},
+    "system.shutdown":      {"severity": "info",    "desc": "鲤鱼 shutdown"},
     "system.error":         {"severity": "critical","desc": "System-level error"},
     "system.config":        {"severity": "info",    "desc": "Configuration changed"},
 }
@@ -207,7 +207,7 @@ class EventBus:
                 self._deliver(sub, event)
 
     def _match(self, event, pattern):
-        """Pattern matching: source:phoenix type:heal.* severity:warn
+        """Pattern matching: source:liyu type:heal.* severity:warn
 
         Uses precompiled regex from module-level cache for glob patterns.
         """
@@ -318,7 +318,7 @@ class EventBus:
 # ── Bridge: Hermes → Event Bus ────────────────────────────────────────────
 
 def bridge_hermes():
-    """Bridge Hermes session events to PHOENIX Event Bus."""
+    """Bridge Hermes session events to 鲤鱼 Event Bus."""
     bus = EventBus()
     hermes_home = Path(os.environ.get("HERMES_HOME", Path.home() / ".hermes"))
     state_db = hermes_home / "state.db"
@@ -359,7 +359,7 @@ def main():
 
     if cmd == "emit":
         etype = sys.argv[2] if len(sys.argv) > 2 else "system.startup"
-        src = sys.argv[3] if len(sys.argv) > 3 else "phoenix"
+        src = sys.argv[3] if len(sys.argv) > 3 else "liyu"
         payload = {}
         severity = None
         for i, arg in enumerate(sys.argv):

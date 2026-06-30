@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-PHOENIX Rule Health — DSPy-style Rule Optimization.
+鲤鱼 Rule Health — DSPy-style Rule Optimization.
 吸收自 DSPy 的 prompt-as-optimization-target 模式。
 
-将 PHOENIX rules 视为可优化目标，分析其有效性：
+将 鲤鱼 rules 视为可优化目标，分析其有效性：
 - 使用频率
 - 成功率关联
 - Token 成本
 - 衰减/过时检测
 
 Usage:
-  python3 phoenix-rule-health.py report            生成规则健康报告
-  python3 phoenix-rule-health.py score <rule-id>   查看单个规则评分
-  python3 phoenix-rule-health.py optimize           标记需要优化的规则
-  python3 phoenix-rule-health.py dashboard          规则健康仪表盘（文本）
+  python3 liyu-rule-health.py report            生成规则健康报告
+  python3 liyu-rule-health.py score <rule-id>   查看单个规则评分
+  python3 liyu-rule-health.py optimize           标记需要优化的规则
+  python3 liyu-rule-health.py dashboard          规则健康仪表盘（文本）
 """
 
 from collections import defaultdict
@@ -28,10 +28,10 @@ import sys
 
 # ── 路径 ─────────────────────────────────────────────────────────────────
 
-PHOENIX_HOME = Path.home() / ".claude" / "phoenix"
-RULES_DIR = Path.home() / ".claude" / "rules" / "phoenix"
-STORY_FILE = PHOENIX_HOME / "story.jsonl"
-FRAMEWORKS_DIR = PHOENIX_HOME / "frameworks"
+鲤鱼_HOME = Path.home() / ".claude" / "liyu"
+RULES_DIR = Path.home() / ".claude" / "rules" / "liyu"
+STORY_FILE = 鲤鱼_HOME / "story.jsonl"
+FRAMEWORKS_DIR = 鲤鱼_HOME / "frameworks"
 
 # ── 数据类 ───────────────────────────────────────────────────────────────
 
@@ -259,7 +259,7 @@ def generate_report():
     story_stats = analyze_story_references()
 
     if not RULES_DIR.exists():
-        print("No PHOENIX rules directory found.")
+        print("No 鲤鱼 rules directory found.")
         return
 
     rules = []
@@ -315,7 +315,7 @@ def generate_report():
 
     # ── 输出报告 ──────────────────────────────────────────────────────────
     print("=" * 72)
-    print("  PHOENIX Rule Health Dashboard")
+    print("  鲤鱼 Rule Health Dashboard")
     print(f"  Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print(f"  Rules analyzed: {len(rules)}")
     print("=" * 72)
@@ -519,7 +519,7 @@ def analyze_frameworks():
 def dashboard():
     """综合仪表盘"""
     print("=" * 72)
-    print("  PHOENIX Rule Health Dashboard")
+    print("  鲤鱼 Rule Health Dashboard")
     print(f"  {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print("=" * 72)
 
@@ -561,7 +561,7 @@ def main():
 
     elif cmd == "score":
         if len(sys.argv) < 3:
-            print("Usage: python3 phoenix-rule-health.py score <rule-id>")
+            print("Usage: python3 liyu-rule-health.py score <rule-id>")
             return
         score_single(sys.argv[2])
 

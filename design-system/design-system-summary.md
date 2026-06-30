@@ -1,4 +1,4 @@
-# PHOENIX AIOS 设计系统摘要
+# 鲤鱼 AIOS 设计系统摘要
 
 > 完整的设计系统概览和快速参考
 
@@ -6,7 +6,7 @@
 
 ## 设计系统概述
 
-PHOENIX AIOS 设计系统是一个专为 AI Agent 系统打造的现代化设计语言，采用 **Dark Luxury + Swiss International** 风格，强调专业性、智能感和克制美。
+鲤鱼 AIOS 设计系统是一个专为 AI Agent 系统打造的现代化设计语言，采用 **Dark Luxury + Swiss International** 风格，强调专业性、智能感和克制美。
 
 ---
 
@@ -236,7 +236,7 @@ Mobile: TopNav + Content + BottomNav
 
 ```
 design-system/
-├── phoenix-design-system.md    # 主规范文档
+├── liyu-design-system.md    # 主规范文档
 ├── design-system-summary.md    # 摘要（本文件）
 ├── components/
 │   ├── button.md               # 按钮组件
@@ -300,7 +300,7 @@ design-system/
 
 ### 为什么避免 AI 紫色？
 
-AI 紫色 (#7C3AED) 已成为 AI 产品的视觉陈词滥调。PHOENIX 选择深蓝+青色组合，传达专业性和独特性。
+AI 紫色 (#7C3AED) 已成为 AI 产品的视觉陈词滥调。鲤鱼 选择深蓝+青色组合，传达专业性和独特性。
 
 ### 为什么选择暗色主题？
 

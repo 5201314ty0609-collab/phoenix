@@ -1,8 +1,8 @@
-# 🐦‍🔥 PHOENIX
+# 🐦‍🔥 鲤鱼
 
 **Self-Evolving Agent Harness · 自进化 AI Agent 编排系统**
 
-PHOENIX 是一个独立运行的 AI Agent 控制台——融合 MUNDO 的编排模式与 NexSandglass 的记忆架构。实时监控、自动学习、自我进化。
+鲤鱼 是一个独立运行的 AI Agent 控制台——融合 MUNDO 的编排模式与 NexSandglass 的记忆架构。实时监控、自动学习、自我进化。
 
 ---
 
@@ -42,7 +42,7 @@ open http://127.0.0.1:8765
 
 | 层级 | 权限 | 升级条件 |
 |------|------|---------|
-| 👑 创始人 | 全权限，不可降级 | holyty + PHOENIX |
+| 👑 创始人 | 全权限，不可降级 | holyty + 鲤鱼 |
 | ⭐ 合伙人 | 完整功能，画像可见 | ≥10 条对话沙粒 |
 | 🌱 使用者 | 基础功能，学习期 | 注册默认 |
 
@@ -83,7 +83,7 @@ L1 沙粒写入 ──→ sand.txt + sand.db (纯文本+SQLite+FTS5)
 
 ## 来源
 
-PHOENIX 融合了两个开源项目的架构精华：
+鲤鱼 融合了两个开源项目的架构精华：
 
 - [MUNDO Agent v2.0.9](https://github.com/LiHongwei-cn/lihongwei-cn) — Agent 编排模式（事件总线·策略引擎·工具防护·技能注册）
 - [NexSandglass V2.9.3](https://github.com/lovevin1314-tech/NexSandglass-Agent-DedicatedMemory) — 记忆架构（偏移率·决策粒子·灵魂蒸馏·四层引擎）
@@ -95,6 +95,6 @@ PHOENIX 融合了两个开源项目的架构精华：
 ## 创始人
 
 - **holyty** — 架构设计与方向
-- **PHOENIX** — 自进化引擎核心
+- **鲤鱼** — 自进化引擎核心
 
 MIT License

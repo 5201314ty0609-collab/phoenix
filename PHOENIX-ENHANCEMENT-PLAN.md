@@ -1,6 +1,6 @@
-# PHOENIX 完善计划 — 借鉴热门项目，吸收精华
+# 鲤鱼 完善计划 — 借鉴热门项目，吸收精华
 
-> 从 Top 5 AI Agent 框架中学习，融合到 PHOENIX 系统
+> 从 Top 5 AI Agent 框架中学习，融合到 鲤鱼 系统
 > 目标：增强 Agent 编排、多 Agent 协作、类型安全
 
 ---
@@ -15,7 +15,7 @@
 - 边 (Edges)：定义流转逻辑
 - 检查点 (Checkpoints)：状态持久化
 
-**PHOENIX 可借鉴**：
+**鲤鱼 可借鉴**：
 - 优化 Agent 工作流编排
 - 实现状态持久化
 - 支持复杂决策树
@@ -34,7 +34,7 @@
 - 代码执行：安全的代码沙箱
 - 人机协作：人类作为监督者
 
-**PHOENIX 可借鉴**：
+**鲤鱼 可借鉴**：
 - 增强 GNAP 协议的多 Agent 协调
 - 实现自动任务委派
 - 添加代码执行沙箱
@@ -53,8 +53,8 @@
 - 协作流程：Agent 之间有序协作
 - 工具共享：Agent 共享工具集
 
-**PHOENIX 可借鉴**：
-- 完善 PHOENIX Agent 角色系统
+**鲤鱼 可借鉴**：
+- 完善 鲤鱼 Agent 角色系统
 - 优化任务委派逻辑
 - 实现工具共享机制
 
@@ -72,7 +72,7 @@
 - 依赖注入：灵活的依赖管理
 - 测试友好：易于单元测试
 
-**PHOENIX 可借鉴**：
+**鲤鱼 可借鉴**：
 - 增强输出验证
 - 实现结构化响应
 - 改进测试覆盖
@@ -91,7 +91,7 @@
 - 工具调用：简洁的工具接口
 - 多模态：支持文本、图像、音频
 
-**PHOENIX 可借鉴**：
+**鲤鱼 可借鉴**：
 - 优化轻量化设计
 - 增强代码生成能力
 - 支持多模态输入
@@ -117,13 +117,13 @@
 
 **产出**：
 - 各框架核心概念笔记
-- PHOENIX 融合点分析
+- 鲤鱼 融合点分析
 
 ---
 
 ### 阶段 2：原型设计 (第2周)
 
-**目标**：设计 PHOENIX 增强架构
+**目标**：设计 鲤鱼 增强架构
 
 **任务**：
 1. 设计状态图引擎 (借鉴 LangGraph)
@@ -133,7 +133,7 @@
 5. 设计轻量化接口 (借鉴 Smolagents)
 
 **产出**：
-- PHOENIX 增强架构文档
+- 鲤鱼 增强架构文档
 - 接口设计规范
 
 ---
@@ -144,7 +144,7 @@
 
 **模块清单**：
 
-#### 3.1 状态图引擎 (phoenix-graph.py)
+#### 3.1 状态图引擎 (liyu-graph.py)
 ```
 借鉴: LangGraph
 功能:
@@ -160,7 +160,7 @@
 - Checkpoint: 保存/恢复状态
 ```
 
-#### 3.2 多 Agent 协调器 (phoenix-coordinator.py)
+#### 3.2 多 Agent 协调器 (liyu-coordinator.py)
 ```
 借鉴: AutoGen
 功能:
@@ -176,7 +176,7 @@
 - Arbitrator: 冲突解决
 ```
 
-#### 3.3 角色系统 (phoenix-roles.py)
+#### 3.3 角色系统 (liyu-roles.py)
 ```
 借鉴: CrewAI
 功能:
@@ -192,7 +192,7 @@
 - Collaboration: 协作规则
 ```
 
-#### 3.4 类型安全层 (phoenix-types.py)
+#### 3.4 类型安全层 (liyu-types.py)
 ```
 借鉴: Pydantic AI
 功能:
@@ -208,7 +208,7 @@
 - ErrorHandler: 错误处理
 ```
 
-#### 3.5 轻量化接口 (phoenix-lite.py)
+#### 3.5 轻量化接口 (liyu-lite.py)
 ```
 借鉴: Smolagents
 功能:
@@ -328,7 +328,7 @@
 - networkx (状态图)
 - asyncio (异步支持)
 
-PHOENIX 现有:
+鲤鱼 现有:
 - sentence-transformers (向量化)
 - numpy (数值计算)
 ```
@@ -337,11 +337,11 @@ PHOENIX 现有:
 
 ```
 与现有模块集成:
-- phoenix-graph.py + reflection-engine.py
-- phoenix-coordinator.py + GNAP 协议
-- phoenix-roles.py + tool-guard.py
-- phoenix-types.py + knowledge-base.py
-- phoenix-lite.py + phoenix-skill.py
+- liyu-graph.py + reflection-engine.py
+- liyu-coordinator.py + GNAP 协议
+- liyu-roles.py + tool-guard.py
+- liyu-types.py + knowledge-base.py
+- liyu-lite.py + liyu-skill.py
 ```
 
 ---
@@ -390,7 +390,7 @@ PHOENIX 现有:
 
 ### 长期 (6个月后)
 
-- ✓ 成为 PHOENIX 核心模块
+- ✓ 成为 鲤鱼 核心模块
 - ✓ 吸收更多框架精华
 - ✓ 建立最佳实践
 - ✓ 输出技术博客

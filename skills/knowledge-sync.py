@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Knowledge Sync — 知识库同步。
+鲤鱼 Skill: Knowledge Sync — 知识库同步。
 
 同步 memory/ 目录到 SQLite 知识库，确保检索系统数据最新。
 
@@ -15,10 +15,10 @@ from pathlib import Path
 import json
 import sys
 
-PHOENIX_HOME = Path.home() / ".claude/phoenix"
+鲤鱼_HOME = Path.home() / ".claude/liyu"
 MEMORY_DIR = Path.home() / ".claude/projects/-Users-holyty/memory"
-DB_PATH = PHOENIX_HOME / "knowledge-base.db"
-SYNC_STATE_FILE = PHOENIX_HOME / "knowledge-sync-state.json"
+DB_PATH = 鲤鱼_HOME / "knowledge-base.db"
+SYNC_STATE_FILE = 鲤鱼_HOME / "knowledge-sync-state.json"
 
 
 def get_memory_files() -> dict:
@@ -122,7 +122,7 @@ def sync():
     # 调用 knowledge-base.py import
     import subprocess
     result = subprocess.run(
-        ["python3", str(PHOENIX_HOME / "knowledge-base.py"), "import"],
+        ["python3", str(鲤鱼_HOME / "knowledge-base.py"), "import"],
         capture_output=True,
         text=True,
     )

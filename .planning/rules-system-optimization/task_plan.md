@@ -1,7 +1,7 @@
 # Task Plan: Rules System Optimization
 
 ## Goal
-Optimize PHOENIX Rules System with intelligent rule management, conflict detection, dependency tracking, and context-aware loading.
+Optimize 鲤鱼 Rules System with intelligent rule management, conflict detection, dependency tracking, and context-aware loading.
 
 ## Current Phase
 Phase 5 (Integration) - Pending
@@ -39,7 +39,7 @@ Phase 5 (Integration) - Pending
 
 ### Phase 5: Integration (Pending)
 - [ ] Migrate existing rules to new format
-- [ ] Integrate with PHOENIX Evolution Engine
+- [ ] Integrate with 鲤鱼 Evolution Engine
 - [ ] Integrate with Claude Code hooks
 - [ ] Update documentation
 - **Status:** pending
@@ -106,11 +106,11 @@ Phase 5 (Integration) - Pending
 - [x] Context-aware loading works correctly
 - [x] Rule validation passes
 - [ ] All rules migrated to new format
-- [ ] Integration with PHOENIX complete
+- [ ] Integration with 鲤鱼 complete
 
 ## Next Steps
 1. Run `rule_migrator.py migrate-all` to migrate existing rules
-2. Integrate with PHOENIX Evolution Engine
+2. Integrate with 鲤鱼 Evolution Engine
 3. Add Claude Code hooks for automatic rule loading
 4. Monitor rule health and optimize
 

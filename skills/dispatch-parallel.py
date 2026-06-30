@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PHOENIX Skill: Dispatch Parallel — 并行任务分派。
+鲤鱼 Skill: Dispatch Parallel — 并行任务分派。
 
 当面对 2+ 独立任务时，自动分派并行 Agent。
 
