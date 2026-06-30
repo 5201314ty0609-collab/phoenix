@@ -3,6 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      - 'index.html'
+      - 'dashboard.html'
+      - '*.html'
+      - 'assets/**'
+      - '.github/workflows/pages.yml'
 
 permissions:
   contents: read
@@ -28,6 +34,24 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
+          exclude: |
+            **/.git/**
+            **/.github/**
+            **/node_modules/**
+            **/*.py
+            **/*.db
+            **/*.jsonl
+            **/*.json
+            **/ccr/**
+            **/frameworks/**
+            **/hooks/**
+            **/knowledge/**
+            **/nexsandglass/**
+            **/phoenix/**
+            **/rules/**
+            **/senses/**
+            **/skills/**
+            **/.obsidian/**
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
