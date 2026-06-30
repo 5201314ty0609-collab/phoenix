@@ -3,12 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - 'index.html'
-      - 'dashboard.html'
-      - '*.html'
-      - 'assets/**'
-      - '.github/workflows/pages.yml'
 
 permissions:
   contents: read
@@ -28,30 +22,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Prepare site
+        run: |
+          mkdir -p _site
+          cp index.html _site/ 2>/dev/null || true
+          cp dashboard.html _site/ 2>/dev/null || true
+          cp *.html _site/ 2>/dev/null || true
+          cp -r assets _site/ 2>/dev/null || true
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
-          exclude: |
-            **/.git/**
-            **/.github/**
-            **/node_modules/**
-            **/*.py
-            **/*.db
-            **/*.jsonl
-            **/*.json
-            **/ccr/**
-            **/frameworks/**
-            **/hooks/**
-            **/knowledge/**
-            **/nexsandglass/**
-            **/phoenix/**
-            **/rules/**
-            **/senses/**
-            **/skills/**
-            **/.obsidian/**
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
