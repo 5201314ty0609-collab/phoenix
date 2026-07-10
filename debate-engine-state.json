@@ -1,0 +1,38 @@
+{
+  "debates": {
+    "debate-1": {
+      "debate_id": "debate-1",
+      "topic": "是否应该重构代码库",
+      "participants": [
+        "Optimizer",
+        "Critic",
+        "Security"
+      ],
+      "histories": {
+        "Optimizer": [
+          "代码库已经积累了大量技术债务，重构可以提高可维护性和性能。建议采用渐进式重构策略，先重构核心模块。"
+        ],
+        "Critic": [
+          "重构风险高，可能导致回归 bug。建议先写全面的测试覆盖，再考虑重构。当前代码虽然有技术债务，但功能稳定。"
+        ],
+        "Security": [
+          "从安全角度，重构需要特别注意认证和授权模块。建议在重构前进行安全审计，确保没有引入新的安全漏洞。"
+        ]
+      },
+      "current_speaker": "Optimizer",
+      "count": 3,
+      "max_rounds": 3,
+      "status": "active",
+      "judge_decision": null,
+      "created_at": "2026-07-10T12:40:23.227197+00:00",
+      "completed_at": null
+    }
+  },
+  "stats": {
+    "total_debates": 1,
+    "completed_debates": 0,
+    "total_rounds": 3
+  },
+  "created_at": "2026-07-10T12:40:23.227079+00:00",
+  "updated_at": "2026-07-10T12:40:35.928551+00:00"
+}
