@@ -168,6 +168,83 @@ def generate_progressive_index(memories: List[Dict], max_tokens: int = 800) -> s
 > 📊 总计约 {tokens_used} tokens
 """
 
+# ── SmartCrusher JSON 压缩（吸收自 Headroom） ──────────────────────────────
+
+@dataclass
+class JSONCompressionConfig:
+    """JSON 压缩配置"""
+    short_value_threshold: int = 20      # 短字符串阈值
+    entropy_threshold: float = 0.85      # 熵阈值（UUID、hash 自动保留）
+    max_array_items_full: int = 3        # 数组保留项数
+    max_number_digits: int = 10          # 数字保留位数
+
+def compress_json_smart(data: Any, config: JSONCompressionConfig = None) -> Any:
+    """SmartCrusher 风格的 JSON 压缩
+
+    保留结构，压缩值。高熵内容（UUID、hash）自动保留。
+    """
+    if config is None:
+        config = JSONCompressionConfig()
+
+    if isinstance(data, dict):
+        compressed = {}
+        for key, value in data.items():
+            # 键名始终保留
+            compressed[key] = compress_json_smart(value, config)
+        return compressed
+
+    elif isinstance(data, list):
+        if len(data) <= config.max_array_items_full:
+            return [compress_json_smart(item, config) for item in data]
+        else:
+            # 只保留前 N 个元素
+            compressed = [compress_json_smart(item, config) for item in data[:config.max_array_items_full]]
+            compressed.append(f"... ({len(data) - config.max_array_items_full} more items)")
+            return compressed
+
+    elif isinstance(data, str):
+        # 短字符串保留
+        if len(data) <= config.short_value_threshold:
+            return data
+        # 高熵内容保留（UUID、hash、API key）
+        if is_high_entropy(data, config.entropy_threshold):
+            return data
+        # 长字符串压缩
+        return data[:config.short_value_threshold] + "..."
+
+    elif isinstance(data, (int, float)):
+        # 数字：短数字保留，长数字压缩
+        str_num = str(data)
+        if len(str_num) <= config.max_number_digits:
+            return data
+        return str_num[:config.max_number_digits] + "..."
+
+    elif isinstance(data, bool):
+        return data
+
+    elif data is None:
+        return data
+
+    else:
+        return str(data)[:config.short_value_threshold]
+
+
+def compress_json_with_stats(data: Any, config: JSONCompressionConfig = None) -> tuple:
+    """压缩 JSON 并返回统计信息
+
+    Returns:
+        (compressed_data, original_tokens, compressed_tokens)
+    """
+    original_json = json.dumps(data, ensure_ascii=False)
+    original_tokens = estimate_tokens(original_json)
+
+    compressed = compress_json_smart(data, config)
+    compressed_json = json.dumps(compressed, ensure_ascii=False, indent=2)
+    compressed_tokens = estimate_tokens(compressed_json)
+
+    return compressed, original_tokens, compressed_tokens
+
+
 # ── 结构化压缩 ──────────────────────────────────────────────────────────
 
 STRUCTURED_COMPRESSION_PROMPT = """分析以下会话观察，生成结构化摘要：
@@ -416,6 +493,38 @@ def main():
         print()
         print(f"压缩内容:")
         print(compressed_json)
+
+    elif cmd == "compress-json":
+        if len(sys.argv) < 3:
+            print("Usage: liyu-context-compressor.py compress-json '<json>'", file=sys.stderr)
+            sys.exit(1)
+
+        try:
+            data = json.loads(sys.argv[2])
+        except json.JSONDecodeError as e:
+            print(f"❌ Invalid JSON: {e}", file=sys.stderr)
+            sys.exit(1)
+
+        compressed, original_tokens, compressed_tokens = compress_json_with_stats(data)
+
+        # CCR 存储
+        ccr = CCRStore()
+        ccr_key = ccr.store(json.dumps(data, ensure_ascii=False), {"type": "json-compressed"})
+
+        # 更新统计
+        state = load_state()
+        state["total_compressions"] += 1
+        state["tokens_saved"] += original_tokens - compressed_tokens
+        save_state(state)
+
+        print(f"📊 SmartCrusher JSON 压缩结果:")
+        print(f"  原始: {original_tokens} tokens")
+        print(f"  压缩: {compressed_tokens} tokens")
+        print(f"  节省: {original_tokens - compressed_tokens} tokens ({(1 - compressed_tokens/original_tokens)*100:.1f}%)")
+        print(f"  CCR Key: {ccr_key}")
+        print()
+        print(f"压缩内容:")
+        print(json.dumps(compressed, ensure_ascii=False, indent=2))
 
     elif cmd == "stats":
         state = load_state()
